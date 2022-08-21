@@ -1,0 +1,38 @@
+{% extends 'layouts/login.html.twig' %}
+{% block title %}Регистрация{% endblock %}
+{% block body %}
+
+    <section id="variants_reg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% include 'partials/_logo_white.html.twig' %}
+                    <div class="variants_reg_items block_shadow b_center">
+
+                        <h2 class="b_center">{{ 'Choose your membership'|trans }}</h2>
+                        <div class="variants_items">
+                            <div class="variants_item">
+                                <a href="{{ path('app_registration_master') }}">
+                                    <img src="{{ asset('assets/images/variants_1.jpg') }}" alt="" />
+                                    <button class="button">{{ 'Master'|trans }}</button>
+                                    <p>{{ 'Take orders'|trans }}</p>
+                                </a>
+                            </div>
+
+                            <div class="variants_item">
+                                <a href="{{ path('app_registration_client') }}">
+                                    <img src="{{ asset('assets/images/variants_2.jpg') }}" alt="" />
+                                    <button class="button">{{ 'Client'|trans }}</button>
+                                    <p>{{ 'Place orders'|trans }}</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-grey">Есть аккаунт? <a href="{{ path('app_login') }}">{{ 'Enter'|trans }}</a></p>
+                    <p class="text-grey">Центр поддержки клиентов: <a href="#">8 800 100 00 00</a><br>
+                        Звонок по России бесплатный</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

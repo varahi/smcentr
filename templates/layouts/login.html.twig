@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <meta name="robots" content="noindex,nofollow">
+
+{#    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/favicon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/favicon.png') }}">#}
+
+    <title>{% block title %}SM Center{% endblock %}</title>
+    <meta name="description" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+    {% block stylesheets %}
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom.css') }}">
+    {% endblock %}
+
+    {% block javascripts %}
+        <!-- jQuery -->
+        <!-- Bootstrap JS + Popper JS -->
+        <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    {% endblock %}
+</head>
+
+<body>
+{% block body %}{% endblock %}
+</body>
+</html>

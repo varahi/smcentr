@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="`user`")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User
+class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
@@ -41,7 +41,7 @@ class User
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isVerified;
+    private $isVerified = false;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -92,6 +92,11 @@ class User
      * @ORM\OneToMany(targetEntity=Order::class, mappedBy="users")
      */
     private $orders;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=City::class, inversedBy="users")
+     */
+    private $city;
 
     public function __construct()
     {
@@ -285,6 +290,18 @@ class User
                 $order->setUsers(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
 
         return $this;
     }
