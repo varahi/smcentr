@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="ru" target-language="ru" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="form.email" resname="form.email">
+        <source>E-mail *</source>
+        <target>E-mail *</target>
+      </trans-unit>
+      <trans-unit id="form.phone" resname="form.phone">
+        <source>Phone *</source>
+        <target>Телефон *</target>
+      </trans-unit>
+      <trans-unit id="form.password" resname="form.password">
+        <source>Password *</source>
+        <target>Пароль *</target>
+      </trans-unit>
+      <trans-unit id="form.confirm_password" resname="form.confirm_password">
+        <source>Confirm Password *</source>
+        <target>Подтвердите пароль *</target>
+      </trans-unit>
+      <trans-unit id="form.full_name" resname="form.full_name">
+        <source>Full name *</source>
+        <target>ФИО *</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

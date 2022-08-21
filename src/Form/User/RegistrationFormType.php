@@ -3,6 +3,8 @@
 namespace App\Form\User;
 
 use App\Entity\User;
+use App\Entity\City;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -12,38 +14,72 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\File;
 
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('phone')
-            ->add('fullName')
-            ->add('city')
+            ->add(
+                'email',
+                EmailType::class,
+                [
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'form.email'
+                    ],
+                    'label' => false,
+                    'translation_domain' => 'forms',
+                ]
+            )
+            ->add(
+                'phone',
+                TelType::class,
+                [
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'form.phone'
+                    ],
+                    'label' => false,
+                    'translation_domain' => 'forms',
+                ]
+            )
+            ->add(
+                'fullName',
+                TextType::class,
+                [
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'form.full_name'
+                    ],
+                    'label' => false,
+                    'translation_domain' => 'forms',
+                ]
+            )
+            ->add('city', EntityType::class, [
+                'class' => City::class,
+                'multiple'  => false,
+                'expanded'  => false,
+                'label' => 'List of housing',
+                'required' => true,
+            ])
+            ->add('getNotifications')
 
-            /*->add('roles')
-            ->add('password')
-            ->add('isVerified')
-            ->add('firstName')
-            ->add('lastName')
-            ->add('fullName')
-            ->add('avatar')
-            ->add('phone')
-            ->add('doc1')
-            ->add('doc2')
-            ->add('doc3')
-            ->add('balance')*/
-
-            ->add('agreeTerms', CheckboxType::class, [
+            /*->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
                     ]),
                 ],
-            ])
+            ])*/
+
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -52,18 +88,52 @@ class RegistrationFormType extends AbstractType
                 //'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Пожалуйста введите пароль',
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'minMessage' => 'Пароль должен состоять как минимм из {{ limit }} символов',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
                 ],
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => 'Confirm Password'],
-                'invalid_message' => 'Your password does not match the confirmation.'
+                //'first_options' => ['label' => 'form.password'],
+                //'second_options' => ['label' => 'form.confirm_password'],
+                'first_options' => [
+                    'attr' => [
+                        'placeholder' => 'form.password'
+                    ],
+                    'label' => false
+                ],
+                'second_options' => [
+                    'attr' => [
+                        'placeholder' => 'form.confirm_password'
+                    ],
+                    'label' => false
+                ],
+                'invalid_message' => 'Your password does not match the confirmation.',
+                'translation_domain' => 'forms',
+            ])
+
+            ->add('avatar', FileType::class, [
+                'required' => false,
+                'mapped' => false,
+                'constraints' => [
+                    new Image([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/gif',
+                            'image/jpeg',
+                            'image/pjpeg',
+                            'image/png',
+                            'image/webp',
+                            'image/vnd.wap.wbmp'
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image document',
+                    ])
+                ],
+                'label' => false,
+                'translation_domain' => 'forms',
             ])
         ;
     }

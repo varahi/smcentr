@@ -98,6 +98,11 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
      */
     private $city;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $getNotifications = false;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -302,6 +307,18 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
     public function setCity(?City $city): self
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function isGetNotifications(): ?bool
+    {
+        return $this->getNotifications;
+    }
+
+    public function setGetNotifications(bool $getNotifications): self
+    {
+        $this->getNotifications = $getNotifications;
 
         return $this;
     }

@@ -28,9 +28,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-grey">Есть аккаунт? <a href="{{ path('app_login') }}">{{ 'Enter'|trans }}</a></p>
-                    <p class="text-grey">Центр поддержки клиентов: <a href="#">8 800 100 00 00</a><br>
-                        Звонок по России бесплатный</p>
+                    {% include 'partials/_login_info.html.twig' %}
                 </div>
             </div>
         </div>

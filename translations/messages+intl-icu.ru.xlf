@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="ru" target-language="ru" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="nWMiwfT" resname="Login">
+        <source>Login</source>
+        <target>Вход в систему</target>
+      </trans-unit>
+      <trans-unit id="9N.Jsxi" resname="adminpanel.back_to_site">
+        <source>adminpanel.back_to_site</source>
+        <target>На сайт</target>
+      </trans-unit>
+      <trans-unit id="3IZZ221" resname="Enter">
+        <source>Enter</source>
+        <target>Войти</target>
+      </trans-unit>
+      <trans-unit id="u0L4zVJ" resname="Forgot password">
+        <source>Forgot password</source>
+        <target>Забыли пароль?</target>
+      </trans-unit>
+      <trans-unit id="eetcIaS" resname="No account">
+        <source>No account</source>
+        <target>Нет аккаунта?</target>
+      </trans-unit>
+      <trans-unit id="u3I07BJ" resname="Register">
+        <source>Register</source>
+        <target>Зарегистрируйтесь</target>
+      </trans-unit>
+      <trans-unit id="RPpfT4L" resname="Download app">
+        <source>Download app</source>
+        <target>Скачайте наше приложение с apple store и google play</target>
+      </trans-unit>
+      <trans-unit id="pOM08WW" resname="Logo title">
+        <source>Logo title</source>
+        <target>SMC</target>
+      </trans-unit>
+      <trans-unit id="rHrUrxG" resname="Slogan">
+        <source>Slogan</source>
+        <target>качество, быстрота, надёжность</target>
+      </trans-unit>
+      <trans-unit id="y1pJKAe" resname="You logged as">
+        <source>You logged as</source>
+        <target>Вы вошли как</target>
+      </trans-unit>
+      <trans-unit id="0FJ_Sz1" resname="Logout">
+        <source>Logout</source>
+        <target>Выйти</target>
+      </trans-unit>
+      <trans-unit id="_LzfsGn" resname="Choose your membership">
+        <source>Choose your membership</source>
+        <target>Выберите ваше участие в системе</target>
+      </trans-unit>
+      <trans-unit id="ors0eAr" resname="Master">
+        <source>Master</source>
+        <target>Мастер</target>
+      </trans-unit>
+      <trans-unit id="xlBPes1" resname="Take orders">
+        <source>Take orders</source>
+        <target>Принимать заказы</target>
+      </trans-unit>
+      <trans-unit id="DHf_Cas" resname="Client">
+        <source>Client</source>
+        <target>Клиент</target>
+      </trans-unit>
+      <trans-unit id="iT2QAdM" resname="Place orders">
+        <source>Place orders</source>
+        <target>Размещать заказы</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,70 @@
+{% extends 'layouts/login.html.twig' %}
+{% block title %}Регистрация клиента{% endblock %}
+{% block body %}
+
+    <section id="reg_client">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="logo_black">
+                        <div class="logo_item">
+                            <img src="{{ asset('assets/images/logo_black.svg') }}" alt="" />
+                            <span>{{'Logo title'|trans }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Регистрация Клиента</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12"></div>
+                {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+                <div class="col-md-12">
+                    <div class="reg_contact">
+                        <h3>Контактная информация</h3>
+                            {{ form_widget(registrationForm.email) }}
+                            {{ form_row(registrationForm.plainPassword, { label: 'Пароль'}) }}
+                            {{ form_widget(registrationForm.phone) }}
+                            {{ form_widget(registrationForm.fullName) }}
+                        {{ form_widget(registrationForm.city) }}
+
+                        <div class="avatar_upload">
+                            <img src="{{ asset('assets/images/avatar.png') }}" alt="" />
+                            <div class="">
+                                <p>Аватар пользователя</p>
+                                <div class="upload_file">
+                                    {{ form_widget(registrationForm.avatar) }}
+                                    <button class="upload">Загрузить<i></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="reg_bottom">
+                        <div class="cb_notifications">
+                            <label class="checkbox">
+                                {{ form_widget(registrationForm.getNotifications) }}
+                                <span>Получать уведомления</span>
+                            </label>
+                        </div>
+                        <button>Регистрация</button>
+                        <div class="bottom_link">
+                            {% include 'partials/_login_info.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(registrationForm) }}
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

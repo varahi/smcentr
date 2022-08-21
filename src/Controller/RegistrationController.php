@@ -15,6 +15,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Service\FileUploader;
 
 class RegistrationController extends AbstractController
 {
@@ -31,7 +33,7 @@ class RegistrationController extends AbstractController
     public function index(): Response
     {
         return $this->render('registration/index.html.twig', [
-            'controller_name' => 'RegistrationController',
+            //'controller_name' => 'RegistrationController',
         ]);
     }
 
@@ -43,19 +45,28 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        SluggerInterface $slugger,
+        FileUploader $fileUploader
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //dd($form->getData()->isGetNotifications());
+
             // encode the plain password
             $user->setPassword(
                 $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
             );
             $user->setRoles(array('ROLE_CLIENT'));
-
+            // Upload avatar file if exist
+            $avatarFile = $form->get('avatar')->getData();
+            if ($avatarFile) {
+                $avatarFileName = $fileUploader->upload($avatarFile);
+                $user->setAvatar($avatarFileName);
+            }
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -80,7 +91,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('registration/register_client.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
@@ -104,7 +115,7 @@ class RegistrationController extends AbstractController
             $user->setPassword(
                 $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
             );
-            $user->setRoles(array('ROLE_CLIENT'));
+            $user->setRoles(array('ROLE_MASTER'));
 
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
@@ -130,7 +141,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('registration/register.html.twig', [
+        return $this->render('registration/register_master.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
