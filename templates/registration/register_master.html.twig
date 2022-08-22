@@ -2,5 +2,203 @@
 {% block title %}Регистрация клиента{% endblock %}
 {% block body %}
 
+    <section id="reg_master">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="logo_black">
+                        <div class="logo_item">
+                            <img src="assets/images/logo_black.svg">
+                            <span>SMC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Регистрация мастера</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="reg_contact">
+                        <h3>Контактная информация</h3>
+                        <input type="text" name="phone" placeholder="Телефон*">
+                        <input type="text" name="fio" placeholder="ФИО*">
+                        <input type="text" name="city" placeholder="ФИО*">
+
+
+                        <div class="avatar_upload">
+                            <img src="assets/images/avatar.png">
+                            <div class="">
+                                <p>Аватар пользователя</p>
+                                <button class="upload">Загрузить<i></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="pasport_upload">
+                        <h3>Фото паспорта</h3>
+                        <div class="p_upload_items">
+                            <div class="p_upload_item">
+
+                                <div class="file_upload">
+                                    <p>Главная страница</p>
+
+                                    <span><img src="assets/images/file_upload.svg"> file-pasport.jpg</span>
+                                </div>
+
+                                <div class="p_upload_btn">
+
+                                    <button class="upload">Загрузить<i></i></button>
+                                </div>
+                            </div>
+
+                            <div class="p_upload_item">
+                                <div class="file_upload">
+                                    <p>Страница прописки</p>
+
+                                    <span><img src="assets/images/file_upload.svg">file-regitration.jpg</span>
+                                </div>
+                                <div class="p_upload_btn">
+
+                                    <button class="upload">Загрузить<i></i></button>
+                                </div>
+
+                            </div>
+
+                            <div class="p_upload_item">
+                                <div class="file_upload">
+                                    <p>Селфи с паспортом</p>
+
+                                    <span><img src="assets/images/file_upload.svg">file-selfi.jpg</span>
+                                </div>
+                                <div class="p_upload_btn">
+
+                                    <button class="upload">Загрузить<i></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="reg_prof">
+                        <h3>Специализация</h3>
+                        <div class="cb_block">
+                            <div class="cb_items">
+
+                                <div class="main_checkbox">
+                                    <label class="checkbox">
+                                        <input type="checkbox" checked>
+                                        <span>Электрик</span>
+                                    </label>
+                                </div>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Монтаж розетки</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Штроба</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Установка счетчика</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Замена проводки</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Монтаж эл. щитка</span>
+                                </label>
+                            </div>
+
+                            <div class="cb_items">
+                                <div class="main_checkbox">
+                                    <label class="checkbox">
+                                        <input type="checkbox" checked>
+                                        <span>Сантехник</span>
+                                    </label>
+                                </div>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Замена труб</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Устранение поломок</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Установка крана</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Замена крана</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Замена планировки</span>
+                                </label>
+                            </div>
+
+                            <div class="cb_items">
+                                <div class="main_checkbox">
+                                    <label class="checkbox">
+                                        <input type="checkbox" checked>
+                                        <span>Монтажник</span>
+                                    </label>
+                                </div>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Монтаж труб</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Монтаж проводки</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Монтаж щитка</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Монтаж эл. проводки</span>
+                                </label>
+
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span>Монтаж ЛДСПР</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'partials/_registration_footer.html.twig' %}
+            </div>
+        </div>
+    </section>
 
 {% endblock %}

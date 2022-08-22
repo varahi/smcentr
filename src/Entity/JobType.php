@@ -29,9 +29,25 @@ class JobType
      */
     private $orders;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Profession::class, inversedBy="jobTypes")
+     */
+    private $profession;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="jobTypes")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->users = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -76,6 +92,45 @@ class JobType
             if ($order->getJobType() === $this) {
                 $order->setJobType(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getProfession(): ?Profession
+    {
+        return $this->profession;
+    }
+
+    public function setProfession(?Profession $profession): self
+    {
+        $this->profession = $profession;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addJobType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeJobType($this);
         }
 
         return $this;

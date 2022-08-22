@@ -103,10 +103,28 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
      */
     private $getNotifications = false;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Profession::class, inversedBy="users")
+     */
+    private $professions;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=JobType::class, inversedBy="users")
+     */
+    private $jobTypes;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->professions = new ArrayCollection();
+        $this->jobTypes = new ArrayCollection();
     }
+
+    public function __toString(): string
+    {
+        return $this->email;
+    }
+
 
     public function getId(): ?int
     {
@@ -319,6 +337,54 @@ class User implements \Symfony\Component\Security\Core\User\PasswordAuthenticate
     public function setGetNotifications(bool $getNotifications): self
     {
         $this->getNotifications = $getNotifications;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Profession>
+     */
+    public function getProfessions(): Collection
+    {
+        return $this->professions;
+    }
+
+    public function addProfession(Profession $profession): self
+    {
+        if (!$this->professions->contains($profession)) {
+            $this->professions[] = $profession;
+        }
+
+        return $this;
+    }
+
+    public function removeProfession(Profession $profession): self
+    {
+        $this->professions->removeElement($profession);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, JobType>
+     */
+    public function getJobTypes(): Collection
+    {
+        return $this->jobTypes;
+    }
+
+    public function addJobType(JobType $jobType): self
+    {
+        if (!$this->jobTypes->contains($jobType)) {
+            $this->jobTypes[] = $jobType;
+        }
+
+        return $this;
+    }
+
+    public function removeJobType(JobType $jobType): self
+    {
+        $this->jobTypes->removeElement($jobType);
 
         return $this;
     }

@@ -69,6 +69,10 @@
         <source>Place orders</source>
         <target>Размещать заказы</target>
       </trans-unit>
+      <trans-unit id="adminpanel.user" resname="adminpanel.user">
+        <source>User</source>
+        <target>User</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

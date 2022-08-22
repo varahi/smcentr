@@ -29,11 +29,51 @@ class Profession
      */
     private $orders;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Profession", inversedBy="children")
+     * @ORM\JoinColumn(name="parent", referencedColumnName="id", nullable=true)
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Profession", mappedBy="parent")
+     */
+    private $children;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="professions")
+     */
+    private $users;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isHidden = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity=JobType::class, mappedBy="profession")
+     */
+    private $jobTypes;
+
     public function __construct()
     {
         $this->jobType = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->jobTypes = new ArrayCollection();
     }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
 
     public function getId(): ?int
     {
@@ -76,6 +116,127 @@ class Profession
             // set the owning side to null (unless already changed)
             if ($order->getProfession() === $this) {
                 $order->setProfession(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function addChild(self $child): self
+    {
+        if (!$this->children->contains($child)) {
+            $this->children[] = $child;
+            $child->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChild(self $child): self
+    {
+        if ($this->children->removeElement($child)) {
+            // set the owning side to null (unless already changed)
+            if ($child->getParent() === $this) {
+                $child->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addProfession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeProfession($this);
+        }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function isIsHidden(): ?bool
+    {
+        return $this->isHidden;
+    }
+
+    public function setIsHidden(bool $isHidden): self
+    {
+        $this->isHidden = $isHidden;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, JobType>
+     */
+    public function getJobTypes(): Collection
+    {
+        return $this->jobTypes;
+    }
+
+    public function addJobType(JobType $jobType): self
+    {
+        if (!$this->jobTypes->contains($jobType)) {
+            $this->jobTypes[] = $jobType;
+            $jobType->setProfession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJobType(JobType $jobType): self
+    {
+        if ($this->jobTypes->removeElement($jobType)) {
+            // set the owning side to null (unless already changed)
+            if ($jobType->getProfession() === $this) {
+                $jobType->setProfession(null);
             }
         }
 
