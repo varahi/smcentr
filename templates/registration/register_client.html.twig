@@ -4,16 +4,7 @@
 
     <section id="reg_client">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="logo_black">
-                        <div class="logo_item">
-                            <img src="{{ asset('assets/images/logo_black.svg') }}" alt="" />
-                            <span>{{'Logo title'|trans }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include 'partials/_logo_black.html.twig' %}
 
             <div class="row">
                 <div class="col-md-12">
@@ -31,7 +22,7 @@
                             {{ form_row(registrationForm.plainPassword, { label: 'Пароль'}) }}
                             {{ form_widget(registrationForm.phone) }}
                             {{ form_widget(registrationForm.fullName) }}
-                        {{ form_widget(registrationForm.city) }}
+                            {{ form_widget(registrationForm.city) }}
 
                         <div class="avatar_upload">
                             <img src="{{ asset('assets/images/avatar.png') }}" alt="" />

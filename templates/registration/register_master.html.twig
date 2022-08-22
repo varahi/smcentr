@@ -4,16 +4,7 @@
 
     <section id="reg_master">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="logo_black">
-                        <div class="logo_item">
-                            <img src="assets/images/logo_black.svg">
-                            <span>SMC</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include 'partials/_logo_black.html.twig' %}
 
             <div class="row">
                 <div class="col-md-12">
@@ -22,19 +13,24 @@
             </div>
 
             <div class="row">
+                {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
                 <div class="col-md-5">
                     <div class="reg_contact">
                         <h3>Контактная информация</h3>
-                        <input type="text" name="phone" placeholder="Телефон*">
-                        <input type="text" name="fio" placeholder="ФИО*">
-                        <input type="text" name="city" placeholder="ФИО*">
-
+                        {{ form_widget(registrationForm.email) }}
+                        {{ form_row(registrationForm.plainPassword, { label: 'Пароль'}) }}
+                        {{ form_widget(registrationForm.phone) }}
+                        {{ form_widget(registrationForm.fullName) }}
+                        {{ form_widget(registrationForm.city) }}
 
                         <div class="avatar_upload">
-                            <img src="assets/images/avatar.png">
+                            <img src="{{ asset('assets/images/avatar.png') }}" alt="" />
                             <div class="">
                                 <p>Аватар пользователя</p>
-                                <button class="upload">Загрузить<i></i></button>
+                                <div class="upload_file">
+                                    {{ form_widget(registrationForm.avatar) }}
+                                    <button class="upload">Загрузить<i></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -48,12 +44,10 @@
 
                                 <div class="file_upload">
                                     <p>Главная страница</p>
-
-                                    <span><img src="assets/images/file_upload.svg"> file-pasport.jpg</span>
+                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" /> file-pasport.jpg</span>
                                 </div>
 
                                 <div class="p_upload_btn">
-
                                     <button class="upload">Загрузить<i></i></button>
                                 </div>
                             </div>
@@ -61,24 +55,19 @@
                             <div class="p_upload_item">
                                 <div class="file_upload">
                                     <p>Страница прописки</p>
-
-                                    <span><img src="assets/images/file_upload.svg">file-regitration.jpg</span>
+                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />file-regitration.jpg</span>
                                 </div>
                                 <div class="p_upload_btn">
-
                                     <button class="upload">Загрузить<i></i></button>
                                 </div>
-
                             </div>
 
                             <div class="p_upload_item">
                                 <div class="file_upload">
                                     <p>Селфи с паспортом</p>
-
-                                    <span><img src="assets/images/file_upload.svg">file-selfi.jpg</span>
+                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />file-selfi.jpg</span>
                                 </div>
                                 <div class="p_upload_btn">
-
                                     <button class="upload">Загрузить<i></i></button>
                                 </div>
                             </div>
@@ -89,114 +78,32 @@
                 <div class="col-md-12">
                     <div class="reg_prof">
                         <h3>Специализация</h3>
+                        {% if professions is not empty %}
                         <div class="cb_block">
-                            <div class="cb_items">
-
-                                <div class="main_checkbox">
-                                    <label class="checkbox">
-                                        <input type="checkbox" checked>
-                                        <span>Электрик</span>
-                                    </label>
+                            {% for profession in professions %}
+                                <div class="cb_items">
+                                    <div class="main_checkbox">
+                                        <label class="checkbox">
+                                            <input type="checkbox" checked>
+                                            <span>{{ profession.name }}</span>
+                                        </label>
+                                    </div>
+                                    {% for jobType in profession.jobTypes %}
+                                        <label class="checkbox">
+                                            <input type="checkbox">
+                                            <span>{{ jobType.name }}</span>
+                                        </label>
+                                    {% endfor %}
                                 </div>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Монтаж розетки</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Штроба</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Установка счетчика</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Замена проводки</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Монтаж эл. щитка</span>
-                                </label>
-                            </div>
-
-                            <div class="cb_items">
-                                <div class="main_checkbox">
-                                    <label class="checkbox">
-                                        <input type="checkbox" checked>
-                                        <span>Сантехник</span>
-                                    </label>
-                                </div>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Замена труб</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Устранение поломок</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Установка крана</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Замена крана</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Замена планировки</span>
-                                </label>
-                            </div>
-
-                            <div class="cb_items">
-                                <div class="main_checkbox">
-                                    <label class="checkbox">
-                                        <input type="checkbox" checked>
-                                        <span>Монтажник</span>
-                                    </label>
-                                </div>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Монтаж труб</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Монтаж проводки</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Монтаж щитка</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Монтаж эл. проводки</span>
-                                </label>
-
-                                <label class="checkbox">
-                                    <input type="checkbox">
-                                    <span>Монтаж ЛДСПР</span>
-                                </label>
-                            </div>
+                            {% endfor %}
                         </div>
+                        {% else %}
+                            <p>Empty professions list</p>
+                        {% endif %}
                     </div>
                 </div>
-
                 {% include 'partials/_registration_footer.html.twig' %}
+                {{ form_end(registrationForm) }}
             </div>
         </div>
     </section>

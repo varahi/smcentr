@@ -39,6 +39,15 @@ class ProfessionRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param array $order
+     * @return Profession[]
+     */
+    public function findAllOrder(array $order)
+    {
+        return $this->findBy([], $order);
+    }
+
 //    /**
 //     * @return Profession[] Returns an array of Profession objects
 //     */

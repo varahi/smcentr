@@ -16,7 +16,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
-
 class UserCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string

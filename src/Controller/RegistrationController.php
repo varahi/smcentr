@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Profession;
 use App\Entity\User;
 use App\Form\User\RegistrationFormType;
+use App\Repository\JobTypeRepository;
+use App\Repository\ProfessionRepository;
+use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,7 +50,6 @@ class RegistrationController extends AbstractController
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         ManagerRegistry $doctrine,
-        SluggerInterface $slugger,
         FileUploader $fileUploader
     ): Response {
         $user = new User();
@@ -104,18 +107,30 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        ProfessionRepository $professionRepository,
+        JobTypeRepository $jobTypeRepository,
+        FileUploader $fileUploader
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $professions = $professionRepository->findAllOrder(['name' => 'ASC']);
+        $jobTypes = $jobTypeRepository->findAllOrder(['name' => 'ASC']);
+
+        if ($form->isSubmitted()) {
             // encode the plain password
             $user->setPassword(
                 $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
             );
             $user->setRoles(array('ROLE_MASTER'));
+            // Upload avatar file if exist
+            $avatarFile = $form->get('avatar')->getData();
+            if ($avatarFile) {
+                $avatarFileName = $fileUploader->upload($avatarFile);
+                $user->setAvatar($avatarFileName);
+            }
 
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
@@ -142,6 +157,8 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/register_master.html.twig', [
+            'professions' => $professions,
+            'jobTypes' => $jobTypes,
             'registrationForm' => $form->createView(),
         ]);
     }

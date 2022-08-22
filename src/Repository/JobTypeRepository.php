@@ -39,6 +39,15 @@ class JobTypeRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param array $order
+     * @return JobType[]
+     */
+    public function findAllOrder(array $order)
+    {
+        return $this->findBy([], $order);
+    }
+
 //    /**
 //     * @return JobType[] Returns an array of JobType objects
 //     */
