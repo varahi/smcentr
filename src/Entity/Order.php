@@ -78,6 +78,11 @@ class Order
      */
     private $district;
 
+    public function __toString(): string
+    {
+        return $this->id;
+    }
+
 
     public function getId(): ?int
     {

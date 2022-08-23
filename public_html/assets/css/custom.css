@@ -40,6 +40,12 @@
 .form-std {
     margin: 0 auto;
 }
-.rounded img {
+.rounded img,
+.user-rounded {
     border-radius: 50%;
+}
+
+.textarea-form-control {
+    border-radius: 20px;
+    margin-bottom: 20px;
 }

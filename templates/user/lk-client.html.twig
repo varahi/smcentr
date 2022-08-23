@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <button>Создать заявку</button>
+                    <a href="{{ path('app_order_new') }}"><button>Создать заявку</button></a>
                 </div>
             </div>
         </div>
@@ -226,10 +226,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-        </div>
         </div>
     </section>
 
@@ -435,10 +431,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-        </div>
         </div>
     </section>
 
@@ -585,8 +577,6 @@
 
             <div class="row">
                 <div class="col-md-12">
-
-
                     <div class="btn_center">
                         <button>Показать все завершенные заявки</button>
                     </div>
@@ -597,30 +587,6 @@
         </div>
     </section>
 
-
-
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <ul>
-                        <li><a href="">Способы оплаты</a></li>
-                        <li><a href="">Политика конфиденциальности</a></li>
-                    </ul>
-
-
-                </div>
-
-                <div class="col-md-4">
-
-                </div>
-
-                <div class="col-md-4">
-                    <p>Центр поддержки клиентов: <a href="">8 800 100 00 00</a><br>
-                        Звонок по России бесплатный</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+    {% include 'partials/footer/_footer.html.twig' %}
 
 {% endblock %}
