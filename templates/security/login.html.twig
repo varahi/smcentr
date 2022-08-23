@@ -8,43 +8,38 @@
                     {% include 'partials/_logo_white.html.twig' %}
                     <div class="auth_items block_shadow b_center">
                         <h2 class="b_center">{{ 'Login'|trans }}</h2>
-                        <form class="form-std" method="post" autocomplete="off">
 
-                            {% for message in app.flashes('notification') %}
-                                <div class="alert-success alert alert-dismissible" role="alert">
-                                    <p>{{ message }}</p>
-                                    {#<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span></button>#}
-                                </div>
-                            {% endfor %}
+                        {% if app.user %}
+                            <div class="mb-3">
+                                {{ 'You logged as'|trans }} {{ app.user.username }} <br /><br />
+                                <a href="{{ path('app_logout') }}"><button>{{ 'Logout'|trans }}</button></a>
+                            </div>
+                        {% else %}
+                            <form class="form-std" method="post" autocomplete="off">
+                                {% for message in app.flashes('notification') %}
+                                    <div class="alert-success alert alert-dismissible" role="alert">
+                                        <p>{{ message }}</p>
+                                        {#<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span></button>#}
+                                    </div>
+                                {% endfor %}
+                                {% if error %}
+                                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                {% endif %}
+                                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" placeholder="E-mail" autocomplete="email" required autofocus>
+                                <input type="password" name="password" id="inputPassword" placeholder="Пароль" autocomplete="current-password" required>
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                <button>{{ 'Enter'|trans }}</button>
+                            </form>
+                        {% endif %}
 
-                            {% if error %}
-                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                            {% endif %}
-                            {% if app.user %}
-                                <div class="mb-3">
-                                    {{ 'You logged as'|trans }} {{ app.user.username }}, <a href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>
-                                </div>
-                            {% endif %}
-
-                            <input type="text" name="login" placeholder="E-mail" required>
-                            <input type="text" name="password" placeholder="Пароль" required>
-                            <button>{{ 'Enter'|trans }}</button>
-                        </form>
-
-                        {#{{ path('app_forgot_password_request') }}#}
-
-                        <p class="m_t_15"><a href="/">{{ 'Forgot password'|trans }}</a></p>
-                        <p class="text-grey">{{ 'No account'|trans }}
-                            <a href="{{ path('app_registration') }}">{{ 'Register'|trans }}</a></p>
-                        <h5>{{ 'Download app'|trans }}</h5>
-                        <div style="display: flex;">
-                            <a href="#" target="_blank">
-                                <img src="{{ asset('assets/images/app.png') }}" style="width: 90%;" alt="" />
-                            </a>
-                            <a href="smc.apk" target="_blank">
-                                <img src="{{ asset('assets/images/android.png') }}" style="width: 90%;" alt="" />
-                            </a>
-                        </div>
+                        {% if app.user %}
+                        {% else %}
+                            <p class="m_t_15"><a href="{{ path('app_forgot_password_request') }}">{{ 'Forgot password'|trans }}</a></p>
+                            <p class="text-grey">{{ 'No account'|trans }}
+                                <a href="{{ path('app_registration') }}">{{ 'Register'|trans }}</a>
+                            </p>
+                        {% endif %}
+                        {% include 'partials/_download_app.html.twig' %}
                     </div>
                     <p class="text-grey">
                         Центр поддержки клиентов: <a href="#">8 800 100 00 00</a><br /> Звонок по России бесплатный

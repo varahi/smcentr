@@ -16,21 +16,30 @@
     /*    font-size: 2.75rem;*/
 }
 
-.upload_file {
+.upload_file,
+.p_upload_btn {
     background: none;
 }
-.upload_file input[type="file"]{
+.upload_file input[type="file"] {
     -webkit-appearance:none;
     position:absolute;
-    top: 90%;
-    left:0;
     opacity:0;
-    margin-left: 60%;
-    width: 200px;
+    width: 180px;
     height: 50px;
     cursor: pointer;
 }
 
+.p_upload_btn input[type="file"] {
+    position:absolute;
+    margin-top: 20px;
+    width: 180px;
+    height: 50px;
+    opacity: 0;
+}
+
 .form-std {
     margin: 0 auto;
+}
+.rounded img {
+    border-radius: 50%;
 }

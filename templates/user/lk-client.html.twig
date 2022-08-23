@@ -1,0 +1,626 @@
+{% extends 'layouts/base.html.twig' %}
+{% block title %}Добро пожаловать {{ user.fullName }}{% endblock %}
+{% block body %}
+
+    <header id="sticky_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% include 'partials/navigation/_cliebt_navbar.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="list_jobs">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Профиль клиента</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="profile_master">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="profile_master">
+                        <div class="profile_img">
+                            {% if user.avatar %}
+                                <div class="rounded">
+                                    <img src="{{ asset('uploads/files/' ~ user.avatar) }}" width="121" height="121" />
+                                </div>
+                            {% else %}
+                                <img src="{{ asset('assets/images/avatar.png') }}">
+                            {% endif %}
+                        </div>
+                        <div class="profile_info">
+                            <div class="fio">
+                                {{ user.fullName }}
+                            </div>
+                            <div class="city">
+                                {{ user.city.name }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn_profile_edit">
+                        <a href="{{ path('app_edit_profile') }}"><button>Редактировать профиль</button></a>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <button>Создать заявку</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Созданные заявки -->
+
+    <section id="list_items">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <h3>Заявки без исполнителя</h3>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="job_item">
+                        <div class="top_item">
+                            <div class="item_left">
+                                <h2>Ремонт сантехники</h2>
+                                <div class="city">
+                                    Москва
+                                </div>
+                                <div class="raion">
+                                    Красноселький район
+                                </div>
+                                <div class="date">03.06.2022</div>
+                            </div>
+                            <div class="item_right">
+                                <div class="id_item">
+                                    ID 123456
+                                </div>
+
+                                <div class="prof">
+                                    Сантехник
+                                </div>
+
+                                <div class="raiting">
+                                    <p>Сложность</p>
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                </div>
+
+                                <div class="status">
+                                    новый
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            Описание заказа. Описание заказа. Описание заказа. Описание заказа. Описание заказа.
+                        </div>
+
+                        <div class="btn_price">
+                            <button>Закрыть заявку</button>
+                            <span>1000 <i>руб.</i></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="job_item">
+                        <div class="top_item">
+                            <div class="item_left">
+                                <h2>Ремонт сантехники</h2>
+                                <div class="city">
+                                    Москва
+                                </div>
+                                <div class="raion">
+                                    Красноселький район
+                                </div>
+                                <div class="date">03.06.2022</div>
+                            </div>
+                            <div class="item_right">
+                                <div class="id_item">
+                                    ID 123456
+                                </div>
+
+                                <div class="prof">
+                                    Сантехник
+                                </div>
+
+                                <div class="raiting">
+                                    <p>Сложность</p>
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                </div>
+
+                                <div class="status">
+                                    новый
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            Описание заказа. Описание заказа. Описание заказа. Описание заказа. Описание заказа.
+                        </div>
+
+                        <div class="btn_price">
+                            <button>Закрыть заявку</button>
+                            <span>1000 <i>руб.</i></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="job_item">
+                        <div class="top_item">
+                            <div class="item_left">
+                                <h2>Ремонт сантехники</h2>
+                                <div class="city">
+                                    Москва
+                                </div>
+                                <div class="raion">
+                                    Красноселький район
+                                </div>
+                                <div class="date">03.06.2022</div>
+                            </div>
+                            <div class="item_right">
+                                <div class="id_item">
+                                    ID 123456
+                                </div>
+
+                                <div class="prof">
+                                    Сантехник
+                                </div>
+
+                                <div class="raiting">
+                                    <p>Сложность</p>
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                </div>
+
+                                <div class="status">
+                                    новый
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            Описание заказа. Описание заказа. Описание заказа. Описание заказа. Описание заказа.
+                        </div>
+
+                        <div class="btn_price">
+                            <button>Закрыть заявку</button>
+                            <span>1000 <i>руб.</i></span>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+
+                    <div class="btn_center">
+                        <button>Показать все заявки без исполнителя</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+        </div>
+    </section>
+
+
+    <!-- Заявки в работе -->
+
+
+    <section id="list_items">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <h3>Активные заявки</h3>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="job_item">
+                        <div class="top_item">
+                            <div class="item_left">
+                                <h2>Ремонт сантехники</h2>
+                                <div class="city">
+                                    Москва
+                                </div>
+                                <div class="raion">
+                                    Красноселький район
+                                </div>
+                                <div class="date">03.06.2022</div>
+                            </div>
+                            <div class="item_right">
+                                <div class="id_item">
+                                    ID 123456
+                                </div>
+
+                                <div class="prof">
+                                    Сантехник
+                                </div>
+
+                                <div class="raiting">
+                                    <p>Сложность</p>
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                </div>
+
+                                <div class="status_performed">
+                                    в работе
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            Описание заказа. Описание заказа. Описание заказа. Описание заказа. Описание заказа.
+                        </div>
+
+                        <div class="btn_price">
+                            <button>Закрыть заявку</button>
+                            <span>1000 <i>руб.</i></span>
+                        </div>
+
+                        <div class="client_contact_visible">
+                            <div class="phone">
+                                <img src="assets/images/phone.svg">
+                                <div class="phone_num"><a href="tel:+79991112233">+7 999 111-22-33</a></div>
+                            </div>
+
+                            <div class="client_block">
+                                Алексей <img src="assets/images/avatar.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-4">
+                    <div class="job_item">
+                        <div class="top_item">
+                            <div class="item_left">
+                                <h2>Ремонт сантехники</h2>
+                                <div class="city">
+                                    Москва
+                                </div>
+                                <div class="raion">
+                                    Красноселький район
+                                </div>
+                                <div class="date">03.06.2022</div>
+                            </div>
+                            <div class="item_right">
+                                <div class="id_item">
+                                    ID 123456
+                                </div>
+
+                                <div class="prof">
+                                    Сантехник
+                                </div>
+
+                                <div class="raiting">
+                                    <p>Сложность</p>
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                </div>
+
+                                <div class="status_performed">
+                                    в работе
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            Описание заказа. Описание заказа. Описание заказа. Описание заказа. Описание заказа.
+                        </div>
+
+                        <div class="btn_price">
+                            <button>Закрыть заявку</button>
+                            <span>1000 <i>руб.</i></span>
+                        </div>
+
+                        <div class="client_contact_visible">
+                            <div class="phone">
+                                <img src="assets/images/phone.svg">
+                                <div class="phone_num"><a href="tel:+79991112233">+7 999 111-22-33</a></div>
+                            </div>
+
+                            <div class="client_block">
+                                Алексей <img src="assets/images/avatar.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="job_item">
+                        <div class="top_item">
+                            <div class="item_left">
+                                <h2>Ремонт сантехники</h2>
+                                <div class="city">
+                                    Москва
+                                </div>
+                                <div class="raion">
+                                    Красноселький район
+                                </div>
+                                <div class="date">03.06.2022</div>
+                            </div>
+                            <div class="item_right">
+                                <div class="id_item">
+                                    ID 123456
+                                </div>
+
+                                <div class="prof">
+                                    Сантехник
+                                </div>
+
+                                <div class="raiting">
+                                    <p>Сложность</p>
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                </div>
+
+                                <div class="status_performed">
+                                    в работе
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            Описание заказа. Описание заказа. Описание заказа. Описание заказа. Описание заказа.
+                        </div>
+
+                        <div class="btn_price">
+                            <button>Закрыть заявку</button>
+                            <span>1000 <i>руб.</i></span>
+                        </div>
+
+                        <div class="client_contact_visible">
+                            <div class="phone">
+                                <img src="assets/images/phone.svg">
+                                <div class="phone_num"><a href="tel:+79991112233">+7 999 111-22-33</a></div>
+                            </div>
+
+                            <div class="client_block">
+                                Алексей <img src="assets/images/avatar.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+
+                    <div class="btn_center">
+                        <button>Показать все активные заявки</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+        </div>
+    </section>
+
+
+    <!-- Заявки завершенные -->
+
+    <section id="list_items">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <h3>Завершенные заявки</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="job_item">
+                        <div class="top_item">
+                            <div class="item_left">
+                                <h2>Ремонт сантехники</h2>
+                                <div class="city">
+                                    Москва
+                                </div>
+                                <div class="raion">
+                                    Красноселький район
+                                </div>
+                                <div class="date">03.06.2022</div>
+                            </div>
+                            <div class="item_right">
+                                <div class="id_item">
+                                    ID 123456
+                                </div>
+
+                                <div class="prof">
+                                    Сантехник
+                                </div>
+
+                                <div class="raiting">
+                                    <p>Сложность</p>
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                </div>
+
+                                <div class="status_complite">
+                                    завершен
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            Описание заказа. Описание заказа. Описание заказа. Описание заказа. Описание заказа.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="job_item">
+                        <div class="top_item">
+                            <div class="item_left">
+                                <h2>Ремонт сантехники</h2>
+                                <div class="city">
+                                    Москва
+                                </div>
+                                <div class="raion">
+                                    Красноселький район
+                                </div>
+                                <div class="date">03.06.2022</div>
+                            </div>
+                            <div class="item_right">
+                                <div class="id_item">
+                                    ID 123456
+                                </div>
+
+                                <div class="prof">
+                                    Сантехник
+                                </div>
+
+                                <div class="raiting">
+                                    <p>Сложность</p>
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                </div>
+
+                                <div class="status_complite">
+                                    завершен
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            Описание заказа. Описание заказа. Описание заказа. Описание заказа. Описание заказа.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="job_item">
+                        <div class="top_item">
+                            <div class="item_left">
+                                <h2>Ремонт сантехники</h2>
+                                <div class="city">
+                                    Москва
+                                </div>
+                                <div class="raion">
+                                    Красноселький район
+                                </div>
+                                <div class="date">03.06.2022</div>
+                            </div>
+                            <div class="item_right">
+                                <div class="id_item">
+                                    ID 123456
+                                </div>
+
+                                <div class="prof">
+                                    Сантехник
+                                </div>
+
+                                <div class="raiting">
+                                    <p>Сложность</p>
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_full.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                    <img src="assets/images/star_empty.svg">
+                                </div>
+
+                                <div class="status_complite">
+                                    завершен
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description">
+                            Описание заказа. Описание заказа. Описание заказа. Описание заказа. Описание заказа.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+
+                    <div class="btn_center">
+                        <button>Показать все завершенные заявки</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </section>
+
+
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <ul>
+                        <li><a href="">Способы оплаты</a></li>
+                        <li><a href="">Политика конфиденциальности</a></li>
+                    </ul>
+
+
+                </div>
+
+                <div class="col-md-4">
+
+                </div>
+
+                <div class="col-md-4">
+                    <p>Центр поддержки клиентов: <a href="">8 800 100 00 00</a><br>
+                        Звонок по России бесплатный</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+{% endblock %}

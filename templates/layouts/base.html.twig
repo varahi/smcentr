@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <meta name="robots" content="noindex,nofollow">
+
+    {#    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/favicon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/favicon.png') }}">#}
+
+    <title>{% block title %}SM Center{% endblock %}</title>
+    <meta name="description" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+    {% block stylesheets %}
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/owl.carousel.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/owl.theme.default.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/custom.css') }}">
+    {% endblock %}
+</head>
+<body>
+{% block body %}{% endblock %}
+
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+{% endblock %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        const slider = $("#slider_active_order").owlCarousel({
+            loop:true,
+            margin:10,
+            nav:true,
+            dots: false,
+            items:4,
+            responsive:{
+                0:{
+                    items:1
+                },
+                600:{
+                    items:2
+                },
+                1000:{
+                    items:3
+                }
+            }
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        const slider = $("#slider_complite_order").owlCarousel({
+            loop:true,
+            margin:10,
+            nav:true,
+            dots: false,
+            items:4,
+            responsive:{
+                0:{
+                    items:1
+                },
+                600:{
+                    items:2
+                },
+                1000:{
+                    items:3
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -44,10 +44,11 @@
 
                                 <div class="file_upload">
                                     <p>Главная страница</p>
-                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" /> file-pasport.jpg</span>
+                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" /> {#file-pasport.jpg#}</span>
                                 </div>
 
                                 <div class="p_upload_btn">
+                                    {{ form_widget(registrationForm.doc1) }}
                                     <button class="upload">Загрузить<i></i></button>
                                 </div>
                             </div>
@@ -55,9 +56,10 @@
                             <div class="p_upload_item">
                                 <div class="file_upload">
                                     <p>Страница прописки</p>
-                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />file-regitration.jpg</span>
+                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />{#file-regitration.jpg#}</span>
                                 </div>
                                 <div class="p_upload_btn">
+                                    {{ form_widget(registrationForm.doc2) }}
                                     <button class="upload">Загрузить<i></i></button>
                                 </div>
                             </div>
@@ -65,9 +67,10 @@
                             <div class="p_upload_item">
                                 <div class="file_upload">
                                     <p>Селфи с паспортом</p>
-                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />file-selfi.jpg</span>
+                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />{#file-selfi.jpg#}</span>
                                 </div>
                                 <div class="p_upload_btn">
+                                    {{ form_widget(registrationForm.doc3) }}
                                     <button class="upload">Загрузить<i></i></button>
                                 </div>
                             </div>
@@ -84,13 +87,13 @@
                                 <div class="cb_items">
                                     <div class="main_checkbox">
                                         <label class="checkbox">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" id="registration_master_form_professions_{{ profession.id }}" name="registration_master_form[professions][]" value="{{ profession.id }}" checked>
                                             <span>{{ profession.name }}</span>
                                         </label>
                                     </div>
                                     {% for jobType in profession.jobTypes %}
                                         <label class="checkbox">
-                                            <input type="checkbox">
+                                            <input type="checkbox" id="registration_master_form_jobTypes_{{ jobType.id }}" name="registration_master_form[jobTypes][]" value="{{ jobType.id }}">
                                             <span>{{ jobType.name }}</span>
                                         </label>
                                     {% endfor %}

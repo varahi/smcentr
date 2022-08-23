@@ -43,11 +43,15 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             ]
         );
 
+
+        //dd($credentials);
+
         return $credentials;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+
         // If user admin, then redirect to admin panel
         $user = $token->getUser();
         if (in_array('ROLE_CLIENT', $user->getRoles())) {
@@ -61,6 +65,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
+        //return $this->authenticator->onAuthenticationFailure($request, $exception);
         return new RedirectResponse($this->urlGenerator->generate('app_login'));
     }
 
