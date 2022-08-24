@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class UserController extends AbstractController
 {
+    public const STATUS_NEW = '0';
+
+    public const STATUS_ACTIVE = '1';
+
+    public const STATUS_COMPLETED = '9';
+
     /**
      * Time in seconds 3600 - one hour
      */
@@ -66,13 +73,22 @@ class UserController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         TranslatorInterface $translator,
-        NotifierInterface $notifier
+        NotifierInterface $notifier,
+        OrderRepository $orderRepository
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT)) {
             $user = $this->security->getUser();
+
+            $newOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user);
+            $activeOrders = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
+            $completedOrders = $orderRepository->findByStatus(self::STATUS_COMPLETED, $user);
+
             {
                 $response = new Response($this->twig->render('user/lk-client.html.twig', [
                     'user' => $user,
+                    'newOrders' => $newOrders,
+                    'activeOrders' => $activeOrders,
+                    'completedOrders' => $completedOrders
                 ]));
 
                 $response->setSharedMaxAge(self::CACHE_MAX_AGE);

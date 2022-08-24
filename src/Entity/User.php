@@ -120,11 +120,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $jobTypes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="performer")
+     */
+    private $assignments;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->professions = new ArrayCollection();
         $this->jobTypes = new ArrayCollection();
+        $this->assignments = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -434,5 +440,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getAssignments(): Collection
+    {
+        return $this->assignments;
+    }
+
+    public function addAssignment(Order $assignment): self
+    {
+        if (!$this->assignments->contains($assignment)) {
+            $this->assignments[] = $assignment;
+            $assignment->setPerformer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignment(Order $assignment): self
+    {
+        if ($this->assignments->removeElement($assignment)) {
+            // set the owning side to null (unless already changed)
+            if ($assignment->getPerformer() === $this) {
+                $assignment->setPerformer(null);
+            }
+        }
+
+        return $this;
     }
 }

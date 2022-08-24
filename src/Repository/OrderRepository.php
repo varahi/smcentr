@@ -16,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class OrderRepository extends ServiceEntityRepository
 {
+    public const ORDER_TABLE = 'App\Entity\Order';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Order::class);
@@ -37,6 +39,25 @@ class OrderRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+
+    /**
+     * @param $status
+     * @param $user
+     * @return float|int|mixed|string
+     */
+    public function findByStatus($status, $user)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('o')
+            ->from(self::ORDER_TABLE, 'o')
+            ->where('o.status LIKE :status')
+            ->andWhere($qb->expr()->in('o.users', $user->getId()))
+            ->setParameter('status', $status)
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

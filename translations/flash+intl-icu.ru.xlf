@@ -21,6 +21,14 @@
         <source>Something wrong</source>
         <target>Что-то пошло не так, попробуйте зарегистрироваться еще раз.</target>
       </trans-unit>
+      <trans-unit id="Order created" resname="Order created">
+        <source>Order created</source>
+        <target>Ваша заявка создана</target>
+      </trans-unit>
+      <trans-unit id="Order closed" resname="Order closed">
+        <source>Order closed</source>
+        <target>Ваша заявка закрыта</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -101,6 +101,82 @@
         <source>try_again</source>
         <target>попробуйте снова</target>
       </trans-unit>
+      <trans-unit id="X9hGTrh" resname="mail_message_visit_link">
+        <source>mail_message_visit_link</source>
+        <target>__mail_message_visit_link</target>
+      </trans-unit>
+      <trans-unit id="p49E9Md" resname="Cheers">
+        <source>Cheers</source>
+        <target>Спасибо</target>
+      </trans-unit>
+      <trans-unit id="AGq684W" resname="Working on">
+        <source>Working on</source>
+        <target>В работе</target>
+      </trans-unit>
+      <trans-unit id="O3QE5i9" resname="Close order">
+        <source>Close order</source>
+        <target>Закрыть заявку</target>
+      </trans-unit>
+      <trans-unit id="1jSsn4T" resname="New order">
+        <source>New order</source>
+        <target>Новая</target>
+      </trans-unit>
+      <trans-unit id="E1QpDdX" resname="Empty professions list">
+        <source>Empty professions list</source>
+        <target>Список профессий пуст</target>
+      </trans-unit>
+      <trans-unit id="rS9mOfI" resname="Empty orders list">
+        <source>Empty orders list</source>
+        <target>Список заявок пуст</target>
+      </trans-unit>
+      <trans-unit id="fE6lBDk" resname="Are you sure you want to cose order">
+        <source>Are you sure you want to cose order</source>
+        <target>Вы уверены, что хотите закрыть заявку?</target>
+      </trans-unit>
+      <trans-unit id="FcSqEwN" resname="Edit profile">
+        <source>Edit profile</source>
+        <target>Редактировать профиль</target>
+      </trans-unit>
+      <trans-unit id="EevU.ko" resname="Create order">
+        <source>Create order</source>
+        <target>Создать заявку</target>
+      </trans-unit>
+      <trans-unit id="Iqlw0uW" resname="Completed">
+        <source>Completed</source>
+        <target>Завершен</target>
+      </trans-unit>
+      <trans-unit id="DiImtSN" resname="Welcome">
+        <source>Welcome</source>
+        <target>Добро пожаловать</target>
+      </trans-unit>
+      <trans-unit id="4jNHGAh" resname="Client profile">
+        <source>Client profile</source>
+        <target>Профиль клиента</target>
+      </trans-unit>
+      <trans-unit id="cPCzu.." resname="New orders">
+        <source>New orders</source>
+        <target>Заявки без исполнителя</target>
+      </trans-unit>
+      <trans-unit id="HbsDpp2" resname="Show all new orders">
+        <source>Show all new orders</source>
+        <target>Показать все заявки без исполнителя</target>
+      </trans-unit>
+      <trans-unit id="bbPhRoL" resname="Active orders">
+        <source>Active orders</source>
+        <target>Активные заявки</target>
+      </trans-unit>
+      <trans-unit id="DClKFFu" resname="Show all active orders">
+        <source>Show all active orders</source>
+        <target>Показать все активные заявки</target>
+      </trans-unit>
+      <trans-unit id="SO773Gg" resname="Completed orders">
+        <source>Completed orders</source>
+        <target>Завершенные заявки</target>
+      </trans-unit>
+      <trans-unit id="juEFp_S" resname="Show all completed orders">
+        <source>Show all completed orders</source>
+        <target>Показать все завершенные заявки</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

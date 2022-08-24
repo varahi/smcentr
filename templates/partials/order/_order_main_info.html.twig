@@ -1,0 +1,52 @@
+<div class="top_item">
+    <div class="item_left">
+        <h2>{{ order.jobType.name }}</h2>
+        <div class="city">
+            {{ order.city.name }}
+        </div>
+        <div class="raion">
+            {{ order.district.name }}
+        </div>
+        <div class="date">{{ order.deadline|date("d.m.Y") }}</div>
+    </div>
+    <div class="item_right">
+        <div class="id_item">
+            ID {{ order.id }}
+        </div>
+        <div class="prof">
+            {{ order.profession.name }}
+        </div>
+        <div class="raiting">
+            <p>Сложность</p>
+            {% include 'partials/order/_order_start.html.twig' %}
+        </div>
+        {% if order.status == 0 %}
+            <div class="status">
+                {{ 'New order'|trans }}
+            </div>
+        {% endif %}
+        {% if order.status == 1 %}
+            <div class="status_performed">
+                {{ 'Working on'|trans }}
+            </div>
+        {% endif %}
+        {% if order.status == 9 %}
+            <div class="status_complite">
+                {{ 'Completed'|trans }}
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+<div class="description">
+    {{ order.description }}
+</div>
+
+{% if order.status == 0 or order.status == 1 %}
+<div class="btn_price">
+    <a href="{{ path('app_close_order', { id: order.id}) }}" onclick="return confirm('{{ 'Are you sure you want to cose order'|trans }}')">
+        <button>{{ 'Close order'|trans }}</button>
+    </a>
+    <span>{{ order.price|format_currency('RUB') }} {#<i>руб.</i>#}</span>
+</div>
+{% endif %}

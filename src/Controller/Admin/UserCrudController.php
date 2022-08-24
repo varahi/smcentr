@@ -62,6 +62,7 @@ class UserCrudController extends AbstractCrudController
             ])->hideOnIndex();
         yield AssociationField::new('city');
         yield AssociationField::new('orders')->hideOnIndex();
+        yield AssociationField::new('assignments')->hideOnIndex();
         yield BooleanField::new('getNotifications');
     }
 

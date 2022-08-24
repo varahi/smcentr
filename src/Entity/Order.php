@@ -78,9 +78,14 @@ class Order
      */
     private $district;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="assignments")
+     */
+    private $performer;
+
     public function __toString(): string
     {
-        return $this->id;
+        return 'ID Заказа - ' . $this->id .' - '. $this->jobType->getName() .' - ' . $this->profession->getName();
     }
 
 
@@ -229,6 +234,18 @@ class Order
     public function setDistrict(?District $district): self
     {
         $this->district = $district;
+
+        return $this;
+    }
+
+    public function getPerformer(): ?User
+    {
+        return $this->performer;
+    }
+
+    public function setPerformer(?User $performer): self
+    {
+        $this->performer = $performer;
 
         return $this;
     }
