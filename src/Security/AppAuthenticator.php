@@ -6,9 +6,11 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -96,10 +98,27 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
             return new RedirectResponse($targetPath);
         }
 
-        // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        $user = $token->getUser();
+        if (in_array('ROLE_CLIENT', $user->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('app_client_profile'));
+        }
+        if (in_array('ROLE_MASTER', $user->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('app_master_profile'));
+        }
 
-        return new RedirectResponse($this->urlGenerator->generate('app_client_profile'));
+        /*if (in_array('ROLE_CLIENT', $user->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('app_client_profile'));
+        } elseif (in_array('ROLE_MASTER', $user->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('app_master_profile'));
+        } else {
+            return new RedirectResponse($this->urlGenerator->generate('app_backend'));
+        }*/
+    }
+
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
+    {
+        //return $this->authenticator->onAuthenticationFailure($request, $exception);
+        return new RedirectResponse($this->urlGenerator->generate('app_login'));
     }
 
     protected function getLoginUrl()

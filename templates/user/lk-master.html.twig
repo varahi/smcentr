@@ -2,26 +2,26 @@
 {% block title %}{{ 'Welcome'|trans }} {{ user.fullName }}{% endblock %}
 {% block body %}
 
-    <header id="sticky_header">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    {% include 'partials/navigation/_navbar.html.twig' %}
-                </div>
+<header id="sticky_header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% include 'partials/navigation/_navbar.html.twig' %}
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <section id="list_jobs">
-        <div class="container">
-            {% include 'partials/_message.html.twig' %}
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>{{ 'Client profile'|trans }}</h1>
-                </div>
+<section id="list_jobs">
+    <div class="container">
+        {% include 'partials/_message.html.twig' %}
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{ 'Master profile'|trans }}</h1>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <section id="profile_master">
         <div class="container">
@@ -41,52 +41,42 @@
                             <div class="fio">
                                 {{ user.fullName }}
                             </div>
+                            <div class="proff">
+                                {% if user.professions is not empty %}
+                                {% for porfession in user.professions %}
+                                    {% if loop.last == false %}
+                                        {{ porfession.name }},
+                                    {% else %}
+                                        {{ porfession.name }}
+                                    {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
                             <div class="city">
                                 {{ user.city.name }}
                             </div>
                         </div>
                     </div>
                     <div class="btn_profile_edit">
-                        <a href="{{ path('app_edit_client_profile') }}"><button>{{ 'Edit profile'|trans }}</button></a>
+                        <a href="{{ path('app_edit_master_profile') }}"><button>{{ 'Edit profile'|trans }}</button></a>
                     </div>
                 </div>
 
                 <div class="col-md-4">
-                    <a href="{{ path('app_order_new') }}"><button>{{ 'Create order'|trans }}</button></a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-{#    <!-- Созданные заявки -->#}
-    <section id="list_items">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h3>{{ 'New orders'|trans }}</h3>
-                </div>
-            </div>
-
-            {% if newOrders is not empty %}
-            <div class="row">
-                {% for order in newOrders %}
-                    {% include 'partials/order/_new_order_item.html.twig' %}
-                {% endfor %}
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="btn_center">
-                        <button>{{ 'Show all new orders'|trans }}</button>
+                    <div class="profile_balance">
+                        <div class="balance">
+                            <span>Баланс:</span>
+                            <div>2300 руб.</div>
+                        </div>
+                        <button>Пополнить баланс</button>
                     </div>
                 </div>
             </div>
-            {% else %}
-                <p>{{ 'Empty orders list'|trans }}</p>
-            {% endif %}
         </div>
     </section>
 
-{#    <!-- Заявки в работе -->#}
+
+    {#    <!-- Active заявки -->#}
     <section id="list_items">
         <div class="container">
             <div class="row">
@@ -96,18 +86,18 @@
             </div>
 
             {% if activeOrders is not empty %}
-            <div class="row">
-                {% for order in activeOrders %}
-                    {% include 'partials/order/_active_order_item.html.twig' %}
-                {% endfor %}
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="btn_center">
-                        <button>{{ 'Show all active orders'|trans }}</button>
+                <div class="row">
+                    {% for order in activeOrders %}
+                        {% include 'partials/order/_active_order_item.html.twig' %}
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="btn_center">
+                            <button>{{ 'Show all active orders'|trans }}</button>
+                        </div>
                     </div>
                 </div>
-            </div>
             {% else %}
                 <p>{{ 'Empty orders list'|trans }}</p>
             {% endif %}
@@ -141,5 +131,6 @@
             {% endif %}
         </div>
     </section>
-    {% include 'partials/footer/_footer.html.twig' %}
+
+ {% include 'partials/footer/_footer.html.twig' %}
 {% endblock %}

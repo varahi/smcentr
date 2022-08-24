@@ -111,7 +111,7 @@ class RegistrationFormType extends AbstractType
                     ],
                     'label' => false
                 ],
-                'invalid_message' => 'Your password does not match the confirmation.',
+                'invalid_message' => 'Your password does not match the confirmation',
                 'translation_domain' => 'forms',
             ])
 

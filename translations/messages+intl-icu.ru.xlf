@@ -177,6 +177,14 @@
         <source>Show all completed orders</source>
         <target>Показать все завершенные заявки</target>
       </trans-unit>
+      <trans-unit id="Wrx8bPV" resname="Master profile">
+        <source>Master profile</source>
+        <target>Профиль мастера</target>
+      </trans-unit>
+      <trans-unit id="Your password does not match the confirmation" resname="Your password does not match the confirmation">
+        <source>Your password does not match the confirmation</source>
+        <target>Введенные пароли не совпадают</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -29,6 +29,14 @@
         <source>Order closed</source>
         <target>Ваша заявка закрыта</target>
       </trans-unit>
+      <trans-unit id="Profile updated" resname="Profile updated">
+        <source>Profile updated</source>
+        <target>Ваш профиль обновлен</target>
+      </trans-unit>
+      <trans-unit id="Mismatch password" resname="Mismatch password">
+        <source>Mismatch password</source>
+        <target>Введенные пароли не совпадают</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

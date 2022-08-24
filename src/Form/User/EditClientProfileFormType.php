@@ -4,8 +4,6 @@ namespace App\Form\User;
 
 use App\Entity\User;
 use App\Entity\City;
-use App\Entity\Profession;
-use App\Entity\JobType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -23,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\File;
 
-class RegistrationMasterFormType extends AbstractType
+class EditClientProfileFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -71,35 +69,19 @@ class RegistrationMasterFormType extends AbstractType
                 'label' => 'List of housing',
                 'required' => true,
             ])
-
-            /*->add('professions', EntityType::class, [
-                'class' => Profession::class,
-                'multiple'  => true,
-                'expanded'  => true,
-                'label' => false,
-                'required' => true,
-            ])*/
-
-           /* ->add('jobTypes', EntityType::class, [
-                'class' => JobType::class,
-                'multiple'  => true,
-                'expanded'  => true,
-                'label' => false,
-                'required' => true,
-            ])*/
-
             ->add('getNotifications')
 
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                'required' => false,
                 'type' => PasswordType::class,
                 'mapped' => false,
                 //'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Пожалуйста введите пароль',
-                    ]),
+                    //new NotBlank([
+                    //    'message' => 'Пожалуйста введите пароль',
+                    //]),
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Пароль должен состоять как минимм из {{ limit }} символов',
@@ -126,69 +108,6 @@ class RegistrationMasterFormType extends AbstractType
             ])
 
             ->add('avatar', FileType::class, [
-                'required' => false,
-                'mapped' => false,
-                'constraints' => [
-                    new Image([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/gif',
-                            'image/jpeg',
-                            'image/pjpeg',
-                            'image/png',
-                            'image/webp',
-                            'image/vnd.wap.wbmp'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image document',
-                    ])
-                ],
-                'label' => false,
-                'translation_domain' => 'forms',
-            ])
-
-            ->add('doc1', FileType::class, [
-                'required' => false,
-                'mapped' => false,
-                'constraints' => [
-                    new Image([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/gif',
-                            'image/jpeg',
-                            'image/pjpeg',
-                            'image/png',
-                            'image/webp',
-                            'image/vnd.wap.wbmp'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image document',
-                    ])
-                ],
-                'label' => false,
-                'translation_domain' => 'forms',
-            ])
-
-            ->add('doc2', FileType::class, [
-                'required' => false,
-                'mapped' => false,
-                'constraints' => [
-                    new Image([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/gif',
-                            'image/jpeg',
-                            'image/pjpeg',
-                            'image/png',
-                            'image/webp',
-                            'image/vnd.wap.wbmp'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image document',
-                    ])
-                ],
-                'label' => false,
-                'translation_domain' => 'forms',
-            ])
-
-            ->add('doc3', FileType::class, [
                 'required' => false,
                 'mapped' => false,
                 'constraints' => [

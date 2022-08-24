@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Form\User\EditClientProfileFormType;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,13 +47,16 @@ class UserController extends AbstractController
     /**
      * @param Security $security
      * @param Environment $twig
+     * @param ManagerRegistry $doctrine
      */
     public function __construct(
         Security $security,
-        Environment $twig
+        Environment $twig,
+        ManagerRegistry $doctrine
     ) {
         $this->security = $security;
         $this->twig = $twig;
+        $this->doctrine = $doctrine;
     }
 
     /**
@@ -102,6 +108,42 @@ class UserController extends AbstractController
     }
 
     /**
+     * Require ROLE_MASTER for *every* controller method in this class.
+     *
+     * @IsGranted("ROLE_MASTER")
+     * @Route("/user/lk-master", name="app_master_profile")
+     */
+    public function masterProfile(
+        Request $request,
+        UserRepository $userRepository,
+        TranslatorInterface $translator,
+        NotifierInterface $notifier,
+        OrderRepository $orderRepository
+    ): Response {
+        if ($this->isGranted(self::ROLE_MASTER)) {
+            $user = $this->security->getUser();
+
+            $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user);
+            $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user);
+
+            {
+                $response = new Response($this->twig->render('user/lk-master.html.twig', [
+                    'user' => $user,
+                    'activeOrders' => $activeOrders,
+                    'completedOrders' => $completedOrders
+                ]));
+
+                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                return $response;
+            }
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
+    }
+
+    /**
      * Require ROLE_CLIENT for *every* controller method in this class.
      *
      * @IsGranted("ROLE_CLIENT")
@@ -136,20 +178,61 @@ class UserController extends AbstractController
      * Require ROLE_CLIENT for *every* controller method in this class.
      *
      * @IsGranted("ROLE_CLIENT")
-     * @Route("/user/edit-profile", name="app_edit_profile")
+     * @Route("/user/edit-client-profile", name="app_edit_client_profile")
      */
     public function editProfile(
         Request $request,
         UserRepository $userRepository,
         TranslatorInterface $translator,
-        NotifierInterface $notifier
+        NotifierInterface $notifier,
+        UserPasswordHasherInterface $passwordHasher,
+        FileUploader $fileUploader
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT)) {
             $user = $this->security->getUser();
-            {
+            $form = $this->createForm(EditClientProfileFormType::class, $user);
+            $form->handleRequest($request);
 
-                $response = new Response($this->twig->render('user/lk-client.html.twig', [
+            if ($form->isSubmitted() && $form->isValid()) {
+                $post = $request->request->get('edit_client_profile_form');
+                // Set new password if changed
+                if ($post['plainPassword']['first'] !=='' && $post['plainPassword']['second'] !=='') {
+                    if (strcmp($post['plainPassword']['first'], $post['plainPassword']['second']) == 0) {
+                        // encode the plain password
+                        $user->setPassword(
+                            $passwordHasher->hashPassword(
+                                $user,
+                                $post['plainPassword']['first']
+                            )
+                        );
+                    } else {
+                        $message = $translator->trans('Mismatch password', array(), 'flash');
+                        $notifier->send(new Notification($message, ['browser']));
+                        return $this->redirectToRoute("app_edit_client_profile");
+                    }
+                }
+
+                // File upload
+                $avatarFile = $form->get('avatar')->getData();
+                if ($avatarFile) {
+                    $avatarFileName = $fileUploader->upload($avatarFile);
+                    $user->setAvatar($avatarFileName);
+                }
+
+                $entityManager = $this->doctrine->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $message = $translator->trans('Profile updated', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
+            }
+
+            {
+                $response = new Response($this->twig->render('user/edit-client.html.twig', [
                     'user' => $user,
+                    'registrationForm' => $form->createView(),
                 ]));
 
                 $response->setSharedMaxAge(self::CACHE_MAX_AGE);

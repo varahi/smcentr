@@ -9,14 +9,18 @@
         </button>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{{ path('app_order_new') }}">Создать заявку</a>
+                {% if is_granted('ROLE_MASTER') %}
+                    <a class="nav-link" href="{{ path('app_order_new') }}">Список заказов</a>
+                {% endif %}
+                {% if is_granted('ROLE_CLIENT') %}
+                    <a class="nav-link" href="{{ path('app_order_new') }}">Создать заявку</a>
+                {% endif %}
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('app_support') }}">Техническая поддержка</a>
             </li>
             <li class="nav-item">
             </li>
-
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
@@ -27,8 +31,15 @@
                     {% endif %}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ path('app_client_profile') }}">Профиль</a>
-
+                    {% if is_granted('ROLE_MASTER') %}
+                        <a class="dropdown-item" href="{{ path('app_master_profile') }}">Профиль</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_CLIENT') %}
+                        <a class="dropdown-item" href="{{ path('app_client_profile') }}">Профиль</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_MASTER') %}
+                        <a class="dropdown-item" href="{{ path('app_client_profile') }}">Баланс</a>
+                    {% endif %}
                     <a class="dropdown-item" href="{{ path('app_history') }}">История заказов</a>
                     <a class="dropdown-item" href="{{ path('app_notifications') }}">Уведомления</a>
                     <div class="dropdown-divider"></div>

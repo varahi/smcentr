@@ -128,22 +128,23 @@ class OrderController extends AbstractController
         OrderRepository $orderRepository,
         Order $order
     ): Response {
-        if ($this->security->isGranted(self::ROLE_CLIENT)) {
+        if ($this->security->isGranted(self::ROLE_CLIENT) || $this->security->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();
-            if ($user->getId() !== $order->getUsers()->getId()) {
+            if ($user->getId() == $order->getUsers()->getId() || $user->getId() == $order->getPerformer()->getId()) {
+                $entityManager = $this->doctrine->getManager();
+                $order->setStatus(self::STATUS_COMPLETED);
+                $entityManager->flush();
+
+                $message = $translator->trans('Order closed', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
+            } else {
+                // Redirect if order or performer not owner
                 $message = $translator->trans('Please login', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
                 return $this->redirectToRoute('app_login');
             }
-
-            $entityManager = $this->doctrine->getManager();
-            $order->setStatus(self::STATUS_COMPLETED);
-            $entityManager->flush();
-
-            $message = $translator->trans('Order closed', array(), 'flash');
-            $notifier->send(new Notification($message, ['browser']));
-            $referer = $request->headers->get('referer');
-            return new RedirectResponse($referer);
         } else {
             $message = $translator->trans('Please login', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
