@@ -129,8 +129,8 @@
         <source>Empty orders list</source>
         <target>Список заявок пуст</target>
       </trans-unit>
-      <trans-unit id="fE6lBDk" resname="Are you sure you want to cose order">
-        <source>Are you sure you want to cose order</source>
+      <trans-unit id="bo2uIvC" resname="Are you sure you want to close order">
+        <source>Are you sure you want to close order</source>
         <target>Вы уверены, что хотите закрыть заявку?</target>
       </trans-unit>
       <trans-unit id="FcSqEwN" resname="Edit profile">
@@ -181,9 +181,37 @@
         <source>Master profile</source>
         <target>Профиль мастера</target>
       </trans-unit>
-      <trans-unit id="Your password does not match the confirmation" resname="Your password does not match the confirmation">
+      <trans-unit id="S4cuXOE" resname="Your password does not match the confirmation">
         <source>Your password does not match the confirmation</source>
         <target>Введенные пароли не совпадают</target>
+      </trans-unit>
+      <trans-unit id="6_ZxK1S" resname="Take order">
+        <source>Take order</source>
+        <target>Взять заказ</target>
+      </trans-unit>
+      <trans-unit id="pFDKJZ." resname="Orders list">
+        <source>Orders list</source>
+        <target>Список заказов</target>
+      </trans-unit>
+      <trans-unit id=".7c.k3q" resname="Are you sure you want to take order">
+        <source>Are you sure you want to take order</source>
+        <target>Вы уверены, что хотите взять заказ в работу?</target>
+      </trans-unit>
+      <trans-unit id="ko9P5Sm" resname="Order history">
+        <source>Order history</source>
+        <target>История заказов</target>
+      </trans-unit>
+      <trans-unit id="eIARgzp" resname="Notifications">
+        <source>Notifications</source>
+        <target>Уведомления</target>
+      </trans-unit>
+      <trans-unit id="SWgM_Qw" resname="Master balance">
+        <source>Master balance</source>
+        <target>Баланс</target>
+      </trans-unit>
+      <trans-unit id="vpGUC3n" resname="Support">
+        <source>Support</source>
+        <target>Техническая поддержка</target>
       </trans-unit>
     </body>
   </file>

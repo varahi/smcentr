@@ -29,6 +29,10 @@
         <source>Order closed</source>
         <target>Ваша заявка закрыта</target>
       </trans-unit>
+      <trans-unit id="Order taked" resname="Order taked">
+        <source>Order taked</source>
+        <target>Заявка поступила в работу</target>
+      </trans-unit>
       <trans-unit id="Profile updated" resname="Profile updated">
         <source>Profile updated</source>
         <target>Ваш профиль обновлен</target>

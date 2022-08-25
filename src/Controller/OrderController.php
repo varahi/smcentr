@@ -49,13 +49,30 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/order", name="app_order")
+     * @Route("/order", name="app_orders_list")
      */
-    public function index(): Response
+    public function index(
+        Request $request,
+        OrderRepository $orderRepository,
+        TranslatorInterface $translator,
+        NotifierInterface $notifier,
+        ManagerRegistry $doctrine
+    ): Response
     {
-        return $this->render('order/index.html.twig', [
-            'controller_name' => 'OrderController',
-        ]);
+        if ($this->isGranted(self::ROLE_MASTER)) {
+            $user = $this->security->getUser();
+            $newOrders = $orderRepository->findAllByStatus(self::STATUS_NEW);
+
+
+            return $this->render('order/orders_list.html.twig', [
+                'user' => $user,
+                'orders' => $newOrders
+            ]);
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
     }
 
     /**
@@ -99,22 +116,13 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/support", name="app_support")
-     */
-    public function support(): Response
-    {
-        return $this->render('order/index.html.twig', [
-            'controller_name' => 'OrderController',
-        ]);
-    }
-
-    /**
      * @Route("/history", name="app_history")
      */
     public function history(): Response
     {
-        return $this->render('order/index.html.twig', [
-            'controller_name' => 'OrderController',
+        $user = $this->security->getUser();
+        return $this->render('order/order-history.html.twig', [
+            'user' => $user,
         ]);
     }
 
@@ -145,6 +153,35 @@ class OrderController extends AbstractController
                 $notifier->send(new Notification($message, ['browser']));
                 return $this->redirectToRoute('app_login');
             }
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute('app_login');
+        }
+    }
+
+    /**
+     * @Route("/take-order/order-{id}", name="app_take_order")
+     */
+    public function takeOrder(
+        Request $request,
+        TranslatorInterface $translator,
+        NotifierInterface $notifier,
+        OrderRepository $orderRepository,
+        Order $order
+    ): Response {
+        if ($this->security->isGranted(self::ROLE_MASTER)) {
+            $entityManager = $this->doctrine->getManager();
+            $user = $this->security->getUser();
+            $order->setPerformer($user);
+            $order->setStatus(self::STATUS_ACTIVE);
+            $entityManager->flush();
+
+            $message = $translator->trans('Order taked', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            $referer = $request->headers->get('referer');
+            return new RedirectResponse($referer);
+
         } else {
             $message = $translator->trans('Please login', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));

@@ -27,15 +27,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12"></div>
-                {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+                {{ form_start(form, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
                 <div class="col-md-12">
                     <div class="reg_contact">
                         <h3>Контактная информация</h3>
-                        {{ form_widget(registrationForm.email) }}
-                        {{ form_row(registrationForm.plainPassword, { label: 'Пароль'}) }}
-                        {{ form_widget(registrationForm.phone) }}
-                        {{ form_widget(registrationForm.fullName) }}
-                        {{ form_widget(registrationForm.city) }}
+                        {{ form_widget(form.email) }}
+                        {{ form_row(form.plainPassword, { label: 'Пароль'}) }}
+                        {{ form_widget(form.phone) }}
+                        {{ form_widget(form.fullName) }}
+                        {{ form_widget(form.city) }}
 
                         <div class="avatar_upload">
                             {% if user.avatar %}
@@ -46,7 +46,7 @@
                             <div class="">
                                 <p>Аватар пользователя</p>
                                 <div class="upload_file">
-                                    {{ form_widget(registrationForm.avatar) }}
+                                    {{ form_widget(form.avatar) }}
                                     <button class="upload">Загрузить<i></i></button>
 
                                 </div>
@@ -59,14 +59,14 @@
                     <div class="reg_bottom">
                         <div class="cb_notifications">
                             <label class="checkbox">
-                                {{ form_widget(registrationForm.getNotifications) }}
+                                {{ form_widget(form.getNotifications) }}
                                 <span>Получать уведомления</span>
                             </label>
                         </div>
                         <button>Обновить</button>
                     </div>
                 </div>
-                {{ form_end(registrationForm) }}
+                {{ form_end(form) }}
 
             </div>
         </div>

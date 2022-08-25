@@ -2,7 +2,13 @@
     <button class="navbar-toggler" type="button" data-toggle="offcanvas">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo.svg') }}" alt=""></a>
+    {% if is_granted('ROLE_MASTER') %}
+        <a class="navbar-brand" href="{{ path('app_master_profile') }}"><img src="{{ asset('assets/images/logo.svg') }}" alt=""></a>
+    {% elseif is_granted('ROLE_CLIENT') %}
+        <a class="navbar-brand" href="{{ path('app_client_profile') }}"><img src="{{ asset('assets/images/logo.svg') }}" alt=""></a>
+    {% else %}
+        <a class="navbar-brand" href="{{ path('app_login') }}"><img src="{{ asset('assets/images/logo.svg') }}" alt=""></a>
+    {% endif %}
     <div class="navbar-collapse offcanvas-collapse" id="navbarSupportedContent">
         <button class="offcanvas-close" type="button" data-toggle="offcanvas-close">
             ×
@@ -10,7 +16,7 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 {% if is_granted('ROLE_MASTER') %}
-                    <a class="nav-link" href="{{ path('app_order_new') }}">Список заказов</a>
+                    <a class="nav-link" href="{{ path('app_orders_list') }}">Список заказов</a>
                 {% endif %}
                 {% if is_granted('ROLE_CLIENT') %}
                     <a class="nav-link" href="{{ path('app_order_new') }}">Создать заявку</a>
@@ -38,7 +44,7 @@
                         <a class="dropdown-item" href="{{ path('app_client_profile') }}">Профиль</a>
                     {% endif %}
                     {% if is_granted('ROLE_MASTER') %}
-                        <a class="dropdown-item" href="{{ path('app_client_profile') }}">Баланс</a>
+                        <a class="dropdown-item" href="{{ path('app_master_balance') }}">Баланс</a>
                     {% endif %}
                     <a class="dropdown-item" href="{{ path('app_history') }}">История заказов</a>
                     <a class="dropdown-item" href="{{ path('app_notifications') }}">Уведомления</a>

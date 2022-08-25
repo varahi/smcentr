@@ -41,6 +41,21 @@ class OrderRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param $status
+     * @return float|int|mixed|string
+     */
+    public function findAllByStatus($status)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('o')
+            ->from(self::ORDER_TABLE, 'o')
+            ->where('o.status LIKE :status')
+            ->setParameter('status', $status)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 
     /**
      * @param $status

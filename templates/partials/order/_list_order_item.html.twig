@@ -1,0 +1,69 @@
+<div class="col-md-4">
+    <div class="job_item">
+        <div class="top_item">
+            <div class="item_left">
+                <h2>{{ order.jobType.name }}</h2>
+                <div class="city">
+                    {{ order.city.name }}
+                </div>
+                <div class="raion">
+                    {{ order.district.name }}
+                </div>
+                <div class="date">{{ order.deadline|date("d.m.Y") }}</div>
+            </div>
+            <div class="item_right">
+                <div class="id_item">
+                    ID {{ order.id }}
+                </div>
+                <div class="prof">
+                    {{ order.profession.name }}
+                </div>
+                <div class="raiting">
+                    <p>Сложность</p>
+                    {% include 'partials/order/_order_start.html.twig' %}
+                </div>
+                {% if order.status == 0 %}
+                    <div class="status">
+                        {{ 'New order'|trans }}
+                    </div>
+                {% endif %}
+                {% if order.status == 1 %}
+                    <div class="status_performed">
+                        {{ 'Working on'|trans }}
+                    </div>
+                {% endif %}
+                {% if order.status == 9 %}
+                    <div class="status_complite">
+                        {{ 'Completed'|trans }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="description">
+            {{ order.description }}
+        </div>
+        <div class="btn_price">
+            {% if order.status == 0 %}
+                <a href="{{ path('app_take_order', { id: order.id}) }}" onclick="return confirm('{{ 'Are you sure you want to take order'|trans }}')">
+                    <button>{{ 'Take order'|trans }}</button>
+                </a>
+            {% endif %}
+            <span>{{ order.price|format_currency('RUB') }} {#<i>руб.</i>#}</span>
+        </div>
+
+        <div class="client_contact">
+            <div class="phone">
+                {% if order.status == 0 %}
+                    <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
+                    <div class="phone_num">{{ order.users.phone[:6] ~ '...' }}</div>
+                {% else %}
+                    <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
+                    <div class="phone_num"><a href="tel:+{{ order.users.phone }}">{{ order.users}}</a></div>
+                {% endif %}
+            </div>
+            <div class="txt_warning">
+                Номер телефона клиента будет доступен только после получения заказа
+            </div>
+        </div>
+    </div>
+</div>
