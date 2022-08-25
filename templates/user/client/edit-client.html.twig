@@ -71,7 +71,10 @@
             </div>
         </div>
     </section>
-
-
+    <script>
+        $(function(){
+            $("#client_profile_form_phone").mask("+7(999) 999-9999");
+        });
+    </script>
     {% include 'partials/footer/_footer.html.twig' %}
 {% endblock %}

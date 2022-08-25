@@ -53,7 +53,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Пользователи', 'fa fa fa-cog')->setSubItems([
             //MenuItem::linkToCrud('Мастера', 'fa fa-user', User::class)->setQueryParameter('role', '[ROLE_MASTER]'),
             //MenuItem::linkToCrud('Клиенты', 'fa fa-user', User::class)->setController(UserController::class)->setAction('support'),
-            MenuItem::linkToCrud('Мастера', 'fa fa-user', User::class),
+            MenuItem::linkToCrud('Мастера', 'fa fa-user', User::class)->setController(UserCrudController::class),
             MenuItem::linkToCrud('Клиенты', 'fa fa-user', User::class),
             MenuItem::linkToCrud('Фирмы', 'fa fa-user', User::class),
         ]);

@@ -15,6 +15,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use Doctrine\ORM\EntityRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -29,6 +35,13 @@ class UserCrudController extends AbstractCrudController
             ->add(EntityFilter::new('professions'))
             ;
     }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->disable('new', 'edit', 'delete');
+    }
+
 
     public function configureCrud(Crud $crud): Crud
     {
@@ -65,6 +78,16 @@ class UserCrudController extends AbstractCrudController
         yield AssociationField::new('assignments')->hideOnIndex();
         yield BooleanField::new('getNotifications');
     }
+
+    /*public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+    {
+        $role = serialize(["ROLE_MASTER"]);
+        $qb = $this->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        $qb->andWhere('entity.roles = :role');
+        $qb->setParameter('role', $role);
+
+        return $qb;
+    }*/
 
     /*
     public function configureFields(string $pageName): iterable
