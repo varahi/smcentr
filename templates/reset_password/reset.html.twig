@@ -7,15 +7,15 @@
                 <div class="col-md-12">
                     {% include 'partials/_logo_white.html.twig' %}
                     <div class="auth_items block_shadow b_center">
-                        <h1>{{ 'Reset password'|trans }}</h1>
+                        <h2 class="b_center">{{ 'Reset password'|trans }}</h2>
                         {{ form_start(resetForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
                         {{ form_row(resetForm.plainPassword) }}
                         <div class="input-submit">
                             <input type="submit" value="{{ 'Reset'|trans }}">
                         </div>
                         {{ form_end(resetForm) }}
+                            {% include 'partials/_download_app.html.twig' %}
                     </div>
-                    {% include 'partials/_download_app.html.twig' %}
                 </div>
             </div>
         </div>

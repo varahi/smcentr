@@ -103,7 +103,7 @@
       </trans-unit>
       <trans-unit id="X9hGTrh" resname="mail_message_visit_link">
         <source>mail_message_visit_link</source>
-        <target>__mail_message_visit_link</target>
+        <target>Вы сделали запрос на изменение пароля. Чтобы изменить пароль проследуйте по этой ссылке: </target>
       </trans-unit>
       <trans-unit id="p49E9Md" resname="Cheers">
         <source>Cheers</source>
@@ -213,29 +213,45 @@
         <source>Support</source>
         <target>Техническая поддержка</target>
       </trans-unit>
-      <trans-unit id="Cities" resname="Cities">
+      <trans-unit id="lWl9FEl" resname="Cities">
         <source>Cities</source>
         <target>Города</target>
       </trans-unit>
-      <trans-unit id="Job Types" resname="Job Types">
+      <trans-unit id="Graup5t" resname="Job Types">
         <source>Job Types</source>
         <target>Виды работ</target>
       </trans-unit>
-      <trans-unit id="Districts" resname="Districts">
+      <trans-unit id="ngOuhKd" resname="Districts">
         <source>Districts</source>
         <target>Районы</target>
       </trans-unit>
-      <trans-unit id="Professions" resname="Professions">
+      <trans-unit id="Vt.N4fz" resname="Professions">
         <source>Professions</source>
         <target>Профессии</target>
       </trans-unit>
-      <trans-unit id="User" resname="User">
+      <trans-unit id="tRLZfny" resname="User">
         <source>User</source>
         <target>Пользователь</target>
       </trans-unit>
-      <trans-unit id="Orders" resname="Orders">
+      <trans-unit id="t_is3VI" resname="Orders">
         <source>Orders</source>
         <target>Заказы</target>
+      </trans-unit>
+      <trans-unit id="KY6mQRC" resname="Ignore text">
+        <source>Ignore text</source>
+        <target>Если это были не вы, просто проигнорируйте это письмо.</target>
+      </trans-unit>
+      <trans-unit id="Your password reset request" resname="Your password reset request">
+        <source>Your password reset request</source>
+        <target>Запрос на изменение пароля</target>
+      </trans-unit>
+      <trans-unit id="New password" resname="New password">
+        <source>New password</source>
+        <target>Новый пароль</target>
+      </trans-unit>
+      <trans-unit id="Repeat Password" resname="Repeat Password">
+        <source>Repeat Password</source>
+        <target>Повторите пароль</target>
       </trans-unit>
     </body>
   </file>
