@@ -14,6 +14,7 @@ use App\Entity\JobType;
 use App\Entity\Order;
 use App\Entity\Profession;
 use App\Entity\User;
+use App\Controller\UserController;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -50,6 +51,8 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Пользователи');
         yield MenuItem::subMenu('Пользователи', 'fa fa fa-cog')->setSubItems([
+            //MenuItem::linkToCrud('Мастера', 'fa fa-user', User::class)->setQueryParameter('role', '[ROLE_MASTER]'),
+            //MenuItem::linkToCrud('Клиенты', 'fa fa-user', User::class)->setController(UserController::class)->setAction('support'),
             MenuItem::linkToCrud('Мастера', 'fa fa-user', User::class),
             MenuItem::linkToCrud('Клиенты', 'fa fa-user', User::class),
             MenuItem::linkToCrud('Фирмы', 'fa fa-user', User::class),

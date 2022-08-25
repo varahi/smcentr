@@ -30,6 +30,10 @@ class OrderCrudController extends AbstractCrudController
     {
         return $filters
             ->add(EntityFilter::new('users'))
+            ->add(EntityFilter::new('performer'))
+            ->add(EntityFilter::new('city'))
+            ->add(EntityFilter::new('jobType'))
+            ->add(EntityFilter::new('profession'))
             ;
     }
 

@@ -20,20 +20,21 @@ class ProfessionCrudController extends AbstractCrudController
         return Profession::class;
     }
 
-    public function configureFilters(Filters $filters): Filters
-    {
-        return $filters
-            ->add(EntityFilter::new('item'))
-            ;
-    }
-
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Profession')
-            ->setEntityLabelInPlural('Profession')
+            ->setEntityLabelInSingular('Professions')
+            ->setEntityLabelInPlural('Professions')
             ->setSearchFields(['id', 'name'])
             ->setDefaultSort(['id' => 'ASC']);
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add(EntityFilter::new('users'))
+            ->add(EntityFilter::new('jobTypes'))
+            ;
     }
 
     public function configureFields(string $pageName): iterable

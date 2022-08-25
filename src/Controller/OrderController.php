@@ -57,8 +57,7 @@ class OrderController extends AbstractController
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         ManagerRegistry $doctrine
-    ): Response
-    {
+    ): Response {
         if ($this->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();
             $newOrders = $orderRepository->findAllByStatus(self::STATUS_NEW);
@@ -181,7 +180,6 @@ class OrderController extends AbstractController
             $notifier->send(new Notification($message, ['browser']));
             $referer = $request->headers->get('referer');
             return new RedirectResponse($referer);
-
         } else {
             $message = $translator->trans('Please login', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));

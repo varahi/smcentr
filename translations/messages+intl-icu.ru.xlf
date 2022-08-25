@@ -213,6 +213,30 @@
         <source>Support</source>
         <target>Техническая поддержка</target>
       </trans-unit>
+      <trans-unit id="Cities" resname="Cities">
+        <source>Cities</source>
+        <target>Города</target>
+      </trans-unit>
+      <trans-unit id="Job Types" resname="Job Types">
+        <source>Job Types</source>
+        <target>Виды работ</target>
+      </trans-unit>
+      <trans-unit id="Districts" resname="Districts">
+        <source>Districts</source>
+        <target>Районы</target>
+      </trans-unit>
+      <trans-unit id="Professions" resname="Professions">
+        <source>Professions</source>
+        <target>Профессии</target>
+      </trans-unit>
+      <trans-unit id="User" resname="User">
+        <source>User</source>
+        <target>Пользователь</target>
+      </trans-unit>
+      <trans-unit id="Orders" resname="Orders">
+        <source>Orders</source>
+        <target>Заказы</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
