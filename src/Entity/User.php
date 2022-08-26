@@ -125,12 +125,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $assignments;
 
+    /**
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     */
+    private $created;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->professions = new ArrayCollection();
         $this->jobTypes = new ArrayCollection();
         $this->assignments = new ArrayCollection();
+        $this->created = new \DateTime();
     }
 
     public function __toString(): string
@@ -468,6 +474,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $assignment->setPerformer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): self
+    {
+        $this->created = $created;
 
         return $this;
     }

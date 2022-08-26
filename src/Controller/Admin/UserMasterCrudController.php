@@ -45,11 +45,11 @@ class UserMasterCrudController extends AbstractCrudController
             ;
     }
 
-    public function configureActions(Actions $actions): Actions
+    /*public function configureActions(Actions $actions): Actions
     {
         return $actions
             ->disable('new', 'edit', 'delete');
-    }
+    }*/
 
 
     public function configureCrud(Crud $crud): Crud

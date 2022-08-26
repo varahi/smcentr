@@ -26,9 +26,13 @@
     <section id="list_items">
         <div class="container">
             <div class="row">
-                {% for order in orders %}
-                    {% include 'partials/order/_list_order_item.html.twig' %}
-                {% endfor %}
+                {% if orders is not empty %}
+                    {% for order in orders %}
+                        {% include 'partials/order/_list_order_item.html.twig' %}
+                    {% endfor %}
+                {% else %}
+                    <p>{{ 'Empty orders list'|trans }}</p>
+                {% endif %}
             </div>
         </div>
     </section>

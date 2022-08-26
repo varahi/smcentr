@@ -50,7 +50,7 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/order", name="app_orders_list")
+     * @Route("/orders-list", name="app_orders_list")
      */
     public function index(
         Request $request,
@@ -61,8 +61,24 @@ class OrderController extends AbstractController
     ): Response {
         if ($this->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();
-            $newOrders = $orderRepository->findAllByStatus(self::STATUS_NEW);
 
+            if ($user->getProfessions() && count($user->getProfessions()) > 0) {
+                foreach ($user->getProfessions() as $profession) {
+                    $professionIds[] = $profession->getId();
+                }
+            } else {
+                $professionIds = [];
+            }
+
+            if ($user->getJobTypes() && count($user->getJobTypes()) > 0) {
+                foreach ($user->getJobTypes() as $jobType) {
+                    $jobTypeIds[] = $jobType->getId();
+                }
+            } else {
+                $jobTypeIds = [];
+            }
+
+            $newOrders = $orderRepository->findAllByStatusProfessionAndJobTypes(self::STATUS_NEW, $professionIds, $jobTypeIds);
 
             return $this->render('order/orders_list.html.twig', [
                 'user' => $user,
@@ -133,7 +149,6 @@ class OrderController extends AbstractController
         Request $request,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
-        OrderRepository $orderRepository,
         Order $order,
         Mailer $mailer
     ): Response {
@@ -145,9 +160,11 @@ class OrderController extends AbstractController
                 $entityManager->flush();
 
                 if ($this->security->isGranted(self::ROLE_MASTER)) {
-                    // Mail to owner for close order
-                    $subject = $translator->trans('Your order closed by perfomer', array(), 'messages');
-                    $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_performer.html.twig', $order);
+                    if ($order->getUsers()->isGetNotifications() == 1) {
+                        // Mail to owner for close order
+                        $subject = $translator->trans('Your order closed by perfomer', array(), 'messages');
+                        $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_performer.html.twig', $order);
+                    }
                 }
 
                 $message = $translator->trans('Order closed', array(), 'flash');
@@ -174,7 +191,6 @@ class OrderController extends AbstractController
         Request $request,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
-        OrderRepository $orderRepository,
         Order $order,
         Mailer $mailer
     ): Response {
@@ -185,9 +201,11 @@ class OrderController extends AbstractController
             $order->setStatus(self::STATUS_ACTIVE);
             $entityManager->flush();
 
-            // Mail to owner of the order
-            $subject = $translator->trans('Your order taked to work', array(), 'messages');
-            $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_taked_to_work.html.twig', $order);
+            if ($order->getUsers()->isGetNotifications() == 1) {
+                // Mail to owner of the order
+                $subject = $translator->trans('Your order taked to work', array(), 'messages');
+                $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_taked_to_work.html.twig', $order);
+            }
 
             $message = $translator->trans('Order taked', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));

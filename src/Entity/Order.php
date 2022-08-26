@@ -83,6 +83,16 @@ class Order
      */
     private $performer;
 
+    /**
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     */
+    private $created;
+
+    public function __construct()
+    {
+        $this->created = new \DateTime();
+    }
+
     public function __toString(): string
     {
         return 'ID Заказа - ' . $this->id .' - '. $this->jobType->getName() .' - ' . $this->profession->getName();
@@ -246,6 +256,18 @@ class Order
     public function setPerformer(?User $performer): self
     {
         $this->performer = $performer;
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): self
+    {
+        $this->created = $created;
 
         return $this;
     }

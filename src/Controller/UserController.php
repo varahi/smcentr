@@ -291,6 +291,7 @@ class UserController extends AbstractController
 
             $professions = $professionRepository->findAllOrder(['name' => 'ASC']);
             $jobTypes = $jobTypeRepository->findAllOrder(['name' => 'ASC']);
+            $entityManager = $this->doctrine->getManager();
 
             if ($form->isSubmitted()) {
                 $post = $request->request->get('master_profile_form');
@@ -317,6 +318,8 @@ class UserController extends AbstractController
                     // Clear all jobtypes from curent user
                     foreach ($jobTypes as $jobType) {
                         $jobType->removeUser($user);
+                        $entityManager->persist($jobType);
+                        $entityManager->flush();
                     }
                     foreach ($post['jobTypes'] as $jobTypeId) {
                         $jobType = $jobTypeRepository->findOneBy(['id' => $jobTypeId]);
@@ -329,6 +332,8 @@ class UserController extends AbstractController
                     // Clear all professions from curent user
                     foreach ($professions as $profession) {
                         $profession->removeUser($user);
+                        $entityManager->persist($profession);
+                        $entityManager->flush();
                     }
                     foreach ($post['professions'] as $professionId) {
                         $profession = $professionRepository->findOneBy(['id' => $professionId]);
@@ -358,7 +363,6 @@ class UserController extends AbstractController
                     $user->setDoc3($doc3FileName);
                 }
 
-                $entityManager = $this->doctrine->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
 

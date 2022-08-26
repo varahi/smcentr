@@ -7,7 +7,7 @@
     <body>
       <trans-unit id="User registered" resname="User registered">
         <source>User registered</source>
-        <target>Вы успешно зарегистрировались</target>
+        <target>Вы успешно зарегистрировались. Теперь вы можете войти в систему.</target>
       </trans-unit>
       <trans-unit id="Please login" resname="Please login">
         <source>Please login</source>
