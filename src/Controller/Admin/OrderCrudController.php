@@ -64,17 +64,14 @@ class OrderCrudController extends AbstractCrudController
                 '5' => '5',
             ]
         )->hideOnIndex();
-        yield ChoiceField::new('status')->setChoices(
+        /*yield ChoiceField::new('status')->setChoices(
             [
                 'Статус заявки *' => null,
                 '0' => '0',
                 '1' => '1',
                 '9' => '9',
-                /*'Новая' => '0',
-                'В работе' => '1',
-                'Завершена' => '9',*/
             ]
-        )->hideOnIndex();
+        )->hideOnIndex();*/
         yield AssociationField::new('city')->hideOnIndex();
         yield AssociationField::new('district')->hideOnIndex();
         yield AssociationField::new('users')->hideOnIndex();

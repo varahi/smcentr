@@ -40,25 +40,23 @@ class DashboardController extends AbstractDashboardController
         //yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToRoute('adminpanel.back_to_site', 'fa fa-home', 'app_login');
         yield MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class);
+
+        yield MenuItem::section('References');
+        yield MenuItem::subMenu('References', 'fa fa-tags')->setSubItems([
+            MenuItem::linkToCrud('Cities', 'fa fa-city', City::class),
+            MenuItem::linkToCrud('Districts', 'fa fa-building', District::class),
+            MenuItem::linkToCrud('Professions', 'fa fa-users', Profession::class),
+            MenuItem::linkToCrud('Job Types', 'fa fa-industry', JobType::class),
+        ]);
+
+        yield MenuItem::section('Users');
+        yield MenuItem::subMenu('Users', 'fa fa fa-cog')->setSubItems([
+            MenuItem::linkToCrud('Masters', 'fa fa-user', User::class)->setController(UserMasterCrudController::class),
+            MenuItem::linkToCrud('Clients', 'fa fa-user', User::class)->setController(UserClientCrudController::class),
+        ]);
+
+        yield MenuItem::linkToCrud('Orders list', 'fa fa-reorder', Order::class);
+        yield MenuItem::section('__________________________________');
         yield MenuItem::linkToLogout('Logout', 'fa fa-user-times');
-
-        yield MenuItem::section('Справочники');
-        yield MenuItem::subMenu('Справочники', 'fa fa-tags')->setSubItems([
-            MenuItem::linkToCrud('Города', 'fa fa-city', City::class),
-            MenuItem::linkToCrud('Районы', 'fa fa-building', District::class),
-            MenuItem::linkToCrud('Профессии', 'fa fa-users', Profession::class),
-            MenuItem::linkToCrud('Виды работ', 'fa fa-industry', JobType::class),
-        ]);
-
-        yield MenuItem::section('Пользователи');
-        yield MenuItem::subMenu('Пользователи', 'fa fa fa-cog')->setSubItems([
-            //MenuItem::linkToCrud('Мастера', 'fa fa-user', User::class)->setQueryParameter('role', '[ROLE_MASTER]'),
-            //MenuItem::linkToCrud('Клиенты', 'fa fa-user', User::class)->setController(UserController::class)->setAction('support'),
-            MenuItem::linkToCrud('Мастера', 'fa fa-user', User::class)->setController(UserMasterCrudController::class),
-            MenuItem::linkToCrud('Клиенты', 'fa fa-user', User::class)->setController(UserClientCrudController::class),
-            //MenuItem::linkToCrud('Фирмы', 'fa fa-user', User::class),
-        ]);
-
-        yield MenuItem::linkToCrud('Список заказов', 'fa fa-reorder', Order::class);
     }
 }

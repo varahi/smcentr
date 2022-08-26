@@ -118,13 +118,17 @@
                                     <div class="cb_items">
                                         <div class="main_checkbox">
                                             <label class="checkbox">
-                                                <input type="checkbox" id="registration_master_form_professions_{{ profession.id }}" name="registration_master_form[professions][]" value="{{ profession.id }}" checked>
+                                                <input type="checkbox" id="master_profile_form_professions_{{ profession.id }}"
+                                                       name="master_profile_form[professions][]" value="{{ profession.id }}"
+                                                        {% for prof in user.professions %}{% if prof.id == profession.id %} checked {% endif %}{% endfor %}>
                                                 <span>{{ profession.name }}</span>
                                             </label>
                                         </div>
                                         {% for jobType in profession.jobTypes %}
                                             <label class="checkbox">
-                                                <input type="checkbox" id="registration_master_form_jobTypes_{{ jobType.id }}" name="registration_master_form[jobTypes][]" value="{{ jobType.id }}">
+                                                <input type="checkbox" id="master_profile_form_jobTypes_{{ jobType.id }}"
+                                                        {% for type in user.jobTypes %}{% if type.id == jobType.id %} checked {% endif %}{% endfor %}
+                                                       name="master_profile_form[jobTypes][]" value="{{ jobType.id }}">
                                                 <span>{{ jobType.name }}</span>
                                             </label>
                                         {% endfor %}
@@ -152,10 +156,10 @@
             </div>
         </div>
     </section>
-    <script>
+    {#<script>
         $(function(){
             $("#master_profile_form_phone").mask("+7(999) 999-9999");
         });
-    </script>
+    </script>#}
     {% include 'partials/footer/_footer.html.twig' %}
 {% endblock %}

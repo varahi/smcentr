@@ -292,7 +292,7 @@ class UserController extends AbstractController
             $professions = $professionRepository->findAllOrder(['name' => 'ASC']);
             $jobTypes = $jobTypeRepository->findAllOrder(['name' => 'ASC']);
 
-            if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->isSubmitted()) {
                 $post = $request->request->get('master_profile_form');
 
                 // Set new password if changed
@@ -309,6 +309,30 @@ class UserController extends AbstractController
                         $message = $translator->trans('Mismatch password', array(), 'flash');
                         $notifier->send(new Notification($message, ['browser']));
                         return $this->redirectToRoute("app_edit_client_profile");
+                    }
+                }
+
+                // Set job types
+                if (isset($post['jobTypes']) && $post['jobTypes'] !== '') {
+                    // Clear all jobtypes from curent user
+                    foreach ($jobTypes as $jobType) {
+                        $jobType->removeUser($user);
+                    }
+                    foreach ($post['jobTypes'] as $jobTypeId) {
+                        $jobType = $jobTypeRepository->findOneBy(['id' => $jobTypeId]);
+                        $user->addJobType($jobType);
+                    }
+                }
+
+                // Set professions
+                if (isset($post['professions']) && $post['professions'] !== '') {
+                    // Clear all professions from curent user
+                    foreach ($professions as $profession) {
+                        $profession->removeUser($user);
+                    }
+                    foreach ($post['professions'] as $professionId) {
+                        $profession = $professionRepository->findOneBy(['id' => $professionId]);
+                        $user->addProfession($profession);
                     }
                 }
 

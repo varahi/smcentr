@@ -265,6 +265,22 @@
         <source>Admins</source>
         <target>Администраторы</target>
       </trans-unit>
+      <trans-unit id="References" resname="References">
+        <source>References</source>
+        <target>Справочники</target>
+      </trans-unit>
+      <trans-unit id="Users" resname="Users">
+        <source>Users</source>
+        <target>Пользователи</target>
+      </trans-unit>
+      <trans-unit id="Masters" resname="Masters">
+        <source>Masters</source>
+        <target>Мастера</target>
+      </trans-unit>
+      <trans-unit id="Clients" resname="Clients">
+        <source>Clients</source>
+        <target>Клиенты</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
