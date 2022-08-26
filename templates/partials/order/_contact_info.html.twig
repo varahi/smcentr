@@ -1,0 +1,33 @@
+{% if is_granted('ROLE_MASTER') %}
+    <div class="phone">
+        {% if order.users %}
+            <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
+            <div class="phone_num"><a href="tel:+{{ order.users.phone }}">{{ order.users.phone }}</a></div>
+        {% endif %}
+    </div>
+    <div class="client_block">
+        {{ order.users.fullName[:7] ~ '...' }}
+        {% if order.users.avatar %}
+            <img src="{{ asset('uploads/files/' ~ order.users.avatar) }}" />
+        {% else %}
+            <img src="{{ asset('assets/images/avatar.png') }}">
+        {% endif %}
+    </div>
+{% elseif is_granted('ROLE_CLIENT') %}
+
+    <div class="phone">
+        {% if order.performer %}
+            <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
+            <div class="phone_num"><a href="tel:+{{ order.performer.phone }}">{{ order.performer.phone }}</a></div>
+        {% endif %}
+    </div>
+    <div class="client_block">
+        {{ order.performer.fullName }}
+        {% if order.performer.avatar %}
+            <img src="{{ asset('uploads/files/' ~ order.performer.avatar) }}" />
+        {% else %}
+            <img src="{{ asset('assets/images/avatar.png') }}">
+        {% endif %}
+    </div>
+{% else %}
+{% endif %}

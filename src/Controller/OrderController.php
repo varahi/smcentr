@@ -18,6 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Twig\Environment;
 use App\Form\Order\OrderFormType;
+use App\Service\Mailer;
 
 class OrderController extends AbstractController
 {
@@ -133,7 +134,8 @@ class OrderController extends AbstractController
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         OrderRepository $orderRepository,
-        Order $order
+        Order $order,
+        Mailer $mailer
     ): Response {
         if ($this->security->isGranted(self::ROLE_CLIENT) || $this->security->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();
@@ -141,6 +143,12 @@ class OrderController extends AbstractController
                 $entityManager = $this->doctrine->getManager();
                 $order->setStatus(self::STATUS_COMPLETED);
                 $entityManager->flush();
+
+                if ($this->security->isGranted(self::ROLE_MASTER)) {
+                    // Mail to owner for close order
+                    $subject = $translator->trans('Your order closed by perfomer', array(), 'messages');
+                    $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_performer.html.twig', $order);
+                }
 
                 $message = $translator->trans('Order closed', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
@@ -167,7 +175,8 @@ class OrderController extends AbstractController
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         OrderRepository $orderRepository,
-        Order $order
+        Order $order,
+        Mailer $mailer
     ): Response {
         if ($this->security->isGranted(self::ROLE_MASTER)) {
             $entityManager = $this->doctrine->getManager();
@@ -175,6 +184,10 @@ class OrderController extends AbstractController
             $order->setPerformer($user);
             $order->setStatus(self::STATUS_ACTIVE);
             $entityManager->flush();
+
+            // Mail to owner of the order
+            $subject = $translator->trans('Your order taked to work', array(), 'messages');
+            $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_taked_to_work.html.twig', $order);
 
             $message = $translator->trans('Order taked', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));

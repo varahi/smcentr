@@ -23,19 +23,20 @@ use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\ImageOptimizer;
 
 class UserController extends AbstractController
 {
+    /**
+     * Time in seconds 3600 - one hour
+     */
+    public const CACHE_MAX_AGE = '3600';
+
     public const STATUS_NEW = '0';
 
     public const STATUS_ACTIVE = '1';
 
     public const STATUS_COMPLETED = '9';
-
-    /**
-     * Time in seconds 3600 - one hour
-     */
-    public const CACHE_MAX_AGE = '3600';
 
     public const ROLE_CLIENT = 'ROLE_CLIENT';
 
@@ -47,19 +48,27 @@ class UserController extends AbstractController
 
     private $urlGenerator;
 
+    private $targetDirectory;
+
     /**
      * @param Security $security
      * @param Environment $twig
      * @param ManagerRegistry $doctrine
+     * @param ImageOptimizer $imageOptimizer
+     * @param string $targetDirectory
      */
     public function __construct(
         Security $security,
         Environment $twig,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        ImageOptimizer $imageOptimizer,
+        string $targetDirectory
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
+        $this->imageOptimizer = $imageOptimizer;
+        $this->targetDirectory = $targetDirectory;
     }
 
     /**
@@ -93,6 +102,11 @@ class UserController extends AbstractController
             $newOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user);
             $activeOrders = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
             $completedOrders = $orderRepository->findByStatus(self::STATUS_COMPLETED, $user);
+
+            // Resize image if exist
+            if ($user->getAvatar()) {
+                $this->imageOptimizer->resize($this->targetDirectory.'/'.$user->getAvatar());
+            }
 
             {
                 $response = new Response($this->twig->render('user/client/lk-client.html.twig', [
@@ -130,6 +144,11 @@ class UserController extends AbstractController
 
             $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user);
             $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user);
+
+            // Resize image if exist
+            if ($user->getAvatar()) {
+                $this->imageOptimizer->resize($this->targetDirectory.'/'.$user->getAvatar());
+            }
 
             {
                 $response = new Response($this->twig->render('user/master/lk-master.html.twig', [

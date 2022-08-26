@@ -253,6 +253,14 @@
         <source>Repeat Password</source>
         <target>Повторите пароль</target>
       </trans-unit>
+      <trans-unit id="Your order taked to work" resname="Your order taked to work">
+        <source>Your order taked to work</source>
+        <target>Ваш заказ взят в работу - smcentr.su</target>
+      </trans-unit>
+      <trans-unit id="Your order closed by perfomer" resname="Your order closed by perfomer">
+        <source>Your order closed by perfomer</source>
+        <target>Ваш заказ закрыт исполнителем - smcentr.su</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

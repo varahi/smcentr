@@ -19,6 +19,7 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
           $targetDirectory: "%kernel.project_dir%/public_html/uploads/files"
+          $adminEmail: "%env(string:default:default_admin_email:ADMIN_EMAIL)%"
           #$adminEmail: "%env(string:default:default_admin_email:ADMIN_EMAIL)%"
 
 

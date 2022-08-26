@@ -1,21 +1,8 @@
 <div class="col-md-4">
     <div class="job_item">
-        {% include 'partials/order/_order_main_info.html.twig' %}
+            {% include 'partials/order/_order_main_info.html.twig' %}
         <div class="client_contact_visible">
-            <div class="phone">
-                {% if order.performer %}
-                    <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
-                    <div class="phone_num"><a href="tel:+{{ order.performer.phone }}">{{ order.performer.phone }}</a></div>
-                {% endif %}
-            </div>
-            <div class="client_block">
-               {{ order.performer.fullName }}
-                {% if order.performer.avatar %}
-                    <img src="{{ asset('uploads/files/' ~ order.performer.avatar) }}" style="border-radius: 50%" />
-                {% else %}
-                    <img src="{{ asset('assets/images/avatar.png') }}">
-                {% endif %}
-            </div>
+            {% include 'partials/order/_contact_info.html.twig' %}
         </div>
     </div>
 </div>
