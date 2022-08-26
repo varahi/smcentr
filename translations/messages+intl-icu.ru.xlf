@@ -11,7 +11,7 @@
       </trans-unit>
       <trans-unit id="9N.Jsxi" resname="adminpanel.back_to_site">
         <source>adminpanel.back_to_site</source>
-        <target>На сайт</target>
+        <target>Перейти на сайт</target>
       </trans-unit>
       <trans-unit id="3IZZ221" resname="Enter">
         <source>Enter</source>
@@ -260,6 +260,10 @@
       <trans-unit id="Your order closed by perfomer" resname="Your order closed by perfomer">
         <source>Your order closed by perfomer</source>
         <target>Ваш заказ закрыт исполнителем - smcentr.su</target>
+      </trans-unit>
+      <trans-unit id="Admins" resname="Admins">
+        <source>Admins</source>
+        <target>Администраторы</target>
       </trans-unit>
     </body>
   </file>

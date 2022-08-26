@@ -372,15 +372,4 @@ class UserController extends AbstractController
             'user' => $user
         ]);
     }
-
-    /**
-     * @Route("/show-all-clients", name="app_show_all_clients")
-     */
-    public function showAllClients(): Response
-    {
-        $user = $this->security->getUser();
-        return $this->render('user/support.html.twig', [
-            'user' => $user
-        ]);
-    }
 }

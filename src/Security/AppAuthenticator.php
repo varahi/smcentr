@@ -105,14 +105,9 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
         if (in_array('ROLE_MASTER', $user->getRoles())) {
             return new RedirectResponse($this->urlGenerator->generate('app_master_profile'));
         }
-
-        /*if (in_array('ROLE_CLIENT', $user->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('app_client_profile'));
-        } elseif (in_array('ROLE_MASTER', $user->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('app_master_profile'));
-        } else {
+        if (in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
             return new RedirectResponse($this->urlGenerator->generate('app_backend'));
-        }*/
+        }
     }
 
     /*public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response

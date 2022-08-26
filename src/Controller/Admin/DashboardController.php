@@ -14,7 +14,8 @@ use App\Entity\JobType;
 use App\Entity\Order;
 use App\Entity\Profession;
 use App\Entity\User;
-use App\Controller\UserController;
+use Symfony\Component\Security\Core\User\UserInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -38,8 +39,8 @@ class DashboardController extends AbstractDashboardController
     {
         //yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToRoute('adminpanel.back_to_site', 'fa fa-home', 'app_login');
-        //yield MenuItem::linkToLogout('Logout', 'fa fa-user-times');
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        yield MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class);
+        yield MenuItem::linkToLogout('Logout', 'fa fa-user-times');
 
         yield MenuItem::section('Справочники');
         yield MenuItem::subMenu('Справочники', 'fa fa-tags')->setSubItems([
@@ -53,9 +54,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Пользователи', 'fa fa fa-cog')->setSubItems([
             //MenuItem::linkToCrud('Мастера', 'fa fa-user', User::class)->setQueryParameter('role', '[ROLE_MASTER]'),
             //MenuItem::linkToCrud('Клиенты', 'fa fa-user', User::class)->setController(UserController::class)->setAction('support'),
-            MenuItem::linkToCrud('Мастера', 'fa fa-user', User::class)->setController(UserCrudController::class),
-            MenuItem::linkToCrud('Клиенты', 'fa fa-user', User::class),
-            MenuItem::linkToCrud('Фирмы', 'fa fa-user', User::class),
+            MenuItem::linkToCrud('Мастера', 'fa fa-user', User::class)->setController(UserMasterCrudController::class),
+            MenuItem::linkToCrud('Клиенты', 'fa fa-user', User::class)->setController(UserClientCrudController::class),
+            //MenuItem::linkToCrud('Фирмы', 'fa fa-user', User::class),
         ]);
 
         yield MenuItem::linkToCrud('Список заказов', 'fa fa-reorder', Order::class);

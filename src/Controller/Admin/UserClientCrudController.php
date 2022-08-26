@@ -22,11 +22,21 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 
-class UserCrudController extends AbstractCrudController
+class UserClientCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return User::class;
+    }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): \Doctrine\ORM\QueryBuilder
+    {
+        $role = 'ROLE_CLIENT';
+        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        $qb->where('entity.roles LIKE :roles');
+        $qb->setParameter('roles', '%"'.$role.'"%');
+
+        return $qb;
     }
 
     public function configureFilters(Filters $filters): Filters
@@ -78,16 +88,6 @@ class UserCrudController extends AbstractCrudController
         yield AssociationField::new('assignments')->hideOnIndex();
         yield BooleanField::new('getNotifications');
     }
-
-    /*public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
-    {
-        $role = serialize(["ROLE_MASTER"]);
-        $qb = $this->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $qb->andWhere('entity.roles = :role');
-        $qb->setParameter('role', $role);
-
-        return $qb;
-    }*/
 
     /*
     public function configureFields(string $pageName): iterable

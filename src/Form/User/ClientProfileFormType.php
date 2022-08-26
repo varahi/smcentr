@@ -31,6 +31,7 @@ class ClientProfileFormType extends AbstractType
                 EmailType::class,
                 [
                     'required' => true,
+                    'disabled' => true,
                     'attr' => [
                         'placeholder' => 'form.email'
                     ],
