@@ -88,6 +88,11 @@ class Order
      */
     private $created;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $closed;
+
     public function __construct()
     {
         $this->created = new \DateTime();
@@ -268,6 +273,18 @@ class Order
     public function setCreated(\DateTimeInterface $created): self
     {
         $this->created = $created;
+
+        return $this;
+    }
+
+    public function getClosed(): ?\DateTimeInterface
+    {
+        return $this->closed;
+    }
+
+    public function setClosed(\DateTimeInterface $closed): self
+    {
+        $this->closed = $closed;
 
         return $this;
     }

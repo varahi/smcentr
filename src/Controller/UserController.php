@@ -90,8 +90,6 @@ class UserController extends AbstractController
      * @Route("/user/lk-client", name="app_client_profile")
      */
     public function clinetProfile(
-        Request $request,
-        UserRepository $userRepository,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         OrderRepository $orderRepository
@@ -388,16 +386,5 @@ class UserController extends AbstractController
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute("app_login");
         }
-    }
-
-    /**
-     * @Route("/support", name="app_support")
-     */
-    public function support(): Response
-    {
-        $user = $this->security->getUser();
-        return $this->render('user/support.html.twig', [
-            'user' => $user
-        ]);
     }
 }

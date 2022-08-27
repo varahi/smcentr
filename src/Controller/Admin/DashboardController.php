@@ -12,10 +12,9 @@ use App\Entity\City;
 use App\Entity\District;
 use App\Entity\JobType;
 use App\Entity\Order;
+use App\Entity\Ticket;
 use App\Entity\Profession;
 use App\Entity\User;
-use Symfony\Component\Security\Core\User\UserInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -56,6 +55,7 @@ class DashboardController extends AbstractDashboardController
         ]);
 
         yield MenuItem::linkToCrud('Orders list', 'fa fa-reorder', Order::class);
+        yield MenuItem::linkToCrud('Tickets list', 'fa fa-support', Ticket::class);
         yield MenuItem::section('__________________________________');
         yield MenuItem::linkToLogout('Logout', 'fa fa-user-times');
     }

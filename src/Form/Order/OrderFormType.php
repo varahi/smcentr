@@ -51,7 +51,7 @@ class OrderFormType extends AbstractType
                 ChoiceType::class,
                 [
                     'required' => true,
-                    'label' => 'State',
+                    'label' => 'Level',
                     'translation_domain' => 'messages',
                     'choices'  => [
                         'Выберите сложноть заявки *' => null,
