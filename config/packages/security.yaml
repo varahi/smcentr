@@ -41,9 +41,11 @@ security:
     access_control:
         ### ROLE_ADMIN - acess to admin pabel
         - { path: ^/backend, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/user/admin, roles: ROLE_ADMIN }
         ### Three different front-end groups
         - { path: ^/user/lk-client, roles: ROLE_CLIENT }
         - { path: ^/user/lk-master, roles: ROLE_MASTER }
+        - { path: ^/user/lk-company, roles: ROLE_COMPANY }
 
 when@test:
     security:

@@ -1,6 +1,8 @@
 <h1>Сообщение с сайта smcentr.su</h1>
 
-<p>Мастер {{ order.performer.email }} - {{ order.performer.fullName }} взял ваш заказ в разработку</p>
+<p>На сайте smcentr.su размещен новый заказ который соответсвует вашим навыкам</p>
+<p>Заказчик {{ order.users.email }} - {{ order.users.fullName }}</p>
+
 <h2>Подробности заказа:</h2>
 
 <table>
@@ -50,14 +52,6 @@
         </td>
         <td>
             {{ order.level }}
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Телефон:
-        </td>
-        <td>
-            {{ order.phone }}
         </td>
     </tr>
     <tr>

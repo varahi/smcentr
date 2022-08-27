@@ -1,0 +1,46 @@
+{% extends 'layouts/base.html.twig' %}
+{% block title %}Добро пожаловать {{ user.fullName }}{% endblock %}
+{% block body %}
+
+<header id="sticky_header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% include 'partials/navigation/_navbar.html.twig' %}
+            </div>
+        </div>
+    </div>
+</header>
+
+    <section id="reg_client">
+        <div class="container">
+            {% include 'partials/_message.html.twig' %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>{{ 'Create ticket'|trans }}</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12"></div>
+
+                {{ form_start(ticketForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+                <div class="col-md-12">
+                    <div class="reg_contact">
+                        <h3>{{ 'Fill all fields'|trans }}</h3>
+                        {{ form_widget(ticketForm.title) }}
+                        {{ form_widget(ticketForm.description) }}
+                        {{ form_widget(ticketForm.priority) }}
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="reg_bottom">
+                        <button id="myBtn">{{ 'Submit'|trans }}</button>
+                    </div>
+                </div>
+                {{ form_end(ticketForm) }}
+            </div>
+        </div>
+    </section>
+    {% include 'partials/footer/_footer.html.twig' %}
+{% endblock %}

@@ -5,5 +5,5 @@ app_logout:
   path: /logout
 # config/routes.yaml
 dashboard:
-  path: /admin
+  path: /backend
   controller: App\Controller\Admin\DashboardController::index

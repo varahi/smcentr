@@ -99,10 +99,12 @@ class OrderController extends AbstractController
         UserRepository $userRepository,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        Mailer $mailer
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT)) {
             $user = $this->security->getUser();
+            $masters = $userRepository->findByRole(self::ROLE_MASTER);
 
             $order = new Order();
             $form = $this->createForm(OrderFormType::class, $order);
@@ -114,6 +116,27 @@ class OrderController extends AbstractController
                 $entityManager = $doctrine->getManager();
                 $entityManager->persist($order);
                 $entityManager->flush();
+
+                // Mails to master about a new order
+                if (count($masters) > 0) {
+                    foreach ($masters as $master) {
+                        if (count($master->getProfessions()) > 0 && count($master->getJobTypes()) > 0) {
+                            foreach ($master->getProfessions() as $profession) {
+                                $professionIds[] = $profession->getId();
+                            }
+
+                            foreach ($master->getJobTypes() as $jobType) {
+                                $jobTypeIds[] = $jobType->getId();
+                            }
+                        }
+                        if ($master->isGetNotifications() == 1 &&
+                            in_array($order->getJobType()->getId(), $jobTypeIds) ||
+                            in_array($order->getProfession()->getId(), $professionIds)) {
+                            $subject = $translator->trans('New order available', array(), 'messages');
+                            $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
+                        }
+                    }
+                }
 
                 $message = $translator->trans('Order created', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
@@ -157,6 +180,7 @@ class OrderController extends AbstractController
             if ($user->getId() == $order->getUsers()->getId() || $user->getId() == $order->getPerformer()->getId()) {
                 $entityManager = $this->doctrine->getManager();
                 $order->setStatus(self::STATUS_COMPLETED);
+                $order->setClosed(new \DateTime());
                 $entityManager->flush();
 
                 if ($this->security->isGranted(self::ROLE_MASTER)) {

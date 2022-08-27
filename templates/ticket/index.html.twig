@@ -1,0 +1,86 @@
+{% extends 'layouts/base.html.twig' %}
+{% block title %}{{ 'Welcome'|trans }} {{ user.fullName }}{% endblock %}
+{% block body %}
+
+    <header id="sticky_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% include 'partials/navigation/_navbar.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="list_jobs">
+        <div class="container">
+            {% include 'partials/_message.html.twig' %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>{{ 'Support'|trans }}</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="profile_master">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="profile_master">
+                        <div class="profile_img">
+                            {% if user.avatar %}
+                                <div class="rounded">
+                                    <img src="{{ asset('uploads/files/' ~ user.avatar) }}" width="121" height="121" alt="" />
+                                </div>
+                            {% else %}
+                                <img src="{{ asset('assets/images/avatar.png') }}" alt="">
+                            {% endif %}
+                        </div>
+                        <div class="profile_info">
+                            <div class="fio">
+                                {{ user.fullName }}
+                            </div>
+                            <div class="city">
+                                {{ user.city.name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <a href="{{ path('app_ticket_new') }}"><button>{{ 'Create ticket'|trans }}</button></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {#    <!-- Созданные заявки -->#}
+    <section id="list_items">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>{{ 'New tickets'|trans }}</h3>
+                </div>
+            </div>
+
+            {% if newTickets is not empty %}
+                <div class="row">
+                    {% for ticket in newTickets %}
+                        {% include 'partials/ticket/_new_ticket_item.html.twig' %}
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="btn_center">
+                            <button>{{ 'Show all new tickets'|trans }}</button>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>{{ 'Empty orders list'|trans }}</p>
+            {% endif %}
+        </div>
+    </section>
+
+    {% include 'partials/footer/_footer.html.twig' %}
+{% endblock %}

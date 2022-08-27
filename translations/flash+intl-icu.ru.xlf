@@ -41,6 +41,10 @@
         <source>Mismatch password</source>
         <target>Введенные пароли не совпадают</target>
       </trans-unit>
+      <trans-unit id="Ticket created" resname="Ticket created">
+        <source>Ticket created</source>
+        <target>Запрос в техническую поддержку отправлен. В скором времени мы ответим на него.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

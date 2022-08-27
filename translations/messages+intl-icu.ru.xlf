@@ -241,45 +241,81 @@
         <source>Ignore text</source>
         <target>Если это были не вы, просто проигнорируйте это письмо.</target>
       </trans-unit>
-      <trans-unit id="Your password reset request" resname="Your password reset request">
+      <trans-unit id="ATJ8qA9" resname="Your password reset request">
         <source>Your password reset request</source>
         <target>Запрос на изменение пароля</target>
       </trans-unit>
-      <trans-unit id="New password" resname="New password">
+      <trans-unit id="PdnfREH" resname="New password">
         <source>New password</source>
         <target>Новый пароль</target>
       </trans-unit>
-      <trans-unit id="Repeat Password" resname="Repeat Password">
+      <trans-unit id="Hkmh4Tp" resname="Repeat Password">
         <source>Repeat Password</source>
         <target>Повторите пароль</target>
       </trans-unit>
-      <trans-unit id="Your order taked to work" resname="Your order taked to work">
+      <trans-unit id="gzeaNjS" resname="Your order taked to work">
         <source>Your order taked to work</source>
         <target>Ваш заказ взят в работу - smcentr.su</target>
       </trans-unit>
-      <trans-unit id="Your order closed by perfomer" resname="Your order closed by perfomer">
+      <trans-unit id="JVar36j" resname="Your order closed by perfomer">
         <source>Your order closed by perfomer</source>
         <target>Ваш заказ закрыт исполнителем - smcentr.su</target>
       </trans-unit>
-      <trans-unit id="Admins" resname="Admins">
+      <trans-unit id="gnOme1W" resname="Admins">
         <source>Admins</source>
         <target>Администраторы</target>
       </trans-unit>
-      <trans-unit id="References" resname="References">
+      <trans-unit id="aYJNOw5" resname="References">
         <source>References</source>
         <target>Справочники</target>
       </trans-unit>
-      <trans-unit id="Users" resname="Users">
+      <trans-unit id="awzJBNC" resname="Users">
         <source>Users</source>
         <target>Пользователи</target>
       </trans-unit>
-      <trans-unit id="Masters" resname="Masters">
+      <trans-unit id="8Tui5HZ" resname="Masters">
         <source>Masters</source>
         <target>Мастера</target>
       </trans-unit>
-      <trans-unit id="Clients" resname="Clients">
+      <trans-unit id="ZaclZUL" resname="Clients">
         <source>Clients</source>
         <target>Клиенты</target>
+      </trans-unit>
+      <trans-unit id="0C2W1Se" resname="Tickets list">
+        <source>Tickets list</source>
+        <target>Тех. поддержка</target>
+      </trans-unit>
+      <trans-unit id="uLZr2hS" resname="Appeal">
+        <source>Appeal</source>
+        <target>Обращение</target>
+      </trans-unit>
+      <trans-unit id="6Db8lex" resname="Create ticket">
+        <source>Create ticket</source>
+        <target>Создать обращение</target>
+      </trans-unit>
+      <trans-unit id="kQnWl3M" resname="Fill all fields">
+        <source>Fill all fields</source>
+        <target>Заполните все поля</target>
+      </trans-unit>
+      <trans-unit id="FV_BbAQ" resname="Submit">
+        <source>Submit</source>
+        <target>Отправить</target>
+      </trans-unit>
+      <trans-unit id="1g27oHk" resname="Priority">
+        <source>Priority</source>
+        <target>__Priority</target>
+      </trans-unit>
+      <trans-unit id="2r.xpsh" resname="New tickets">
+        <source>New tickets</source>
+        <target>Новые тикеты</target>
+      </trans-unit>
+      <trans-unit id="d3mtVqb" resname="Show all new tickets">
+        <source>Show all new tickets</source>
+        <target>Показать все новые тикеты</target>
+      </trans-unit>
+      <trans-unit id="New order available" resname="New order available">
+        <source>New order available</source>
+        <target>Доступен новый заказ</target>
       </trans-unit>
     </body>
   </file>

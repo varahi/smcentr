@@ -32,7 +32,7 @@ class TicketCrudController extends AbstractCrudController
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-            ->add(EntityFilter::new('users'))
+            ->add(EntityFilter::new('user'))
             ;
     }
 

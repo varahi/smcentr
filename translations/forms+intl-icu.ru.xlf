@@ -25,6 +25,14 @@
         <source>Full name *</source>
         <target>ФИО *</target>
       </trans-unit>
+      <trans-unit id="Ticket title" resname="Ticket title">
+        <source>Ticket title</source>
+        <target>Название заявки *</target>
+      </trans-unit>
+      <trans-unit id="Ticket description" resname="Ticket description">
+        <source>Ticket description</source>
+        <target>Описание заявки *</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
