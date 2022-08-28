@@ -2,31 +2,39 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\User\ClientProfileFormType;
 use App\Form\User\MasterProfileFormType;
 use App\Repository\JobTypeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
+use App\Security\EmailVerifier;
 use App\Service\FileUploader;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\ImageOptimizer;
+#use App\Controller\Traits\EmailVerifyTrait;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class UserController extends AbstractController
 {
+
+    //use EmailVerifyTrait;
+
     /**
      * Time in seconds 3600 - one hour
      */
@@ -50,6 +58,8 @@ class UserController extends AbstractController
 
     private $targetDirectory;
 
+    private $emailVerifier;
+
     /**
      * @param Security $security
      * @param Environment $twig
@@ -62,13 +72,17 @@ class UserController extends AbstractController
         Environment $twig,
         ManagerRegistry $doctrine,
         ImageOptimizer $imageOptimizer,
-        string $targetDirectory
+        string $targetDirectory,
+        VerifyEmailHelperInterface $helper,
+        EmailVerifier $emailVerifier
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
         $this->imageOptimizer = $imageOptimizer;
         $this->targetDirectory = $targetDirectory;
+        $this->verifyEmailHelper = $helper;
+        $this->emailVerifier = $emailVerifier;
     }
 
     /**
@@ -96,6 +110,14 @@ class UserController extends AbstractController
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT)) {
             $user = $this->security->getUser();
+
+            if($user->isIsVerified() == 0) {
+                // Send a new email link to verify email
+                $this->verifyEmail($user);
+                $message = $translator->trans('Please verify you profile', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute("app_login");
+            }
 
             $newOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user);
             $activeOrders = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
@@ -386,5 +408,36 @@ class UserController extends AbstractController
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute("app_login");
         }
+    }
+
+    /**
+     * @param User $user
+     * @return void
+     */
+    private function verifyEmail(
+        User $user
+    ) {
+
+        // Verify email
+        $signatureComponents = $this->verifyEmailHelper->generateSignature(
+            'app_verify_email',
+            $user->getId(),
+            $user->getEmail(),
+            ['id' => $user->getId()] // add the user's id as an extra query param
+        );
+
+        // generate a signed url and email it to the user
+        $this->emailVerifier->sendEmailConfirmation(
+            'app_verify_email',
+            $user,
+            (new TemplatedEmail())
+                ->from(new Address('noreply@smcentr.su', 'Admin'))
+                ->to($user->getEmail())
+                ->subject('Пожалуйста подтвердите ваш пароль')
+                ->htmlTemplate('registration/confirmation_email.html.twig')
+                ->context([
+                    'verifyUrl' => $signatureComponents->getSignedUrl()
+                ])
+        );
     }
 }

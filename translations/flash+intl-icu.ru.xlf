@@ -45,6 +45,10 @@
         <source>Ticket created</source>
         <target>Запрос в техническую поддержку отправлен. В скором времени мы ответим на него.</target>
       </trans-unit>
+      <trans-unit id="Please verify you profile" resname="Please verify you profile">
+        <source>Please verify you profile</source>
+        <target>Пожалуйста подтвердите свой профиль перейдя по ссылке указанной в письме</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

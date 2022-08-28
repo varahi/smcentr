@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Ticket;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -12,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 
 class TicketCrudController extends AbstractCrudController
 {
@@ -41,6 +43,10 @@ class TicketCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield TextField::new('title');
         yield TextEditorField::new('description');
+        yield IntegerField::new('priority');
+        yield IntegerField::new('status');
         yield AssociationField::new('user')->hideOnIndex();
+        //yield UrlField::new('answer', 'Test');
+        //yield MenuItem::linkToRoute('Test', '', 'app_edit_client_profile');
     }
 }

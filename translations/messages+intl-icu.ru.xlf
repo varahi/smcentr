@@ -303,7 +303,7 @@
       </trans-unit>
       <trans-unit id="1g27oHk" resname="Priority">
         <source>Priority</source>
-        <target>__Priority</target>
+        <target>Срочность</target>
       </trans-unit>
       <trans-unit id="2r.xpsh" resname="New tickets">
         <source>New tickets</source>
@@ -316,6 +316,10 @@
       <trans-unit id="New order available" resname="New order available">
         <source>New order available</source>
         <target>Доступен новый заказ</target>
+      </trans-unit>
+      <trans-unit id="Please confirm your password" resname="Please confirm your password">
+        <source>Please confirm your password</source>
+        <target>Пожалуйста подтвердите ваш пароль</target>
       </trans-unit>
     </body>
   </file>
