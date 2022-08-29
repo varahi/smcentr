@@ -86,6 +86,36 @@ class OrderRepository extends ServiceEntityRepository
 
     /**
      * @param $status
+     * @return float|int|mixed|string
+     */
+    public function findAllByStatusProfessionJobTypesAndCity($status, array $professions, array $jobTypes, string $city)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('o')
+            ->from(self::ORDER_TABLE, 'o')
+            ->where('o.status LIKE :status')
+            ->setParameter('status', $status)
+        ;
+
+        if (isset($professions) && !empty($professions)) {
+            $qb->andWhere($qb->expr()->in('o.profession', $professions));
+        } else {
+            $qb->andWhere($qb->expr()->in('o.profession', [0]));
+        }
+        if (isset($jobTypes) && !empty($jobTypes)) {
+            $qb->andWhere($qb->expr()->in('o.jobType', $jobTypes));
+        } else {
+            $qb->andWhere($qb->expr()->in('o.jobType', [0]));
+        }
+        if (isset($city) && !empty($city)) {
+            $qb->andWhere($qb->expr()->eq('o.city', $city));
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param $status
      * @param $user
      * @return float|int|mixed|string
      */

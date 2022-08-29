@@ -78,7 +78,13 @@ class OrderController extends AbstractController
                 $jobTypeIds = [];
             }
 
-            $newOrders = $orderRepository->findAllByStatusProfessionAndJobTypes(self::STATUS_NEW, $professionIds, $jobTypeIds);
+            if ($user->getCity()->getId()) {
+                $cityId = $user->getCity()->getId();
+            } else {
+                $cityId = null;
+            }
+
+            $newOrders = $orderRepository->findAllByStatusProfessionJobTypesAndCity(self::STATUS_NEW, $professionIds, $jobTypeIds, $cityId);
 
             return $this->render('order/orders_list.html.twig', [
                 'user' => $user,
@@ -178,14 +184,38 @@ class OrderController extends AbstractController
         if ($this->security->isGranted(self::ROLE_CLIENT) || $this->security->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();
             if ($user->getId() == $order->getUsers()->getId() || $user->getId() == $order->getPerformer()->getId()) {
-                $entityManager = $this->doctrine->getManager();
-                $order->setStatus(self::STATUS_COMPLETED);
-                $order->setClosed(new \DateTime());
-                $entityManager->flush();
 
+                // Set balance for master
                 if ($this->security->isGranted(self::ROLE_MASTER)) {
+                    $masterBalance = (float)$order->getPerformer()->getBalance();
+                    if ($masterBalance == null || $masterBalance == 0) {
+                        // Redirect if order or performer not owner
+                        $message = $translator->trans('Please top up balance', array(), 'flash');
+                        $notifier->send(new Notification($message, ['browser']));
+                        return $this->redirectToRoute('app_master_top_up_balance');
+                    }
+
+                    if ($order->getCity()->getTaxRate()) {
+                        $tax = $order->getPrice() * $order->getCity()->getTaxRate();
+                        $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
+                        if ($order->getPerformer()->getBalance() <= $tax) {
+                            // Redirect if order or performer not owner
+                            $message = $translator->trans('Please top up balance', array(), 'flash');
+                            $notifier->send(new Notification($message, ['browser']));
+                            return $this->redirectToRoute('app_master_top_up_balance');
+                        } else {
+                            $order->getPerformer()->setBalance($newMasterBalance);
+                        }
+                    }
+
+                    // Persist data
+                    $entityManager = $this->doctrine->getManager();
+                    $order->setStatus(self::STATUS_COMPLETED);
+                    $order->setClosed(new \DateTime());
+                    $entityManager->flush();
+
+                    // Mail to owner for close order
                     if ($order->getUsers()->isGetNotifications() == 1) {
-                        // Mail to owner for close order
                         $subject = $translator->trans('Your order closed by perfomer', array(), 'messages');
                         $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_performer.html.twig', $order);
                     }

@@ -15,7 +15,6 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
  */
 trait EmailVerifyTrait
 {
-
     /**
      * @var EmailVerifier
      */
@@ -69,5 +68,4 @@ trait EmailVerifyTrait
                 ])
         );*/
     }
-
 }

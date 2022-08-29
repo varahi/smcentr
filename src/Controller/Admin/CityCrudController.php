@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
 
 class CityCrudController extends AbstractCrudController
 {
@@ -42,6 +43,7 @@ class CityCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield TextField::new('name');
         yield AssociationField::new('district')->hideOnIndex();
+        yield PercentField::new('taxRate');
         //yield AssociationField::new('orders')->hideOnIndex();
         //yield AssociationField::new('users')->hideOnIndex();
     }

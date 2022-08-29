@@ -70,6 +70,7 @@ class UserClientCrudController extends AbstractCrudController
         //yield TextField::new('lastName');
         yield TextField::new('fullName');
         yield BooleanField::new('isVerified');
+        yield BooleanField::new('isDisabled');
         yield ArrayField::new('roles')->hideOnIndex();
         yield ImageField::new('avatar')
             ->setBasePath('/uploads/files')

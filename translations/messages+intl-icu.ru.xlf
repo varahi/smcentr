@@ -313,13 +313,21 @@
         <source>Show all new tickets</source>
         <target>Показать все новые тикеты</target>
       </trans-unit>
-      <trans-unit id="New order available" resname="New order available">
+      <trans-unit id="htp8BYO" resname="New order available">
         <source>New order available</source>
         <target>Доступен новый заказ</target>
       </trans-unit>
-      <trans-unit id="Please confirm your password" resname="Please confirm your password">
+      <trans-unit id="nUKH11S" resname="Please confirm your password">
         <source>Please confirm your password</source>
         <target>Пожалуйста подтвердите ваш пароль</target>
+      </trans-unit>
+      <trans-unit id="Cct3oUr" resname="Top up balance">
+        <source>Top up balance</source>
+        <target>Пополнить баланс</target>
+      </trans-unit>
+      <trans-unit id="0F4Ht8F" resname="Balance">
+        <source>Balance</source>
+        <target>Баланс</target>
       </trans-unit>
     </body>
   </file>

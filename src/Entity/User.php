@@ -140,6 +140,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $answers;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isDisabled;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $taxRate;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -558,6 +568,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $answer->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isIsDisabled(): ?bool
+    {
+        return $this->isDisabled;
+    }
+
+    public function setIsDisabled(?bool $isDisabled): self
+    {
+        $this->isDisabled = $isDisabled;
+
+        return $this;
+    }
+
+    public function getTaxRate(): ?float
+    {
+        return $this->taxRate;
+    }
+
+    public function setTaxRate(?float $taxRate): self
+    {
+        $this->taxRate = $taxRate;
 
         return $this;
     }

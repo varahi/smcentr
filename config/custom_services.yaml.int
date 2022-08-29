@@ -1,0 +1,6 @@
+# This is a custom service what can be different for each domain
+parameters:
+  default_admin_email: admin@smcentr.su
+  default_subject: Subject from site smcentr.su
+  default_domain: 'smcentr.t3dev.ru'
+  default_scheme: 'https'

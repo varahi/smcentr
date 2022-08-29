@@ -7,7 +7,7 @@
     <body>
       <trans-unit id="User registered" resname="User registered">
         <source>User registered</source>
-        <target>Вы успешно зарегистрировались. Теперь вы можете войти в систему.</target>
+        <target>Вы успешно зарегистрировались. После подтверждения вашего профиля вы сможете войти в систему.</target>
       </trans-unit>
       <trans-unit id="Please login" resname="Please login">
         <source>Please login</source>
@@ -48,6 +48,10 @@
       <trans-unit id="Please verify you profile" resname="Please verify you profile">
         <source>Please verify you profile</source>
         <target>Пожалуйста подтвердите свой профиль перейдя по ссылке указанной в письме</target>
+      </trans-unit>
+      <trans-unit id="Please top up balance" resname="Please top up balance">
+        <source>Please top up balance</source>
+        <target>На вашем балансе недостаточно средств для совершения данной операции. Пожалуйста пополните ваш баланс.</target>
       </trans-unit>
     </body>
   </file>

@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
@@ -53,6 +54,7 @@ class OrderCrudController extends AbstractCrudController
         //yield TextField::new('price');
         yield TelephoneField::new('phone');
         yield TextareaField::new('description');
+        yield MoneyField::new('price')->setCurrency('RUB')->setCustomOption('storedAsCents', false);
         yield DateField::new('deadline');
         yield ChoiceField::new('level')->setChoices(
             [

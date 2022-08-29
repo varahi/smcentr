@@ -7,6 +7,8 @@ use App\Entity\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Twig\Environment;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\HttpFoundation\Response;
 
 class Mailer
 {

@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -65,10 +66,10 @@ class UserMasterCrudController extends AbstractCrudController
     {
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield EmailField::new('email');
-        //yield TextField::new('firstName');
-        //yield TextField::new('lastName');
         yield TextField::new('fullName');
         yield BooleanField::new('isVerified');
+        yield BooleanField::new('isDisabled');
+        yield MoneyField::new('balance')->setCurrency('RUB')->setCustomOption('storedAsCents', false);
         yield ArrayField::new('roles')->hideOnIndex();
         yield ImageField::new('avatar')
             ->setBasePath('/uploads/files')

@@ -39,6 +39,11 @@ class City
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $taxRate;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -154,6 +159,18 @@ class City
                 $user->setCity(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTaxRate(): ?float
+    {
+        return $this->taxRate;
+    }
+
+    public function setTaxRate(?float $taxRate): self
+    {
+        $this->taxRate = $taxRate;
 
         return $this;
     }

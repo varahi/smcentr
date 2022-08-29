@@ -17,7 +17,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
@@ -32,7 +34,6 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class UserController extends AbstractController
 {
-
     //use EmailVerifyTrait;
 
     /**
@@ -106,12 +107,13 @@ class UserController extends AbstractController
     public function clinetProfile(
         TranslatorInterface $translator,
         NotifierInterface $notifier,
-        OrderRepository $orderRepository
+        OrderRepository $orderRepository,
+        MailerInterface $mailer
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT)) {
             $user = $this->security->getUser();
 
-            if($user->isIsVerified() == 0) {
+            if ($user->isIsVerified() == 0) {
                 // Send a new email link to verify email
                 $this->verifyEmail($user);
                 $message = $translator->trans('Please verify you profile', array(), 'flash');
@@ -162,7 +164,7 @@ class UserController extends AbstractController
         if ($this->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();
 
-            if($user->isIsVerified() == 0) {
+            if ($user->isIsVerified() == 0) {
                 // Send a new email link to verify email
                 $this->verifyEmail($user);
                 $message = $translator->trans('Please verify you profile', array(), 'flash');
@@ -406,6 +408,34 @@ class UserController extends AbstractController
                     'professions' => $professions,
                     'jobTypes' => $jobTypes,
                     'form' => $form->createView(),
+                ]));
+
+                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                return $response;
+            }
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
+    }
+
+    /**
+     * Require ROLE_MASTER for *every* controller method in this class.
+     *
+     * @IsGranted("ROLE_MASTER")
+     * @Route("/user/top-up-balancer", name="app_master_top_up_balance")
+     */
+    public function topUpBalance(
+        TranslatorInterface $translator,
+        NotifierInterface $notifier
+    ) {
+        if ($this->isGranted(self::ROLE_MASTER)) {
+            $user = $this->security->getUser();
+
+            {
+                $response = new Response($this->twig->render('user/master/top_up_balance.html.twig', [
+                    'user' => $user,
                 ]));
 
                 $response->setSharedMaxAge(self::CACHE_MAX_AGE);
