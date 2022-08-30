@@ -40,15 +40,16 @@ class City
     private $users;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\OneToMany(targetEntity=TaxRate::class, mappedBy="city")
      */
-    private $taxRate;
+    private $taxRates;
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->district = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->taxRates = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -163,14 +164,32 @@ class City
         return $this;
     }
 
-    public function getTaxRate(): ?float
+    /**
+     * @return Collection<int, TaxRate>
+     */
+    public function getTaxRates(): Collection
     {
-        return $this->taxRate;
+        return $this->taxRates;
     }
 
-    public function setTaxRate(?float $taxRate): self
+    public function addTaxRate(TaxRate $taxRate): self
     {
-        $this->taxRate = $taxRate;
+        if (!$this->taxRates->contains($taxRate)) {
+            $this->taxRates[] = $taxRate;
+            $taxRate->setCity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTaxRate(TaxRate $taxRate): self
+    {
+        if ($this->taxRates->removeElement($taxRate)) {
+            // set the owning side to null (unless already changed)
+            if ($taxRate->getCity() === $this) {
+                $taxRate->setCity(null);
+            }
+        }
 
         return $this;
     }

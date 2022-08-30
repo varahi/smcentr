@@ -329,6 +329,10 @@
         <source>Balance</source>
         <target>Баланс</target>
       </trans-unit>
+      <trans-unit id="Tax Rate" resname="Tax Rate">
+        <source>Tax Rate</source>
+        <target>Комисси списаний</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

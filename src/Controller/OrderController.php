@@ -195,16 +195,21 @@ class OrderController extends AbstractController
                         return $this->redirectToRoute('app_master_top_up_balance');
                     }
 
-                    if ($order->getCity()->getTaxRate()) {
-                        $tax = $order->getPrice() * $order->getCity()->getTaxRate();
-                        $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
-                        if ($order->getPerformer()->getBalance() <= $tax) {
-                            // Redirect if order or performer not owner
-                            $message = $translator->trans('Please top up balance', array(), 'flash');
-                            $notifier->send(new Notification($message, ['browser']));
-                            return $this->redirectToRoute('app_master_top_up_balance');
-                        } else {
-                            $order->getPerformer()->setBalance($newMasterBalance);
+                    // Calculate tax rate depends on city and profession
+                    if (count($order->getCity()->getTaxRates()) > 0) {
+                        foreach ($order->getCity()->getTaxRates() as $taxRate) {
+                            if ($taxRate->getProfession()->getId() == $order->getProfession()->getId()) {
+                                $tax = $order->getPrice() * $taxRate->getPercent();
+                                $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
+                                if ($order->getPerformer()->getBalance() <= $tax) {
+                                    // Redirect if order or performer not owner
+                                    $message = $translator->trans('Please top up balance', array(), 'flash');
+                                    $notifier->send(new Notification($message, ['browser']));
+                                    return $this->redirectToRoute('app_master_top_up_balance');
+                                } else {
+                                    $order->getPerformer()->setBalance($newMasterBalance);
+                                }
+                            }
                         }
                     }
 

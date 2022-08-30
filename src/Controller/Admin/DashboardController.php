@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\TaxRate;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -46,6 +47,8 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Districts', 'fa fa-building', District::class),
             MenuItem::linkToCrud('Professions', 'fa fa-users', Profession::class),
             MenuItem::linkToCrud('Job Types', 'fa fa-industry', JobType::class),
+            MenuItem::section('<hr />'),
+            MenuItem::linkToCrud('Tax Rate', 'fa fa-percent', TaxRate::class)
         ]);
 
         yield MenuItem::section('Users');
@@ -56,7 +59,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::linkToCrud('Orders list', 'fa fa-reorder', Order::class);
         yield MenuItem::linkToCrud('Tickets list', 'fa fa-support', Ticket::class);
-        yield MenuItem::section('__________________________________');
+        yield MenuItem::section('<hr />');
         yield MenuItem::linkToLogout('Logout', 'fa fa-user-times');
     }
 }

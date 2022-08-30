@@ -60,6 +60,11 @@ class Profession
      */
     private $jobTypes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TaxRate::class, mappedBy="profession")
+     */
+    private $taxRates;
+
     public function __construct()
     {
         $this->jobType = new ArrayCollection();
@@ -67,6 +72,7 @@ class Profession
         $this->children = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->jobTypes = new ArrayCollection();
+        $this->taxRates = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -237,6 +243,36 @@ class Profession
             // set the owning side to null (unless already changed)
             if ($jobType->getProfession() === $this) {
                 $jobType->setProfession(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TaxRate>
+     */
+    public function getTaxRates(): Collection
+    {
+        return $this->taxRates;
+    }
+
+    public function addTaxRate(TaxRate $taxRate): self
+    {
+        if (!$this->taxRates->contains($taxRate)) {
+            $this->taxRates[] = $taxRate;
+            $taxRate->setProfession($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTaxRate(TaxRate $taxRate): self
+    {
+        if ($this->taxRates->removeElement($taxRate)) {
+            // set the owning side to null (unless already changed)
+            if ($taxRate->getProfession() === $this) {
+                $taxRate->setProfession(null);
             }
         }
 

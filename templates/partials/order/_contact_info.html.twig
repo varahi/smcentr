@@ -6,11 +6,13 @@
         {% endif %}
     </div>
     <div class="client_block">
-        {{ order.users.fullName[:7] ~ '...' }}
+        {% if order.users is not empty %}
+            {{ order.users.fullName[:7] ~ '...' }}
         {% if order.users.avatar %}
             <img src="{{ asset('uploads/files/' ~ order.users.avatar) }}" />
         {% else %}
             <img src="{{ asset('assets/images/avatar.png') }}">
+        {% endif %}
         {% endif %}
     </div>
 {% elseif is_granted('ROLE_CLIENT') %}
