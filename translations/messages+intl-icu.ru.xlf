@@ -333,6 +333,18 @@
         <source>Tax Rate</source>
         <target>Комисси списаний</target>
       </trans-unit>
+      <trans-unit id="News" resname="News">
+        <source>News</source>
+        <target>Новости</target>
+      </trans-unit>
+      <trans-unit id="Oferta" resname="Oferta">
+        <source>Oferta</source>
+        <target>Оферта</target>
+      </trans-unit>
+      <trans-unit id="Privacy Policy" resname="Privacy Policy">
+        <source>Privacy Policy</source>
+        <target>Политика конфиденциальности</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

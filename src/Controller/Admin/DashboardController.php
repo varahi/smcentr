@@ -39,7 +39,7 @@ class DashboardController extends AbstractDashboardController
     {
         //yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToRoute('adminpanel.back_to_site', 'fa fa-home', 'app_login');
-        yield MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class);
+        //yield MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class);
 
         yield MenuItem::section('References');
         yield MenuItem::subMenu('References', 'fa fa-tags')->setSubItems([
@@ -55,10 +55,21 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Users', 'fa fa fa-cog')->setSubItems([
             MenuItem::linkToCrud('Masters', 'fa fa-user', User::class)->setController(UserMasterCrudController::class),
             MenuItem::linkToCrud('Clients', 'fa fa-user', User::class)->setController(UserClientCrudController::class),
+            MenuItem::section('<hr />'),
+            MenuItem::linkToCrud('Moderators', 'fa fa-user', User::class)->setController(UserAdminCrudController::class),
+            MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class),
+            MenuItem::section(''),
+        ]);
+
+        yield MenuItem::section('Information');
+        yield MenuItem::subMenu('Information', 'fa fa fa-info')->setSubItems([
+            MenuItem::linkToCrud('News', 'fa fa-newspaper-o', District::class),
+            MenuItem::linkToCrud('Oferta', 'fa fa-legal', District::class),
+            MenuItem::linkToCrud('Privacy Policy', 'fa fa-ticket', District::class),
         ]);
 
         yield MenuItem::linkToCrud('Orders list', 'fa fa-reorder', Order::class);
-        yield MenuItem::linkToCrud('Tickets list', 'fa fa-support', Ticket::class);
+        yield MenuItem::linkToRoute('Tickets list', 'fa fa-support', 'app_support');
         yield MenuItem::section('<hr />');
         yield MenuItem::linkToLogout('Logout', 'fa fa-user-times');
     }

@@ -43,9 +43,10 @@ class TicketCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield TextField::new('title');
         yield TextEditorField::new('description');
+        //yield UrlField::new('id', '', '');
         yield IntegerField::new('priority');
         yield IntegerField::new('status');
-        yield AssociationField::new('user')->hideOnIndex();
+        yield AssociationField::new('user');
         //yield UrlField::new('answer', 'Test');
         //yield MenuItem::linkToRoute('Test', '', 'app_edit_client_profile');
     }
