@@ -329,25 +329,65 @@
         <source>Balance</source>
         <target>Баланс</target>
       </trans-unit>
-      <trans-unit id="Tax Rate" resname="Tax Rate">
+      <trans-unit id="dURBbtw" resname="Tax Rate">
         <source>Tax Rate</source>
         <target>Комисси списаний</target>
       </trans-unit>
-      <trans-unit id="News" resname="News">
+      <trans-unit id="aXUvIxO" resname="News">
         <source>News</source>
         <target>Новости</target>
       </trans-unit>
-      <trans-unit id="Oferta" resname="Oferta">
+      <trans-unit id="eyaWviO" resname="Oferta">
         <source>Oferta</source>
         <target>Оферта</target>
       </trans-unit>
-      <trans-unit id="Privacy Policy" resname="Privacy Policy">
+      <trans-unit id="UG.zlGI" resname="Privacy Policy">
         <source>Privacy Policy</source>
         <target>Политика конфиденциальности</target>
       </trans-unit>
-      <trans-unit id="Information" resname="Information">
+      <trans-unit id="HLC6El_" resname="Information">
         <source>Information</source>
         <target>Информация</target>
+      </trans-unit>
+      <trans-unit id="ftPcGAo" resname="Your request has been answered">
+        <source>Your request has been answered</source>
+        <target>На ваш запрос был получен ответ</target>
+      </trans-unit>
+      <trans-unit id="1RdjB.p" resname="Ticket id">
+        <source>Ticket id</source>
+        <target>Id заявки</target>
+      </trans-unit>
+      <trans-unit id="1wueJLy" resname="Created">
+        <source>Created</source>
+        <target>Создано</target>
+      </trans-unit>
+      <trans-unit id="v.LMSWB" resname="Ttile">
+        <source>Ttile</source>
+        <target>Заголовок</target>
+      </trans-unit>
+      <trans-unit id="Um4Ah8w" resname="Description">
+        <source>Description</source>
+        <target>Описание</target>
+      </trans-unit>
+      <trans-unit id="Wr00RYI" resname="Answer ticket">
+        <source>Answer ticket</source>
+        <target>Ответить</target>
+      </trans-unit>
+      <trans-unit id="VRetK._" resname="To admin panel">
+        <source>To admin panel</source>
+        <target>В панель управления</target>
+      </trans-unit>
+      <trans-unit id="kXK069Z" resname="Detail ticket">
+        <source>Detail ticket</source>
+        <target>Описание заявки</target>
+      </trans-unit>
+      <trans-unit id="ksfur.V" resname="No answers">
+        <source>No answers</source>
+        <target>Нет ответов на заявку</target>
+      </trans-unit>
+      <trans-unit id="H8EIQgr" resname="Answer the question">
+        <source>Answer the question</source>
+        <target>Ответить на заявку</target>
       </trans-unit>
     </body>
   </file>

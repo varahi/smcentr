@@ -33,6 +33,10 @@
         <source>Ticket description</source>
         <target>Описание заявки *</target>
       </trans-unit>
+      <trans-unit id="Answer" resname="Answer">
+        <source>Answer</source>
+        <target>Ответить на запрос</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

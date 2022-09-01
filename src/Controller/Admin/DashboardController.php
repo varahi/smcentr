@@ -69,7 +69,7 @@ class DashboardController extends AbstractDashboardController
         ]);
 
         yield MenuItem::linkToCrud('Orders list', 'fa fa-reorder', Order::class);
-        yield MenuItem::linkToRoute('Tickets list', 'fa fa-support', 'app_support');
+        yield MenuItem::linkToRoute('Tickets list', 'fa fa-support', 'app_ticket_list');
         yield MenuItem::section('<hr />');
         yield MenuItem::linkToLogout('Logout', 'fa fa-user-times');
     }

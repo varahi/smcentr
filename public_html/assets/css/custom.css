@@ -49,3 +49,11 @@
     border-radius: 20px;
     margin-bottom: 20px;
 }
+
+table.dataTable thead .sorting_asc:after {
+    content: "\e155";
+}
+
+.answer {
+    margin: 10px 0;
+}

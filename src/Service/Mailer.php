@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\Entity\Answer;
 use App\Entity\Order;
+use App\Entity\Ticket;
 use App\Entity\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -41,6 +43,27 @@ class Mailer
                 'user' => $user,
                 'date' => $date,
                 'order' => $order
+            ]);
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function sendAnswerEmail(User $user, string $subject, string $template, Answer $answer, Ticket $ticket)
+    {
+        $date = new \DateTime();
+        $email = (new TemplatedEmail())
+            ->subject($subject)
+            ->htmlTemplate($template)
+            ->from($this->adminEmail)
+            ->to($user->getEmail())
+            ->context([
+                'user' => $user,
+                'date' => $date,
+                'answer' => $answer,
+                'ticket' => $ticket
             ]);
 
         $this->mailer->send($email);

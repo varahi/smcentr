@@ -53,6 +53,10 @@
         <source>Please top up balance</source>
         <target>На вашем балансе недостаточно средств для совершения данной операции. Пожалуйста пополните ваш баланс.</target>
       </trans-unit>
+      <trans-unit id="Answered" resname="Answered">
+        <source>Answered</source>
+        <target>Вы ответили на вопрос</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
