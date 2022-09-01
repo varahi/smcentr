@@ -22,3 +22,10 @@
 .env
 composer.lock
 public/index.php
+/migrations
+.php-cs-fixer.cache
+composer.phar
+php-cs-fixer
+
+public_html/bundles/
+public_html/uploads/

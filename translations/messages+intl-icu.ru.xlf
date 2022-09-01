@@ -345,6 +345,10 @@
         <source>Privacy Policy</source>
         <target>Политика конфиденциальности</target>
       </trans-unit>
+      <trans-unit id="Information" resname="Information">
+        <source>Information</source>
+        <target>Информация</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
