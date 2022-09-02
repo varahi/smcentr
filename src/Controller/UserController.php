@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\User\ClientProfileFormType;
 use App\Form\User\MasterProfileFormType;
+use App\Form\User\RegistrationFormType;
 use App\Repository\JobTypeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProfessionRepository;

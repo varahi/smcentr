@@ -433,18 +433,43 @@
         <source>More</source>
         <target>Подробнее</target>
       </trans-unit>
-        <trans-unit id="Support request" resname="Support request">
-            <source>Support request</source>
-            <target>Заявка в тех поддержку</target>
-        </trans-unit>
-        <trans-unit id="Privacy policy" resname="Privacy policy">
-            <source>Privacy Policy</source>
-            <target>Политика конфиденциальности</target>
-        </trans-unit>
-      <trans-unit id="Oferta" resname="Oferta">
-        <source>Oferta</source>
-        <target>Оферта</target>
+      <trans-unit id="X6g_R9G" resname="Support request">
+        <source>Support request</source>
+        <target>Заявка в тех поддержку</target>
       </trans-unit>
+      <trans-unit id="ukRc.zi" resname="Privacy policy">
+        <source>Privacy policy</source>
+        <target>Политика конфиденциальности</target>
+      </trans-unit>
+      <trans-unit id="LWodrKB" resname="Company registration">
+        <source>Company registration</source>
+        <target>Регистрация компании</target>
+      </trans-unit>
+      <trans-unit id="6R3tQHG" resname="Contact info">
+        <source>Contact info</source>
+        <target>Контактная информация</target>
+      </trans-unit>
+      <trans-unit id="yo6CbZw" resname="Avatar">
+        <source>Avatar</source>
+        <target>Аватар пользователя</target>
+      </trans-unit>
+        <trans-unit id="New company registered" resname="New company registered">
+            <source>New company registered</source>
+            <target>Зарегистрирована новая компания</target>
+        </trans-unit>
+
+        <trans-unit id="Companies" resname="Companies">
+            <source>Companies</source>
+            <target>Компании</target>
+        </trans-unit>
+        <trans-unit id="Create company" resname="Create company">
+            <source>Create company</source>
+            <target>Создать компанию</target>
+        </trans-unit>
+        <trans-unit id="Edit company" resname="Edit company">
+            <source>Edit company</source>
+            <target>Редактировать компанию</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

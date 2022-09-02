@@ -61,6 +61,10 @@
         <source>Ticket activated again</source>
         <target>Заявка снова активирована для работы</target>
       </trans-unit>
+      <trans-unit id="Company registered" resname="Company registered">
+        <source>Company registered</source>
+        <target>Компания зарегистрирована</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

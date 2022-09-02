@@ -1,0 +1,48 @@
+<h1>Сообщение с сайта smcentr.su</h1>
+
+<p>На ваш email зарегистрирована новая компания</p>
+
+<h2>Информация о компании</h2>
+
+<table>
+    <tr>
+        <td>
+            Email/Login:
+        </td>
+        <td>
+            {{ user.email }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Пароль:
+        </td>
+        <td>
+            {{ plainPassword }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Телефон:
+        </td>
+        <td>
+            {{ user.phone }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Название компании:
+        </td>
+        <td>
+            {{ user.fullName }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+           Город компании:
+        </td>
+        <td>
+            {{ user.city.name }}
+        </td>
+    </tr>
+</table>

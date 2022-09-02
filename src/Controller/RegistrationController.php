@@ -10,8 +10,10 @@ use App\Repository\JobTypeRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
+use App\Service\Mailer;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Notifier\Notification\Notification;
@@ -26,9 +28,12 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\MailerInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class RegistrationController extends AbstractController
 {
+    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+
     private $emailVerifier;
 
     private $mailer;
@@ -47,6 +52,67 @@ class RegistrationController extends AbstractController
     {
         return $this->render('registration/index.html.twig', [
         ]);
+    }
+
+    /**
+     * Require ROLE_MASTER for *every* controller method in this class.
+     *
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     * @Route("/registration-company", name="app_registration_company")
+     */
+    public function registerCompany(
+        Request $request,
+        UserRepository $userRepository,
+        TranslatorInterface $translator,
+        NotifierInterface $notifier,
+        UserPasswordHasherInterface $passwordHasher,
+        FileUploader $fileUploader,
+        ManagerRegistry $doctrine,
+        Mailer $mailer
+    ): Response {
+        if ($this->isGranted(self::ROLE_SUPER_ADMIN)) {
+            $user = new User();
+            $form = $this->createForm(RegistrationFormType::class, $user);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $post = $_POST['registration_form'];
+                $plainPassword = $post['plainPassword']['first'];
+
+                // encode the plain password
+                $user->setPassword(
+                    $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
+                );
+                $user->setUsername($form->get('email')->getData());
+                $user->setRoles(array('ROLE_COMPANY'));
+                $user->setIsVerified('1');
+                // Upload avatar file if exist
+                $avatarFile = $form->get('avatar')->getData();
+                if ($avatarFile) {
+                    $avatarFileName = $fileUploader->upload($avatarFile);
+                    $user->setAvatar($avatarFileName);
+                }
+                $entityManager = $doctrine->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $subject = $translator->trans('New company registered', array(), 'messages');
+                $mailer->sendNewCompanyEmail($user, $subject, 'emails/new_company_registration.html.twig', $plainPassword);
+
+                $message = $translator->trans('Company registered', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
+            }
+
+            return $this->render('registration/register_company.html.twig', [
+                'registrationForm' => $form->createView(),
+            ]);
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
     }
 
     /**

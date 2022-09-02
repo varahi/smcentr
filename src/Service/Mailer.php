@@ -51,6 +51,26 @@ class Mailer
     /**
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
+    public function sendNewCompanyEmail(User $user, string $subject, string $template, $plainPassword)
+    {
+        $date = new \DateTime();
+        $email = (new TemplatedEmail())
+            ->subject($subject)
+            ->htmlTemplate($template)
+            ->from($this->adminEmail)
+            ->to($user->getEmail())
+            ->context([
+                'user' => $user,
+                'date' => $date,
+                'plainPassword' => $plainPassword
+            ]);
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     public function sendAnswerEmail(User $user, string $subject, string $template, Answer $answer, Ticket $ticket)
     {
         $date = new \DateTime();

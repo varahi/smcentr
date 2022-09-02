@@ -1,0 +1,63 @@
+{% extends 'layouts/login.html.twig' %}
+{% block title %}{{ 'Company registration'|trans }}{% endblock %}
+{% block body %}
+
+    <section id="reg_client">
+        <div class="container">
+            {% include 'partials/_message.html.twig' %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>{{ 'Company registration'|trans }}</h1>
+                </div>
+            </div>
+
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <div class="md-6" style="margin-right: 30px">
+                            <div class="btn_profile_edit">
+                                <a href="{{ path('app_backend') }}"><button>{{ 'To admin panel'|trans }}</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="row">
+                <div class="col-md-12"></div>
+                {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+                <div class="col-md-12">
+                    <div class="reg_contact">
+                        <h3>{{ 'Contact info'|trans }}</h3>
+                        {{ form_widget(registrationForm.email) }}
+                        {{ form_row(registrationForm.plainPassword, { label: 'Пароль'}) }}
+                        {{ form_widget(registrationForm.phone) }}
+                        {{ form_widget(registrationForm.fullName) }}
+                        {{ form_widget(registrationForm.city) }}
+
+                        <div class="avatar_upload">
+                            <img src="{{ asset('assets/images/avatar.png') }}" alt="" />
+                            <div class="">
+                                <p>{{ 'Avatar'|trans }}</p>
+                                <div class="upload_file">
+                                    {{ form_widget(registrationForm.avatar) }}
+                                    <button class="upload">Загрузить<i></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'partials/footer/_registration_footer2.html.twig' %}
+                {{ form_end(registrationForm) }}
+
+            </div>
+        </div>
+    </section>
+    <script>
+        $(function(){
+            $("#registration_form_phone").mask("+7(999) 999-9999");
+        });
+    </script>
+{% endblock %}
