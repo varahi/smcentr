@@ -437,6 +437,14 @@
             <source>Support request</source>
             <target>Заявка в тех поддержку</target>
         </trans-unit>
+        <trans-unit id="Privacy policy" resname="Privacy policy">
+            <source>Privacy Policy</source>
+            <target>Политика конфиденциальности</target>
+        </trans-unit>
+      <trans-unit id="Oferta" resname="Oferta">
+        <source>Oferta</source>
+        <target>Оферта</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

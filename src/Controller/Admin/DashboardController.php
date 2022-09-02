@@ -16,6 +16,7 @@ use App\Entity\Order;
 use App\Entity\Ticket;
 use App\Entity\Profession;
 use App\Entity\User;
+use App\Entity\Pages;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -63,9 +64,9 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Information');
         yield MenuItem::subMenu('Information', 'fa fa fa-info')->setSubItems([
-            MenuItem::linkToCrud('News', 'fa fa-newspaper-o', District::class),
-            MenuItem::linkToCrud('Oferta', 'fa fa-legal', District::class),
-            MenuItem::linkToCrud('Privacy Policy', 'fa fa-ticket', District::class),
+            //MenuItem::linkToCrud('News', 'fa fa-newspaper-o', District::class),
+            MenuItem::linkToCrud('Oferta', 'fa fa-legal', Pages::class)->setController(OfertaCrudController::class),
+            MenuItem::linkToCrud('Privacy Policy', 'fa fa-ticket', Pages::class)->setController(PrivacyCrudController::class),
         ]);
 
         yield MenuItem::linkToCrud('Orders list', 'fa fa-reorder', Order::class);

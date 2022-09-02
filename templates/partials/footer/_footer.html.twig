@@ -3,17 +3,14 @@
         <div class="row">
             <div class="col-md-4">
                 <ul>
-                    <li><a href="">Способы оплаты</a></li>
-                    <li><a href="">Политика конфиденциальности</a></li>
+                    {#<li><a href="">Способы оплаты</a></li>#}
+                    <li><a href="{{ path('app_page_oferta') }}">{{ 'Oferta'|trans }}</a></li>
+                    <li><a href="{{ path('app_page_privacy') }}">Политика конфиденциальности</a></li>
                 </ul>
             </div>
-
+            <div class="col-md-4"></div>
             <div class="col-md-4">
-            </div>
-
-            <div class="col-md-4">
-                <p>Центр поддержки клиентов: <a href="">8 800 100 00 00</a><br>
-                    Звонок по России бесплатный</p>
+                <p>Центр поддержки клиентов: <a href="">8 800 100 00 00</a><br />Звонок по России бесплатный</p>
             </div>
         </div>
     </div>
