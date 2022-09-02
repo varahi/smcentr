@@ -16,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TicketRepository extends ServiceEntityRepository
 {
+    public const TICKET_TABLE = 'App\Entity\Ticket';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Ticket::class);
@@ -37,6 +39,22 @@ class TicketRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @param $status
+     * @return float|int|mixed|string
+     */
+    public function findAllByStatus($status)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('t')
+            ->from(self::TICKET_TABLE, 't')
+            ->where('t.status LIKE :status')
+            ->setParameter('status', $status)
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

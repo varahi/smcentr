@@ -54,6 +54,54 @@ table.dataTable thead .sorting_asc:after {
     content: "\e155";
 }
 
+.answers {
+    margin-left: 20px;
+}
+.answer p {
+    font-size: 16px;
+    color: #000;
+    line-height: 20px;
+}
 .answer {
-    margin: 10px 0;
+    padding: 5px 20px 3px 20px;
+    border-radius: 10px;
+}
+.answer:nth-child(even) {
+    background: #eae9e9;
+}
+.answer:nth-child(odd) {
+    background: #fff
+}
+
+blockquote {
+/*    color: rgba(250, 200, 130, 0.6);*/
+    color: #000;
+    font-family: Tahoma, sans-serif;
+    font-size: 26px;
+    width: 95%;
+    margin: 0 auto;
+}
+
+blockquote p {
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+blockquote p::before,
+blockquote p::after {
+    content: "“";
+    font-size: 4rem;
+    margin: -2rem 0 0 -2rem;
+    position: absolute;
+    opacity: 0.5;
+}
+
+blockquote p::after {
+    content: "”";
+    margin: -1rem -4rem 0 0;
+}
+
+blockquote cite {
+    font-size: 1.5rem;
+    font-size: 20px;
 }

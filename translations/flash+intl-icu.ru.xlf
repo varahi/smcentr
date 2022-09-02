@@ -57,6 +57,10 @@
         <source>Answered</source>
         <target>Вы ответили на вопрос</target>
       </trans-unit>
+      <trans-unit id="Ticket activated again" resname="Ticket activated again">
+        <source>Ticket activated again</source>
+        <target>Заявка снова активирована для работы</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -20,6 +20,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use App\Form\Ticket\TicketFormType;
 use App\Service\Mailer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class TicketController extends AbstractController
 {
@@ -57,18 +58,36 @@ class TicketController extends AbstractController
     }
 
     /**
+     * @Route("/support", name="app_support")
+     */
+    public function index(
+        TicketRepository $ticketRepository
+    ): Response {
+        $user = $this->security->getUser();
+        $newTickets = $ticketRepository->findAll();
+        return $this->render('ticket/index.html.twig', [
+            'user' => $user,
+            'newTickets' => $newTickets,
+        ]);
+    }
+
+    /**
      * @Route("/ticket-list", name="app_ticket_list")
      */
     public function list(
         TicketRepository $ticketRepository
     ): Response {
         $user = $this->security->getUser();
-        $tickets = $ticketRepository->findAll();
 
+        $newTickets = $ticketRepository->findAllByStatus(self::STATUS_NEW);
+        $activeTickets = $ticketRepository->findAllByStatus(self::STATUS_ACTIVE);
+        $completedTickets = $ticketRepository->findAllByStatus(self::STATUS_COMPLETED);
 
         return $this->render('ticket/ticket_list.html.twig', [
             'user' => $user,
-            'newTickets' => $tickets,
+            'newTickets' => $newTickets,
+            'activeTickets' => $activeTickets,
+            'completedTickets' => $completedTickets,
         ]);
     }
 
@@ -128,20 +147,6 @@ class TicketController extends AbstractController
     }
 
     /**
-     * @Route("/support", name="app_support")
-     */
-    public function index(
-        TicketRepository $ticketRepository
-    ): Response {
-        $user = $this->security->getUser();
-        $newTickets = $ticketRepository->findAll();
-        return $this->render('ticket/index.html.twig', [
-            'user' => $user,
-            'newTickets' => $newTickets,
-        ]);
-    }
-
-    /**
      * @Route("/support/new-ticket", name="app_ticket_new")
      */
     public function newTicket(
@@ -178,5 +183,33 @@ class TicketController extends AbstractController
             'user' => $user,
             'ticketForm' => $form->createView()
         ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     * @Route("/activate-ticket/ticket-{id}", name="app_activate_ticket")
+     */
+    public function activateTicket(
+        Request $request,
+        TranslatorInterface $translator,
+        NotifierInterface $notifier,
+        Ticket $ticket,
+        ManagerRegistry $doctrine
+    ) {
+        if ($this->isGranted(self::ROLE_SUPER_ADMIN)) {
+            $entityManager = $doctrine->getManager();
+            $ticket->setStatus(self::STATUS_ACTIVE);
+            $entityManager->persist($ticket);
+            $entityManager->flush();
+
+            $message = $translator->trans('Ticket activated again', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            $referer = $request->headers->get('referer');
+            return new RedirectResponse($referer);
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
     }
 }

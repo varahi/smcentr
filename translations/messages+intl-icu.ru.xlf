@@ -307,7 +307,7 @@
       </trans-unit>
       <trans-unit id="2r.xpsh" resname="New tickets">
         <source>New tickets</source>
-        <target>Новые тикеты</target>
+        <target>Новые заявки</target>
       </trans-unit>
       <trans-unit id="d3mtVqb" resname="Show all new tickets">
         <source>Show all new tickets</source>
@@ -388,6 +388,30 @@
       <trans-unit id="H8EIQgr" resname="Answer the question">
         <source>Answer the question</source>
         <target>Ответить на заявку</target>
+      </trans-unit>
+      <trans-unit id="i0VW.ZT" resname="Active tickets">
+        <source>Active tickets</source>
+        <target>Заявки в работе</target>
+      </trans-unit>
+      <trans-unit id="tADaUbt" resname="Completed tickets">
+        <source>Completed tickets</source>
+        <target>Завершенные заявки</target>
+      </trans-unit>
+      <trans-unit id="OoFk5tV" resname="To ticket list">
+        <source>To ticket list</source>
+        <target>К списку заявок</target>
+      </trans-unit>
+      <trans-unit id="tcMVaZZ" resname="Close ticket">
+        <source>Close ticket</source>
+        <target>Закрыть заявку</target>
+      </trans-unit>
+      <trans-unit id="qSi5dsi" resname="Are you sure you want to activate ticket">
+        <source>Are you sure you want to activate ticket</source>
+        <target>Вы уверены, что хотите актвировать заявку</target>
+      </trans-unit>
+      <trans-unit id="jiWOYye" resname="Activate ticket">
+        <source>Activate ticket</source>
+        <target>Активировать заявку</target>
       </trans-unit>
     </body>
   </file>
