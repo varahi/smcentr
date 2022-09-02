@@ -37,6 +37,10 @@
         <source>Answer</source>
         <target>Ответить на запрос</target>
       </trans-unit>
+      <trans-unit id="Your message" resname="Your message">
+        <source>Your message</source>
+        <target>Ваше сообщение</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -23,19 +23,13 @@
                     {% include 'partials/order/_order_stars.html.twig' %}
                 </div>
                 {% if order.status == 0 %}
-                    <div class="status">
-                        {{ 'New order'|trans }}
-                    </div>
+                    <div class="status">{{ 'New order'|trans }}</div>
                 {% endif %}
                 {% if order.status == 1 %}
-                    <div class="status_performed">
-                        {{ 'Working on'|trans }}
-                    </div>
+                    <div class="status_performed">{{ 'Working on'|trans }}</div>
                 {% endif %}
                 {% if order.status == 9 %}
-                    <div class="status_complite">
-                        {{ 'Completed'|trans }}
-                    </div>
+                    <div class="status_complite">{{ 'Completed'|trans }}</div>
                 {% endif %}
             </div>
         </div>
@@ -48,7 +42,7 @@
                     <button>{{ 'Take order'|trans }}</button>
                 </a>
             {% endif %}
-            <span>{{ order.price|format_currency('RUB') }} {#<i>руб.</i>#}</span>
+            <span>{{ order.price|format_currency('RUB', {fraction_digit: 0}) }} {#<i>руб.</i>#}</span>
         </div>
 
         <div class="client_contact">

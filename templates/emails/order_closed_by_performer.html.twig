@@ -33,7 +33,7 @@
             Стоимость заказа:
         </td>
         <td>
-            {{ order.price|format_currency('RUB') }}
+            {{ order.price|format_currency('RUB', {fraction_digit: 0}) }}
         </td>
     </tr>
     <tr>

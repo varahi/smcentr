@@ -56,7 +56,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Masters', 'fa fa-user', User::class)->setController(UserMasterCrudController::class),
             MenuItem::linkToCrud('Clients', 'fa fa-user', User::class)->setController(UserClientCrudController::class),
             MenuItem::section('<hr />'),
-            MenuItem::linkToCrud('Moderators', 'fa fa-user', User::class)->setController(UserAdminCrudController::class),
+            //MenuItem::linkToCrud('Moderators', 'fa fa-user', User::class)->setController(UserAdminCrudController::class),
             MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class),
             MenuItem::section(''),
         ]);

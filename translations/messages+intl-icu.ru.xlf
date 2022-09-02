@@ -413,6 +413,30 @@
         <source>Activate ticket</source>
         <target>Активировать заявку</target>
       </trans-unit>
+      <trans-unit id="GP3VSbL" resname="New">
+        <source>New</source>
+        <target>Новый</target>
+      </trans-unit>
+      <trans-unit id="kjQGlYm" resname="Active">
+        <source>Active</source>
+        <target>В работе</target>
+      </trans-unit>
+      <trans-unit id="KGozGfT" resname="Show all active tickets">
+        <source>Show all active tickets</source>
+        <target>Показать все активные заявки</target>
+      </trans-unit>
+      <trans-unit id="F6dnZBb" resname="Show all completed tickets">
+        <source>Show all completed tickets</source>
+        <target>Показать все завершенные заявки</target>
+      </trans-unit>
+      <trans-unit id="1H18sOT" resname="More">
+        <source>More</source>
+        <target>Подробнее</target>
+      </trans-unit>
+        <trans-unit id="Support request" resname="Support request">
+            <source>Support request</source>
+            <target>Заявка в тех поддержку</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

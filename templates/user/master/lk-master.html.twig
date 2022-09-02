@@ -67,7 +67,7 @@
                     <div class="profile_balance">
                         <div class="balance">
                             <span>{{ 'Balance'|trans }}:</span>
-                            <div>{{ user.balance|format_currency('RUB') }}</div>
+                            <div>{{ user.balance|format_currency('RUB', {fraction_digit: 0}) }}</div>
                         </div>
                         <a href="{{ path('app_master_top_up_balance') }}"><button>{{ 'Top up balance'|trans }}</button></a>
                     </div>

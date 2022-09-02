@@ -19,7 +19,7 @@ class AnswerFormType extends AbstractType
                 [
                     'required' => true,
                     'attr' => [
-                        'placeholder' => 'Answer',
+                        'placeholder' => 'Your message',
                         'class' => 'form-control textarea-form-control',
                     ],
                     'label' => false,

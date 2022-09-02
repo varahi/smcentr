@@ -23,7 +23,7 @@
                 <div style="display: none">{{ ticket.priority }}</div>
             </td>
             {% if id == 'active-tickets' or id  == 'new-tickets' %}
-                <td><a href="{{ path('app_ticket_detail', { id: ticket.id}) }}">{{ 'Answer ticket'|trans }}</a></td>
+                <td><a href="{{ path('app_edit_ticket', { id: ticket.id}) }}">{{ 'Answer ticket'|trans }}</a></td>
             {% else %}
                 <td>
                     <a href="{{ path('app_activate_ticket', { id: ticket.id}) }}" onclick="return confirm('{{ 'Are you sure you want to activate ticket'|trans }}')">

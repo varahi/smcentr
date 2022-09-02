@@ -1,12 +1,8 @@
 <div class="col-md-4">
     <div class="job_item">
-
         <div class="top_item">
             <div class="item_left">
                 <h2>{{ ticket.title }}</h2>
-                {#<div class="raion">
-                    {{ ticket.description }}
-                </div>#}
             </div>
             <div class="item_right">
                 <div class="id_item">
@@ -17,14 +13,19 @@
                     {% include 'partials/ticket/_ticket_stars.html.twig' %}
                 </div>
                 {% if ticket.status == 0 %}
-                    <div class="status">
-                        {{ 'New order'|trans }}
-                    </div>
+                    <div class="status">{{ 'New'|trans }}</div>
+                {% endif %}
+                {% if ticket.status == 1 %}
+                    <div class="status_performed">{{ 'Active'|trans }}</div>
+                {% endif %}
+                {% if ticket.status == 9 %}
+                    <div class="status_complite">{{ 'Completed'|trans }}</div>
                 {% endif %}
             </div>
         </div>
         <div class="description">
             {{ ticket.description }}
         </div>
+        <a href="{{ path('app_detail_ticket', { id: ticket.id}) }}">{{ 'More'|trans }}</a>
     </div>
 </div>

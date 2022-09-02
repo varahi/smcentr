@@ -54,7 +54,6 @@
         </div>
     </section>
 
-    {#    <!-- Созданные заявки -->#}
     <section id="list_items">
         <div class="container">
             <div class="row">
@@ -66,16 +65,81 @@
             {% if newTickets is not empty %}
                 <div class="row">
                     {% for ticket in newTickets %}
-                        {% include 'partials/ticket/_new_ticket_item.html.twig' %}
+                        {% include 'partials/ticket/_ticket_item.html.twig' %}
                     {% endfor %}
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="btn_center">
-                            <button>{{ 'Show all new tickets'|trans }}</button>
+
+                {% if newTickets|length > 3 %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="btn_center">
+                                <button>{{ 'Show all new tickets'|trans }}</button>
+                            </div>
                         </div>
                     </div>
+                {% endif %}
+
+            {% else %}
+                <p>{{ 'Empty orders list'|trans }}</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <section id="list_items">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>{{ 'Active tickets'|trans }}</h3>
                 </div>
+            </div>
+            {% if activeTickets is not empty %}
+                <div class="row">
+                    {% for ticket in activeTickets %}
+                        {% include 'partials/ticket/_ticket_item.html.twig' %}
+                    {% endfor %}
+                </div>
+
+                {% if activeTickets|length > 3 %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="btn_center">
+                                <button>{{ 'Show all active tickets'|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            {% else %}
+                <p>{{ 'Empty orders list'|trans }}</p>
+            {% endif %}
+        </div>
+    </section>
+
+
+    <section id="list_items">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>{{ 'Completed tickets'|trans }}</h3>
+                </div>
+            </div>
+            {% if completedTickets is not empty %}
+                <div class="row">
+                    {% for ticket in completedTickets %}
+                        {% include 'partials/ticket/_ticket_item.html.twig' %}
+                    {% endfor %}
+                </div>
+
+                {% if completedTickets|length > 3 %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="btn_center">
+                                <button>{{ 'Show all completed tickets'|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
             {% else %}
                 <p>{{ 'Empty orders list'|trans }}</p>
             {% endif %}

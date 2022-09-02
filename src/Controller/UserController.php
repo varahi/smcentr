@@ -211,7 +211,6 @@ class UserController extends AbstractController
         if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();
             {
-
                 $response = new Response($this->twig->render('user/notifications.html.twig', [
                     'user' => $user,
                 ]));

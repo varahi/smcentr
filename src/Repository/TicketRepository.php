@@ -42,6 +42,24 @@ class TicketRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int $id
+     * @return int|mixed|string
+     */
+    public function findByUserAndStatus(int $id, $status)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('t')
+            ->from(self::TICKET_TABLE, 't')
+            ->join('t.user', 'u')
+            ->where($qb->expr()->eq('u.id', $id))
+            ->andWhere('t.status LIKE :status')
+            ->setParameter('status', $status)
+            ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * @param $status
      * @return float|int|mixed|string
      */
