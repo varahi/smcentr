@@ -51,6 +51,7 @@
        onclick="return confirm('{{ 'Are you sure you want to close order'|trans }} {% if tax > 0 %} С вашего баланса спишется {{ tax }} руб. {% endif %}')">
         <button>{{ 'Close order'|trans }}</button>
     </a>
-    <span>{{ order.price|format_currency('RUB', {fraction_digit: 0}) }} {#<i>руб.</i>#}</span>
+    {#<span>{{ order.price|format_currency('RUB', {fraction_digit: 0}) }} <i>руб.</i></span>#}
+    <span>{{ order.price|number_format(0, '.', ' ') }} <i>&#8381;</i></span>
 </div>
 {% endif %}

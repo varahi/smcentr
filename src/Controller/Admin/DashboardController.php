@@ -13,18 +13,21 @@ use App\Entity\City;
 use App\Entity\District;
 use App\Entity\JobType;
 use App\Entity\Order;
-use App\Entity\Ticket;
 use App\Entity\Profession;
 use App\Entity\User;
 use App\Entity\Pages;
 
 class DashboardController extends AbstractDashboardController
 {
+
     /**
      * @Route("/backend", name="app_backend")
      */
     public function index(): Response
     {
+
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+
         //return parent::index();
         $routeBuilder = $this->get(AdminUrlGenerator::class);
         return $this->redirect($routeBuilder->setController(CityCrudController::class)->generateUrl());
@@ -44,7 +47,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('References');
         yield MenuItem::subMenu('References', 'fa fa-tags')->setSubItems([
-            MenuItem::linkToCrud('Cities', 'fa fa-city', City::class),
+            MenuItem::linkToCrud('Cities', 'fa fa-city', City::class)->setPermission('ROLE_SUPER_ADMIN'),
             MenuItem::linkToCrud('Districts', 'fa fa-building', District::class),
             MenuItem::linkToCrud('Professions', 'fa fa-users', Profession::class),
             MenuItem::linkToCrud('Job Types', 'fa fa-industry', JobType::class),

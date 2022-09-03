@@ -42,7 +42,7 @@
                     <button>{{ 'Take order'|trans }}</button>
                 </a>
             {% endif %}
-            <span>{{ order.price|format_currency('RUB', {fraction_digit: 0}) }} {#<i>руб.</i>#}</span>
+            <span><span>{{ order.price|number_format(0, '.', ' ') }} <i>&#8381;</i></span></span>
         </div>
 
         <div class="client_contact">
