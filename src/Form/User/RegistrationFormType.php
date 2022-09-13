@@ -2,6 +2,7 @@
 
 namespace App\Form\User;
 
+use App\Entity\District;
 use App\Entity\User;
 use App\Entity\City;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -64,6 +65,13 @@ class RegistrationFormType extends AbstractType
             )
             ->add('city', EntityType::class, [
                 'class' => City::class,
+                'multiple'  => false,
+                'expanded'  => false,
+                'label' => 'List of housing',
+                'required' => true,
+            ])
+            ->add('district', EntityType::class, [
+                'class' => District::class,
                 'multiple'  => false,
                 'expanded'  => false,
                 'label' => 'List of housing',

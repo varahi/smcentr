@@ -150,6 +150,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $taxRate;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=District::class, inversedBy="users")
+     */
+    private $district;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -592,6 +597,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTaxRate(?float $taxRate): self
     {
         $this->taxRate = $taxRate;
+
+        return $this;
+    }
+
+    public function getDistrict(): ?District
+    {
+        return $this->district;
+    }
+
+    public function setDistrict(?District $district): self
+    {
+        $this->district = $district;
 
         return $this;
     }

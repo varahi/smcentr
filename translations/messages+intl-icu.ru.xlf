@@ -163,7 +163,7 @@
       </trans-unit>
       <trans-unit id="bbPhRoL" resname="Active orders">
         <source>Active orders</source>
-        <target>Активные заявки</target>
+        <target>Заявки в работе</target>
       </trans-unit>
       <trans-unit id="DClKFFu" resname="Show all active orders">
         <source>Show all active orders</source>

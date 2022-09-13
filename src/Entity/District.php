@@ -34,9 +34,15 @@ class District
      */
     private $orders;
 
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="district")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -97,6 +103,36 @@ class District
             // set the owning side to null (unless already changed)
             if ($order->getDistrict() === $this) {
                 $order->setDistrict(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setDistrict($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getDistrict() === $this) {
+                $user->setDistrict(null);
             }
         }
 

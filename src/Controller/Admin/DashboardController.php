@@ -19,13 +19,11 @@ use App\Entity\Pages;
 
 class DashboardController extends AbstractDashboardController
 {
-
     /**
      * @Route("/backend", name="app_backend")
      */
     public function index(): Response
     {
-
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
         //return parent::index();

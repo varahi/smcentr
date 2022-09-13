@@ -84,6 +84,7 @@ class UserMasterCrudController extends AbstractCrudController
                 'by_reference' => false,
             ])->hideOnIndex();
         yield AssociationField::new('city');
+        yield AssociationField::new('district');
         yield AssociationField::new('orders')->hideOnIndex();
         yield AssociationField::new('assignments')->hideOnIndex();
         yield BooleanField::new('getNotifications');
