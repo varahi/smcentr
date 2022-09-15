@@ -45,22 +45,35 @@ class OrderFormType extends AbstractType
                     'label' => false,
                 ]
             )
+            ->add(
+                'address',
+                TextareaType::class,
+                [
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'Адрес выполнения заявки *',
+                        'class' => 'form-control textarea-form-control',
+                    ],
+                    'label' => false,
+                ]
+            )
             //->add('level')
             ->add(
                 'level',
                 ChoiceType::class,
                 [
                     'required' => true,
-                    'label' => 'Level',
+                    'label' => 'Выберите сложноть заявки *',
                     'translation_domain' => 'messages',
                     'choices'  => [
-                        'Выберите сложноть заявки *' => null,
+                        //'Выберите сложноть заявки *' => null,
                         '1' => '1',
                         '2' => '2',
                         '3' => '3',
                         '4' => '4',
                         '5' => '5',
                     ],
+                    'data' => '3'
                 ]
             )
             ->add(
@@ -71,11 +84,11 @@ class OrderFormType extends AbstractType
                     'attr' => [
                         'placeholder' => 'Телефон *',
                     ],
-                    'label' => false,
+                    'label' => 'asdasd',
                 ]
             )
             ->add('deadline', DateType::class, [
-                'label'     => false,
+                'label'     => 'Срок выпоплнения работ',
                 'required' => true,
                 'widget' => 'single_text',
                 //'format' => 'MM/DD/yyyy',
@@ -86,6 +99,17 @@ class OrderFormType extends AbstractType
                     'class' => 'date'
                 ]
             ])
+            ->add(
+                'estimatedTime',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Время выполнения работ',
+                    ],
+                    'label' => false,
+                ]
+            )
             ->add('profession', EntityType::class, [
                 'class' => Profession::class,
                 'multiple'  => false,

@@ -37,6 +37,10 @@
     opacity: 0;
 }
 
+button.upload:hover {
+    cursor: pointer;
+}
+
 .form-std {
     margin: 0 auto;
 }
@@ -111,3 +115,14 @@ blockquote cite {
 .status_performed {
     min-width: 100px;
 }
+
+/*
+.client_contact_visible .address {
+    border: 1px solid red;
+    display: block;
+    padding-bottom: 10px;
+    width: 60%;
+}
+.client_contact_visible .phone {
+    display: block;
+}*/

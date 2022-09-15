@@ -32,11 +32,13 @@
                         {{ form_widget(orderForm.jobType) }}
                         {{ form_widget(orderForm.city) }}
                         {{ form_widget(orderForm.district) }}
+                        {{ form_widget(orderForm.address) }}
                         {{ form_widget(orderForm.description) }}
                         {{ form_widget(orderForm.price) }}
-                        {{ form_widget(orderForm.level) }}
+                        {{ form_row(orderForm.level) }}
                         {{ form_widget(orderForm.phone) }}
-                        {{ form_widget(orderForm.deadline) }}
+                        {{ form_row(orderForm.estimatedTime) }}
+                        {{ form_row(orderForm.deadline) }}
                     </div>
                 </div>
 

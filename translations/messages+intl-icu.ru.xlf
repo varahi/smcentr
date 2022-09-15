@@ -255,7 +255,7 @@
       </trans-unit>
       <trans-unit id="gzeaNjS" resname="Your order taked to work">
         <source>Your order taked to work</source>
-        <target>Ваш заказ взят в работу - smcentr.su</target>
+        <target>Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано</target>
       </trans-unit>
       <trans-unit id="JVar36j" resname="Your order closed by perfomer">
         <source>Your order closed by perfomer</source>

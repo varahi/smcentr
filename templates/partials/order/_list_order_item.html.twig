@@ -1,3 +1,13 @@
+{% set tax = '' %}
+{% if order.city.taxRates is not empty %}
+    {% for taxRate in order.city.taxRates %}
+        {% if taxRate.id == order.profession.id %}
+            {% set tax = taxRate.percent * order.price %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+
 <div class="col-md-4">
     <div class="job_item">
         <div class="top_item">
@@ -38,7 +48,12 @@
         </div>
         <div class="btn_price">
             {% if order.status == 0 %}
-                <a href="{{ path('app_take_order', { id: order.id}) }}" onclick="return confirm('{{ 'Are you sure you want to take order'|trans }}')">
+                {#<a href="{{ path('app_take_order', { id: order.id}) }}" onclick="return confirm('{{ 'Are you sure you want to take order'|trans }}') ">
+                    <button>{{ 'Take order'|trans }}</button>
+                </a>#}
+
+                <a href="{{ path('app_take_order', { id: order.id}) }}"
+                   onclick="return confirm('{{ 'Are you sure you want to take order'|trans }} {% if tax > 0 %} С вашего баланса будет списано {{ tax }} руб. комиссии {% endif %}')">
                     <button>{{ 'Take order'|trans }}</button>
                 </a>
             {% endif %}

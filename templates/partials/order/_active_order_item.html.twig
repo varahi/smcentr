@@ -4,5 +4,10 @@
         <div class="client_contact_visible">
             {% include 'partials/order/_contact_info.html.twig' %}
         </div>
+        {% if order.users %}
+        <div class="client_address_visible">
+            {{ order.address }}
+        </div>
+        {% endif %}
     </div>
 </div>

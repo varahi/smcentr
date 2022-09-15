@@ -187,16 +187,16 @@ class OrderController extends AbstractController
 
                 // Set balance for master
                 if ($this->security->isGranted(self::ROLE_MASTER)) {
-                    $masterBalance = (float)$order->getPerformer()->getBalance();
+                    /*$masterBalance = (float)$order->getPerformer()->getBalance();
                     if ($masterBalance == null || $masterBalance == 0) {
                         // Redirect if order or performer not owner
                         $message = $translator->trans('Please top up balance', array(), 'flash');
                         $notifier->send(new Notification($message, ['browser']));
                         return $this->redirectToRoute('app_master_top_up_balance');
-                    }
+                    }*/
 
                     // Calculate tax rate depends on city and profession
-                    if (count($order->getCity()->getTaxRates()) > 0) {
+                    /*if (count($order->getCity()->getTaxRates()) > 0) {
                         foreach ($order->getCity()->getTaxRates() as $taxRate) {
                             if ($taxRate->getProfession()->getId() == $order->getProfession()->getId()) {
                                 $tax = $order->getPrice() * $taxRate->getPercent();
@@ -211,7 +211,7 @@ class OrderController extends AbstractController
                                 }
                             }
                         }
-                    }
+                    }*/
 
                     // Persist data
                     $entityManager = $this->doctrine->getManager();
@@ -260,13 +260,46 @@ class OrderController extends AbstractController
             $order->setStatus(self::STATUS_ACTIVE);
             $entityManager->flush();
 
+            // Set balance for master
+            $masterBalance = (float)$order->getPerformer()->getBalance();
+            if ($masterBalance == null || $masterBalance == 0) {
+                // Redirect if order or performer not owner
+                $message = $translator->trans('Please top up balance', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute('app_master_top_up_balance');
+            }
+
+            // Calculate tax rate depends on city and profession
+            if (count($order->getCity()->getTaxRates()) > 0) {
+                foreach ($order->getCity()->getTaxRates() as $taxRate) {
+                    if ($taxRate->getProfession()->getId() == $order->getProfession()->getId()) {
+                        $tax = $order->getPrice() * $taxRate->getPercent();
+                        $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
+                        if ($order->getPerformer()->getBalance() <= $tax) {
+                            // Redirect if order or performer not owner
+                            $message = $translator->trans('Please top up balance', array(), 'flash');
+                            $notifier->send(new Notification($message, ['browser']));
+                            return $this->redirectToRoute('app_master_top_up_balance');
+                        } else {
+                            $order->getPerformer()->setBalance($newMasterBalance);
+                        }
+                    }
+                }
+            }
+
+            $user->setBalance($newMasterBalance);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
             if ($order->getUsers()->isGetNotifications() == 1) {
                 // Mail to owner of the order
-                $subject = $translator->trans('Your order taked to work', array(), 'messages');
+                //$subject = $translator->trans('Your order taked to work', array(), 'messages');
+                $subject = 'Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано ' . $tax . ' руб. комиссии.';
                 $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_taked_to_work.html.twig', $order);
             }
 
-            $message = $translator->trans('Order taked', array(), 'flash');
+            //$message = $translator->trans('Order taked', array(), 'flash');
+            $message = 'Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано ' . $tax . ' руб. комиссии.';
             $notifier->send(new Notification($message, ['browser']));
             $referer = $request->headers->get('referer');
             return new RedirectResponse($referer);

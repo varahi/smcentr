@@ -55,6 +55,8 @@ class OrderCrudController extends AbstractCrudController
         yield TelephoneField::new('phone');
         yield TextareaField::new('description');
         yield MoneyField::new('price')->setCurrency('RUB')->setCustomOption('storedAsCents', false);
+        yield TextareaField::new('address');
+        yield TextField::new('estimatedTime');
         yield DateField::new('deadline');
         yield ChoiceField::new('level')->setChoices(
             [

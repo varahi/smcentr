@@ -12,10 +12,9 @@
                 </div>
             </div>
 
-            {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
             <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
+                {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+                <div class="col-md-5">
                     <div class="reg_contact">
                         <h3>Контактная информация</h3>
                         {{ form_widget(registrationForm.email) }}
@@ -36,7 +35,10 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <div class="row">
+                <div class="col-md-7">
                     <div class="pasport_upload">
                         <h3>Фото паспорта</h3>
                         <div class="p_upload_items">
@@ -77,39 +79,39 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4"></div>
+                </div>
 
                 <div class="col-md-12">
                     <div class="reg_prof">
                         <h3>Специализация</h3>
                         {% if professions is not empty %}
-                            <div class="cb_block">
-                                {% for profession in professions %}
-                                    <div class="cb_items">
-                                        <div class="main_checkbox">
-                                            <label class="checkbox">
-                                                <input type="checkbox" id="registration_master_form_professions_{{ profession.id }}" name="registration_master_form[professions][]" value="{{ profession.id }}" checked>
-                                                <span>{{ profession.name }}</span>
-                                            </label>
-                                        </div>
-                                        {% for jobType in profession.jobTypes %}
-                                            <label class="checkbox">
-                                                <input type="checkbox" id="registration_master_form_jobTypes_{{ jobType.id }}" name="registration_master_form[jobTypes][]" value="{{ jobType.id }}">
-                                                <span>{{ jobType.name }}</span>
-                                            </label>
-                                        {% endfor %}
+                        <div class="cb_block">
+                            {% for profession in professions %}
+                                <div class="cb_items">
+                                    <div class="main_checkbox">
+                                        <label class="checkbox">
+                                            <input type="checkbox" id="registration_master_form_professions_{{ profession.id }}" name="registration_master_form[professions][]" value="{{ profession.id }}" checked>
+                                            <span>{{ profession.name }}</span>
+                                        </label>
                                     </div>
-                                {% endfor %}
-                            </div>
+                                    {% for jobType in profession.jobTypes %}
+                                        <label class="checkbox">
+                                            <input type="checkbox" id="registration_master_form_jobTypes_{{ jobType.id }}" name="registration_master_form[jobTypes][]" value="{{ jobType.id }}">
+                                            <span>{{ jobType.name }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
                         {% else %}
                             <p>{{ 'Empty professions list'|trans }}</p>
                         {% endif %}
                     </div>
                 </div>
                 {% include 'partials/footer/_registration_footer.html.twig' %}
+                {{ form_end(registrationForm) }}
             </div>
-             {{ form_end(registrationForm) }}
-            </div>
+        </div>
     </section>
     <script>
         $(function(){

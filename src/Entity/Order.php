@@ -93,6 +93,16 @@ class Order
      */
     private $closed;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $address;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $estimatedTime;
+
     public function __construct()
     {
         $this->created = new \DateTime();
@@ -285,6 +295,30 @@ class Order
     public function setClosed(\DateTimeInterface $closed): self
     {
         $this->closed = $closed;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getEstimatedTime(): ?string
+    {
+        return $this->estimatedTime;
+    }
+
+    public function setEstimatedTime(?string $estimatedTime): self
+    {
+        $this->estimatedTime = $estimatedTime;
 
         return $this;
     }
