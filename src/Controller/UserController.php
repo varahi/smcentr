@@ -122,6 +122,12 @@ class UserController extends AbstractController
                 return $this->redirectToRoute("app_login");
             }
 
+            if ($user->isIsDisabled() == 1) {
+                $message = $translator->trans('Please verify you profile', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute("app_login");
+            }
+
             $newOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user);
             $activeOrders = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
             $completedOrders = $orderRepository->findByStatus(self::STATUS_COMPLETED, $user);

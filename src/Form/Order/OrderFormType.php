@@ -10,6 +10,7 @@ use App\Entity\Profession;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -24,13 +25,15 @@ class OrderFormType extends AbstractType
         $builder
             ->add(
                 'price',
-                TextType::class,
+                MoneyType::class,
                 [
                     'required' => true,
                     'attr' => [
                         'placeholder' => 'Цена заявки *',
                     ],
                     'label' => false,
+                    'currency' => '',
+                    'html5' => true
                 ]
             )
             ->add(
@@ -47,7 +50,7 @@ class OrderFormType extends AbstractType
             )
             ->add(
                 'address',
-                TextareaType::class,
+                TextType::class,
                 [
                     'required' => true,
                     'attr' => [

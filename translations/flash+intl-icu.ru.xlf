@@ -65,6 +65,10 @@
         <source>Company registered</source>
         <target>Компания зарегистрирована</target>
       </trans-unit>
+      <trans-unit id="Access blocked" resname="Access blocked">
+        <source>Access blocked</source>
+        <target>Ваш аккунт заблокирован, пожалуйста свяжитесь с нашей службой поддержки для прояснения ситуации</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

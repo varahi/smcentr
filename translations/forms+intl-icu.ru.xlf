@@ -27,11 +27,11 @@
       </trans-unit>
       <trans-unit id="Ticket title" resname="Ticket title">
         <source>Ticket title</source>
-        <target>Название заявки *</target>
+        <target>Тема обращения</target>
       </trans-unit>
       <trans-unit id="Ticket description" resname="Ticket description">
         <source>Ticket description</source>
-        <target>Описание заявки *</target>
+        <target>Текс обращения</target>
       </trans-unit>
       <trans-unit id="Answer" resname="Answer">
         <source>Answer</source>
