@@ -127,7 +127,7 @@ class OrderRepository extends ServiceEntityRepository
             ->where('o.status LIKE :status')
             ->andWhere($qb->expr()->in('o.users', $user->getId()))
             ->setParameter('status', $status)
-            ->orderBy('o.created', 'ASC')
+            ->orderBy('o.created', 'DESC')
         ;
 
         return $qb->getQuery()->getResult();
