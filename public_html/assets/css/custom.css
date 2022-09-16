@@ -126,3 +126,21 @@ blockquote cite {
 .client_contact_visible .phone {
     display: block;
 }*/
+
+
+.load-more__btn-wrap {
+    width: 100%;
+    text-align: center;
+}
+.load-more__btn-wrap .load-more__btn {
+    display: inline-block;
+    background: #FF8C00;
+    border: 0;
+    border-radius: 60px;
+    color: #fff;
+    padding: 12px 70px;
+}
+.load-more__btn-wrap .load-more__btn:hover {
+    text-decoration: none;
+    background: #FFA700;
+}

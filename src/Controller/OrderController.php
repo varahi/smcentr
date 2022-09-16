@@ -185,45 +185,16 @@ class OrderController extends AbstractController
             $user = $this->security->getUser();
             if ($user->getId() == $order->getUsers()->getId() || $user->getId() == $order->getPerformer()->getId()) {
 
-                // Set balance for master
-                if ($this->security->isGranted(self::ROLE_MASTER)) {
-                    /*$masterBalance = (float)$order->getPerformer()->getBalance();
-                    if ($masterBalance == null || $masterBalance == 0) {
-                        // Redirect if order or performer not owner
-                        $message = $translator->trans('Please top up balance', array(), 'flash');
-                        $notifier->send(new Notification($message, ['browser']));
-                        return $this->redirectToRoute('app_master_top_up_balance');
-                    }*/
+                // Persist data
+                $entityManager = $this->doctrine->getManager();
+                $order->setStatus(self::STATUS_COMPLETED);
+                $order->setClosed(new \DateTime());
+                $entityManager->flush();
 
-                    // Calculate tax rate depends on city and profession
-                    /*if (count($order->getCity()->getTaxRates()) > 0) {
-                        foreach ($order->getCity()->getTaxRates() as $taxRate) {
-                            if ($taxRate->getProfession()->getId() == $order->getProfession()->getId()) {
-                                $tax = $order->getPrice() * $taxRate->getPercent();
-                                $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
-                                if ($order->getPerformer()->getBalance() <= $tax) {
-                                    // Redirect if order or performer not owner
-                                    $message = $translator->trans('Please top up balance', array(), 'flash');
-                                    $notifier->send(new Notification($message, ['browser']));
-                                    return $this->redirectToRoute('app_master_top_up_balance');
-                                } else {
-                                    $order->getPerformer()->setBalance($newMasterBalance);
-                                }
-                            }
-                        }
-                    }*/
-
-                    // Persist data
-                    $entityManager = $this->doctrine->getManager();
-                    $order->setStatus(self::STATUS_COMPLETED);
-                    $order->setClosed(new \DateTime());
-                    $entityManager->flush();
-
-                    // Mail to owner for close order
-                    if ($order->getUsers()->isGetNotifications() == 1) {
-                        $subject = $translator->trans('Your order closed by perfomer', array(), 'messages');
-                        $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_performer.html.twig', $order);
-                    }
+                // Mail to owner for close order
+                if ($order->getUsers()->isGetNotifications() == 1) {
+                    $subject = $translator->trans('Your order closed by perfomer', array(), 'messages');
+                    $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_performer.html.twig', $order);
                 }
 
                 $message = $translator->trans('Order closed', array(), 'flash');
@@ -285,21 +256,29 @@ class OrderController extends AbstractController
                         }
                     }
                 }
+                $user->setBalance($newMasterBalance);
+                $entityManager->persist($user);
+                $entityManager->flush();
             }
-
-            $user->setBalance($newMasterBalance);
-            $entityManager->persist($user);
-            $entityManager->flush();
 
             if ($order->getUsers()->isGetNotifications() == 1) {
                 // Mail to owner of the order
                 //$subject = $translator->trans('Your order taked to work', array(), 'messages');
-                $subject = 'Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано ' . $tax . ' руб. комиссии.';
+                if (isset($tax)) {
+                    $subject = 'Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано ' . $tax . ' руб. комиссии.';
+                } else {
+                    $subject = 'Вы успешно приняли заявку, она добавилась в ваш профиль.';
+                }
                 $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_taked_to_work.html.twig', $order);
             }
 
             //$message = $translator->trans('Order taked', array(), 'flash');
-            $message = 'Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано ' . $tax . ' руб. комиссии.';
+            if (isset($tax)) {
+                $message = 'Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано ' . $tax . ' руб. комиссии.';
+            } else {
+                $message = 'Вы успешно приняли заявку, она добавилась в ваш профиль.';
+            }
+
             $notifier->send(new Notification($message, ['browser']));
             $referer = $request->headers->get('referer');
             return new RedirectResponse($referer);

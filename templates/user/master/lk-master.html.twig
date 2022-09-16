@@ -87,18 +87,29 @@
             </div>
 
             {% if activeOrders is not empty %}
-                <div class="row">
+                <div class="row active_orders_list">
                     {% for order in activeOrders %}
                         {% include 'partials/order/_active_order_item.html.twig' %}
                     {% endfor %}
                 </div>
-                <div class="row">
+
+                <script>
+                    $('.active_orders_list').simpleLoadMore({
+                        item: 'div.col-md-4',
+                        count: 3,
+                        counterInBtn: true,
+                        btnText: '{{ 'Show all active orders'|trans }}',
+                    });
+                </script>
+
+                {#<div class="row">
                     <div class="col-md-12">
                         <div class="btn_center">
                             <button>{{ 'Show all active orders'|trans }}</button>
                         </div>
                     </div>
-                </div>
+                </div>#}
+
             {% else %}
                 <p>{{ 'Empty orders list'|trans }}</p>
             {% endif %}
@@ -115,18 +126,29 @@
             </div>
 
             {% if completedOrders is not empty %}
-                <div class="row">
+                <div class="row complted_orders_list">
                     {% for order in completedOrders %}
                         {% include 'partials/order/_completed_order_item.html.twig' %}
                     {% endfor %}
                 </div>
-                <div class="row">
+
+                <script>
+                    $('.complted_orders_list').simpleLoadMore({
+                        item: 'div.col-md-4',
+                        count: 3,
+                        counterInBtn: true,
+                        btnText: '{{ 'Show all completed orders'|trans }}',
+                    });
+                </script>
+
+                {#<div class="row">
                     <div class="col-md-12">
                         <div class="btn_center">
                             <button>{{ 'Show all completed orders'|trans }}</button>
                         </div>
                     </div>
-                </div>
+                </div>#}
+
             {% else %}
                 <p>{{ 'Empty orders list'|trans }}</p>
             {% endif %}

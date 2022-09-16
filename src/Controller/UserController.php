@@ -32,6 +32,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\ImageOptimizer;
 #use App\Controller\Traits\EmailVerifyTrait;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 class UserController extends AbstractController
 {
@@ -61,6 +62,8 @@ class UserController extends AbstractController
     private $targetDirectory;
 
     private $emailVerifier;
+
+    public const LIMIT_PER_PAGE = '3';
 
     /**
      * @param Security $security
@@ -106,10 +109,12 @@ class UserController extends AbstractController
      * @Route("/user/lk-client", name="app_client_profile")
      */
     public function clinetProfile(
+        Request $request,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         OrderRepository $orderRepository,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+        PaginatorInterface $paginator
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT)) {
             $user = $this->security->getUser();
@@ -122,11 +127,15 @@ class UserController extends AbstractController
                 return $this->redirectToRoute("app_login");
             }
 
-            if ($user->isIsDisabled() == 1) {
-                $message = $translator->trans('Please verify you profile', array(), 'flash');
-                $notifier->send(new Notification($message, ['browser']));
-                return $this->redirectToRoute("app_login");
-            }
+            $queryOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user);
+            $queryOrders2 = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
+
+            // Pagination
+            /*$newOrders = $paginator->paginate(
+                $queryOrders,
+                $request->query->getInt('page', 1),
+                self::LIMIT_PER_PAGE
+            );*/
 
             $newOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user);
             $activeOrders = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);

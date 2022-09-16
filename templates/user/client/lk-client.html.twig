@@ -61,7 +61,8 @@
         </div>
     </section>
 
-{#    <!-- Созданные заявки -->#}
+
+    {#    <!-- Созданные заявки -->#}
     <section id="list_items">
         <div class="container">
             <div class="row">
@@ -71,18 +72,30 @@
             </div>
 
             {% if newOrders is not empty %}
-            <div class="row">
+            <div class="row new_orders_list">
                 {% for order in newOrders %}
                     {% include 'partials/order/_new_order_item.html.twig' %}
                 {% endfor %}
             </div>
-            <div class="row">
+
+                <script>
+                    $('.new_orders_list').simpleLoadMore({
+                        item: 'div.col-md-4',
+                        count: 3,
+                        counterInBtn: true,
+                        //btnText: 'View More {showing}/{total}',
+                        btnText: '{{ 'Show all new orders'|trans }}',
+                    });
+                </script>
+
+            {#<div class="row">
                 <div class="col-md-12">
                     <div class="btn_center">
                         <button>{{ 'Show all new orders'|trans }}</button>
                     </div>
                 </div>
-            </div>
+            </div>#}
+
             {% else %}
                 <p>{{ 'Empty orders list'|trans }}</p>
             {% endif %}
@@ -99,18 +112,29 @@
             </div>
 
             {% if activeOrders is not empty %}
-            <div class="row">
+            <div class="row active_orders_list">
                 {% for order in activeOrders %}
                     {% include 'partials/order/_active_order_item.html.twig' %}
                 {% endfor %}
             </div>
-            <div class="row">
+
+                <script>
+                    $('.active_orders_list').simpleLoadMore({
+                        item: 'div.col-md-4',
+                        count: 3,
+                        counterInBtn: true,
+                        btnText: '{{ 'Show all active orders'|trans }}',
+                    });
+                </script>
+
+            {#<div class="row">
                 <div class="col-md-12">
                     <div class="btn_center">
                         <button>{{ 'Show all active orders'|trans }}</button>
                     </div>
                 </div>
-            </div>
+            </div>#}
+
             {% else %}
                 <p>{{ 'Empty orders list'|trans }}</p>
             {% endif %}
@@ -127,18 +151,29 @@
             </div>
 
             {% if completedOrders is not empty %}
-                <div class="row">
+                <div class="row completed_orders_list">
                     {% for order in completedOrders %}
                         {% include 'partials/order/_completed_order_item.html.twig' %}
                     {% endfor %}
                 </div>
-                <div class="row">
+
+                <script>
+                    $('.completed_orders_list').simpleLoadMore({
+                        item: 'div.col-md-4',
+                        count: 3,
+                        counterInBtn: true,
+                        btnText: '{{ 'Show all completed orders'|trans }}',
+                    });
+                </script>
+
+                {#<div class="row">
                     <div class="col-md-12">
                         <div class="btn_center">
                             <button>{{ 'Show all completed orders'|trans }}</button>
                         </div>
                     </div>
-                </div>
+                </div>#}
+
             {% else %}
                 <p>{{ 'Empty orders list'|trans }}</p>
             {% endif %}
