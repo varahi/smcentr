@@ -26,12 +26,12 @@
                         {{ form_widget(registrationForm.district) }}
 
                         <div class="avatar_upload">
-                            <img src="{{ asset('assets/images/avatar.png') }}" alt="" />
+                            <img id="avatar" src="{{ asset('assets/images/avatar.png') }}" alt="" />
                             <div class="">
                                 <p>Аватар пользователя</p>
-                                <div class="upload_file">
+                                <div class="upload_file upload_file_1">
                                     {{ form_widget(registrationForm.avatar) }}
-                                    <button class="upload">Загрузить<i></i></button>
+                                    <button class="upload upload-1">Загрузить<i></i></button>
                                 </div>
                             </div>
                         </div>
@@ -44,34 +44,34 @@
 
                                 <div class="file_upload">
                                     <p>Главная страница</p>
-                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" /> {#file-pasport.jpg#}</span>
+                                    <span><img id="doc1" src="{{ asset('assets/images/file_upload.svg') }}" alt="" /> {#file-pasport.jpg#}</span>
                                 </div>
 
-                                <div class="p_upload_btn">
+                                <div class="p_upload_btn upload_file_2">
                                     {{ form_widget(registrationForm.doc1) }}
-                                    <button class="upload">Загрузить<i></i></button>
+                                    <button class="upload upload-2">Загрузить<i></i></button>
                                 </div>
                             </div>
 
                             <div class="p_upload_item">
                                 <div class="file_upload">
                                     <p>Страница прописки</p>
-                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />{#file-regitration.jpg#}</span>
+                                    <span><img id="doc2" src="{{ asset('assets/images/file_upload.svg') }}" alt="" />{#file-regitration.jpg#}</span>
                                 </div>
-                                <div class="p_upload_btn">
+                                <div class="p_upload_btn upload_file_3">
                                     {{ form_widget(registrationForm.doc2) }}
-                                    <button class="upload">Загрузить<i></i></button>
+                                    <button class="upload upload-3">Загрузить<i></i></button>
                                 </div>
                             </div>
 
                             <div class="p_upload_item">
                                 <div class="file_upload">
                                     <p>Селфи с паспортом</p>
-                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />{#file-selfi.jpg#}</span>
+                                    <span><img id="doc3" src="{{ asset('assets/images/file_upload.svg') }}" alt="" />{#file-selfi.jpg#}</span>
                                 </div>
-                                <div class="p_upload_btn">
+                                <div class="p_upload_btn upload_file_4">
                                     {{ form_widget(registrationForm.doc3) }}
-                                    <button class="upload">Загрузить<i></i></button>
+                                    <button class="upload upload-4">Загрузить<i></i></button>
                                 </div>
                             </div>
                         </div>
@@ -115,5 +115,79 @@
         $(function(){
             $("#registration_master_form_phone").mask("+7(999) 999-9999");
         });
+        // New avatar uploaded
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#avatar')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function readDoc1(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#doc1')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function readDoc2(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#doc2')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function readDoc3(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#doc3')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        // Hover on upload button
+        $( ".upload_file_1" ).hover(
+            function() {
+                $( ".upload-1" ).addClass( 'hover');
+            }, function() {
+                $( ".upload-1" ).removeClass( 'hover');
+            }
+        );
+        $( ".upload_file_2" ).hover(
+            function() {
+                $( ".upload-2" ).addClass( 'hover');
+            }, function() {
+                $( ".upload-2" ).removeClass( 'hover');
+            }
+        );
+        $( ".upload_file_3" ).hover(
+            function() {
+                $( ".upload-3" ).addClass( 'hover');
+            }, function() {
+                $( ".upload-3" ).removeClass( 'hover');
+            }
+        );
+        $( ".upload_file_4" ).hover(
+            function() {
+                $( ".upload-4" ).addClass( 'hover');
+            }, function() {
+                $( ".upload-4" ).removeClass( 'hover');
+            }
+        );
     </script>
 {% endblock %}

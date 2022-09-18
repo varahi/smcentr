@@ -16,31 +16,6 @@
     /*    font-size: 2.75rem;*/
 }
 
-.upload_file,
-.p_upload_btn {
-    background: none;
-}
-.upload_file input[type="file"] {
-    -webkit-appearance:none;
-    position:absolute;
-    opacity:0;
-    width: 180px;
-    height: 50px;
-    cursor: pointer;
-}
-
-.p_upload_btn input[type="file"] {
-    position:absolute;
-    margin-top: 20px;
-    width: 180px;
-    height: 50px;
-    opacity: 0;
-}
-
-button.upload:hover {
-    cursor: pointer;
-}
-
 .form-std {
     margin: 0 auto;
 }
@@ -143,4 +118,51 @@ blockquote cite {
 .load-more__btn-wrap .load-more__btn:hover {
     text-decoration: none;
     background: #FFA700;
+}
+
+
+/* Customize upload buttons */
+.upload_file,
+.p_upload_btn {
+    background: none;
+}
+.upload_file input[type="file"] {
+    -webkit-appearance:none;
+    position:absolute;
+    opacity:0;
+    width: 180px;
+    height: 50px;
+    cursor: pointer;
+    background: transparent;
+}
+.upload_file input[type="file"]:hover {
+    cursor: pointer;
+}
+
+.p_upload_btn input[type="file"] {
+    position:absolute;
+    margin-top: 20px;
+    width: 180px;
+    height: 50px;
+    opacity: 0;
+}
+
+#avatar {
+    width: 121px;
+    height: 121px;
+    border-radius: 100px;
+}
+
+#doc1,
+#doc2,
+#doc3 {
+    max-width: 121px;
+    max-height: 121px;
+}
+
+button.upload {
+    cursor: pointer;
+}
+button.hover {
+    background: #3292b2;
 }

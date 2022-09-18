@@ -25,13 +25,12 @@
                             {{ form_widget(registrationForm.city) }}
                             {{ form_widget(registrationForm.district) }}
                         <div class="avatar_upload">
-                            <img src="{{ asset('assets/images/avatar.png') }}" alt="" />
+                            <img id="avatar" src="{{ asset('assets/images/avatar.png') }}" alt="" />
                             <div class="">
                                 <p>Аватар пользователя</p>
                                 <div class="upload_file">
                                     {{ form_widget(registrationForm.avatar) }}
                                     <button class="upload">Загрузить<i></i></button>
-
                                 </div>
                             </div>
                         </div>
@@ -48,5 +47,25 @@
         $(function(){
             $("#registration_form_phone").mask("+7(999) 999-9999");
         });
+        // Remove avatar image upload
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#avatar')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        // Hover on upload button
+        $( ".upload_file" ).hover(
+            function() {
+                $( ".upload" ).addClass( 'hover');
+            }, function() {
+                $( ".upload" ).removeClass( 'hover');
+            }
+        );
     </script>
 {% endblock %}

@@ -150,6 +150,9 @@ class RegistrationMasterFormType extends AbstractType
                         'mimeTypesMessage' => 'Please upload a valid image document',
                     ])
                 ],
+                'attr' => [
+                    'onchange' => 'readURL(this);'
+                ],
                 'label' => false,
                 'translation_domain' => 'forms',
             ])
@@ -170,6 +173,9 @@ class RegistrationMasterFormType extends AbstractType
                         ],
                         'mimeTypesMessage' => 'Please upload a valid image document',
                     ])
+                ],
+                'attr' => [
+                    'onchange' => 'readDoc1(this);'
                 ],
                 'label' => false,
                 'translation_domain' => 'forms',
@@ -192,6 +198,9 @@ class RegistrationMasterFormType extends AbstractType
                         'mimeTypesMessage' => 'Please upload a valid image document',
                     ])
                 ],
+                'attr' => [
+                    'onchange' => 'readDoc2(this);'
+                ],
                 'label' => false,
                 'translation_domain' => 'forms',
             ])
@@ -212,6 +221,9 @@ class RegistrationMasterFormType extends AbstractType
                         ],
                         'mimeTypesMessage' => 'Please upload a valid image document',
                     ])
+                ],
+                'attr' => [
+                    'onchange' => 'readDoc3(this);'
                 ],
                 'label' => false,
                 'translation_domain' => 'forms',

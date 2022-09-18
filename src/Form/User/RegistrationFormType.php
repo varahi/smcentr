@@ -140,6 +140,9 @@ class RegistrationFormType extends AbstractType
                         'mimeTypesMessage' => 'Please upload a valid image document',
                     ])
                 ],
+                'attr' => [
+                    'onchange' => 'readURL(this);'
+                ],
                 'label' => false,
                 'translation_domain' => 'forms',
             ])
