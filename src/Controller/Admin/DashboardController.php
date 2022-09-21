@@ -24,7 +24,9 @@ class DashboardController extends AbstractDashboardController
      */
     public function index(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        //$this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        //$this->denyAccessUnlessGranted('ROLE_EDITOR');
+        //$this->denyAccessUnlessGranted('ROLE_ADMINISTRATOR');
 
         //return parent::index();
         $routeBuilder = $this->get(AdminUrlGenerator::class);
@@ -45,7 +47,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('References');
         yield MenuItem::subMenu('References', 'fa fa-tags')->setSubItems([
-            MenuItem::linkToCrud('Cities', 'fa fa-city', City::class)->setPermission('ROLE_SUPER_ADMIN'),
+            MenuItem::linkToCrud('Cities', 'fa fa-city', City::class),
             MenuItem::linkToCrud('Districts', 'fa fa-building', District::class),
             MenuItem::linkToCrud('Professions', 'fa fa-users', Profession::class),
             MenuItem::linkToCrud('Job Types', 'fa fa-industry', JobType::class),
@@ -57,20 +59,27 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::subMenu('Users', 'fa fa fa-cog')->setSubItems([
             MenuItem::linkToCrud('Masters', 'fa fa-user', User::class)->setController(UserMasterCrudController::class),
             MenuItem::linkToCrud('Clients', 'fa fa-user', User::class)->setController(UserClientCrudController::class),
-            MenuItem::linkToCrud('Companies', 'fa fa-users', User::class)->setController(UserCompanyCrudController::class),
-            MenuItem::linkToRoute('Create company', 'fa fa-users', 'app_registration_company'),
+            MenuItem::linkToCrud('Companies', 'fa fa-users', User::class)
+                ->setController(UserCompanyCrudController::class)
+                ->setPermission('ROLE_SUPER_ADMIN'),
+
+            MenuItem::linkToRoute('Create company', 'fa fa-users', 'app_registration_company')
+                ->setPermission('ROLE_SUPER_ADMIN'),
             //MenuItem::linkToRoute('Edit company', 'fa fa-users', 'app_registration_company'),
             MenuItem::section('<hr />'),
             //MenuItem::linkToCrud('Moderators', 'fa fa-user', User::class)->setController(UserAdminCrudController::class),
-            MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class),
+            MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class)
+                ->setPermission('ROLE_SUPER_ADMIN'),
             MenuItem::section(''),
         ]);
 
         yield MenuItem::section('Information');
         yield MenuItem::subMenu('Information', 'fa fa fa-info')->setSubItems([
             //MenuItem::linkToCrud('News', 'fa fa-newspaper-o', District::class),
-            MenuItem::linkToCrud('Oferta', 'fa fa-legal', Pages::class)->setController(OfertaCrudController::class),
-            MenuItem::linkToCrud('Privacy Policy', 'fa fa-ticket', Pages::class)->setController(PrivacyCrudController::class),
+            MenuItem::linkToCrud('Oferta', 'fa fa-legal', Pages::class)->setController(OfertaCrudController::class)
+                ->setPermission('ROLE_SUPER_ADMIN'),
+            MenuItem::linkToCrud('Privacy Policy', 'fa fa-ticket', Pages::class)->setController(PrivacyCrudController::class)
+                ->setPermission('ROLE_SUPER_ADMIN'),
         ]);
 
         yield MenuItem::linkToCrud('Orders list', 'fa fa-reorder', Order::class);

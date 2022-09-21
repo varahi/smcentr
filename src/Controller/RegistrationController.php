@@ -34,6 +34,8 @@ class RegistrationController extends AbstractController
 {
     public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
+    public const ROLE_EDITOR = 'ROLE_EDITOR';
+
     private $emailVerifier;
 
     private $mailer;
@@ -70,7 +72,7 @@ class RegistrationController extends AbstractController
         ManagerRegistry $doctrine,
         Mailer $mailer
     ): Response {
-        if ($this->isGranted(self::ROLE_SUPER_ADMIN)) {
+        if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR)) {
             $user = new User();
             $form = $this->createForm(RegistrationFormType::class, $user);
             $form->handleRequest($request);
