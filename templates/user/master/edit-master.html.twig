@@ -117,7 +117,7 @@
                             <div class="cb_block">
                                 {% for profession in professions %}
                                     <div class="cb_items">
-                                        <div class="main_checkbox">
+                                        <div class="main_checkbox main_checkbox_{{ profession.id }}">
                                             <label class="checkbox">
                                                 <input type="checkbox" id="master_profile_form_professions_{{ profession.id }}"
                                                        name="master_profile_form[professions][]" value="{{ profession.id }}"
@@ -125,6 +125,7 @@
                                                 <span>{{ profession.name }}</span>
                                             </label>
                                         </div>
+                                        <div class="prof_{{ profession.id }} hidden">
                                         {% for jobType in profession.jobTypes %}
                                             <label class="checkbox">
                                                 <input type="checkbox" id="master_profile_form_jobTypes_{{ jobType.id }}"
@@ -133,6 +134,7 @@
                                                 <span>{{ jobType.name }}</span>
                                             </label>
                                         {% endfor %}
+                                        </div>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -163,4 +165,27 @@
         });
     </script>#}
     {% include 'partials/footer/_footer.html.twig' %}
+
+    <script>
+        if ($('#master_profile_form_professions_1').is(':checked')) {
+            $( ".prof_1" ).addClass( 'show');
+        }
+        if ($('#master_profile_form_professions_2').is(':checked')) {
+            $( ".prof_2" ).addClass( 'show');
+        }
+        if ($('#master_profile_form_professions_3').is(':checked')) {
+            $( ".prof_3" ).addClass( 'show');
+        }
+
+        $("#master_profile_form_professions_1").click(function(){
+            $(".prof_1").toggle(100);
+        });
+        $("#master_profile_form_professions_2").click(function(){
+            $(".prof_2").toggle(100);
+        });
+        $("#master_profile_form_professions_3").click(function(){
+            $(".prof_3").toggle(100);
+        });
+    </script>
+
 {% endblock %}

@@ -71,7 +71,7 @@ class UserClientCrudController extends AbstractCrudController
         yield TextField::new('fullName');
         yield BooleanField::new('isVerified');
         yield BooleanField::new('isDisabled');
-        yield ArrayField::new('roles')->hideOnIndex();
+        yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
         yield ImageField::new('avatar')
             ->setBasePath('/uploads/files')
             ->setLabel('Avatar')

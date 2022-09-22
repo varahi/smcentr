@@ -61,7 +61,7 @@ class UserAdminCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield EmailField::new('email');
         yield TextField::new('fullName');
-        yield ArrayField::new('roles')->hideOnIndex();
+        yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
         yield ImageField::new('avatar')
             ->setBasePath('/uploads/files')
             ->setLabel('Avatar')

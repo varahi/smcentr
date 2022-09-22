@@ -70,7 +70,7 @@ class UserCompanyCrudController extends AbstractCrudController
         yield BooleanField::new('isVerified');
         yield BooleanField::new('isDisabled');
         yield MoneyField::new('balance')->setCurrency('RUB')->setCustomOption('storedAsCents', false);
-        yield ArrayField::new('roles')->hideOnIndex();
+        yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
         yield ImageField::new('avatar')
             ->setBasePath('/uploads/files')
             ->setLabel('Avatar')

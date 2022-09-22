@@ -166,3 +166,9 @@ button.upload {
 button.hover {
     background: #3292b2;
 }
+.hidden {
+    display: none;
+}
+.show {
+    display: block;
+}

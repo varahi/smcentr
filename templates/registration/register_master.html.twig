@@ -86,18 +86,20 @@
                             <div class="cb_block">
                                 {% for profession in professions %}
                                     <div class="cb_items">
-                                        <div class="main_checkbox">
+                                        <div class="main_checkbox main_checkbox_{{ profession.id }}">
                                             <label class="checkbox">
-                                                <input type="checkbox" id="registration_master_form_professions_{{ profession.id }}" name="registration_master_form[professions][]" value="{{ profession.id }}" checked>
+                                                <input type="checkbox" id="registration_master_form_professions_{{ profession.id }}" name="registration_master_form[professions][]" value="{{ profession.id }}">
                                                 <span>{{ profession.name }}</span>
                                             </label>
                                         </div>
-                                        {% for jobType in profession.jobTypes %}
-                                            <label class="checkbox">
-                                                <input type="checkbox" id="registration_master_form_jobTypes_{{ jobType.id }}" name="registration_master_form[jobTypes][]" value="{{ jobType.id }}">
-                                                <span>{{ jobType.name }}</span>
-                                            </label>
-                                        {% endfor %}
+                                        <div class="prof_{{ profession.id }} hidden">
+                                            {% for jobType in profession.jobTypes %}
+                                                <label class="checkbox">
+                                                    <input type="checkbox" id="registration_master_form_jobTypes_{{ jobType.id }}" name="registration_master_form[jobTypes][]" value="{{ jobType.id }}">
+                                                    <span>{{ jobType.name }}</span>
+                                                </label>
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -189,5 +191,16 @@
                 $( ".upload-4" ).removeClass( 'hover');
             }
         );
+
+        $("#registration_master_form_professions_1").click(function(){
+            $(".prof_1").toggle(100);
+        });
+        $("#registration_master_form_professions_2").click(function(){
+            $(".prof_2").toggle(100);
+        });
+        $("#registration_master_form_professions_3").click(function(){
+            $(".prof_3").toggle(100);
+        });
     </script>
+
 {% endblock %}
