@@ -470,6 +470,98 @@
             <source>Edit company</source>
             <target>Редактировать компанию</target>
         </trans-unit>
+        <trans-unit id="Full Name" resname="Full Name">
+            <source>Full Name</source>
+            <target>Полное Имя</target>
+        </trans-unit>
+        <trans-unit id="Email" resname="Email">
+            <source>Email</source>
+            <target>E-mail</target>
+        </trans-unit>
+        <trans-unit id="Name" resname="Name">
+            <source>Name</source>
+            <target>Название</target>
+        </trans-unit>
+        <trans-unit id="Tax Rates" resname="Tax Rates">
+            <source>Tax Rates</source>
+            <target>Комиссии</target>
+        </trans-unit>
+        <trans-unit id="District" resname="District">
+            <source>District</source>
+            <target>Район</target>
+        </trans-unit>
+        <trans-unit id="City" resname="City">
+            <source>City</source>
+            <target>Город</target>
+        </trans-unit>
+        <trans-unit id="Is Hidden" resname="Is Hidden">
+            <source>Is Hidden</source>
+            <target>Скрыто</target>
+        </trans-unit>
+        <trans-unit id="Profession" resname="Profession">
+            <source>Profession</source>
+            <target>Профессия</target>
+        </trans-unit>
+        <trans-unit id="Percent" resname="Percent">
+            <source>Percent</source>
+            <target>Процент списания</target>
+        </trans-unit>
+        <trans-unit id="Is Verified" resname="Is Verified">
+            <source>Is Verified</source>
+            <target>Подтвержден</target>
+        </trans-unit>
+        <trans-unit id="Is Disabled" resname="Is Disabled">
+            <source>Is Disabled</source>
+            <target>Заблокирован</target>
+        </trans-unit>
+        <trans-unit id="Get Notifications" resname="Get Notifications">
+            <source>Get Notifications</source>
+            <target>Получать уведомления</target>
+        </trans-unit>
+        <trans-unit id="Roles" resname="Roles">
+            <source>Roles</source>
+            <target>Группа пользователей</target>
+        </trans-unit>
+        <trans-unit id="Assignments" resname="Assignments">
+            <source>Assignments</source>
+            <target>Задания</target>
+        </trans-unit>
+        <trans-unit id="Company" resname="Company">
+            <source>Company</source>
+            <target>Компания</target>
+        </trans-unit>
+        <trans-unit id="Privacy" resname="Privacy">
+            <source>Privacy</source>
+            <target>Политика конфиденциальности</target>
+        </trans-unit>
+        <trans-unit id="Phone" resname="Phone">
+            <source>Phone</source>
+            <target>Телефон</target>
+        </trans-unit>
+        <trans-unit id="Price" resname="Price">
+            <source>Price</source>
+            <target>Стоимость</target>
+        </trans-unit>
+        <trans-unit id="Address" resname="Address">
+            <source>Address</source>
+            <target>Адрес</target>
+        </trans-unit>
+        <trans-unit id="Estimated Time" resname="Estimated Time">
+            <source>Estimated Time</source>
+            <target>Время выполнения работы</target>
+        </trans-unit>
+        <trans-unit id="Deadline" resname="Deadline">
+            <source>Deadline</source>
+            <target>Срок выполнения работы</target>
+        </trans-unit>
+        <trans-unit id="Level" resname="Level">
+            <source>Level</source>
+            <target>Сложность заявки</target>
+        </trans-unit>
+        <trans-unit id="Job Type" resname="Job Type">
+            <source>Job Type</source>
+            <target>Тип работы</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

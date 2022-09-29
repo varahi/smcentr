@@ -12,6 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
         "easycorp/easyadmin-bundle": "^3.5",
+        "friendsofsymfony/ckeditor-bundle": "^2.4",
         "imagine/imagine": "^1.2",
         "knplabs/knp-paginator-bundle": "^5.9",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -82,7 +83,8 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "ckeditor:install": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"

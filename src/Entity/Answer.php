@@ -23,7 +23,7 @@ class Answer
     private $answer;
 
     /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="datetime")
      */
     private $created;
 

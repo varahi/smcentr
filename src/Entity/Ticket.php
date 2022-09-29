@@ -25,7 +25,7 @@ class Ticket
     private $title;
 
     /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     * @ORM\Column(type="datetime")
      */
     private $created;
 
