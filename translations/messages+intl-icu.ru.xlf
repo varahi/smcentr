@@ -562,6 +562,18 @@
             <source>Job Type</source>
             <target>Тип работы</target>
         </trans-unit>
+        <trans-unit id="JobType" resname="JobType">
+            <source>Job Type</source>
+            <target>Тип работы</target>
+        </trans-unit>
+        <trans-unit id="JobTypes" resname="JobTypes">
+            <source>Job Type</source>
+            <target>Тип работы</target>
+        </trans-unit>
+        <trans-unit id="Performer" resname="Performer">
+            <source>Performer</source>
+            <target>Исполнитель</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>
