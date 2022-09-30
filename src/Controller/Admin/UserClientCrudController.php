@@ -38,7 +38,6 @@ class UserClientCrudController extends AbstractCrudController
      */
     private $security;
 
-
     /**
      * @param UserPasswordHasherInterface $passwordEncoder
      * @param Security $security

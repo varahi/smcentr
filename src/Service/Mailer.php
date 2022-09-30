@@ -31,6 +31,25 @@ class Mailer
     /**
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
+    public function updateCrudUserEmail(User $user, string $subject, string $template)
+    {
+        $date = new \DateTime();
+        $email = (new TemplatedEmail())
+            ->subject($subject)
+            ->htmlTemplate($template)
+            ->from($this->adminEmail)
+            ->to($user->getEmail())
+            ->context([
+                'user' => $user,
+                'date' => $date
+            ]);
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     public function sendUserEmail(User $user, string $subject, string $template, Order $order)
     {
         $date = new \DateTime();

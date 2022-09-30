@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
@@ -34,14 +35,25 @@ use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use App\Service\Mailer;
 
 class UserMasterCrudController extends AbstractCrudController
 {
     private UserPasswordHasherInterface $passwordEncoder;
 
-    public function __construct(UserPasswordHasherInterface $passwordEncoder)
+    /**
+     * @var Mailer
+     */
+    private $mailer;
+
+    public function __construct(
+        UserPasswordHasherInterface $passwordEncoder,
+        Mailer $mailer
+    )
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->mailer = $mailer;
+
     }
 
     public static function getEntityFqcn(): string
@@ -95,7 +107,7 @@ class UserMasterCrudController extends AbstractCrudController
             ->setPermission('ROLE_SUPER_ADMIN');
 
         //yield FormField::addPanel( 'Change password' )->setIcon( 'fa fa-key' );
-        yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
+        /*yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
             ->setFormType(RepeatedType::class)
             ->setRequired(false)
             ->setFormTypeOptions([
@@ -114,7 +126,7 @@ class UserMasterCrudController extends AbstractCrudController
                 'second_options'  => [ 'label' => 'Repeat password' ],
                 'error_bubbling'  => true,
                 'invalid_message' => 'The password fields do not match.',
-            ]);
+            ]);*/
 
         yield TextField::new('fullName');
         yield BooleanField::new('isVerified');
@@ -167,6 +179,26 @@ class UserMasterCrudController extends AbstractCrudController
                 $user->setPassword($this->passwordEncoder->hashPassword($user, $user->getPassword()));
             }
         });
+    }
+
+    /**
+     *
+     * @param EntityManagerInterface $entityManager
+     * @param $entityInstance
+     */
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+
+        /*$user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new \LogicException('Currently logged in user is not an instance of User?!');
+        }
+
+        if (method_exists($entityInstance, 'setIsVerified')) {
+            $subject = 'Bla bla bla';
+            $this->mailer->updateCrudUserEmail($user, $subject, 'emails/update_crud_user.html.twig');
+        }*/
+
     }
 
     /*
