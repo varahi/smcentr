@@ -9,6 +9,10 @@
         <source>User registered</source>
         <target>Вы успешно зарегистрировались. После подтверждения вашего профиля вы сможете войти в систему.</target>
       </trans-unit>
+      <trans-unit id="User master registered" resname="User master registered">
+        <source>User registered</source>
+        <target>Вы успешно зарегистрировались. После подтверждения вашего профиля администратором, вы сможете войти в систему.</target>
+      </trans-unit>
       <trans-unit id="Please login" resname="Please login">
         <source>Please login</source>
         <target>Пожалуйста войдите в систему</target>
@@ -16,6 +20,10 @@
       <trans-unit id="Email verifyed" resname="Email verifyed">
         <source>Email verifyed</source>
         <target>Ваш аккаунт подтвержден, вы можете войти в систему.</target>
+      </trans-unit>
+      <trans-unit id="Email for master verifyed" resname="Email for master verifyed">
+        <source>Email for master verifyed</source>
+        <target>Вы подтвердили аккаунт для мастера. Мастеру отправлено уведомительное письмо.</target>
       </trans-unit>
       <trans-unit id="Something wrong" resname="Something wrong">
         <source>Something wrong</source>

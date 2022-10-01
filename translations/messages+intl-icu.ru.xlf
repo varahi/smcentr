@@ -594,6 +594,10 @@
             <source>Password</source>
             <target>Пароль</target>
         </trans-unit>
+        <trans-unit id="Master account verified" resname="Master account verified">
+            <source>Master account verified</source>
+            <target>Ваш аккаунт подтвержден администратором</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

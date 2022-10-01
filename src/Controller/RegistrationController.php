@@ -36,15 +36,24 @@ class RegistrationController extends AbstractController
 
     public const ROLE_EDITOR = 'ROLE_EDITOR';
 
+    public const ROLE_MASTER = 'ROLE_MASTER';
+
     private $emailVerifier;
 
     private $mailer;
 
-    public function __construct(EmailVerifier $emailVerifier, VerifyEmailHelperInterface $helper, MailerInterface $mailer)
-    {
+    private $adminEmail;
+
+    public function __construct(
+        EmailVerifier $emailVerifier,
+        VerifyEmailHelperInterface $helper,
+        MailerInterface $mailer,
+        string $adminEmail
+    ) {
         $this->emailVerifier = $emailVerifier;
         $this->verifyEmailHelper = $helper;
         $this->mailer = $mailer;
+        $this->adminEmail = $adminEmail;
     }
 
     /**
@@ -249,22 +258,29 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            // Verify email
+            $signatureComponents = $this->verifyEmailHelper->generateSignature(
+                'app_verify_email',
+                $user->getId(),
+                $user->getEmail(),
+                ['id' => $user->getId()] // add the user's id as an extra query param
+            );
+
             // generate a signed url and email it to the user
-            /*
-             Uncomment this block if need to send email
             $this->emailVerifier->sendEmailConfirmation(
                 'app_verify_email',
                 $user,
                 (new TemplatedEmail())
-                    ->from(new Address('info@pimentrouge.fr', 'ConciergeAdmin'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->from(new Address('noreply@smcentr.su', 'Admin'))
+                    ->to($this->adminEmail)
+                    ->subject('В сервисе smcentr.su зарегистрировался новый мастер')
+                    ->htmlTemplate('registration/confirmation_email_masster.html.twig')
+                    ->context([
+                        'verifyUrl' => $signatureComponents->getSignedUrl()
+                    ])
             );
-            */
-            // do anything else you need here, like send an email
 
-            $message = $translator->trans('User registered', array(), 'flash');
+            $message = $translator->trans('User master registered', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute('app_login');
         }
@@ -283,7 +299,8 @@ class RegistrationController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         TranslatorInterface $translator,
-        NotifierInterface $notifier
+        NotifierInterface $notifier,
+        Mailer $mailer
     ): Response {
         //$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         //$user = $this->getUser();
@@ -317,8 +334,15 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // Mark your user as verified. e.g. switch a User::verified property to true
-        $message = $translator->trans('Email verifyed', array(), 'flash');
+        if ($user != null && in_array(self::ROLE_MASTER, $user->getRoles())) {
+            $message = $translator->trans('Email for master verifyed', array(), 'flash');
+            $subject = $translator->trans('Master account verified', array(), 'messages');
+            $mailer->sendMasterVerifedEmail($user, $subject, 'emails/master_verified.html.twig');
+        } else {
+            // Mark your user as verified. e.g. switch a User::verified property to true
+            $message = $translator->trans('Email verifyed', array(), 'flash');
+        }
+
         $notifier->send(new Notification($message, ['browser']));
         return $this->redirectToRoute("app_login");
     }
