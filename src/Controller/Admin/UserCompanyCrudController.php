@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -67,11 +69,18 @@ class UserCompanyCrudController extends AbstractCrudController
     {
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield EmailField::new('email');
+        //yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
+        $roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
+        yield ChoiceField::new('roles')
+            ->setChoices(array_combine($roles, $roles))
+            ->allowMultipleChoices()
+            ->renderAsBadges()
+            ->setPermission('ROLE_SUPER_ADMIN');
+
         yield TextField::new('fullName');
         yield BooleanField::new('isVerified');
         yield BooleanField::new('isDisabled');
         yield MoneyField::new('balance')->setCurrency('RUB')->setCustomOption('storedAsCents', false);
-        yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
         yield ImageField::new('avatar')
             ->setBasePath('uploads/files')
             ->setUploadDir('public_html/uploads/files')
@@ -85,10 +94,19 @@ class UserCompanyCrudController extends AbstractCrudController
             ->setFormTypeOptions([
                 'by_reference' => false,
             ])->hideOnIndex();
+        yield AssociationField::new('companyMasters')
+            ->setFormTypeOptions([
+                'by_reference' => false,
+            ])->hideOnIndex();
+        yield AssociationField::new('companyClients')
+            ->setFormTypeOptions([
+                'by_reference' => false,
+            ])->hideOnIndex();
         yield AssociationField::new('city');
         yield AssociationField::new('district');
         yield AssociationField::new('orders')->hideOnIndex();
         yield AssociationField::new('assignments')->hideOnIndex();
         yield BooleanField::new('getNotifications');
+        yield PercentField::new('taxRate')->hideOnIndex();
     }
 }

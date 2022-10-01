@@ -49,11 +49,9 @@ class UserMasterCrudController extends AbstractCrudController
     public function __construct(
         UserPasswordHasherInterface $passwordEncoder,
         Mailer $mailer
-    )
-    {
+    ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
-
     }
 
     public static function getEntityFqcn(): string
@@ -104,7 +102,8 @@ class UserMasterCrudController extends AbstractCrudController
             ->setChoices(array_combine($roles, $roles))
             ->allowMultipleChoices()
             ->renderAsBadges()
-            ->setPermission('ROLE_SUPER_ADMIN');
+            ->setPermission('ROLE_SUPER_ADMIN')
+            ->hideOnIndex();
 
         //yield FormField::addPanel( 'Change password' )->setIcon( 'fa fa-key' );
         /*yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
@@ -129,6 +128,7 @@ class UserMasterCrudController extends AbstractCrudController
             ]);*/
 
         yield TextField::new('fullName');
+        yield AssociationField::new('master')->setLabel('Master Company');
         yield BooleanField::new('isVerified');
         yield BooleanField::new('isDisabled');
         yield MoneyField::new('balance')->setCurrency('RUB')->setCustomOption('storedAsCents', false);
@@ -198,7 +198,6 @@ class UserMasterCrudController extends AbstractCrudController
             $subject = 'Bla bla bla';
             $this->mailer->updateCrudUserEmail($user, $subject, 'emails/update_crud_user.html.twig');
         }*/
-
     }
 
     /*

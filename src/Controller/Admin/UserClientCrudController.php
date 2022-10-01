@@ -104,7 +104,8 @@ class UserClientCrudController extends AbstractCrudController
             ->setChoices(array_combine($roles, $roles))
             ->allowMultipleChoices()
             ->renderAsBadges()
-            ->setPermission('ROLE_SUPER_ADMIN');
+            ->setPermission('ROLE_SUPER_ADMIN')
+            ->hideOnIndex();
 
         yield TextField::new('password')
             ->setFormType(PasswordType::class)
@@ -141,6 +142,7 @@ class UserClientCrudController extends AbstractCrudController
         //yield TextField::new('firstName');
         //yield TextField::new('lastName');
         yield TextField::new('fullName');
+        yield AssociationField::new('client')->setLabel('Client Company')->hideOnIndex();
         yield BooleanField::new('isVerified');
         yield BooleanField::new('isDisabled');
         //yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');

@@ -574,6 +574,26 @@
             <source>Performer</source>
             <target>Исполнитель</target>
         </trans-unit>
+        <trans-unit id="Company Masters" resname="Company Masters">
+            <source>Company Masters</source>
+            <target>Мастера компании</target>
+        </trans-unit>
+        <trans-unit id="Company Clients" resname="Company Clients">
+            <source>Company Clients</source>
+            <target>Клиенты компании</target>
+        </trans-unit>
+        <trans-unit id="Master Company" resname="Master Company">
+            <source>Master Company</source>
+            <target>Компания мастера</target>
+        </trans-unit>
+        <trans-unit id="Client Company" resname="Client Company">
+            <source>Client Company</source>
+            <target>Компания клиента</target>
+        </trans-unit>
+        <trans-unit id="Password" resname="Password">
+            <source>Password</source>
+            <target>Пароль</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

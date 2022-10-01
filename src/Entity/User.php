@@ -155,6 +155,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $district;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="companyClients")
+     */
+    private $client;
+
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="client")
+     */
+    private $companyClients;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="companyMasters")
+     */
+    private $master;
+
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="master")
+     */
+    private $companyMasters;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -164,11 +184,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->created = new \DateTime();
         $this->ticket = new ArrayCollection();
         $this->answers = new ArrayCollection();
+        $this->companyClients = new ArrayCollection();
+        $this->companyMasters = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return $this->email;
+        return $this->fullName .' - '. $this->email;
     }
 
 
@@ -609,6 +631,91 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDistrict(?District $district): self
     {
         $this->district = $district;
+
+        return $this;
+    }
+
+
+    public function getClient(): ?self
+    {
+        return $this->client;
+    }
+
+    public function setClient(?self $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getCompanyClients(): Collection
+    {
+        return $this->companyClients;
+    }
+
+    public function addCompanyClient(self $companyClient): self
+    {
+        if (!$this->companyClients->contains($companyClient)) {
+            $this->companyClients[] = $companyClient;
+            $companyClient->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyClient(self $companyClient): self
+    {
+        if ($this->companyClients->removeElement($companyClient)) {
+            // set the owning side to null (unless already changed)
+            if ($companyClient->getClient() === $this) {
+                $companyClient->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMaster(): ?self
+    {
+        return $this->master;
+    }
+
+    public function setMaster(?self $master): self
+    {
+        $this->master = $master;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getCompanyMasters(): Collection
+    {
+        return $this->companyMasters;
+    }
+
+    public function addCompanyMaster(self $companyMaster): self
+    {
+        if (!$this->companyMasters->contains($companyMaster)) {
+            $this->companyMasters[] = $companyMaster;
+            $companyMaster->setMaster($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyMaster(self $companyMaster): self
+    {
+        if ($this->companyMasters->removeElement($companyMaster)) {
+            // set the owning side to null (unless already changed)
+            if ($companyMaster->getMaster() === $this) {
+                $companyMaster->setMaster(null);
+            }
+        }
 
         return $this;
     }
