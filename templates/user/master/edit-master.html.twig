@@ -42,14 +42,13 @@
                             {% if user.avatar %}
                                 <img src="{{ asset('uploads/files/' ~ user.avatar) }}" class="user-rounded" width="121" height="121" />
                             {% else %}
-                                <img src="{{ asset('assets/images/avatar.png') }}">
+                                <img id="avatar" src="{{ asset('assets/images/avatar.png') }}">
                             {% endif %}
                             <div class="">
                                 <p>Аватар пользователя</p>
-                                <div class="upload_file">
+                                <div class="upload_file upload_file_1">
                                     {{ form_widget(form.avatar) }}
-                                    <button class="upload">Загрузить<i></i></button>
-
+                                    <button class="upload upload-1">Загрузить<i></i></button>
                                 </div>
                             </div>
                         </div>
@@ -64,45 +63,51 @@
 
                                 <div class="file_upload">
                                     <p>Главная страница</p>
-                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />
-                                        {% if user.doc1 %}
+                                    <span>
+                                        {% if user.doc1 is not empty or user.doc1 is not null %}
                                             <img src="{{ asset('uploads/files/' ~ user.doc1) }}" width="40" height="40" />
+                                         {% else %}
+                                            <span><img id="doc1" src="{{ asset('assets/images/file_upload.svg') }}" alt="" /></span>
                                         {% endif %}
                                     </span>
                                 </div>
-                                <div class="p_upload_btn">
+                                <div class="p_upload_btn upload_file_2">
                                     {{ form_widget(form.doc1) }}
-                                    <button class="upload">Загрузить<i></i></button>
+                                    <button class="upload upload-2">Загрузить<i></i></button>
                                 </div>
                             </div>
 
                             <div class="p_upload_item">
                                 <div class="file_upload">
                                     <p>Страница прописки</p>
-                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />
-                                        {% if user.doc2 %}
+                                    <span>
+                                        {% if user.doc2 is not empty or user.doc2 is not null %}
                                             <img src="{{ asset('uploads/files/' ~ user.doc2) }}" width="40" height="40" />
+                                        {% else %}
+                                            <img id="doc2" src="{{ asset('assets/images/file_upload.svg') }}" alt="" />
                                         {% endif %}
                                     </span>
                                 </div>
-                                <div class="p_upload_btn">
+                                <div class="p_upload_btn upload_file_3">
                                     {{ form_widget(form.doc2) }}
-                                    <button class="upload">Загрузить<i></i></button>
+                                    <button class="upload upload-3">Загрузить<i></i></button>
                                 </div>
                             </div>
 
                             <div class="p_upload_item">
                                 <div class="file_upload">
                                     <p>Селфи с паспортом</p>
-                                    <span><img src="{{ asset('assets/images/file_upload.svg') }}" alt="" />
-                                    {% if user.doc3 %}
+                                    <span>
+                                   {% if user.doc3 is not empty or user.doc3 is not null %}
                                         <img src="{{ asset('uploads/files/' ~ user.doc3) }}" width="40" height="40" />
+                                   {% else %}
+                                       <img id="doc3" src="{{ asset('assets/images/file_upload.svg') }}" alt="" />
                                     {% endif %}
                                     </span>
                                 </div>
-                                <div class="p_upload_btn">
+                                <div class="p_upload_btn upload_file_4">
                                     {{ form_widget(form.doc3) }}
-                                    <button class="upload">Загрузить<i></i></button>
+                                    <button class="upload upload-4">Загрузить<i></i></button>
                                 </div>
                             </div>
                         </div>
@@ -184,6 +189,92 @@
             $(".prof_2").toggle(100);
         });
         $("#master_profile_form_professions_3").click(function(){
+            $(".prof_3").toggle(100);
+        });
+
+        // New avatar uploaded
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#avatar')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function readDoc1(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#doc1')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function readDoc2(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#doc2')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function readDoc3(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#doc3')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Hover on upload button
+        $( ".upload_file_1" ).hover(
+            function() {
+                $( ".upload-1" ).addClass( 'hover');
+            }, function() {
+                $( ".upload-1" ).removeClass( 'hover');
+            }
+        );
+        $( ".upload_file_2" ).hover(
+            function() {
+                $( ".upload-2" ).addClass( 'hover');
+            }, function() {
+                $( ".upload-2" ).removeClass( 'hover');
+            }
+        );
+        $( ".upload_file_3" ).hover(
+            function() {
+                $( ".upload-3" ).addClass( 'hover');
+            }, function() {
+                $( ".upload-3" ).removeClass( 'hover');
+            }
+        );
+        $( ".upload_file_4" ).hover(
+            function() {
+                $( ".upload-4" ).addClass( 'hover');
+            }, function() {
+                $( ".upload-4" ).removeClass( 'hover');
+            }
+        );
+
+        $("#registration_master_form_professions_1").click(function(){
+            $(".prof_1").toggle(100);
+        });
+        $("#registration_master_form_professions_2").click(function(){
+            $(".prof_2").toggle(100);
+        });
+        $("#registration_master_form_professions_3").click(function(){
             $(".prof_3").toggle(100);
         });
     </script>
