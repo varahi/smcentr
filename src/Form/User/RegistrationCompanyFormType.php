@@ -5,9 +5,11 @@ namespace App\Form\User;
 use App\Entity\District;
 use App\Entity\User;
 use App\Entity\City;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,7 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\File;
 
-class ClientProfileFormType extends AbstractType
+class RegistrationCompanyFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -32,7 +34,6 @@ class ClientProfileFormType extends AbstractType
                 EmailType::class,
                 [
                     'required' => true,
-                    'disabled' => true,
                     'attr' => [
                         'placeholder' => 'form.email'
                     ],
@@ -80,17 +81,25 @@ class ClientProfileFormType extends AbstractType
             ])
             ->add('getNotifications')
 
+            /*->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'You should agree to our terms.',
+                    ]),
+                ],
+            ])*/
+
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
-                'required' => false,
                 'type' => PasswordType::class,
                 'mapped' => false,
                 //'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
-                    //new NotBlank([
-                    //    'message' => 'Пожалуйста введите пароль',
-                    //]),
+                    new NotBlank([
+                        'message' => 'Пожалуйста введите пароль',
+                    ]),
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Пароль должен состоять как минимм из {{ limit }} символов',
@@ -138,6 +147,50 @@ class ClientProfileFormType extends AbstractType
                 ],
                 'label' => false,
                 'translation_domain' => 'forms',
+            ])
+
+            ->add('balance', MoneyType::class, [
+                'required' => false,
+                'attr' => [
+                    'class' => 'input-select',
+                ],
+                'label_attr' => [
+                    'class' => 'label-class'
+                ],
+                'label' => 'Company balance',
+                'currency' => 'RUB'
+            ])
+
+            ->add('companyMasters', EntityType::class, [
+                'class' => User::class,
+                'required' => false,
+                'multiple'  => true,
+                'expanded'  => false,
+                'by_reference' => false,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->where('u.roles LIKE :roles')
+                        ->andWhere('u.isVerified = 1')
+                        ->setParameter('roles', '%"'.'ROLE_MASTER'.'"%')
+                        ->orderBy('u.username', 'ASC');
+                },
+                'label' => 'Company Masters',
+            ])
+
+            ->add('companyClients', EntityType::class, [
+                'class' => User::class,
+                'required' => false,
+                'multiple'  => true,
+                'expanded'  => false,
+                'by_reference' => false,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->where('u.roles LIKE :roles')
+                        ->andWhere('u.isVerified = 1')
+                        ->setParameter('roles', '%"'.'ROLE_CLIENT'.'"%')
+                        ->orderBy('u.username', 'ASC');
+                },
+                'label' => 'Company Clients',
             ])
         ;
     }

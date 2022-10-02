@@ -172,3 +172,14 @@ button.hover {
 .show {
     display: block;
 }
+
+#registration_company_form_balance {
+    display: inline-block !important;
+    width: 370px;
+    margin-right: 10px;
+}
+select#registration_company_form_companyMasters,
+select#registration_company_form_companyClients {
+    border-radius: 0;
+    background-image: none;
+}

@@ -209,6 +209,10 @@
         <source>Master balance</source>
         <target>Баланс</target>
       </trans-unit>
+      <trans-unit id="7TRZ1qB" resname="Company balance">
+        <source>Company balance</source>
+        <target>Баланс компании</target>
+      </trans-unit>
       <trans-unit id="vpGUC3n" resname="Support">
         <source>Support</source>
         <target>Техническая поддержка</target>
@@ -453,151 +457,158 @@
         <source>Avatar</source>
         <target>Аватар пользователя</target>
       </trans-unit>
-        <trans-unit id="New company registered" resname="New company registered">
-            <source>New company registered</source>
-            <target>Зарегистрирована новая компания</target>
-        </trans-unit>
-
-        <trans-unit id="Companies" resname="Companies">
-            <source>Companies</source>
-            <target>Компании</target>
-        </trans-unit>
-        <trans-unit id="Create company" resname="Create company">
-            <source>Create company</source>
-            <target>Создать компанию</target>
-        </trans-unit>
-        <trans-unit id="Edit company" resname="Edit company">
-            <source>Edit company</source>
-            <target>Редактировать компанию</target>
-        </trans-unit>
-        <trans-unit id="Full Name" resname="Full Name">
-            <source>Full Name</source>
-            <target>Полное Имя</target>
-        </trans-unit>
-        <trans-unit id="Email" resname="Email">
-            <source>Email</source>
-            <target>E-mail</target>
-        </trans-unit>
-        <trans-unit id="Name" resname="Name">
-            <source>Name</source>
-            <target>Название</target>
-        </trans-unit>
-        <trans-unit id="Tax Rates" resname="Tax Rates">
-            <source>Tax Rates</source>
-            <target>Комиссии</target>
-        </trans-unit>
-        <trans-unit id="District" resname="District">
-            <source>District</source>
-            <target>Район</target>
-        </trans-unit>
-        <trans-unit id="City" resname="City">
-            <source>City</source>
-            <target>Город</target>
-        </trans-unit>
-        <trans-unit id="Is Hidden" resname="Is Hidden">
-            <source>Is Hidden</source>
-            <target>Скрыто</target>
-        </trans-unit>
-        <trans-unit id="Profession" resname="Profession">
-            <source>Profession</source>
-            <target>Профессия</target>
-        </trans-unit>
-        <trans-unit id="Percent" resname="Percent">
-            <source>Percent</source>
-            <target>Процент списания</target>
-        </trans-unit>
-        <trans-unit id="Is Verified" resname="Is Verified">
-            <source>Is Verified</source>
-            <target>Подтвержден</target>
-        </trans-unit>
-        <trans-unit id="Is Disabled" resname="Is Disabled">
-            <source>Is Disabled</source>
-            <target>Заблокирован</target>
-        </trans-unit>
-        <trans-unit id="Get Notifications" resname="Get Notifications">
-            <source>Get Notifications</source>
-            <target>Получать уведомления</target>
-        </trans-unit>
-        <trans-unit id="Roles" resname="Roles">
-            <source>Roles</source>
-            <target>Группа пользователей</target>
-        </trans-unit>
-        <trans-unit id="Assignments" resname="Assignments">
-            <source>Assignments</source>
-            <target>Задания</target>
-        </trans-unit>
-        <trans-unit id="Company" resname="Company">
-            <source>Company</source>
-            <target>Компания</target>
-        </trans-unit>
-        <trans-unit id="Privacy" resname="Privacy">
-            <source>Privacy</source>
-            <target>Политика конфиденциальности</target>
-        </trans-unit>
-        <trans-unit id="Phone" resname="Phone">
-            <source>Phone</source>
-            <target>Телефон</target>
-        </trans-unit>
-        <trans-unit id="Price" resname="Price">
-            <source>Price</source>
-            <target>Стоимость</target>
-        </trans-unit>
-        <trans-unit id="Address" resname="Address">
-            <source>Address</source>
-            <target>Адрес</target>
-        </trans-unit>
-        <trans-unit id="Estimated Time" resname="Estimated Time">
-            <source>Estimated Time</source>
-            <target>Время выполнения работы</target>
-        </trans-unit>
-        <trans-unit id="Deadline" resname="Deadline">
-            <source>Deadline</source>
-            <target>Срок выполнения работы</target>
-        </trans-unit>
-        <trans-unit id="Level" resname="Level">
-            <source>Level</source>
-            <target>Сложность заявки</target>
-        </trans-unit>
-        <trans-unit id="Job Type" resname="Job Type">
-            <source>Job Type</source>
-            <target>Тип работы</target>
-        </trans-unit>
-        <trans-unit id="JobType" resname="JobType">
-            <source>Job Type</source>
-            <target>Тип работы</target>
-        </trans-unit>
-        <trans-unit id="JobTypes" resname="JobTypes">
-            <source>Job Type</source>
-            <target>Тип работы</target>
-        </trans-unit>
-        <trans-unit id="Performer" resname="Performer">
-            <source>Performer</source>
-            <target>Исполнитель</target>
-        </trans-unit>
-        <trans-unit id="Company Masters" resname="Company Masters">
-            <source>Company Masters</source>
-            <target>Мастера компании</target>
-        </trans-unit>
-        <trans-unit id="Company Clients" resname="Company Clients">
-            <source>Company Clients</source>
-            <target>Клиенты компании</target>
-        </trans-unit>
-        <trans-unit id="Master Company" resname="Master Company">
-            <source>Master Company</source>
-            <target>Компания мастера</target>
-        </trans-unit>
-        <trans-unit id="Client Company" resname="Client Company">
-            <source>Client Company</source>
-            <target>Компания клиента</target>
-        </trans-unit>
-        <trans-unit id="Password" resname="Password">
-            <source>Password</source>
-            <target>Пароль</target>
-        </trans-unit>
-        <trans-unit id="Master account verified" resname="Master account verified">
-            <source>Master account verified</source>
-            <target>Ваш аккаунт подтвержден администратором</target>
-        </trans-unit>
+      <trans-unit id="JPznYEf" resname="New company registered">
+        <source>New company registered</source>
+        <target>Зарегистрирована новая компания</target>
+      </trans-unit>
+      <trans-unit id="SSNBO0D" resname="Companies">
+        <source>Companies</source>
+        <target>Компании</target>
+      </trans-unit>
+      <trans-unit id="HNORwcZ" resname="Create company">
+        <source>Create company</source>
+        <target>Создать компанию</target>
+      </trans-unit>
+      <trans-unit id="0mVxL76" resname="Edit company">
+        <source>Edit company</source>
+        <target>Редактировать компанию</target>
+      </trans-unit>
+      <trans-unit id="jgDN9x_" resname="Full Name">
+        <source>Full Name</source>
+        <target>Полное Имя</target>
+      </trans-unit>
+      <trans-unit id="lpzL089" resname="Email">
+        <source>Email</source>
+        <target>E-mail</target>
+      </trans-unit>
+      <trans-unit id="3NHVIj9" resname="Name">
+        <source>Name</source>
+        <target>Название</target>
+      </trans-unit>
+      <trans-unit id=".XigyPo" resname="Tax Rates">
+        <source>Tax Rates</source>
+        <target>Комиссии</target>
+      </trans-unit>
+      <trans-unit id="UPGHjST" resname="District">
+        <source>District</source>
+        <target>Район</target>
+      </trans-unit>
+      <trans-unit id=".DP3Mkb" resname="City">
+        <source>City</source>
+        <target>Город</target>
+      </trans-unit>
+      <trans-unit id="kFgk_eb" resname="Is Hidden">
+        <source>Is Hidden</source>
+        <target>Скрыто</target>
+      </trans-unit>
+      <trans-unit id="E6FQ4.0" resname="Profession">
+        <source>Profession</source>
+        <target>Профессия</target>
+      </trans-unit>
+      <trans-unit id="cW1jOxJ" resname="Percent">
+        <source>Percent</source>
+        <target>Процент списания</target>
+      </trans-unit>
+      <trans-unit id="QAxmkmc" resname="Is Verified">
+        <source>Is Verified</source>
+        <target>Подтвержден</target>
+      </trans-unit>
+      <trans-unit id="0xg4evI" resname="Is Disabled">
+        <source>Is Disabled</source>
+        <target>Заблокирован</target>
+      </trans-unit>
+      <trans-unit id="W7g.jrL" resname="Get Notifications">
+        <source>Get Notifications</source>
+        <target>Получать уведомления</target>
+      </trans-unit>
+      <trans-unit id="wlM3BVR" resname="Roles">
+        <source>Roles</source>
+        <target>Группа пользователей</target>
+      </trans-unit>
+      <trans-unit id="LH4h9jp" resname="Assignments">
+        <source>Assignments</source>
+        <target>Задания</target>
+      </trans-unit>
+      <trans-unit id="3kdDyHl" resname="Company">
+        <source>Company</source>
+        <target>Компания</target>
+      </trans-unit>
+      <trans-unit id="VKV8MUf" resname="Privacy">
+        <source>Privacy</source>
+        <target>Политика конфиденциальности</target>
+      </trans-unit>
+      <trans-unit id="Y9zriAC" resname="Phone">
+        <source>Phone</source>
+        <target>Телефон</target>
+      </trans-unit>
+      <trans-unit id="k8kchR5" resname="Price">
+        <source>Price</source>
+        <target>Стоимость</target>
+      </trans-unit>
+      <trans-unit id="Vu_PIJV" resname="Address">
+        <source>Address</source>
+        <target>Адрес</target>
+      </trans-unit>
+      <trans-unit id="KtU9pUo" resname="Estimated Time">
+        <source>Estimated Time</source>
+        <target>Время выполнения работы</target>
+      </trans-unit>
+      <trans-unit id="b8s43ch" resname="Deadline">
+        <source>Deadline</source>
+        <target>Срок выполнения работы</target>
+      </trans-unit>
+      <trans-unit id="FwkwXJ_" resname="Level">
+        <source>Level</source>
+        <target>Сложность заявки</target>
+      </trans-unit>
+      <trans-unit id="vIkmLYM" resname="Job Type">
+        <source>Job Type</source>
+        <target>Тип работы</target>
+      </trans-unit>
+      <trans-unit id="iuuKv3B" resname="JobType">
+        <source>JobType</source>
+        <target>Тип работы</target>
+      </trans-unit>
+      <trans-unit id="vOca0BH" resname="JobTypes">
+        <source>JobTypes</source>
+        <target>Тип работы</target>
+      </trans-unit>
+      <trans-unit id="9LFjq96" resname="Performer">
+        <source>Performer</source>
+        <target>Исполнитель</target>
+      </trans-unit>
+      <trans-unit id="GLf40ne" resname="Company Masters">
+        <source>Company Masters</source>
+        <target>Мастера компании (для выбора нескольких записей, нажмите и удерживайте кнопку ctrl)</target>
+      </trans-unit>
+      <trans-unit id="WEdMngG" resname="Company Clients">
+        <source>Company Clients</source>
+        <target>Клиенты компании (для выбора нескольких записей, нажмите и удерживайте кнопку ctrl)</target>
+      </trans-unit>
+      <trans-unit id="Q.sZOP2" resname="Master Company">
+        <source>Master Company</source>
+        <target>Компания мастера</target>
+      </trans-unit>
+      <trans-unit id="wDGZvGY" resname="Client Company">
+        <source>Client Company</source>
+        <target>Компания клиента</target>
+      </trans-unit>
+      <trans-unit id="588_9PF" resname="Password">
+        <source>Password</source>
+        <target>Пароль</target>
+      </trans-unit>
+      <trans-unit id="PIm.v8D" resname="Master account verified">
+        <source>Master account verified</source>
+        <target>Ваш аккаунт подтвержден администратором</target>
+      </trans-unit>
+      <trans-unit id="Pw.zGOX" resname="Company avatar">
+        <source>Company avatar</source>
+        <target>Аватар компании</target>
+      </trans-unit>
+      <trans-unit id="hl6J3nj" resname="Upload">
+        <source>Upload</source>
+        <target>Загрузить</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

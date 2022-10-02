@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Profession;
 use App\Entity\User;
+use App\Form\User\RegistrationCompanyFormType;
 use App\Form\User\RegistrationFormType;
 use App\Form\User\RegistrationMasterFormType;
 use App\Repository\JobTypeRepository;
@@ -83,11 +84,11 @@ class RegistrationController extends AbstractController
     ): Response {
         if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR)) {
             $user = new User();
-            $form = $this->createForm(RegistrationFormType::class, $user);
+            $form = $this->createForm(RegistrationCompanyFormType::class, $user);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $post = $_POST['registration_form'];
+                $post = $_POST['registration_company_form'];
                 $plainPassword = $post['plainPassword']['first'];
 
                 // encode the plain password
