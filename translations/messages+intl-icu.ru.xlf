@@ -577,14 +577,22 @@
         <source>Performer</source>
         <target>Исполнитель</target>
       </trans-unit>
-      <trans-unit id="GLf40ne" resname="Company Masters">
+        <trans-unit id="GLf40ne" resname="Company Masters">
+            <source>Company Masters</source>
+            <target>Мастера компании</target>
+        </trans-unit>
+      <trans-unit id="Company Masters2" resname="Company Masters2">
         <source>Company Masters</source>
         <target>Мастера компании (для выбора нескольких записей, нажмите и удерживайте кнопку ctrl)</target>
       </trans-unit>
       <trans-unit id="WEdMngG" resname="Company Clients">
         <source>Company Clients</source>
-        <target>Клиенты компании (для выбора нескольких записей, нажмите и удерживайте кнопку ctrl)</target>
+        <target>Клиенты компании</target>
       </trans-unit>
+        <trans-unit id="Company Clients2" resname="Company Clients2">
+            <source>Company Clients</source>
+            <target>Клиенты компании (для выбора нескольких записей, нажмите и удерживайте кнопку ctrl)</target>
+        </trans-unit>
       <trans-unit id="Q.sZOP2" resname="Master Company">
         <source>Master Company</source>
         <target>Компания мастера</target>
@@ -597,6 +605,10 @@
         <source>Password</source>
         <target>Пароль</target>
       </trans-unit>
+        <trans-unit id="Repeat password" resname="Repeat password">
+            <source>Repeat password</source>
+            <target>Повторите пароль</target>
+        </trans-unit>
       <trans-unit id="PIm.v8D" resname="Master account verified">
         <source>Master account verified</source>
         <target>Ваш аккаунт подтвержден администратором</target>
@@ -609,6 +621,18 @@
         <source>Upload</source>
         <target>Загрузить</target>
       </trans-unit>
+        <trans-unit id="Main Info" resname="Main Info">
+            <source>Main Info</source>
+            <target>Основная информация</target>
+        </trans-unit>
+        <trans-unit id="Additional Info" resname="Additional Info">
+            <source>Additional Info</source>
+            <target>Расширенная информация</target>
+        </trans-unit>
+        <trans-unit id="Change password" resname="Change password">
+            <source>Change password</source>
+            <target>Сменить пароль</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

@@ -174,7 +174,7 @@ class RegistrationCompanyFormType extends AbstractType
                         ->setParameter('roles', '%"'.'ROLE_MASTER'.'"%')
                         ->orderBy('u.username', 'ASC');
                 },
-                'label' => 'Company Masters',
+                'label' => 'Company Masters2',
             ])
 
             ->add('companyClients', EntityType::class, [
@@ -190,7 +190,7 @@ class RegistrationCompanyFormType extends AbstractType
                         ->setParameter('roles', '%"'.'ROLE_CLIENT'.'"%')
                         ->orderBy('u.username', 'ASC');
                 },
-                'label' => 'Company Clients',
+                'label' => 'Company Clients2',
             ])
         ;
     }

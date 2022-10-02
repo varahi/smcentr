@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
@@ -91,11 +92,26 @@ class UserMasterCrudController extends AbstractCrudController
             ->setDefaultSort(['id' => 'DESC']);
     }
 
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            ->addCssFile('assets/css/easy_admin_custom.css')
+            ;
+    }
+
     public function configureFields(string $pageName): iterable
     {
-        yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
-        yield EmailField::new('email');
+        $role = 'ROLE_COMPANY';
 
+        yield FormField::addPanel('Main Info')->setIcon('fa fa-info');
+        yield FormField::addRow();
+        yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled')->hideWhenCreating();
+
+        yield FormField::addRow();
+        yield EmailField::new('email')->setColumns('col-md-4');
+        yield TextField::new('fullName')->setColumns('col-md-4');
+
+        yield FormField::addRow();
         //yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
         $roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
         yield ChoiceField::new('roles')
@@ -103,10 +119,39 @@ class UserMasterCrudController extends AbstractCrudController
             ->allowMultipleChoices()
             ->renderAsBadges()
             ->setPermission('ROLE_SUPER_ADMIN')
-            ->hideOnIndex();
+            ->hideOnIndex()
+            ->setColumns('col-md-4');
 
-        //yield FormField::addPanel( 'Change password' )->setIcon( 'fa fa-key' );
-        /*yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
+        yield AssociationField::new('master')
+            //->setFormTypeOption('disabled', 'disabled')
+            ->setLabel('Master Company')
+            ->setColumns('col-md-4')
+            ->setFormTypeOption('query_builder', function (EntityRepository $entityRepository) use ($role) {
+                return $entityRepository->createQueryBuilder('entity')
+                    ->where('entity.roles LIKE :roles')
+                    ->setParameter('roles', '%"'.$role.'"%')
+                    ->orderBy('entity.fullName', 'ASC');
+            });
+
+        /*yield AssociationField::new('master')
+            ->setLabel('Master Company')
+            ->setColumns('col-md-4')
+            ->setFormTypeOptions([
+                'query_builder' => function (EntityRepository $entityRepository) use ($role) {
+                    return $entityRepository->createQueryBuilder('entity')
+                        ->where('entity.roles LIKE :roles')
+                        ->setParameter('roles', '%"'.$role.'"%')
+                        ->orderBy('entity.fullName', 'ASC');
+                },
+                'by_reference' => false,
+            ]);*/
+
+        yield BooleanField::new('isVerified');
+        yield BooleanField::new('isDisabled');
+
+        yield FormField::addPanel('Change password')->setIcon('fa fa-key');
+        yield FormField::addRow();
+        yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
             ->setFormType(RepeatedType::class)
             ->setRequired(false)
             ->setFormTypeOptions([
@@ -125,32 +170,39 @@ class UserMasterCrudController extends AbstractCrudController
                 'second_options'  => [ 'label' => 'Repeat password' ],
                 'error_bubbling'  => true,
                 'invalid_message' => 'The password fields do not match.',
-            ]);*/
+            ]);
 
-        yield TextField::new('fullName');
-        yield AssociationField::new('master')->setLabel('Master Company');
-        yield BooleanField::new('isVerified');
-        yield BooleanField::new('isDisabled');
-        yield MoneyField::new('balance')->setCurrency('RUB')->setCustomOption('storedAsCents', false);
-
+        yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
+        yield BooleanField::new('getNotifications');
+        yield FormField::addRow();
+        yield MoneyField::new('balance')->setCurrency('RUB')
+            ->setCustomOption('storedAsCents', false)->setColumns('col-md-4');
         yield ImageField::new('avatar')
             ->setBasePath('uploads/files')
             ->setUploadDir('public_html/uploads/files')
             ->setFormType(FileUploadType::class)
-            ->setRequired(false);
+            ->setRequired(false)
+            ->setColumns('col-md-4');
+
+        yield FormField::addRow();
+        yield AssociationField::new('city')->setColumns('col-md-4');
+        yield AssociationField::new('district')->setColumns('col-md-4');
+
+        yield FormField::addRow();
         yield AssociationField::new('professions')
             ->setFormTypeOptions([
                 'by_reference' => false,
-            ])->hideOnIndex();
+            ])->hideOnIndex()
+            ->setColumns('col-md-4');
         yield AssociationField::new('jobTypes')
             ->setFormTypeOptions([
                 'by_reference' => false,
-            ])->hideOnIndex();
-        yield AssociationField::new('city');
-        yield AssociationField::new('district');
-        yield AssociationField::new('orders')->hideOnIndex();
-        yield AssociationField::new('assignments')->hideOnIndex();
-        yield BooleanField::new('getNotifications');
+            ])->hideOnIndex()
+            ->setColumns('col-md-4');
+
+        yield FormField::addRow();
+        yield AssociationField::new('orders')->hideOnIndex()->setColumns('col-md-4');
+        yield AssociationField::new('assignments')->hideOnIndex()->setColumns('col-md-4');
     }
 
     public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
