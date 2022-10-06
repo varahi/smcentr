@@ -231,6 +231,7 @@ class UserController extends AbstractController
             {
                 $newNotifications = $notificationRepository->findNewByUser($user->getId());
                 $viewedNotifications = $notificationRepository->findViewedByUser($user->getId());
+
                 $response = new Response($this->twig->render('user/notifications.html.twig', [
                     'user' => $user,
                     'newNotifications' => $newNotifications,

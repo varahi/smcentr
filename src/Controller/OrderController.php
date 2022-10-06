@@ -33,6 +33,14 @@ class OrderController extends AbstractController
 
     public const ROLE_MASTER = 'ROLE_MASTER';
 
+    public const NOTIFICATION_CHANGE_STATUS = '1';
+
+    public const NOTIFICATION_BALANCE_PLUS = '2';
+
+    public const NOTIFICATION_BALANCE_MINUS = '3';
+
+    public const NOTIFICATION_NEW_ORDER = '4';
+
     private $doctrine;
 
     /**
@@ -149,6 +157,7 @@ class OrderController extends AbstractController
                             $userNotification->setUser($master);
                             $message = $translator->trans('New order in the system', array(), 'messages');
                             $userNotification->setMessage($message);
+                            $userNotification->setType(self::NOTIFICATION_NEW_ORDER);
                             $entityManager->persist($userNotification);
                             $entityManager->flush();
                         }
@@ -263,6 +272,21 @@ class OrderController extends AbstractController
                             $notifier->send(new Notification($message, ['browser']));
                             return $this->redirectToRoute('app_master_top_up_balance');
                         } else {
+                            // Send notifications for masters
+                            $userNotification = new UserNotification();
+                            $userNotification->setUser($order->getPerformer());
+                            $message = $translator->trans('Withdrawal from the balance', array(), 'messages');
+                            $userNotification->setMessage($message .' '.$tax.' руб.' .' за заявку');
+                            $userNotification->setType(self::NOTIFICATION_BALANCE_MINUS);
+
+                            $userNotification2 = new UserNotification();
+                            $userNotification2->setUser($order->getPerformer());
+                            $userNotification2->setMessage($translator->trans('You got an order', array(), 'messages'));
+                            $userNotification->setType(self::NOTIFICATION_CHANGE_STATUS);
+
+                            $entityManager->persist($userNotification);
+                            $entityManager->flush();
+                            // Set new order
                             $order->getPerformer()->setBalance($newMasterBalance);
                         }
                     }

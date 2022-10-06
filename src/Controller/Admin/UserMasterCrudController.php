@@ -203,6 +203,9 @@ class UserMasterCrudController extends AbstractCrudController
         yield FormField::addRow();
         yield AssociationField::new('orders')->hideOnIndex()->setColumns('col-md-4');
         yield AssociationField::new('assignments')->hideOnIndex()->setColumns('col-md-4');
+
+        yield FormField::addRow();
+        yield AssociationField::new('notifications')->hideOnIndex()->setColumns('col-md-4');
     }
 
     public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface

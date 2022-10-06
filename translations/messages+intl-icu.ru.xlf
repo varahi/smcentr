@@ -643,7 +643,15 @@
         </trans-unit>
         <trans-unit id="New order in the system" resname="New order in the system">
             <source>New order in the system</source>
-            <target>Новая заявка в системе</target>
+            <target>Новая заявка в системе по вашему городу и профессии</target>
+        </trans-unit>
+        <trans-unit id="Withdrawal from the balance" resname="Withdrawal from the balance">
+            <source>Withdrawal from the balance for the amount</source>
+            <target>С баланса списано</target>
+        </trans-unit>
+        <trans-unit id="You got an order" resname="You got an order">
+            <source>You got an order</source>
+            <target>Вы взяли заявку</target>
         </trans-unit>
     </body>
   </file>
