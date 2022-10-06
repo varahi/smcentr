@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\Notification as UserNotification;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -140,6 +141,16 @@ class OrderController extends AbstractController
                             in_array($order->getProfession()->getId(), $professionIds)) {
                             $subject = $translator->trans('New order available', array(), 'messages');
                             $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
+                        }
+
+                        // Send notifications for masters
+                        if (in_array($order->getJobType()->getId(), $jobTypeIds) || in_array($order->getProfession()->getId(), $professionIds)) {
+                            $userNotification = new UserNotification();
+                            $userNotification->setUser($master);
+                            $message = $translator->trans('New order in the system', array(), 'messages');
+                            $userNotification->setMessage($message);
+                            $entityManager->persist($userNotification);
+                            $entityManager->flush();
                         }
                     }
                 }

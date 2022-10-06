@@ -16,6 +16,7 @@ use App\Entity\Order;
 use App\Entity\Profession;
 use App\Entity\User;
 use App\Entity\Pages;
+use App\Entity\Notification;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -74,6 +75,8 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class)
                 ->setPermission('ROLE_SUPER_ADMIN'),
             MenuItem::section(''),
+
+            MenuItem::linkToCrud('Notifications', 'fa fa-bell', Notification::class)
         ]);
 
         yield MenuItem::section('Information');

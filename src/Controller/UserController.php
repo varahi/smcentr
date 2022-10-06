@@ -7,6 +7,7 @@ use App\Form\User\ClientProfileFormType;
 use App\Form\User\MasterProfileFormType;
 use App\Form\User\RegistrationFormType;
 use App\Repository\JobTypeRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
@@ -222,13 +223,18 @@ class UserController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         TranslatorInterface $translator,
-        NotifierInterface $notifier
+        NotifierInterface $notifier,
+        NotificationRepository $notificationRepository
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();
             {
+                $newNotifications = $notificationRepository->findNewByUser($user->getId());
+                $viewedNotifications = $notificationRepository->findViewedByUser($user->getId());
                 $response = new Response($this->twig->render('user/notifications.html.twig', [
                     'user' => $user,
+                    'newNotifications' => $newNotifications,
+                    'viewedNotifications' => $viewedNotifications
                 ]));
 
                 $response->setSharedMaxAge(self::CACHE_MAX_AGE);

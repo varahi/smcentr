@@ -25,8 +25,19 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('app_support') }}">Техническая поддержка</a>
             </li>
-            <li class="nav-item">
-            </li>
+
+            {% if is_granted('ROLE_MASTER') %}
+                {% set nts = '' %}
+                {% if user.notifications %}
+                    {% set nts = user.notifications|length %}
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link notif" href="{{ path('app_notifications') }}">
+                        <img src=" {{ asset('assets/images/notif.svg') }}" alt=""><span>{{ nts }}</span>
+                    </a>
+                </li>
+            {% endif %}
+
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">

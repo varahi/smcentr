@@ -1,0 +1,10 @@
+<div class="notification">
+    <div class="status">
+        <a href="#">
+            <img src="{{ asset('assets/images/notif_status_new.svg') }}">
+        </a>
+    </div>
+    <div class="date">{{ notification.created|date("H:i \ d.m.Y") }}</div>
+    <div class="title">{{ notification.message }}</div>
+    <div class="desc"><a href="#">Вы можете ознакомиться с заявкой</a></div>
+</div>

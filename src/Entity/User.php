@@ -175,6 +175,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $companyMasters;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="user")
+     */
+    private $notifications;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -186,6 +191,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->answers = new ArrayCollection();
         $this->companyClients = new ArrayCollection();
         $this->companyMasters = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -714,6 +720,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($companyMaster->getMaster() === $this) {
                 $companyMaster->setMaster(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
             }
         }
 

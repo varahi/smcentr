@@ -1143,3 +1143,101 @@ button {
 
 
 }
+
+
+.notif {
+    position: relative;
+}
+
+.notif img {
+
+}
+
+.notif span {
+    background: #FF8C00;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    display: block;
+    position: absolute;
+    top: -8px;
+    right: 8px;
+    border-radius: 60px;
+    text-align: center;
+}
+
+.notification {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 1px 2px 0px #00000029;
+    padding: 15px;
+    color: #717380;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.notification:hover {
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0,0,0,0.16);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.16);
+    color: #222;
+}
+
+.notification .status {
+    width: 5%;
+}
+
+.notification .date {
+    width: 15%;
+}
+
+.notification .title {
+    width: 40%;
+    font-weight: 500;
+    color: #222;
+    font-size: 16px;
+}
+
+.notification .desc {
+    width: 40%;
+}
+
+#list_notification h2 {
+    font-size: 20px;
+}
+
+@media (max-width: 600px) {
+    .notif {
+        position: absolute;
+        display: inline-block;
+        top: 20px;
+        right: 70px;
+    }
+
+    .offcanvas-collapse {
+        padding-top: 20px;
+    }
+
+    .notification {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .notification .status {
+        width: 10%;
+    }
+
+    .notification .date {
+        width: 90%;
+    }
+
+    .notification .title {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .notification .desc {
+        width: 100%;
+    }
+}

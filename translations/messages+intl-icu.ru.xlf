@@ -633,6 +633,18 @@
             <source>Change password</source>
             <target>Сменить пароль</target>
         </trans-unit>
+        <trans-unit id="Notification" resname="Notification">
+            <source>Notification</source>
+            <target>Уведомление</target>
+        </trans-unit>
+        <trans-unit id="Message" resname="Message">
+            <source>Message</source>
+            <target>Сообщение</target>
+        </trans-unit>
+        <trans-unit id="New order in the system" resname="New order in the system">
+            <source>New order in the system</source>
+            <target>Новая заявка в системе</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>
