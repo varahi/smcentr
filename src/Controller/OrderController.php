@@ -144,6 +144,7 @@ class OrderController extends AbstractController
                             }
                         } else {
                             $jobTypeIds = [];
+                            $professionIds[] = [];
                         }
                         if ($master->isGetNotifications() == 1 &&
                             in_array($order->getJobType()->getId(), $jobTypeIds) ||
