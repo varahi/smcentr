@@ -136,25 +136,41 @@ class OrderController extends AbstractController
                 if (count($masters) > 0) {
                     foreach ($masters as $master) {
                         if (count($master->getProfessions()) > 0 && count($master->getJobTypes()) > 0) {
-                            foreach ($master->getProfessions() as $profession) {
-                                $professionIds[] = $profession->getId();
+                            if ($master->getProfessions() && count($master->getProfessions()) > 0) {
+                                foreach ($master->getProfessions() as $profession) {
+                                    $professionIds[] = $profession->getId();
+                                }
+                            } else {
+                                $professionIds = [];
                             }
-                            foreach ($master->getJobTypes() as $jobType) {
-                                $jobTypeIds[] = $jobType->getId();
+
+                            if ($master->getJobTypes() && count($master->getJobTypes()) > 0) {
+                                foreach ($master->getJobTypes() as $jobType) {
+                                    $jobTypeIds[] = $jobType->getId();
+                                }
+                            } else {
+                                $jobTypeIds = [];
                             }
-                        } else {
-                            $jobTypeIds = [];
-                            $professionIds[] = [];
-                        }
-                        if ($master->isGetNotifications() == 1 &&
-                            in_array($order->getJobType()->getId(), $jobTypeIds) ||
-                            in_array($order->getProfession()->getId(), $professionIds)) {
-                            $subject = $translator->trans('New order available', array(), 'messages');
-                            $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
                         }
 
+                        /*if ($master->isGetNotifications() == 1 &&
+                            $order->getCity()->getId() == $master->getCity()->getId() &&
+                            in_array($order->getJobType()->getId(), $jobTypeIds) &&
+                            in_array($order->getProfession()->getId(), $professionIds)
+                        ) {
+                            $subject = $translator->trans('New order available', array(), 'messages');
+                            $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
+                        }*/
+
                         // Send notifications for masters
-                        if (in_array($order->getJobType()->getId(), $jobTypeIds) || in_array($order->getProfession()->getId(), $professionIds)) {
+                        if ($master->isGetNotifications() == 1 &&
+                            $order->getCity()->getId() == $master->getCity()->getId() &&
+                            in_array($order->getJobType()->getId(), $jobTypeIds) &&
+                            in_array($order->getProfession()->getId(), $professionIds)
+                        ) {
+                            $subject = $translator->trans('New order available', array(), 'messages');
+                            $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
+
                             $masterNotification = new UserNotification();
                             $masterNotification->setUser($master);
                             $message = $translator->trans('Notification new order for master', array(), 'messages');
@@ -244,10 +260,11 @@ class OrderController extends AbstractController
                 $userNotification->setUser($order->getUsers());
                 $userNotification->setMessage($translator->trans('Notification order closed', array(), 'messages'));
                 $userNotification->setApplication($order);
-                $masterNotification->setType(self::NOTIFICATION_CHANGE_STATUS);
-                $masterNotification->setIsRead('0');
+                $userNotification->setType(self::NOTIFICATION_CHANGE_STATUS);
+                $userNotification->setIsRead('0');
 
                 $entityManager->persist($masterNotification);
+                $entityManager->persist($userNotification);
                 $entityManager->flush();
 
                 $message = $translator->trans('Order closed', array(), 'flash');
