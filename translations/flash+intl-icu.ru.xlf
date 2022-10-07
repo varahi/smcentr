@@ -37,6 +37,10 @@
         <source>Order closed</source>
         <target>Ваша заявка закрыта</target>
       </trans-unit>
+      <trans-unit id="Notification order closed" resname="Notification order closed">
+        <source>Notification order closed</source>
+        <target>Заявка закрыта</target>
+      </trans-unit>
       <trans-unit id="Order taked" resname="Order taked">
         <source>Order taked</source>
         <target>Заявка поступила в работу</target>
@@ -76,6 +80,10 @@
       <trans-unit id="Access blocked" resname="Access blocked">
         <source>Access blocked</source>
         <target>Ваш аккунт заблокирован, пожалуйста свяжитесь с нашей службой поддержки для прояснения ситуации</target>
+      </trans-unit>
+      <trans-unit id="Notification mark as read" resname="Notification mark as read">
+        <source>Notification mark as read</source>
+        <target>Уведомление отмечено как прочитанное</target>
       </trans-unit>
     </body>
   </file>

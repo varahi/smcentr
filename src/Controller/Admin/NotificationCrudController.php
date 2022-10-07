@@ -56,5 +56,6 @@ class NotificationCrudController extends AbstractCrudController
             ]
         )->hideOnIndex();
         yield AssociationField::new('user')->hideOnIndex();
+        yield AssociationField::new('application')->hideOnIndex();
     }
 }

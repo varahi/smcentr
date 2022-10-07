@@ -153,16 +153,28 @@ class OrderController extends AbstractController
 
                         // Send notifications for masters
                         if (in_array($order->getJobType()->getId(), $jobTypeIds) || in_array($order->getProfession()->getId(), $professionIds)) {
-                            $userNotification = new UserNotification();
-                            $userNotification->setUser($master);
-                            $message = $translator->trans('New order in the system', array(), 'messages');
-                            $userNotification->setMessage($message);
-                            $userNotification->setType(self::NOTIFICATION_NEW_ORDER);
-                            $entityManager->persist($userNotification);
+                            $masterNotification = new UserNotification();
+                            $masterNotification->setUser($master);
+                            $message = $translator->trans('Notification new order for master', array(), 'messages');
+                            $masterNotification->setMessage($message);
+                            $masterNotification->setApplication($order);
+                            $masterNotification->setType(self::NOTIFICATION_NEW_ORDER);
+                            $masterNotification->setIsRead('0');
+                            $entityManager->persist($masterNotification);
                             $entityManager->flush();
                         }
                     }
                 }
+
+                // Send notifications for user
+                $userNotification = new UserNotification();
+                $userNotification->setUser($user);
+                $userNotification->setMessage($translator->trans('Notification new order for user', array(), 'messages'));
+                $userNotification->setApplication($order);
+                $userNotification->setType(self::NOTIFICATION_NEW_ORDER);
+                $userNotification->setIsRead('0');
+                $entityManager->persist($userNotification);
+                $entityManager->flush();
 
                 $message = $translator->trans('Order created', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
@@ -216,6 +228,25 @@ class OrderController extends AbstractController
                     $subject = $translator->trans('Your order closed by perfomer', array(), 'messages');
                     $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_performer.html.twig', $order);
                 }
+
+                // Send notification for master
+                $masterNotification = new UserNotification();
+                $masterNotification->setUser($order->getPerformer());
+                $masterNotification->setMessage($translator->trans('Notification order closed', array(), 'messages'));
+                $masterNotification->setApplication($order);
+                $masterNotification->setType(self::NOTIFICATION_CHANGE_STATUS);
+                $masterNotification->setIsRead('0');
+
+                // Send notification for user
+                $userNotification = new UserNotification();
+                $userNotification->setUser($order->getUsers());
+                $userNotification->setMessage($translator->trans('Notification order closed', array(), 'messages'));
+                $userNotification->setApplication($order);
+                $masterNotification->setType(self::NOTIFICATION_CHANGE_STATUS);
+                $masterNotification->setIsRead('0');
+
+                $entityManager->persist($masterNotification);
+                $entityManager->flush();
 
                 $message = $translator->trans('Order closed', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
@@ -272,22 +303,41 @@ class OrderController extends AbstractController
                             $notifier->send(new Notification($message, ['browser']));
                             return $this->redirectToRoute('app_master_top_up_balance');
                         } else {
+
                             // Send notifications for masters
-                            $userNotification = new UserNotification();
-                            $userNotification->setUser($order->getPerformer());
+                            $masterNotification = new UserNotification();
+                            $masterNotification->setUser($order->getPerformer());
                             $message = $translator->trans('Withdrawal from the balance', array(), 'messages');
-                            $userNotification->setMessage($message .' '.$tax.' руб.' .' за заявку');
-                            $userNotification->setType(self::NOTIFICATION_BALANCE_MINUS);
+                            $masterNotification->setMessage($message .' '.$tax.' руб.' .' за заявку');
+                            $masterNotification->setType(self::NOTIFICATION_BALANCE_MINUS);
+                            $masterNotification->setApplication($order);
+                            $masterNotification->setIsRead('0');
 
-                            $userNotification2 = new UserNotification();
-                            $userNotification2->setUser($order->getPerformer());
-                            $userNotification2->setMessage($translator->trans('You got an order', array(), 'messages'));
+                            $masterNotification2 = new UserNotification();
+                            $masterNotification2->setUser($order->getPerformer());
+                            $masterNotification2->setMessage($translator->trans('You got an order', array(), 'messages'));
+                            $masterNotification2->setType(self::NOTIFICATION_CHANGE_STATUS);
+                            $masterNotification2->setApplication($order);
+                            $masterNotification2->setIsRead('0');
+
+                            $entityManager->persist($masterNotification);
+                            $entityManager->persist($masterNotification2);
+
+                            // Send notifications for user
+                            $userNotification = new UserNotification();
+                            $userNotification->setUser($order->getUsers());
+                            $message = $translator->trans('Your order has been processed', array(), 'messages');
+                            $userNotification->setMessage($message .' '.$order->getPerformer()->getFullName().' - '.$order->getPerformer()->getEmail());
                             $userNotification->setType(self::NOTIFICATION_CHANGE_STATUS);
-
+                            $userNotification->setApplication($order);
+                            $userNotification->setIsRead('0');
                             $entityManager->persist($userNotification);
-                            $entityManager->flush();
+
                             // Set new order
                             $order->getPerformer()->setBalance($newMasterBalance);
+                            $entityManager->persist($order);
+
+                            $entityManager->flush();
                         }
                     }
                 }

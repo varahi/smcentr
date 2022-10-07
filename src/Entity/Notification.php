@@ -47,6 +47,11 @@ class Notification
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="notifications")
+     */
+    private $application;
+
     public function __construct()
     {
         $this->created = new \DateTime();
@@ -118,6 +123,18 @@ class Notification
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getApplication(): ?Order
+    {
+        return $this->application;
+    }
+
+    public function setApplication(?Order $application): self
+    {
+        $this->application = $application;
 
         return $this;
     }

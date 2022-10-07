@@ -25,23 +25,34 @@
 
     <section id="list_notification">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Новые уведомления</h2>
-                    {% for notification in newNotifications %}
-                        {% include 'partials/notification/_new_item.html.twig' %}
-                    {% endfor %}
-                </div>
-            </div>
+            {% if newNotifications or viewedNotifications %}
 
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Просмотренные уведомления</h2>
-                    {% for notification in viewedNotifications %}
-                        {% include 'partials/notification/_viewed_item.html.twig' %}
-                    {% endfor %}
+                {% if newNotifications %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Новые уведомления</h2>
+                        {% for notification in newNotifications %}
+                            {% include 'partials/notification/_item.html.twig' %}
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+                {% endif %}
+
+                {% if viewedNotifications %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Просмотренные уведомления</h2>
+                        {% for notification in viewedNotifications %}
+                            {% include 'partials/notification/_item.html.twig' %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            {% else %}
+                <p>У вас пока нет уведомлений</p>
+            {% endif %}
+
+
         </div>
     </section>
 

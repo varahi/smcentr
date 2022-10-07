@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -103,9 +105,15 @@ class Order
      */
     private $estimatedTime;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="application")
+     */
+    private $notifications;
+
     public function __construct()
     {
         $this->created = new \DateTime();
+        $this->notifications = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -319,6 +327,36 @@ class Order
     public function setEstimatedTime(?string $estimatedTime): self
     {
         $this->estimatedTime = $estimatedTime;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setApplication($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getApplication() === $this) {
+                $notification->setApplication(null);
+            }
+        }
 
         return $this;
     }

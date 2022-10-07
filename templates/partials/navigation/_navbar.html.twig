@@ -26,14 +26,19 @@
                 <a class="nav-link" href="{{ path('app_support') }}">Техническая поддержка</a>
             </li>
 
-            {% if is_granted('ROLE_MASTER') %}
-                {% set nts = '' %}
+            {% if is_granted('ROLE_MASTER') or is_granted('ROLE_CLIENT') %}
+                {% set nts = 0 %}
                 {% if user.notifications %}
-                    {% set nts = user.notifications|length %}
+                    {% for notification in user.notifications %}
+                        {% if notification.isRead == 0 %}
+                            {% set nts = nts + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {#{% set nts = user.notifications|length %}#}
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link notif" href="{{ path('app_notifications') }}">
-                        <img src=" {{ asset('assets/images/notif.svg') }}" alt=""><span>{{ nts }}</span>
+                        <img src=" {{ asset('assets/images/notif.svg') }}" alt="">{% if nts > 0 %}<span>{{ nts }}</span>{% endif %}
                     </a>
                 </li>
             {% endif %}

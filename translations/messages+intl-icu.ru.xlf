@@ -641,9 +641,13 @@
             <source>Message</source>
             <target>Сообщение</target>
         </trans-unit>
-        <trans-unit id="New order in the system" resname="New order in the system">
-            <source>New order in the system</source>
+        <trans-unit id="Notification new order for master" resname="Notification new order for master">
+            <source>Notification new order for master</source>
             <target>Новая заявка в системе по вашему городу и профессии</target>
+        </trans-unit>
+        <trans-unit id="Notification new order for user" resname="Notification new order for user">
+            <source>Notification new order for user</source>
+            <target>Вами создана новая заявка</target>
         </trans-unit>
         <trans-unit id="Withdrawal from the balance" resname="Withdrawal from the balance">
             <source>Withdrawal from the balance for the amount</source>
@@ -652,6 +656,10 @@
         <trans-unit id="You got an order" resname="You got an order">
             <source>You got an order</source>
             <target>Вы взяли заявку</target>
+        </trans-unit>
+        <trans-unit id="Your order has been processed" resname="Your order has been processed">
+            <source>Your order has been processed</source>
+            <target>Ваша заявка принята в работу мастером </target>
         </trans-unit>
     </body>
   </file>

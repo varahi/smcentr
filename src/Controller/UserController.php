@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Notification as UserNotification;
 use App\Form\User\ClientProfileFormType;
 use App\Form\User\MasterProfileFormType;
 use App\Form\User\RegistrationFormType;
@@ -215,7 +216,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * Require ROLE_CLIENT for *every* controller method in this class.
      *
      * @Route("/user/notifications", name="app_notifications")
      */
@@ -240,6 +240,41 @@ class UserController extends AbstractController
 
                 $response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;
+            }
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
+    }
+
+    /**
+     *
+     * @Route("/user/notification/mark/id-{id}", name="app_mark_as_read")
+     */
+    public function markAsRead(
+        Request $request,
+        TranslatorInterface $translator,
+        NotifierInterface $notifier,
+        NotificationRepository $notificationRepository,
+        UserNotification $userNotification
+    ): Response {
+        if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER)) {
+            $user = $this->security->getUser();
+            if ($user->getId() == $userNotification->getUser()->getId()) {
+                $userNotification->setIsRead('1');
+                $entityManager = $this->doctrine->getManager();
+                $entityManager->persist($userNotification);
+                $entityManager->flush();
+
+                $message = $translator->trans('Notification mark as read', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
+            } else {
+                $message = $translator->trans('Please login', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute("app_login");
             }
         } else {
             $message = $translator->trans('Please login', array(), 'flash');
