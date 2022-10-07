@@ -139,10 +139,11 @@ class OrderController extends AbstractController
                             foreach ($master->getProfessions() as $profession) {
                                 $professionIds[] = $profession->getId();
                             }
-
                             foreach ($master->getJobTypes() as $jobType) {
                                 $jobTypeIds[] = $jobType->getId();
                             }
+                        } else {
+                            $jobTypeIds = [];
                         }
                         if ($master->isGetNotifications() == 1 &&
                             in_array($order->getJobType()->getId(), $jobTypeIds) ||
