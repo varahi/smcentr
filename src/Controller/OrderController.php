@@ -4,7 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Entity\Notification as UserNotification;
+use App\Repository\CityRepository;
+use App\Repository\DistrictRepository;
+use App\Repository\JobTypeRepository;
 use App\Repository\OrderRepository;
+use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -115,19 +119,54 @@ class OrderController extends AbstractController
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         ManagerRegistry $doctrine,
-        Mailer $mailer
+        Mailer $mailer,
+        CityRepository $cityRepository,
+        DistrictRepository $districtRepository,
+        ProfessionRepository $professionRepository,
+        JobTypeRepository $jobTypeRepository
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT)) {
             $user = $this->security->getUser();
             $masters = $userRepository->findByRole(self::ROLE_MASTER);
+            $cities = $cityRepository->findAllOrder(['name' => 'ASC']);
+            $districts = $districtRepository->findAllOrder(['name' => 'ASC']);
+            $professions = $professionRepository->findAllOrder(['name' => 'ASC']);
+            $jobTypes = $jobTypeRepository->findAllOrder(['name' => 'ASC']);
 
             $order = new Order();
             $form = $this->createForm(OrderFormType::class, $order);
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->isSubmitted()) {
+                $post = $request->request->get('order_form');
+                if ($post['profession'] !=='') {
+                    $profession = $professionRepository->findOneBy(['id' => $post['profession']]);
+                    if ($profession) {
+                        $order->setProfession($profession);
+                    }
+                }
+                if ($post['jobType'] !=='') {
+                    $jobType = $jobTypeRepository->findOneBy(['id' => $post['jobType']]);
+                    if ($jobType) {
+                        $order->setJobType($jobType);
+                    }
+                }
+                if ($post['city'] !=='') {
+                    $city = $cityRepository->findOneBy(['id' => $post['city']]);
+                    if ($city) {
+                        $order->setCity($city);
+                    }
+                }
+                if ($post['district'] !=='') {
+                    $district = $districtRepository->findOneBy(['id' => $post['district']]);
+                    if ($district) {
+                        $order->setDistrict($district);
+                    }
+                }
                 $order->setStatus(self::STATUS_NEW);
                 $order->setUsers($user);
+                $order->setLevel('3');
+
                 $entityManager = $doctrine->getManager();
                 $entityManager->persist($order);
                 $entityManager->flush();
@@ -201,6 +240,10 @@ class OrderController extends AbstractController
 
             return $this->render('order/new.html.twig', [
                 'user' => $user,
+                'cities' => $cities,
+                'districts' => $districts,
+                'professions' => $professions,
+                'jobTypes' => $jobTypes,
                 'orderForm' => $form->createView()
             ]);
         } else {

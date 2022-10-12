@@ -61,7 +61,7 @@ class OrderFormType extends AbstractType
                 ]
             )
             //->add('level')
-            ->add(
+            /*->add(
                 'level',
                 ChoiceType::class,
                 [
@@ -78,7 +78,7 @@ class OrderFormType extends AbstractType
                     ],
                     'data' => '3'
                 ]
-            )
+            )*/
             ->add(
                 'phone',
                 TelType::class,
@@ -113,7 +113,7 @@ class OrderFormType extends AbstractType
                     'label' => false,
                 ]
             )
-            ->add('profession', EntityType::class, [
+            /*->add('profession', EntityType::class, [
                 'class' => Profession::class,
                 'multiple'  => false,
                 'expanded'  => false,
@@ -128,8 +128,8 @@ class OrderFormType extends AbstractType
                 'label' => false,
                 'required' => true,
                 'placeholder' => 'Выберите тип работ *'
-            ])
-            ->add('city', EntityType::class, [
+            ])*/
+            /*->add('city', EntityType::class, [
                 'class' => City::class,
                 'multiple'  => false,
                 'expanded'  => false,
@@ -144,7 +144,7 @@ class OrderFormType extends AbstractType
                 'label' => false,
                 'required' => true,
                 'placeholder' => 'Выберите район *'
-            ])
+            ])*/
         ;
     }
 

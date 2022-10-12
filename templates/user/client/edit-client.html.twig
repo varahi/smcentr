@@ -1,5 +1,11 @@
 {% extends 'layouts/base.html.twig' %}
 {% block title %}{{ 'Welcome'|trans }} {{ user.fullName }}{% endblock %}
+    {% block javascripts %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="{{ asset('assets/js/jquery.simpleLoadMore.js') }}"></script>
+        <script src="{{ asset('assets/js/dependableList.js') }}"></script>
+    {% endblock %}
+
 {% block body %}
 
 <header id="sticky_header">
@@ -35,14 +41,29 @@
                         {{ form_row(form.plainPassword, { label: 'Пароль'}) }}
                         {{ form_widget(form.phone) }}
                         {{ form_widget(form.fullName) }}
-                        {{ form_widget(form.city) }}
-                        {{ form_widget(form.district) }}
+
+
+                        <label for="client_profile_form_city" style="display: none;"></label>
+                        <select id="client_profile_form_city" name="client_profile_form[city]">
+                            {% for city in cities %}
+                                <option value="{{ city.id }}" {% if city.id == user.city.id %} selected {% endif %}>{{ city.name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="client_profile_form_district" style="display: none"></label>
+                        <select id="client_profile_form_district" name="client_profile_form[district]">
+                            {% for district in districts %}
+                                <option data-list-id="{{ district.city.id }}" value="{{ district.id }}" {% if district.city.id == user.city.id %} selected {% endif %}>
+                                    {{ district.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
 
                         <div class="avatar_upload">
                             {% if user.avatar %}
-                                <img id="avatar" src="{{ asset('uploads/files/' ~ user.avatar) }}" class="user-rounded" width="121" height="121" />
+                                <img id="avatar" src="{{ asset('uploads/files/' ~ user.avatar) }}" class="user-rounded" width="121" height="121"  alt=""/>
                             {% else %}
-                                <img id="avatar" src="{{ asset('assets/images/avatar.png') }}">
+                                <img id="avatar" src="{{ asset('assets/images/avatar.png') }}" alt="">
                             {% endif %}
                             <div class="">
                                 <p>Аватар пользователя</p>
@@ -68,6 +89,13 @@
                     </div>
                 </div>
                 {{ form_end(form) }}
+
+                <script type="text/javascript">
+                    createDependableList ( '#client_profile_form_city', '#client_profile_form_district' );
+                    //$('#client_profile_form_city').change(function() {
+                    //    $('#client_profile_form_district').prop('disabled', false);
+                    //});
+                </script>
 
             </div>
         </div>

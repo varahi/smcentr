@@ -1,5 +1,10 @@
 {% extends 'layouts/base.html.twig' %}
 {% block title %}Добро пожаловать {{ user.fullName }}{% endblock %}
+    {% block javascripts %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="{{ asset('assets/js/jquery.simpleLoadMore.js') }}"></script>
+        <script src="{{ asset('assets/js/dependableList.js') }}"></script>
+    {% endblock %}
 {% block body %}
 
     <header id="sticky_header">
@@ -23,22 +28,51 @@
 
             <div class="row">
                 <div class="col-md-12"></div>
-
                 {{ form_start(orderForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
                 <div class="col-md-12">
                     <div class="reg_contact">
                         <h3>Заполните все поля</h3>
-                        {{ form_widget(orderForm.profession) }}
-                        {{ form_widget(orderForm.jobType) }}
-                        {{ form_widget(orderForm.city) }}
-                        {{ form_widget(orderForm.district) }}
+
+                        <label for="order_form_profession" style="display: none"></label>
+                        <select id="order_form_profession" name="order_form[profession]" required="required">
+                            <option value="" selected="selected">Выберите профессию *</option>
+                            {% for profession in professions %}
+                                <option value="{{ profession.id }}">{{ profession.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="order_form_jobType" style="display: none"></label>
+                        <select id="order_form_jobType" name="order_form[jobType]" required="required" disabled>
+                            <option value="" selected="selected">Выберите тип работ *</option>
+                            {% for jobType in jobTypes %}
+                                {% if jobType.profession is not null or jobType.profession is not empty %}
+                                    <option data-list-id="{{ jobType.profession.id }}" value="{{ jobType.id }}">{{ jobType.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+
+                        <label for="order_form_city" style="display: none"></label>
+                        <select id="order_form_city" name="order_form[city]" required="required">
+                            <option value="" selected="selected">Выберите город *</option>
+                            {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="order_form_district" style="display: none"></label>
+                        <select id="order_form_district" name="order_form[district]" required="required" disabled>
+                            <option value="" selected="selected">Выберите район *</option>
+                            {% for district in districts %}
+                                <option data-list-id="{{ district.city.id }}" value="{{ district.id }}">{{ district.name }}</option>
+                            {% endfor %}
+                        </select>
+
                         {{ form_widget(orderForm.address) }}
                         {{ form_widget(orderForm.description) }}
                         {{ form_widget(orderForm.price) }}
-                        {{ form_row(orderForm.level) }}
                         {{ form_widget(orderForm.phone) }}
                         {{ form_row(orderForm.estimatedTime) }}
                         {{ form_row(orderForm.deadline) }}
+
                     </div>
                 </div>
 
@@ -49,83 +83,15 @@
                 </div>
                 {{ form_end(orderForm) }}
 
-                <!-- The Modal -->
-                <div id="myModal" class="modal">
-                    <div class="modal-content">
-                        <span style="text-align: right;" class="close">&times;</span>
-                        <p style="text-align: center; font-size: 16px;">Ваша заявка успешно создана.<br>Наши мастера смогут ознакомиться с ней в ближайшее время.<br>
-                            <a style="margin-top: 20px;display: block;" href="#">Перейти в профиль</a></p>
-                    </div>
-                </div>
-
-
-                <style type="text/css">
-                    /* The Modal (background) */
-                    .modal {
-                        display: none; /* Hidden by default */
-                        position: fixed; /* Stay in place */
-                        z-index: 1; /* Sit on top */
-                        left: 0;
-                        top: 0;
-                        width: 100%; /* Full width */
-                        height: 100%; /* Full height */
-                        overflow: auto; /* Enable scroll if needed */
-                        background-color: rgb(0,0,0); /* Fallback color */
-                        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-                    }
-
-                    /* Modal Content/Box */
-                    .modal-content {
-                        background-color: #fefefe;
-                        margin: 25% auto; /* 15% from the top and centered */
-                        padding: 20px;
-                        border: 1px solid #888;
-                        width: 80%; /* Could be more or less, depending on screen size */
-                    }
-
-                    /* The Close Button */
-                    .close {
-                        color: #aaa;
-                        float: right;
-                        font-size: 28px;
-                        font-weight: bold;
-                    }
-
-                    .close:hover,
-                    .close:focus {
-                        color: black;
-                        text-decoration: none;
-                        cursor: pointer;
-                    }
-                </style>
-
-
                 <script type="text/javascript">
-                    // Get the modal
-                    var modal = document.getElementById("myModal");
-
-                    // Get the button that opens the modal
-                    var btn = document.getElementById("myBtn");
-
-                    // Get the <span> element that closes the modal
-                    var span = document.getElementsByClassName("close")[0];
-
-                    // When the user clicks on the button, open the modal
-                    btn.onclick = function() {
-                       // modal.style.display = "block";
-                    }
-
-                    // When the user clicks on <span> (x), close the modal
-                    span.onclick = function() {
-                       // modal.style.display = "none";
-                    }
-
-                    // When the user clicks anywhere outside of the modal, close it
-                    window.onclick = function(event) {
-                        if (event.target == modal) {
-                           // modal.style.display = "none";
-                        }
-                    }
+                    createDependableList ( '#order_form_city', '#order_form_district' );
+                    createDependableList ( '#order_form_profession', '#order_form_jobType' );
+                    $('#order_form_city').change(function() {
+                        $('#order_form_district').prop('disabled', false);
+                    });
+                    $('#order_form_profession').change(function() {
+                        $('#order_form_jobType').prop('disabled', false);
+                    });
                 </script>
             </div>
         </div>

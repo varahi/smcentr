@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -16,17 +17,39 @@ class SecurityController extends AbstractController
      */
     public const CACHE_MAX_AGE = '86400';
 
+    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
+
+    public const ROLE_EDITOR = 'ROLE_EDITOR';
+
+    public const ROLE_CLIENT = 'ROLE_CLIENT';
+
+    public const ROLE_MASTER = 'ROLE_MASTER';
+
+    public const ROLE_COMPANY = 'ROLE_COMPANY';
+
     /**
      * @var string
      */
     private $environment;
 
     /**
-     * Your Service constructor.
+     * @var Security
      */
-    public function __construct(KernelInterface $kernel)
-    {
+    private $security;
+
+
+    /**
+     * @param KernelInterface $kernel
+     * @param Security $security
+     */
+    public function __construct(
+        KernelInterface $kernel,
+        Security $security
+    ) {
         $this->environment = $kernel->getEnvironment();
+        $this->security = $security;
     }
 
     /**
@@ -44,6 +67,26 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+
+        // Redirect depends on roles
+        if ($this->security->getUser()) {
+            $user = $this->security->getUser();
+            if ($user != null && in_array(self::ROLE_CLIENT, $user->getRoles())) {
+                return $this->redirectToRoute("app_client_profile");
+            } elseif ($user != null && in_array(self::ROLE_MASTER, $user->getRoles())) {
+                return $this->redirectToRoute("app_master_profile");
+            } elseif ($user != null && in_array(self::ROLE_COMPANY, $user->getRoles())) {
+                return $this->redirectToRoute("app_company_profile");
+            } elseif (
+                $user != null && in_array(self::ROLE_EDITOR, $user->getRoles()) ||
+                $user != null && in_array(self::ROLE_ADMIN, $user->getRoles()) ||
+                $user != null && in_array(self::ROLE_SUPER_ADMIN, $user->getRoles())
+            ) {
+                return $this->redirectToRoute("app_backend");
+            } else {
+                return $this->redirectToRoute("app_login");
+            }
+        }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

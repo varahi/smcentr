@@ -1,0 +1,159 @@
+{% extends 'layouts/base.html.twig' %}
+{% block title %}{{ 'Welcome'|trans }} - {{ user.fullName }}{% endblock %}
+{% block body %}
+
+    <header id="sticky_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% include 'partials/navigation/_navbar.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="list_jobs">
+        <div class="container">
+            {% include 'partials/_message.html.twig' %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>{{ 'Company profile'|trans }}</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="profile_master">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="profile_master">
+                        <div class="profile_img">
+                            {% if user.avatar %}
+                                <div class="rounded">
+                                    <img src="{{ asset('uploads/files/' ~ user.avatar) }}" width="121" height="121" alt="" />
+                                </div>
+                            {% else %}
+                                <img src="{{ asset('assets/images/avatar.png') }}" alt="">
+                            {% endif %}
+                        </div>
+                        <div class="profile_info">
+                            <div class="fio">
+                                {{ user.fullName }}
+                            </div>
+                            <div class="proff">
+                                {% if user.professions is not empty %}
+                                    {% for porfession in user.professions %}
+                                        {% if loop.last == false %}
+                                            {{ porfession.name }},
+                                        {% else %}
+                                            {{ porfession.name }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="city">
+                                {{ user.city.name }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn_profile_edit">
+                        <a href="{{ path('app_edit_master_profile') }}"><button>{{ 'Edit profile'|trans }}</button></a>
+                    </div>
+                </div>
+
+                <!-- ToDo: master balance -->
+                <div class="col-md-4">
+                    <div class="profile_balance">
+                        <div class="balance">
+                            <span>{{ 'Balance'|trans }}:</span>
+                            <div>{{ user.balance|number_format(0, '.', ' ') }} <i>&#8381;</i></div>
+                        </div>
+                        <a href="{{ path('app_master_top_up_balance') }}"><button>{{ 'Top up balance'|trans }}</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    {#    <!-- Active заявки -->#}
+    <section id="list_items">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>{{ 'Active orders'|trans }}</h3>
+                </div>
+            </div>
+
+            {% if activeOrders is not empty %}
+                <div class="row active_orders_list">
+                    {% for order in activeOrders %}
+                        {% include 'partials/order/_active_order_item.html.twig' %}
+                    {% endfor %}
+                </div>
+
+                <script>
+                    $('.active_orders_list').simpleLoadMore({
+                        item: 'div.col-md-4',
+                        count: 3,
+                        counterInBtn: true,
+                        btnText: '{{ 'Show all active orders'|trans }}',
+                    });
+                </script>
+
+                {#<div class="row">
+                    <div class="col-md-12">
+                        <div class="btn_center">
+                            <button>{{ 'Show all active orders'|trans }}</button>
+                        </div>
+                    </div>
+                </div>#}
+
+            {% else %}
+                <p>{{ 'Empty orders list'|trans }}</p>
+            {% endif %}
+        </div>
+    </section>
+
+    {#    <!-- Заявки завершенные -->#}
+    <section id="list_items">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>{{ 'Completed orders'|trans }}</h3>
+                </div>
+            </div>
+
+            {% if completedOrders is not empty %}
+                <div class="row complted_orders_list">
+                    {% for order in completedOrders %}
+                        {% include 'partials/order/_completed_order_item.html.twig' %}
+                    {% endfor %}
+                </div>
+
+                <script>
+                    $('.complted_orders_list').simpleLoadMore({
+                        item: 'div.col-md-4',
+                        count: 3,
+                        counterInBtn: true,
+                        btnText: '{{ 'Show all completed orders'|trans }}',
+                    });
+                </script>
+
+                {#<div class="row">
+                    <div class="col-md-12">
+                        <div class="btn_center">
+                            <button>{{ 'Show all completed orders'|trans }}</button>
+                        </div>
+                    </div>
+                </div>#}
+
+            {% else %}
+                <p>{{ 'Empty orders list'|trans }}</p>
+            {% endif %}
+        </div>
+    </section>
+
+    {% include 'partials/footer/_footer.html.twig' %}
+{% endblock %}

@@ -1,0 +1,195 @@
+{% extends 'layouts/base.html.twig' %}
+{% block title %}Добро пожаловать {{ user.fullName }}{% endblock %}
+    {% block javascripts %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="{{ asset('assets/js/jquery.simpleLoadMore.js') }}"></script>
+        <script src="{{ asset('assets/js/dependableList.js') }}"></script>
+    {% endblock %}
+{% block body %}
+
+    <header id="sticky_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% include 'partials/navigation/_navbar.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="reg_client">
+        <div class="container">
+            {% include 'partials/_message.html.twig' %}
+
+            {#<form>
+                <!-- Super Parent -->
+                <div class="form-group">
+                    <label for="first_list"> User select </label>
+                    <select class="form-control" id="first_list">
+                        <option value="0" selected> Select User list </option>
+                        <option value="1"> User A </option>
+                        <option value="2"> User B </option>
+                        <option value="3"> User C </option>
+                        <option value="4"> User D </option>
+                        <option value="5"> User E </option>
+                    </select>
+                </div>
+
+                <!-- Parent: User list and Child: Subject list -->
+                <div class="form-group">
+                    <label for="second_list"> Subject select </label>
+                    <select class="form-control" id="second_list" disabled>
+                        <option data-list-id="0" value="0" selected> Select subject list </option>
+                        <option data-list-id="1" value="1"> Subject A.1 </option>
+                        <option data-list-id="1" value="2"> Subject A.2 </option>
+                        <option data-list-id="1" value="3"> Subject A.3 </option>
+                        <option data-list-id="2" value="4"> Subject B </option>
+                        <option data-list-id="3" value="5"> Subject C </option>
+                        <option data-list-id="4" value="6"> Subject D </option>
+                        <option data-list-id="5" value="7"> Subject E </option>
+                    </select>
+                </div>
+            </form>#}
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Создание заявки</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12"></div>
+
+                {{ form_start(orderForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+                <div class="col-md-12">
+                    <div class="reg_contact">
+                        <h3>Заполните все поля</h3>
+                        {{ form_widget(orderForm.profession) }}
+                        {{ form_widget(orderForm.jobType) }}
+
+                        <select id="order_form_city" name="order_form[city]" required="required">
+                            <option value="" selected="selected">Выберите город *</option>
+                            {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <select id="order_form_district" name="order_form[district]" required="required" disabled>
+                            <option value="" selected="selected">Выберите район *</option>
+                            {% for district in districts %}
+                                <option data-list-id="{{ district.city.id }}" value="{{ district.id }}">{{ district.name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        {#{{ form_widget(orderForm.city) }}
+                        {{ form_widget(orderForm.district) }}#}
+                        {{ form_widget(orderForm.address) }}
+                        {{ form_widget(orderForm.description) }}
+                        {{ form_widget(orderForm.price) }}
+                        {{ form_widget(orderForm.phone) }}
+                        {{ form_row(orderForm.estimatedTime) }}
+                        {{ form_row(orderForm.deadline) }}
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="reg_bottom">
+                        <button id="myBtn">Разместить заявку</button>
+                    </div>
+                </div>
+                {{ form_end(orderForm) }}
+
+                <script type="text/javascript">
+                    createDependableList ( '#order_form_city', '#order_form_district' );
+                    $('#order_form_city').change(function() {
+                        $('#order_form_district').prop('disabled', false);
+                    });
+                </script>
+
+                <!-- The Modal -->
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <span style="text-align: right;" class="close">&times;</span>
+                        <p style="text-align: center; font-size: 16px;">Ваша заявка успешно создана.<br>Наши мастера смогут ознакомиться с ней в ближайшее время.<br>
+                            <a style="margin-top: 20px;display: block;" href="#">Перейти в профиль</a></p>
+                    </div>
+                </div>
+
+
+                <style type="text/css">
+                    /* The Modal (background) */
+                    .modal {
+                        display: none; /* Hidden by default */
+                        position: fixed; /* Stay in place */
+                        z-index: 1; /* Sit on top */
+                        left: 0;
+                        top: 0;
+                        width: 100%; /* Full width */
+                        height: 100%; /* Full height */
+                        overflow: auto; /* Enable scroll if needed */
+                        background-color: rgb(0,0,0); /* Fallback color */
+                        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                    }
+
+                    /* Modal Content/Box */
+                    .modal-content {
+                        background-color: #fefefe;
+                        margin: 25% auto; /* 15% from the top and centered */
+                        padding: 20px;
+                        border: 1px solid #888;
+                        width: 80%; /* Could be more or less, depending on screen size */
+                    }
+
+                    /* The Close Button */
+                    .close {
+                        color: #aaa;
+                        float: right;
+                        font-size: 28px;
+                        font-weight: bold;
+                    }
+
+                    .close:hover,
+                    .close:focus {
+                        color: black;
+                        text-decoration: none;
+                        cursor: pointer;
+                    }
+                </style>
+                <script type="text/javascript">
+                    // Get the modal
+                    var modal = document.getElementById("myModal");
+
+                    // Get the button that opens the modal
+                    var btn = document.getElementById("myBtn");
+
+                    // Get the <span> element that closes the modal
+                    var span = document.getElementsByClassName("close")[0];
+
+                    // When the user clicks on the button, open the modal
+                    btn.onclick = function() {
+                       // modal.style.display = "block";
+                    }
+
+                    // When the user clicks on <span> (x), close the modal
+                    span.onclick = function() {
+                       // modal.style.display = "none";
+                    }
+
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function(event) {
+                        if (event.target == modal) {
+                           // modal.style.display = "none";
+                        }
+                    }
+                </script>
+                
+            </div>
+        </div>
+    </section>
+    <script>
+        $(function(){
+            $("#order_form_phone").mask("+7(999) 999-9999");
+        });
+    </script>
+    {% include 'partials/footer/_footer.html.twig' %}
+{% endblock %}

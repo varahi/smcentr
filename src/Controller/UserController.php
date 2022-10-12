@@ -7,6 +7,8 @@ use App\Entity\Notification as UserNotification;
 use App\Form\User\ClientProfileFormType;
 use App\Form\User\MasterProfileFormType;
 use App\Form\User\RegistrationFormType;
+use App\Repository\CityRepository;
+use App\Repository\DistrictRepository;
 use App\Repository\JobTypeRepository;
 use App\Repository\NotificationRepository;
 use App\Repository\OrderRepository;
@@ -31,6 +33,7 @@ use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as SecurityGranted;
 use App\ImageOptimizer;
 #use App\Controller\Traits\EmailVerifyTrait;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
@@ -54,6 +57,8 @@ class UserController extends AbstractController
     public const ROLE_CLIENT = 'ROLE_CLIENT';
 
     public const ROLE_MASTER = 'ROLE_MASTER';
+
+    public const ROLE_COMPANY = 'ROLE_COMPANY';
 
     private $security;
 
@@ -216,6 +221,55 @@ class UserController extends AbstractController
     }
 
     /**
+     * Require ROLE_COMPANY for *every* controller method in this class.
+     *
+     * @IsGranted("ROLE_COMPANY")
+     * @Route("/user/lk-company", name="app_company_profile")
+     */
+    public function companyProfile(
+        Request $request,
+        UserRepository $userRepository,
+        TranslatorInterface $translator,
+        NotifierInterface $notifier,
+        OrderRepository $orderRepository
+    ): Response {
+        if ($this->isGranted(self::ROLE_COMPANY)) {
+            $user = $this->security->getUser();
+
+            if ($user->isIsVerified() == 0) {
+                // Send a new email link to verify email
+                $this->verifyEmail($user);
+                $message = $translator->trans('Please verify you profile', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute("app_login");
+            }
+
+            $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user);
+            $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user);
+
+            // Resize image if exist
+            if ($user->getAvatar()) {
+                $this->imageOptimizer->resize($this->targetDirectory.'/'.$user->getAvatar());
+            }
+
+            {
+                $response = new Response($this->twig->render('user/company/lk-company.html.twig', [
+                    'user' => $user,
+                    'activeOrders' => $activeOrders,
+                    'completedOrders' => $completedOrders
+                ]));
+
+                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                return $response;
+            }
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
+    }
+
+    /**
      *
      * @Route("/user/notifications", name="app_notifications")
      */
@@ -292,19 +346,35 @@ class UserController extends AbstractController
      */
     public function editClientProfile(
         Request $request,
-        UserRepository $userRepository,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         UserPasswordHasherInterface $passwordHasher,
-        FileUploader $fileUploader
+        FileUploader $fileUploader,
+        CityRepository $cityRepository,
+        DistrictRepository $districtRepository
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT)) {
             $user = $this->security->getUser();
             $form = $this->createForm(ClientProfileFormType::class, $user);
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
+            $cities = $cityRepository->findAllOrder(['name' => 'ASC']);
+            $districts = $districtRepository->findAllOrder(['name' => 'ASC']);
+
+            if ($form->isSubmitted()) {
                 $post = $request->request->get('client_profile_form');
+                if ($post['city'] !=='') {
+                    $city = $cityRepository->findOneBy(['id' => $post['city']]);
+                    if ($city) {
+                        $user->setCity($city);
+                    }
+                }
+                if ($post['district'] !=='') {
+                    $district = $districtRepository->findOneBy(['id' => $post['district']]);
+                    if ($district) {
+                        $user->setDistrict($district);
+                    }
+                }
                 // Set new password if changed
                 if ($post['plainPassword']['first'] !=='' && $post['plainPassword']['second'] !=='') {
                     if (strcmp($post['plainPassword']['first'], $post['plainPassword']['second']) == 0) {
@@ -342,6 +412,8 @@ class UserController extends AbstractController
             {
                 $response = new Response($this->twig->render('user/client/edit-client.html.twig', [
                     'user' => $user,
+                    'cities' => $cities,
+                    'districts' => $districts,
                     'form' => $form->createView(),
                 ]));
 
@@ -358,26 +430,28 @@ class UserController extends AbstractController
     /**
      * Require ROLE_MASTER for *every* controller method in this class.
      *
-     * @IsGranted("ROLE_MASTER")
      * @Route("/user/edit-master-profile", name="app_edit_master_profile")
      */
     public function editMasterProfile(
         Request $request,
-        UserRepository $userRepository,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         UserPasswordHasherInterface $passwordHasher,
         FileUploader $fileUploader,
         ProfessionRepository $professionRepository,
-        JobTypeRepository $jobTypeRepository
+        JobTypeRepository $jobTypeRepository,
+        CityRepository $cityRepository,
+        DistrictRepository $districtRepository
     ): Response {
-        if ($this->isGranted(self::ROLE_MASTER)) {
+        if ($this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
             $form = $this->createForm(MasterProfileFormType::class, $user);
             $form->handleRequest($request);
 
             $professions = $professionRepository->findAllOrder(['name' => 'ASC']);
             $jobTypes = $jobTypeRepository->findAllOrder(['name' => 'ASC']);
+            $cities = $cityRepository->findAllOrder(['name' => 'ASC']);
+            $districts = $districtRepository->findAllOrder(['name' => 'ASC']);
             $entityManager = $this->doctrine->getManager();
 
             if ($form->isSubmitted()) {
@@ -428,6 +502,20 @@ class UserController extends AbstractController
                     }
                 }
 
+                // Set city and district
+                if ($post['city'] !=='') {
+                    $city = $cityRepository->findOneBy(['id' => $post['city']]);
+                    if ($city) {
+                        $user->setCity($city);
+                    }
+                }
+                if ($post['district'] !=='') {
+                    $district = $districtRepository->findOneBy(['id' => $post['district']]);
+                    if ($district) {
+                        $user->setDistrict($district);
+                    }
+                }
+
                 // Files upload
                 $avatarFile = $form->get('avatar')->getData();
                 $doc1File = $form->get('doc1')->getData();
@@ -464,6 +552,8 @@ class UserController extends AbstractController
                     'user' => $user,
                     'professions' => $professions,
                     'jobTypes' => $jobTypes,
+                    'cities' => $cities,
+                    'districts' => $districts,
                     'form' => $form->createView(),
                 ]));
 

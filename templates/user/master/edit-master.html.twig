@@ -1,5 +1,10 @@
 {% extends 'layouts/base.html.twig' %}
-{% block title %}{{ 'Welcome'|trans }} {{ user.fullName }}{% endblock %}
+{% block title %}Редактировать профиль мастера - {{ user.fullName }}{% endblock %}
+    {% block javascripts %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="{{ asset('assets/js/jquery.simpleLoadMore.js') }}"></script>
+        <script src="{{ asset('assets/js/dependableList.js') }}"></script>
+    {% endblock %}
 {% block body %}
 
     <header id="sticky_header">
@@ -35,8 +40,21 @@
                         {{ form_row(form.plainPassword, { label: 'Пароль'}) }}
                         {{ form_widget(form.phone) }}
                         {{ form_widget(form.fullName) }}
-                        {{ form_widget(form.city) }}
-                        {{ form_widget(form.district) }}
+
+                        <label for="master_profile_form_city" style="display: none;"></label>
+                        <select id="master_profile_form_city" name="master_profile_form[city]">
+                            {% for city in cities %}
+                                <option value="{{ city.id }}" {% if city.id == user.city.id %} selected {% endif %}>{{ city.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="master_profile_form_district" style="display: none"></label>
+                        <select id="master_profile_form_district" name="master_profile_form[district]">
+                            {% for district in districts %}
+                                <option data-list-id="{{ district.city.id }}" value="{{ district.id }}" {% if district.city.id == user.city.id %} selected {% endif %}>
+                                    {{ district.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
 
                         <div class="avatar_upload">
                             {% if user.avatar %}
@@ -161,6 +179,11 @@
                     </div>
                 </div>
                 {{ form_end(form) }}
+
+                <script type="text/javascript">
+                    createDependableList ( '#master_profile_form_city', '#master_profile_form_district' );
+                </script>
+
             </div>
         </div>
     </section>
