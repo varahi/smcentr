@@ -133,14 +133,17 @@ class OrderRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findPerfomedByStatus($status, $user)
+    public function findPerfomedByStatus($status, $user, $orderField, $orderDirection)
     {
+        $field = 'o.'.$orderField;
+
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('o')
             ->from(self::ORDER_TABLE, 'o')
             ->where('o.status LIKE :status')
             ->andWhere($qb->expr()->in('o.performer', $user->getId()))
             ->setParameter('status', $status)
+            ->orderBy($field, $orderDirection)
         ;
 
         return $qb->getQuery()->getResult();

@@ -65,7 +65,13 @@ class UserCompanyCrudController extends AbstractCrudController
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-            ->add(EntityFilter::new('professions'))
+            //->add(EntityFilter::new('professions'))
+            //->add(EntityFilter::new('jobTypes'))
+            ->add(EntityFilter::new('ticket', 'Tickets list'))
+            ->add(EntityFilter::new('city'))
+            ->add(EntityFilter::new('district'))
+            ->add(EntityFilter::new('companyClients', 'Company Clients'))
+            ->add(EntityFilter::new('companyMasters', 'Company Masters'))
             ;
     }
 

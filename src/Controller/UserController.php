@@ -195,8 +195,8 @@ class UserController extends AbstractController
                 return $this->redirectToRoute("app_login");
             }
 
-            $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user);
-            $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user);
+            $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC');
+            $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC');
 
             // Resize image if exist
             if ($user->getAvatar()) {
@@ -244,8 +244,8 @@ class UserController extends AbstractController
                 return $this->redirectToRoute("app_login");
             }
 
-            $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user);
-            $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user);
+            $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC');
+            $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC');
 
             // Resize image if exist
             if ($user->getAvatar()) {

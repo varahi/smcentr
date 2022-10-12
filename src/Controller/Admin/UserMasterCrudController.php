@@ -73,6 +73,10 @@ class UserMasterCrudController extends AbstractCrudController
     {
         return $filters
             ->add(EntityFilter::new('professions'))
+            ->add(EntityFilter::new('jobTypes'))
+            ->add(EntityFilter::new('ticket', 'Tickets list'))
+            ->add(EntityFilter::new('city'))
+            ->add(EntityFilter::new('district'))
             ;
     }
 

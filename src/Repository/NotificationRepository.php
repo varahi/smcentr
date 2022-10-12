@@ -54,6 +54,7 @@ class NotificationRepository extends ServiceEntityRepository
         $qb->where($qb->expr()->eq('u.id', $id));
         //$qb->andWhere('n.isRead is NULL');
         $qb->andWhere($qb->expr()->in('n.isRead', [0]));
+        $qb->orderBy('n.created', 'DESC');
 
         return $qb->getQuery()->getResult();
     }
@@ -71,6 +72,7 @@ class NotificationRepository extends ServiceEntityRepository
         $qb->where($qb->expr()->eq('u.id', $id));
         //$qb->andWhere('n.isRead is not NULL');
         $qb->andWhere($qb->expr()->in('n.isRead', [1]));
+        $qb->orderBy('n.created', 'DESC');
 
         return $qb->getQuery()->getResult();
     }

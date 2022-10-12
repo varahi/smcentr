@@ -77,8 +77,15 @@ class RegistrationFormType extends AbstractType
                 'label' => 'List of housing',
                 'required' => true,
             ])
-            ->add('getNotifications')
-
+            ->add(
+                'getNotifications',
+                CheckboxType::class,
+                [
+                    'mapped' => false,
+                    'label' => false,
+                    'data' => true, // Default checked
+                ]
+            )
             /*->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
