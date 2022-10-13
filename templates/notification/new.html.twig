@@ -1,16 +1,6 @@
-{% extends 'layouts/base.html.twig' %}
+{% extends 'layouts/login.html.twig' %}
 {% block title %}{{ 'New notification'|trans }}{% endblock %}
 {% block body %}
-
-    <header id="sticky_header">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    {% include 'partials/navigation/_navbar.html.twig' %}
-                </div>
-            </div>
-        </div>
-    </header>
 
     <section id="reg_client">
         <div class="container">
@@ -100,6 +90,4 @@
             </div>
         </div>
     </section>
-
-    {% include 'partials/footer/_footer.html.twig' %}
 {% endblock %}
