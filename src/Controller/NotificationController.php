@@ -24,14 +24,6 @@ class NotificationController extends AbstractController
 {
     use NotificationTrait;
 
-    public const NOTIFICATION_CHANGE_STATUS = '1';
-
-    public const NOTIFICATION_BALANCE_PLUS = '2';
-
-    public const NOTIFICATION_BALANCE_MINUS = '3';
-
-    public const NOTIFICATION_NEW_ORDER = '4';
-
     public const NOTIFICATION_MAILING = '10';
 
     public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
@@ -66,16 +58,6 @@ class NotificationController extends AbstractController
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
-    }
-
-    /**
-     * @Route("/notification", name="app_notification")
-     */
-    public function index(): Response
-    {
-        return $this->render('notification/index.html.twig', [
-            'controller_name' => 'NotificationController',
-        ]);
     }
 
     /**

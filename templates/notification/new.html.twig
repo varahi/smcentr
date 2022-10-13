@@ -21,6 +21,18 @@
                 </div>
             </div>
 
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <div class="md-6" style="margin-right: 30px">
+                            <div class="btn_profile_edit">
+                                <a href="{{ path('app_backend') }}"><button>{{ 'To admin panel'|trans }}</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <div class="row">
                 <div class="col-md-12"></div>
                 {{ form_start(form, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}

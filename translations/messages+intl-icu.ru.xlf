@@ -577,22 +577,22 @@
         <source>Performer</source>
         <target>Исполнитель</target>
       </trans-unit>
-        <trans-unit id="GLf40ne" resname="Company Masters">
-            <source>Company Masters</source>
-            <target>Мастера компании</target>
-        </trans-unit>
-      <trans-unit id="Company Masters2" resname="Company Masters2">
+      <trans-unit id="GLf40ne" resname="Company Masters">
         <source>Company Masters</source>
+        <target>Мастера компании</target>
+      </trans-unit>
+      <trans-unit id="zK9OUvc" resname="Company Masters2">
+        <source>Company Masters2</source>
         <target>Мастера компании (для выбора нескольких записей, нажмите и удерживайте кнопку ctrl)</target>
       </trans-unit>
       <trans-unit id="WEdMngG" resname="Company Clients">
         <source>Company Clients</source>
         <target>Клиенты компании</target>
       </trans-unit>
-        <trans-unit id="Company Clients2" resname="Company Clients2">
-            <source>Company Clients</source>
-            <target>Клиенты компании (для выбора нескольких записей, нажмите и удерживайте кнопку ctrl)</target>
-        </trans-unit>
+      <trans-unit id="6H0l.c9" resname="Company Clients2">
+        <source>Company Clients2</source>
+        <target>Клиенты компании (для выбора нескольких записей, нажмите и удерживайте кнопку ctrl)</target>
+      </trans-unit>
       <trans-unit id="Q.sZOP2" resname="Master Company">
         <source>Master Company</source>
         <target>Компания мастера</target>
@@ -605,10 +605,10 @@
         <source>Password</source>
         <target>Пароль</target>
       </trans-unit>
-        <trans-unit id="Repeat password" resname="Repeat password">
-            <source>Repeat password</source>
-            <target>Повторите пароль</target>
-        </trans-unit>
+      <trans-unit id="t0Bw_Q6" resname="Repeat password">
+        <source>Repeat password</source>
+        <target>Повторите пароль</target>
+      </trans-unit>
       <trans-unit id="PIm.v8D" resname="Master account verified">
         <source>Master account verified</source>
         <target>Ваш аккаунт подтвержден администратором</target>
@@ -621,46 +621,62 @@
         <source>Upload</source>
         <target>Загрузить</target>
       </trans-unit>
-        <trans-unit id="Main Info" resname="Main Info">
-            <source>Main Info</source>
-            <target>Основная информация</target>
-        </trans-unit>
-        <trans-unit id="Additional Info" resname="Additional Info">
-            <source>Additional Info</source>
-            <target>Расширенная информация</target>
-        </trans-unit>
-        <trans-unit id="Change password" resname="Change password">
-            <source>Change password</source>
-            <target>Сменить пароль</target>
-        </trans-unit>
-        <trans-unit id="Notification" resname="Notification">
-            <source>Notification</source>
-            <target>Уведомление</target>
-        </trans-unit>
-        <trans-unit id="Message" resname="Message">
-            <source>Message</source>
-            <target>Сообщение</target>
-        </trans-unit>
-        <trans-unit id="Notification new order for master" resname="Notification new order for master">
-            <source>Notification new order for master</source>
-            <target>Новая заявка в системе по вашему городу и профессии</target>
-        </trans-unit>
-        <trans-unit id="Notification new order for user" resname="Notification new order for user">
-            <source>Notification new order for user</source>
-            <target>Вами создана новая заявка</target>
-        </trans-unit>
-        <trans-unit id="Withdrawal from the balance" resname="Withdrawal from the balance">
-            <source>Withdrawal from the balance for the amount</source>
-            <target>С баланса списано</target>
-        </trans-unit>
-        <trans-unit id="You got an order" resname="You got an order">
-            <source>You got an order</source>
-            <target>Вы взяли заявку</target>
-        </trans-unit>
-        <trans-unit id="Your order has been processed" resname="Your order has been processed">
-            <source>Your order has been processed</source>
-            <target>Ваша заявка принята в работу мастером </target>
-        </trans-unit>
+      <trans-unit id="dvtnjDy" resname="Main Info">
+        <source>Main Info</source>
+        <target>Основная информация</target>
+      </trans-unit>
+      <trans-unit id="UDxG7pY" resname="Additional Info">
+        <source>Additional Info</source>
+        <target>Расширенная информация</target>
+      </trans-unit>
+      <trans-unit id="P5yZH2O" resname="Change password">
+        <source>Change password</source>
+        <target>Сменить пароль</target>
+      </trans-unit>
+      <trans-unit id="fTG4MxO" resname="Notification">
+        <source>Notification</source>
+        <target>Уведомление</target>
+      </trans-unit>
+      <trans-unit id="L3dmip3" resname="Message">
+        <source>Message</source>
+        <target>Сообщение</target>
+      </trans-unit>
+      <trans-unit id="Uo6SpLR" resname="Notification new order for master">
+        <source>Notification new order for master</source>
+        <target>Новая заявка в системе по вашему городу и профессии</target>
+      </trans-unit>
+      <trans-unit id="JEVIOSs" resname="Notification new order for user">
+        <source>Notification new order for user</source>
+        <target>Вами создана новая заявка</target>
+      </trans-unit>
+      <trans-unit id="Ysy.Zs8" resname="Withdrawal from the balance">
+        <source>Withdrawal from the balance</source>
+        <target>С баланса списано</target>
+      </trans-unit>
+      <trans-unit id="Ma.j.ID" resname="You got an order">
+        <source>You got an order</source>
+        <target>Вы взяли заявку</target>
+      </trans-unit>
+      <trans-unit id="TeTGCeV" resname="Your order has been processed">
+        <source>Your order has been processed</source>
+        <target>Ваша заявка принята в работу мастером </target>
+      </trans-unit>
+      <trans-unit id="vXlCDVX" resname="Create notification">
+        <source>Create notification</source>
+        <target>Создать рассылку уведомлений</target>
+      </trans-unit>
+      <trans-unit id="Ox1Z5R4" resname="Notification order closed">
+        <source>Notification order closed</source>
+        <target>Изменения статуса заявки (закрыта)</target>
+      </trans-unit>
+      <trans-unit id="PxHpiQC" resname="New notification">
+        <source>New notification</source>
+        <target>Создать уведомления</target>
+      </trans-unit>
+      <trans-unit id="zZpn.KK" resname="Company profile">
+        <source>Company profile</source>
+        <target>Профиль компании</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
