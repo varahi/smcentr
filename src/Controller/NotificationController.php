@@ -18,9 +18,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\Notification as UserNotification;
+use App\Controller\Traits\NotificationTrait;
 
 class NotificationController extends AbstractController
 {
+    use NotificationTrait;
+
     public const NOTIFICATION_CHANGE_STATUS = '1';
 
     public const NOTIFICATION_BALANCE_PLUS = '2';
@@ -38,6 +41,8 @@ class NotificationController extends AbstractController
     public const ROLE_CLIENT = 'ROLE_CLIENT';
 
     public const ROLE_MASTER = 'ROLE_MASTER';
+
+    public const ROLE_COMPANY = 'ROLE_COMPANY';
 
     private $doctrine;
 
@@ -95,36 +100,47 @@ class NotificationController extends AbstractController
             $form = $this->createForm(NotificationFormType::class, $userNotification);
             $form->handleRequest($request);
 
-            $entityManager = $this->doctrine->getManager();
-
             if ($form->isSubmitted()) {
                 $post = $request->request->get('notification_form');
-                if ($post['recipient'] == 10) {
-                    // Notifications to masters of the chosen profession and the chosen city
-                    if ($post['city'] =='' || $post['profession'] =='') {
-                        //$message = $translator->trans('Mismatch password', array(), 'flash');
-                        $message = 'Выберите город и профессию';
-                        $notifier->send(new Notification($message, ['browser']));
-                        return $this->redirectToRoute("app_new_notification");
-                    }
-                    $city = $cityRepository->findOneBy(['id' => $post['city']]);
-                    $profession = $professionRepository->findOneBy(['id' => $post['profession']]);
-                    //$professions = array($profession->getId());
 
-                    // Find all masters by city and profession
-                    $users = $userRepository->findByCityAndProfession(self::ROLE_MASTER, $city, $profession);
+                // Notifications to masters of the chosen profession and the chosen city
+                if ($post['notificationType'] == 10) {
+                    $this->masterNotificationByProfessionAndCity($request, $notifier, $cityRepository, $professionRepository, $userRepository);
+                }
 
-                    if (count($users) > 0) {
-                        foreach ($users as $user) {
-                            $userNotification = new UserNotification();
-                            $userNotification->setUser($user);
-                            $userNotification->setMessage($post['message']);
-                            $userNotification->setType(self::NOTIFICATION_MAILING);
-                            $userNotification->setIsRead('0');
-                            $entityManager->persist($userNotification);
-                            $entityManager->flush();
-                        }
-                    }
+                // Notifications to clients of the chosen city
+                if ($post['notificationType'] == 20) {
+                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_CLIENT);
+                }
+
+                // Notifications to masters of the chosen city
+                if ($post['notificationType'] == 30) {
+                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_MASTER);
+                }
+
+                // Notifications to all masters
+                if ($post['notificationType'] == 40) {
+                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_MASTER);
+                }
+
+                // Notifications to all clients
+                if ($post['notificationType'] == 50) {
+                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_CLIENT);
+                }
+
+                // Notifications to companies of the chosen city
+                if ($post['notificationType'] == 60) {
+                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_COMPANY);
+                }
+
+                // Notifications to all companies
+                if ($post['notificationType'] == 70) {
+                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_COMPANY);
+                }
+
+                // Notifications to all users
+                if ($post['notificationType'] == 80) {
+                    $this->notificationAllUsers($request, $userRepository);
                 }
 
                 $message = $translator->trans('Notifications sent', array(), 'flash');

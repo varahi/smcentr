@@ -85,6 +85,10 @@
         <source>Notification mark as read</source>
         <target>Уведомление отмечено как прочитанное</target>
       </trans-unit>
+      <trans-unit id="Notifications sent" resname="Notifications sent">
+        <source>Notifications sent</source>
+        <target>Уведомления отправлены</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

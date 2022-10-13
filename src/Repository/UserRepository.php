@@ -60,6 +60,12 @@ class UserRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * @param $role
+     * @param $city
+     * @param $profession
+     * @return float|int|mixed|string
+     */
     public function findByCityAndProfession($role, $city, $profession)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -69,7 +75,26 @@ class UserRepository extends ServiceEntityRepository
             ->andWhere($qb->expr()->eq('u.city', $city->getId()))
             ->setParameter('roles', '%"'.$role.'"%')
             ->join('u.professions', 'p')
-            ->andWhere($qb->expr()->eq('p.id', 1))
+            ->andWhere($qb->expr()->eq('p.id', $profession->getId()))
+            ->orderBy('u.id', 'ASC')
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param $role
+     * @param $city
+     * @return float|int|mixed|string
+     */
+    public function findByCity($role, $city)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('u')
+            ->from(self::USER_TABLE, 'u')
+            ->where('u.roles LIKE :roles')
+            ->andWhere($qb->expr()->eq('u.city', $city->getId()))
+            ->setParameter('roles', '%"'.$role.'"%')
             ->orderBy('u.id', 'ASC')
         ;
 
