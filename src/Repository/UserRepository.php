@@ -16,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserRepository extends ServiceEntityRepository
 {
+    public const USER_TABLE = 'App\Entity\User';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
@@ -53,6 +55,23 @@ class UserRepository extends ServiceEntityRepository
             ->andWhere('u.isVerified is not NULL')
             ->orderBy('u.id', 'ASC')
             ->setParameter('roles', '%"'.$role.'"%');
+
+        return $qb->getQuery()->getResult();
+    }
+
+
+    public function findByCityAndProfession($role, $city, $profession)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('u')
+            ->from(self::USER_TABLE, 'u')
+            ->where('u.roles LIKE :roles')
+            ->andWhere($qb->expr()->eq('u.city', $city->getId()))
+            ->setParameter('roles', '%"'.$role.'"%')
+            ->join('u.professions', 'p')
+            ->andWhere($qb->expr()->eq('p.id', 1))
+            ->orderBy('u.id', 'ASC')
+        ;
 
         return $qb->getQuery()->getResult();
     }

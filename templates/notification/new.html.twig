@@ -1,0 +1,93 @@
+{% extends 'layouts/base.html.twig' %}
+{% block title %}{{ 'New notification'|trans }}{% endblock %}
+{% block body %}
+
+    <header id="sticky_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% include 'partials/navigation/_navbar.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="reg_client">
+        <div class="container">
+            {% include 'partials/_message.html.twig' %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>{{ 'New notification'|trans }}</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12"></div>
+                {{ form_start(form, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+
+                {{ form_row(form.message) }}
+
+                <label for="notification_form_city" style="display: none"></label>
+                <select id="notification_form_city" name="notification_form[city]">
+                    <option value="" selected="selected">Выберите город</option>
+                    {% for city in cities %}
+                        <option value="{{ city.id }}">{{ city.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="notification_form_profession" style="display: none"></label>
+                <select id="notification_form_profession" name="notification_form[profession]">
+                    <option value="" selected="selected">Выберите профессию</option>
+                    {% for profession in professions %}
+                        <option value="{{ profession.id }}">{{ profession.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <div class="" style="margin-top: 10px">
+                    <label class="checkbox">
+                        <input type="radio" name="notification_form[recipient]" value="10">
+                        <span>Мастерам выбранной профессии и выбранного города</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" name="notification_form[recipient]" value="20">
+                        <span>Клиентам выбранного города</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" name="notification_form[recipient]" value="30">
+                        <span>Всем мастерам выбранного города</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" name="notification_form[recipient]" value="40">
+                        <span>Всем мастерам</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" name="notification_form[recipient]" value="50">
+                        <span>Всем клиентам</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" name="notification_form[recipient]" value="60">
+                        <span>Фирмам выбранного города</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" name="notification_form[recipient]" value="70">
+                        <span>Всем фирмам</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" name="notification_form[recipient]" value="80">
+                        <span>Всем пользователям</span>
+                    </label>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="reg_bottom">
+                        <button id="myBtn">Отправить уведомление</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </section>
+
+    {% include 'partials/footer/_footer.html.twig' %}
+{% endblock %}

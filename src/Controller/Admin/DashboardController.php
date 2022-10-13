@@ -76,7 +76,9 @@ class DashboardController extends AbstractDashboardController
                 ->setPermission('ROLE_SUPER_ADMIN'),
             MenuItem::section(''),
 
-            MenuItem::linkToCrud('Notifications', 'fa fa-bell', Notification::class)
+            MenuItem::linkToCrud('Notifications', 'fa fa-bell', Notification::class),
+            MenuItem::linkToRoute('Create notification', 'fa fa-bell-o', 'app_new_notification')
+                ->setPermission('ROLE_SUPER_ADMIN'),
         ]);
 
         yield MenuItem::section('Information');
