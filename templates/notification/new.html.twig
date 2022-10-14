@@ -30,7 +30,7 @@
                 {{ form_row(form.message) }}
 
                 <label for="notification_form_city" style="display: none"></label>
-                <select id="notification_form_city" name="notification_form[city]">
+                <select id="notification_form_city" name="notification_form[city]" class="hidden">
                     <option value="" selected="selected">Выберите город</option>
                     {% for city in cities %}
                         <option value="{{ city.id }}">{{ city.name }}</option>
@@ -38,7 +38,7 @@
                 </select>
 
                 <label for="notification_form_profession" style="display: none"></label>
-                <select id="notification_form_profession" name="notification_form[profession]">
+                <select id="notification_form_profession" name="notification_form[profession]" class="hidden">
                     <option value="" selected="selected">Выберите профессию</option>
                     {% for profession in professions %}
                         <option value="{{ profession.id }}">{{ profession.name }}</option>
@@ -47,35 +47,35 @@
 
                 <div class="" style="margin-top: 10px">
                     <label class="checkbox">
-                        <input type="radio" name="notification_form[notificationType]" value="10">
+                        <input type="radio" name="notification_form[notificationType]" id="notification_type_10" value="10" onclick="show10();">
                         <span>Мастерам выбранной профессии и выбранного города</span>
                     </label>
                     <label class="checkbox">
-                        <input type="radio" name="notification_form[notificationType]" value="20">
+                        <input type="radio" name="notification_form[notificationType]" id="notification_type_20" value="20" onclick="show20();">
                         <span>Клиентам выбранного города</span>
                     </label>
                     <label class="checkbox">
-                        <input type="radio" name="notification_form[notificationType]" value="30">
+                        <input type="radio" name="notification_form[notificationType]" id="notification_type_30" value="30" onclick="show30();">
                         <span>Всем мастерам выбранного города</span>
                     </label>
                     <label class="checkbox">
-                        <input type="radio" name="notification_form[notificationType]" value="40">
+                        <input type="radio" name="notification_form[notificationType]" id="notification_type_40" value="40" onclick="show40();">
                         <span>Всем мастерам</span>
                     </label>
                     <label class="checkbox">
-                        <input type="radio" name="notification_form[notificationType]" value="50">
+                        <input type="radio" name="notification_form[notificationType]" id="notification_type_50" value="50" onclick="show50();">
                         <span>Всем клиентам</span>
                     </label>
                     <label class="checkbox">
-                        <input type="radio" name="notification_form[notificationType]" value="60">
+                        <input type="radio" name="notification_form[notificationType]" id="notification_type_60" value="60" onclick="show60();">
                         <span>Фирмам выбранного города</span>
                     </label>
                     <label class="checkbox">
-                        <input type="radio" name="notification_form[notificationType]" value="70">
+                        <input type="radio" name="notification_form[notificationType]" id="notification_type_70" value="70" onclick="show70();">
                         <span>Всем фирмам</span>
                     </label>
                     <label class="checkbox">
-                        <input type="radio" name="notification_form[notificationType]" value="80">
+                        <input type="radio" name="notification_form[notificationType]" id="notification_type_80" value="80" onclick="show80();">
                         <span>Всем пользователям</span>
                     </label>
                 </div>
@@ -86,6 +86,41 @@
                     </div>
                 </div>
                 {{ form_end(form) }}
+
+                <script>
+                    function show10(){
+                        document.getElementById('notification_form_city').style.display ='block';
+                        document.getElementById('notification_form_profession').style.display ='block';
+                    }
+                    function show20(){
+                        document.getElementById('notification_form_city').style.display = 'block';
+                        document.getElementById('notification_form_profession').style.display ='none';
+                    }
+                    function show30(){
+                        document.getElementById('notification_form_city').style.display = 'block';
+                        document.getElementById('notification_form_profession').style.display ='none';
+                    }
+                    function show40(){
+                        document.getElementById('notification_form_city').style.display = 'none';
+                        document.getElementById('notification_form_profession').style.display ='none';
+                    }
+                    function show50(){
+                        document.getElementById('notification_form_city').style.display = 'none';
+                        document.getElementById('notification_form_profession').style.display ='none';
+                    }
+                    function show60(){
+                        document.getElementById('notification_form_city').style.display = 'block';
+                        document.getElementById('notification_form_profession').style.display ='none';
+                    }
+                    function show70(){
+                        document.getElementById('notification_form_city').style.display = 'none';
+                        document.getElementById('notification_form_profession').style.display ='none';
+                    }
+                    function show80(){
+                        document.getElementById('notification_form_city').style.display = 'none';
+                        document.getElementById('notification_form_profession').style.display ='none';
+                    }
+                </script>
 
             </div>
         </div>

@@ -203,7 +203,7 @@
       </trans-unit>
       <trans-unit id="eIARgzp" resname="Notifications">
         <source>Notifications</source>
-        <target>Уведомления</target>
+        <target>Системные уведомления</target>
       </trans-unit>
       <trans-unit id="SWgM_Qw" resname="Master balance">
         <source>Master balance</source>
@@ -663,7 +663,7 @@
       </trans-unit>
       <trans-unit id="vXlCDVX" resname="Create notification">
         <source>Create notification</source>
-        <target>Создать рассылку уведомлений</target>
+        <target>Сообщения пользователям</target>
       </trans-unit>
       <trans-unit id="Ox1Z5R4" resname="Notification order closed">
         <source>Notification order closed</source>
