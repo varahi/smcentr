@@ -9,10 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use DateTime;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @vich\Uploadable
  * @method string getUserIdentifier()
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -69,6 +74,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $avatar;
+
+    /**
+     * @Vich\UploadableField(mapping="user", fileNameProperty="avatar")
+     * @var File
+     */
+    private $avatarFile;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -179,6 +190,61 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="user")
      */
     private $notifications;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $responsiblePersonFullName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $responsiblePersonPhone;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $responsiblePersonEmail;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $inn;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $ogrn;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $checkingAccount;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $bank;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $legalAddress;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $physicalAdress;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cardNumber;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cardFullName;
 
     public function __construct()
     {
@@ -305,18 +371,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFullName(string $fullName): self
     {
         $this->fullName = $fullName;
-
-        return $this;
-    }
-
-    public function getAvatar(): ?string
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(string $avatar): self
-    {
-        $this->avatar = $avatar;
 
         return $this;
     }
@@ -754,5 +808,182 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getResponsiblePersonFullName(): ?string
+    {
+        return $this->responsiblePersonFullName;
+    }
+
+    public function setResponsiblePersonFullName(?string $responsiblePersonFullName): self
+    {
+        $this->responsiblePersonFullName = $responsiblePersonFullName;
+
+        return $this;
+    }
+
+    public function getResponsiblePersonPhone(): ?string
+    {
+        return $this->responsiblePersonPhone;
+    }
+
+    public function setResponsiblePersonPhone(?string $responsiblePersonPhone): self
+    {
+        $this->responsiblePersonPhone = $responsiblePersonPhone;
+
+        return $this;
+    }
+
+    public function getResponsiblePersonEmail(): ?string
+    {
+        return $this->responsiblePersonEmail;
+    }
+
+    public function setResponsiblePersonEmail(?string $responsiblePersonEmail): self
+    {
+        $this->responsiblePersonEmail = $responsiblePersonEmail;
+
+        return $this;
+    }
+
+    public function getInn(): ?string
+    {
+        return $this->inn;
+    }
+
+    public function setInn(?string $inn): self
+    {
+        $this->inn = $inn;
+
+        return $this;
+    }
+
+    public function getOgrn(): ?string
+    {
+        return $this->ogrn;
+    }
+
+    public function setOgrn(?string $ogrn): self
+    {
+        $this->ogrn = $ogrn;
+
+        return $this;
+    }
+
+    public function getCheckingAccount(): ?string
+    {
+        return $this->checkingAccount;
+    }
+
+    public function setCheckingAccount(?string $checkingAccount): self
+    {
+        $this->checkingAccount = $checkingAccount;
+
+        return $this;
+    }
+
+    public function getBank(): ?string
+    {
+        return $this->bank;
+    }
+
+    public function setBank(?string $bank): self
+    {
+        $this->bank = $bank;
+
+        return $this;
+    }
+
+    public function getLegalAddress(): ?string
+    {
+        return $this->legalAddress;
+    }
+
+    public function setLegalAddress(?string $legalAddress): self
+    {
+        $this->legalAddress = $legalAddress;
+
+        return $this;
+    }
+
+    public function getPhysicalAdress(): ?string
+    {
+        return $this->physicalAdress;
+    }
+
+    public function setPhysicalAdress(?string $physicalAdress): self
+    {
+        $this->physicalAdress = $physicalAdress;
+
+        return $this;
+    }
+
+    public function getCardNumber(): ?string
+    {
+        return $this->cardNumber;
+    }
+
+    public function setCardNumber(?string $cardNumber): self
+    {
+        $this->cardNumber = $cardNumber;
+
+        return $this;
+    }
+
+    public function getCardFullName(): ?string
+    {
+        return $this->cardFullName;
+    }
+
+    public function setCardFullName(?string $cardFullName): self
+    {
+        $this->cardFullName = $cardFullName;
+
+        return $this;
+    }
+
+    public function getAvatarBack(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatarBack(string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param string|null $avatar
+     */
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getAvatarFile(): ?File
+    {
+        return $this->avatarFile;
+    }
+
+    /**
+     * @param File|null $avatarFile
+     */
+    public function setAvatarFile(?File $avatarFile = null)
+    {
+        $this->avatarFile = $avatarFile;
     }
 }

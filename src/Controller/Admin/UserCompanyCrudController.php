@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -37,6 +38,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class UserCompanyCrudController extends AbstractCrudController
 {
@@ -105,24 +107,103 @@ class UserCompanyCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled')->hideWhenCreating();
 
         yield FormField::addRow();
-        yield TextField::new('fullName')->setColumns('col-md-4');
+        yield TextField::new('fullName')->setColumns('col-md-4')->setLabel('Company name');
         yield EmailField::new('email')->setColumns('col-md-4');
 
         yield FormField::addRow();
-        $roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
+        /*$roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
         yield ChoiceField::new('roles')
             ->setChoices(array_combine($roles, $roles))
             ->allowMultipleChoices()
             ->renderAsBadges()
             ->setPermission('ROLE_SUPER_ADMIN')
             ->setColumns('col-md-4')
-            ->hideOnIndex();
+            ->hideOnIndex();*/
 
         yield FormField::addRow();
 
         $roleMaster = 'ROLE_MASTER';
         $roleClient = 'ROLE_CLIENT';
 
+
+        yield BooleanField::new('isVerified')->hideOnIndex();
+        yield BooleanField::new('isDisabled');
+
+        yield FormField::addPanel('Contact Info')->setIcon('fa fa-info-circle');
+        yield FormField::addRow();
+
+        yield AssociationField::new('city')->setColumns('col-md-4');
+        //yield AssociationField::new('district')->setColumns('col-md-4')->hideOnIndex();
+
+        yield FormField::addRow();
+        yield TextField::new('responsiblePersonFullName')->setColumns('col-md-4')->hideOnIndex();
+        yield TextField::new('responsiblePersonPhone')->setColumns('col-md-4')->hideOnIndex();
+        yield TextField::new('responsiblePersonEmail')->setColumns('col-md-4')->hideOnIndex();
+
+        yield FormField::addRow();
+        yield ImageField::new('avatar')
+            ->setBasePath('uploads/files')
+            ->setUploadDir('public_html/uploads/files')
+            ->setFormType(FileUploadType::class)
+            ->setRequired(false)
+            ->setColumns('col-md-4')
+            //->setFormType(VichImageType::class)
+        ;
+
+
+        yield FormField::addPanel('Change password')->setIcon('fa fa-key');
+        yield FormField::addRow();
+
+        yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
+            ->setFormType(RepeatedType::class)
+            ->setRequired(false)
+            ->setFormTypeOptions([
+                'type'            => PasswordType::class,
+                'first_options'   => [ 'label' => 'New password' ],
+                'second_options'  => [ 'label' => 'Repeat password' ],
+                'error_bubbling'  => true,
+                'invalid_message' => 'The password fields do not match.',
+            ]);
+        yield Field::new('password', 'New password')->onlyWhenUpdating()->setRequired(false)
+            ->setFormType(RepeatedType::class)
+            ->setRequired(false)
+            ->setFormTypeOptions([
+                'type'            => PasswordType::class,
+                'first_options'   => [ 'label' => 'New password' ],
+                'second_options'  => [ 'label' => 'Repeat password' ],
+                'error_bubbling'  => true,
+                'invalid_message' => 'The password fields do not match.',
+            ]);
+
+        yield FormField::addPanel('Money')->setIcon('fa fa-money');
+        yield MoneyField::new('balance')->setCurrency('RUB')->setCustomOption('storedAsCents', false)->setColumns('col-md-4');
+        yield FormField::addRow();
+        yield TextField::new('inn')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
+        yield TextField::new('ogrn')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
+        yield FormField::addRow();
+        yield TextField::new('checkingAccount')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
+        yield TextField::new('bank')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
+        yield FormField::addRow();
+        yield TextField::new('cardNumber')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
+        yield TextField::new('cardFullName')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
+
+        yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
+        yield BooleanField::new('getNotifications');
+        yield PercentField::new('taxRate')->hideOnIndex()->setColumns('col-md-4');
+
+        yield FormField::addRow();
+        yield AssociationField::new('professions')
+            ->setFormTypeOptions([
+                'by_reference' => false,
+            ])->hideOnIndex()
+            ->setColumns('col-md-4');
+        yield AssociationField::new('jobTypes')
+            ->setFormTypeOptions([
+                'by_reference' => false,
+            ])->hideOnIndex()
+            ->setColumns('col-md-4');
+
+        yield FormField::addRow();
         yield AssociationField::new('companyMasters')
             ->setLabel('Company Masters')
             ->setColumns('col-md-4')
@@ -150,61 +231,6 @@ class UserCompanyCrudController extends AbstractCrudController
                 },
                 'by_reference' => false,
             ]);
-
-        yield BooleanField::new('isVerified');
-        yield BooleanField::new('isDisabled');
-
-        yield FormField::addPanel('Change password')->setIcon('fa fa-key');
-        yield FormField::addRow();
-
-        yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
-            ->setFormType(RepeatedType::class)
-            ->setRequired(false)
-            ->setFormTypeOptions([
-                'type'            => PasswordType::class,
-                'first_options'   => [ 'label' => 'New password' ],
-                'second_options'  => [ 'label' => 'Repeat password' ],
-                'error_bubbling'  => true,
-                'invalid_message' => 'The password fields do not match.',
-            ]);
-        yield Field::new('password', 'New password')->onlyWhenUpdating()->setRequired(false)
-            ->setFormType(RepeatedType::class)
-            ->setRequired(false)
-            ->setFormTypeOptions([
-                'type'            => PasswordType::class,
-                'first_options'   => [ 'label' => 'New password' ],
-                'second_options'  => [ 'label' => 'Repeat password' ],
-                'error_bubbling'  => true,
-                'invalid_message' => 'The password fields do not match.',
-            ]);
-
-        yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
-        yield BooleanField::new('getNotifications');
-        yield PercentField::new('taxRate')->hideOnIndex()->setColumns('col-md-4');
-
-        yield FormField::addRow();
-        yield MoneyField::new('balance')->setCurrency('RUB')->setCustomOption('storedAsCents', false)->setColumns('col-md-4');
-        yield ImageField::new('avatar')
-            ->setBasePath('uploads/files')
-            ->setUploadDir('public_html/uploads/files')
-            ->setFormType(FileUploadType::class)
-            ->setRequired(false)->setColumns('col-md-4');
-
-        yield FormField::addRow();
-        yield AssociationField::new('professions')
-            ->setFormTypeOptions([
-                'by_reference' => false,
-            ])->hideOnIndex()
-            ->setColumns('col-md-4');
-        yield AssociationField::new('jobTypes')
-            ->setFormTypeOptions([
-                'by_reference' => false,
-            ])->hideOnIndex()
-            ->setColumns('col-md-4');
-
-        yield FormField::addRow();
-        yield AssociationField::new('city')->setColumns('col-md-4');
-        yield AssociationField::new('district')->setColumns('col-md-4');
 
         yield FormField::addRow();
         yield AssociationField::new('orders')->hideOnIndex()->setColumns('col-md-4');
