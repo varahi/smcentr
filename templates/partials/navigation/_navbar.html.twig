@@ -6,6 +6,8 @@
         <a class="navbar-brand" href="{{ path('app_master_profile') }}"><img src="{{ asset('assets/images/logo.svg') }}" alt=""></a>
     {% elseif is_granted('ROLE_CLIENT') %}
         <a class="navbar-brand" href="{{ path('app_client_profile') }}"><img src="{{ asset('assets/images/logo.svg') }}" alt=""></a>
+    {% elseif is_granted('ROLE_COMPANY') %}
+        <a class="navbar-brand" href="{{ path('app_company_profile') }}"><img src="{{ asset('assets/images/logo.svg') }}" alt=""></a>
     {% else %}
         <a class="navbar-brand" href="{{ path('app_login') }}"><img src="{{ asset('assets/images/logo.svg') }}" alt=""></a>
     {% endif %}
@@ -18,7 +20,7 @@
                 {% if is_granted('ROLE_MASTER') %}
                     <a class="nav-link" href="{{ path('app_orders_list') }}">Список заказов</a>
                 {% endif %}
-                {% if is_granted('ROLE_CLIENT') %}
+                {% if is_granted('ROLE_CLIENT') or is_granted('ROLE_COMPANY') %}
                     <a class="nav-link" href="{{ path('app_order_new') }}">Создать заявку</a>
                 {% endif %}
             </li>
@@ -61,6 +63,9 @@
                     {% endif %}
                     {% if is_granted('ROLE_MASTER') %}
                         <a class="dropdown-item" href="{{ path('app_master_balance') }}">Баланс</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_COMPANY') %}
+                        <a class="dropdown-item" href="{{ path('app_company_profile') }}">Профиль</a>
                     {% endif %}
                     <a class="dropdown-item" href="{{ path('app_history') }}">История заказов</a>
                     <a class="dropdown-item" href="{{ path('app_notifications') }}">Уведомления</a>

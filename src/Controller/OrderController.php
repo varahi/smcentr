@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Entity\Notification as UserNotification;
+use App\Form\Order\OrderFormCompanyType;
 use App\Repository\CityRepository;
 use App\Repository\DistrictRepository;
 use App\Repository\JobTypeRepository;
@@ -36,6 +37,8 @@ class OrderController extends AbstractController
     public const ROLE_CLIENT = 'ROLE_CLIENT';
 
     public const ROLE_MASTER = 'ROLE_MASTER';
+
+    public const ROLE_COMPANY = 'ROLE_COMPANY';
 
     public const NOTIFICATION_CHANGE_STATUS = '1';
 
@@ -125,7 +128,7 @@ class OrderController extends AbstractController
         ProfessionRepository $professionRepository,
         JobTypeRepository $jobTypeRepository
     ): Response {
-        if ($this->isGranted(self::ROLE_CLIENT)) {
+        if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
             $masters = $userRepository->findByRole(self::ROLE_MASTER);
             $cities = $cityRepository->findAllOrder(['name' => 'ASC']);
@@ -134,7 +137,14 @@ class OrderController extends AbstractController
             $jobTypes = $jobTypeRepository->findAllOrder(['name' => 'ASC']);
 
             $order = new Order();
-            $form = $this->createForm(OrderFormType::class, $order);
+
+            if ($this->isGranted(self::ROLE_CLIENT)) {
+                $form = $this->createForm(OrderFormType::class, $order);
+            }
+            if ($this->isGranted(self::ROLE_COMPANY)) {
+                $form = $this->createForm(OrderFormCompanyType::class, $order);
+            }
+
             $form->handleRequest($request);
 
             if ($form->isSubmitted()) {

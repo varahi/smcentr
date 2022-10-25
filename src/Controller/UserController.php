@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Notification as UserNotification;
 use App\Form\User\ClientProfileFormType;
+use App\Form\User\CompanyProfileFormType;
 use App\Form\User\MasterProfileFormType;
 use App\Form\User\RegistrationFormType;
 use App\Repository\CityRepository;
@@ -280,7 +281,7 @@ class UserController extends AbstractController
         NotifierInterface $notifier,
         NotificationRepository $notificationRepository
     ): Response {
-        if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER)) {
+        if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
             {
                 $newNotifications = $notificationRepository->findNewByUser($user->getId());
@@ -568,6 +569,83 @@ class UserController extends AbstractController
     }
 
     /**
+     * Require ROLE_COMPANY for *every* controller method in this class.
+     *
+     * @IsGranted("ROLE_COMPANY")
+     * @Route("/user/edit-company-profile", name="app_edit_company_profile")
+     */
+    public function editCompanyProfile(
+        Request $request,
+        TranslatorInterface $translator,
+        NotifierInterface $notifier,
+        UserPasswordHasherInterface $passwordHasher,
+        FileUploader $fileUploader,
+        CityRepository $cityRepository,
+        DistrictRepository $districtRepository
+    ): Response {
+        if ($this->isGranted(self::ROLE_COMPANY)) {
+            $user = $this->security->getUser();
+            $form = $this->createForm(CompanyProfileFormType::class, $user);
+            $form->handleRequest($request);
+
+            $cities = $cityRepository->findAllOrder(['name' => 'ASC']);
+            $districts = $districtRepository->findAllOrder(['name' => 'ASC']);
+
+            if ($form->isSubmitted()) {
+                $post = $request->request->get('company_profile_form');
+                // Set new password if changed
+                if ($post['plainPassword']['first'] !=='' && $post['plainPassword']['second'] !=='') {
+                    if (strcmp($post['plainPassword']['first'], $post['plainPassword']['second']) == 0) {
+                        // encode the plain password
+                        $user->setPassword(
+                            $passwordHasher->hashPassword(
+                                $user,
+                                $post['plainPassword']['first']
+                            )
+                        );
+                    } else {
+                        $message = $translator->trans('Mismatch password', array(), 'flash');
+                        $notifier->send(new Notification($message, ['browser']));
+                        return $this->redirectToRoute("app_edit_client_profile");
+                    }
+                }
+
+                // File upload
+                $avatarFile = $form->get('avatar')->getData();
+                if ($avatarFile) {
+                    $avatarFileName = $fileUploader->upload($avatarFile);
+                    $user->setAvatar($avatarFileName);
+                }
+
+                $entityManager = $this->doctrine->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $message = $translator->trans('Profile updated', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
+            }
+
+            {
+                $response = new Response($this->twig->render('user/company/edit-company.html.twig', [
+                    'user' => $user,
+                    'cities' => $cities,
+                    'districts' => $districts,
+                    'form' => $form->createView(),
+                ]));
+
+                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                return $response;
+            }
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
+    }
+
+    /**
      * Require ROLE_MASTER for *every* controller method in this class.
      *
      * @IsGranted("ROLE_MASTER")
@@ -594,6 +672,35 @@ class UserController extends AbstractController
             return $this->redirectToRoute("app_login");
         }
     }
+
+    /**
+     * Require ROLE_MASTER for *every* controller method in this class.
+     *
+     * @IsGranted("ROLE_COMPANY")
+     * @Route("/user/withdrawal-request", name="app_withdrawal_request")
+     */
+    public function withdrawalRequest(
+        TranslatorInterface $translator,
+        NotifierInterface $notifier
+    ) {
+        if ($this->isGranted(self::ROLE_COMPANY)) {
+            $user = $this->security->getUser();
+
+            {
+                $response = new Response($this->twig->render('user/master/top_up_balance.html.twig', [
+                    'user' => $user,
+                ]));
+
+                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                return $response;
+            }
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
+    }
+
 
     /**
      * @param User $user

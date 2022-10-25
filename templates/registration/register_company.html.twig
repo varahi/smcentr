@@ -25,7 +25,7 @@
 
             <div class="row">
                 <div class="col-md-12"></div>
-                {{ form_start(registrationForm, {'attr' : {'class': 'form-std registration_company_form', 'autocomplete': 'off'}} ) }}
+                {{ form_start(registrationForm, {'attr' : {'class': 'form-std company_form', 'autocomplete': 'off'}} ) }}
                 <div class="col-md-12">
                     <div class="reg_contact reg_company">
                         <h3>{{ 'Account'|trans }}</h3>
@@ -57,7 +57,6 @@
                         {{ form_row(registrationForm.checkingAccount) }}
                         {{ form_row(registrationForm.cardNumber) }}
                         {{ form_row(registrationForm.cardFullName) }}
-
 
                         <h3>{{ 'Company avatar'|trans }}</h3>
 

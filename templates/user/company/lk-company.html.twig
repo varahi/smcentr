@@ -58,12 +58,12 @@
                         </div>
                     </div>
                     <div class="btn_profile_edit">
-                        <a href="{{ path('app_edit_master_profile') }}"><button>{{ 'Edit profile'|trans }}</button></a>
+                        <a href="{{ path('app_edit_company_profile') }}"><button>{{ 'Edit profile'|trans }}</button></a>
                     </div>
                 </div>
 
                 <!-- ToDo: master balance -->
-                <div class="col-md-4">
+                {#<div class="col-md-4">
                     <div class="profile_balance">
                         <div class="balance">
                             <span>{{ 'Balance'|trans }}:</span>
@@ -71,7 +71,19 @@
                         </div>
                         <a href="{{ path('app_master_top_up_balance') }}"><button>{{ 'Top up balance'|trans }}</button></a>
                     </div>
+                </div>#}
+
+                <div class="col-md-4">
+                    <div class="profile_balance">
+                        <div style="margin-bottom: 20px">
+                            <a href="{{ path('app_withdrawal_request') }}"><button>{{ 'Request a withdrawal'|trans }}</button></a>
+                        </div>
+                        <div>
+                            <a href="{{ path('app_order_new') }}"><button>{{ 'Create order'|trans }}</button></a>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>

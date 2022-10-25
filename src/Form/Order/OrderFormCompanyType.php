@@ -18,7 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class OrderFormType extends AbstractType
+class OrderFormCompanyType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -60,7 +60,7 @@ class OrderFormType extends AbstractType
                     'label' => false,
                 ]
             )
-            /*->add(
+            ->add(
                 'level',
                 ChoiceType::class,
                 [
@@ -77,7 +77,7 @@ class OrderFormType extends AbstractType
                     ],
                     'data' => '3'
                 ]
-            )*/
+            )
             ->add(
                 'phone',
                 TelType::class,

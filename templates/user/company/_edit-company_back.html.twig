@@ -1,0 +1,113 @@
+{% extends 'layouts/base.html.twig' %}
+{% block title %}{{ 'Welcome'|trans }} {{ user.fullName }}{% endblock %}
+    {% block javascripts %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="{{ asset('assets/js/jquery.simpleLoadMore.js') }}"></script>
+        <script src="{{ asset('assets/js/dependableList.js') }}"></script>
+    {% endblock %}
+
+{% block body %}
+
+<header id="sticky_header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% include 'partials/navigation/_navbar.html.twig' %}
+            </div>
+        </div>
+    </div>
+</header>
+
+<section id="list_jobs">
+    <div class="container">
+        {% include 'partials/_message.html.twig' %}
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{ 'Edit profile'|trans }}</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <section id="reg_client">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12"></div>
+                {{ form_start(form, {'attr' : {'class': 'form-std company_form', 'autocomplete': 'off'}} ) }}
+                <div class="col-md-12">
+                    <div class="reg_contact">
+                        <h3>Контактная информация</h3>
+                        {{ form_widget(form.email) }}
+                        {{ form_row(form.plainPassword, { label: 'Пароль'}) }}
+                        {{ form_widget(form.phone) }}
+                        {{ form_widget(form.fullName) }}
+                        {{ form_widget(form.city) }}
+
+                        <div class="avatar_upload">
+                            {% if user.avatar %}
+                                <img id="avatar" src="{{ asset('uploads/files/' ~ user.avatar) }}" class="user-rounded" width="121" height="121"  alt=""/>
+                            {% else %}
+                                <img id="avatar" src="{{ asset('assets/images/avatar.png') }}" alt="">
+                            {% endif %}
+                            <div class="">
+                                <p>Аватар пользователя</p>
+                                <div class="upload_file">
+                                    {{ form_widget(form.avatar) }}
+                                    <button class="upload">Загрузить<i></i></button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="reg_bottom">
+                        <div class="cb_notifications">
+                            <label class="checkbox">
+                                {{ form_widget(form.getNotifications) }}
+                                <span>Получать уведомления</span>
+                            </label>
+                        </div>
+                        <button>Обновить</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+
+                <script type="text/javascript">
+                    createDependableList ( '#client_profile_form_city', '#client_profile_form_district' );
+                    //$('#client_profile_form_city').change(function() {
+                    //    $('#client_profile_form_district').prop('disabled', false);
+                    //});
+                </script>
+
+            </div>
+        </div>
+    </section>
+    <script>
+        $(function(){
+            $("#company_profile_form_phone").mask("+7(999) 999-9999");
+        });
+        // Remove avatar image upload
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#avatar')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        // Hover on upload button
+        $( ".upload_file" ).hover(
+            function() {
+                $( ".upload" ).addClass( 'hover');
+            }, function() {
+                $( ".upload" ).removeClass( 'hover');
+            }
+        );
+    </script>
+    {% include 'partials/footer/_footer.html.twig' %}
+{% endblock %}

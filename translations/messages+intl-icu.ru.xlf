@@ -733,6 +733,10 @@
         <source>Access denied</source>
         <target>Доступ запрещен</target>
       </trans-unit>
+      <trans-unit id="sJtM0EA" resname="Request a withdrawal">
+        <source>Request a withdrawal</source>
+        <target>Запрос на вывод средств</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -196,7 +196,7 @@ select#registration_company_form_companyClients {
 }
 
 
-.registration_company_form h3 {
+.company_form h3 {
     border-bottom: 1px solid #ddd;
     padding-bottom: 15px;
     margin-bottom: 15px;
@@ -209,6 +209,7 @@ input[required] + label:after {
     content: '*';
     color: red;
 }
-.reg_company {
+.company_form .reg_company,
+.company_form .reg_contact {
     width: 600px !important;
 }
