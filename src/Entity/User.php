@@ -162,6 +162,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $taxRate;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $serviceTaxRate;
+
+    /**
      * @ORM\ManyToOne(targetEntity=District::class, inversedBy="users")
      */
     private $district;
@@ -681,6 +686,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->taxRate = $taxRate;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServiceTaxRate(): ?float
+    {
+        return $this->serviceTaxRate;
+    }
+
+    /**
+     * @param mixed $serviceTaxRate
+     */
+    public function setServiceTaxRate(?float $serviceTaxRate): void
+    {
+        $this->serviceTaxRate = $serviceTaxRate;
     }
 
     public function getDistrict(): ?District

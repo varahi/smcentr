@@ -335,7 +335,7 @@
       </trans-unit>
       <trans-unit id="dURBbtw" resname="Tax Rate">
         <source>Tax Rate</source>
-        <target>Комисси списаний</target>
+        <target>Комисси списаний %</target>
       </trans-unit>
       <trans-unit id="aXUvIxO" resname="News">
         <source>News</source>
@@ -676,6 +676,54 @@
       <trans-unit id="zZpn.KK" resname="Company profile">
         <source>Company profile</source>
         <target>Профиль компании</target>
+      </trans-unit>
+      <trans-unit id="xTtFstK" resname="Inn">
+        <source>Inn</source>
+        <target>ИНН</target>
+      </trans-unit>
+      <trans-unit id="PDPWcrS" resname="Ogrn">
+        <source>Ogrn</source>
+        <target>ОГРН</target>
+      </trans-unit>
+      <trans-unit id="7bvZUXl" resname="Checking Account">
+        <source>Checking Account</source>
+        <target>Расчетный счет</target>
+      </trans-unit>
+      <trans-unit id="Z2xHG8j" resname="Bank">
+        <source>Bank</source>
+        <target>Банк</target>
+      </trans-unit>
+      <trans-unit id="RWbgaKI" resname="Card Number">
+        <source>Card Number</source>
+        <target>Номер карты</target>
+      </trans-unit>
+      <trans-unit id="diMURi5" resname="Card Full Name">
+        <source>Card Full Name</source>
+        <target>Владелец карты</target>
+      </trans-unit>
+      <trans-unit id="BAbUB8q" resname="Service Tax Rate">
+        <source>Service Tax Rate</source>
+        <target>Комиссия сервиса %</target>
+      </trans-unit>
+      <trans-unit id="OlhPnGv" resname="Responsible Person Full Name">
+        <source>Responsible Person Full Name</source>
+        <target>ФИО ответственного лица</target>
+      </trans-unit>
+      <trans-unit id="X939_he" resname="Responsible Person Phone">
+        <source>Responsible Person Phone</source>
+        <target>Телефон ответственного лица</target>
+      </trans-unit>
+      <trans-unit id="o4M51wJ" resname="Responsible Person Email">
+        <source>Responsible Person Email</source>
+        <target>Email ответственного лица</target>
+      </trans-unit>
+      <trans-unit id="bfraE9L" resname="Company name">
+        <source>Company name</source>
+        <target>Название компании</target>
+      </trans-unit>
+      <trans-unit id="fhsNVkH" resname="Account">
+        <source>Account</source>
+        <target>Учетная запись</target>
       </trans-unit>
     </body>
   </file>

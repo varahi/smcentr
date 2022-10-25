@@ -194,3 +194,21 @@ select#registration_company_form_companyClients {
 .checkbox input[type="radio"]:checked + span::before {
     background-image: url(../images/check_full.svg);
 }
+
+
+.registration_company_form h3 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+.required:after {
+    content: ' *';
+    color: #ff0000;
+}
+input[required] + label:after {
+    content: '*';
+    color: red;
+}
+.reg_company {
+    width: 600px !important;
+}

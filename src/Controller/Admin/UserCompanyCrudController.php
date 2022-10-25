@@ -77,11 +77,12 @@ class UserCompanyCrudController extends AbstractCrudController
             ;
     }
 
-    /*public function configureActions(Actions $actions): Actions
+    public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->disable('new', 'delete');
-    }*/
+            ->disable('new');
+        //->disable('new', 'delete');
+    }
 
 
     public function configureCrud(Crud $crud): Crud
@@ -190,6 +191,7 @@ class UserCompanyCrudController extends AbstractCrudController
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
         yield BooleanField::new('getNotifications');
         yield PercentField::new('taxRate')->hideOnIndex()->setColumns('col-md-4');
+        yield PercentField::new('serviceTaxRate')->hideOnIndex()->setColumns('col-md-4');
 
         yield FormField::addRow();
         yield AssociationField::new('professions')

@@ -6,8 +6,8 @@
     </header>
     <body>
       <trans-unit id="form.email" resname="form.email">
-        <source>E-mail *</source>
-        <target>E-mail *</target>
+        <source>E-mail</source>
+        <target>E-mail</target>
       </trans-unit>
       <trans-unit id="form.phone" resname="form.phone">
         <source>Phone *</source>

@@ -25,41 +25,19 @@
 
             <div class="row">
                 <div class="col-md-12"></div>
-                {{ form_start(registrationForm, {'attr' : {'class': 'form-std registration_company_form', 'autocomplete': 'off'}} ) }}
+                {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
                 <div class="col-md-12">
-                    <div class="reg_contact reg_company">
-                        <h3>{{ 'Account'|trans }}</h3>
-                        {{ form_row(registrationForm.fullName) }}
-                        {{ form_row(registrationForm.email) }}
-                        {{ form_row(registrationForm.plainPassword, { label: 'Пароль'}) }}
-
+                    <div class="reg_contact">
                         <h3>{{ 'Contact info'|trans }}</h3>
-                        {{ form_row(registrationForm.city) }}
-                        {{ form_row(registrationForm.responsiblePersonFullName) }}
-                        {{ form_row(registrationForm.responsiblePersonPhone) }}
-                        {{ form_row(registrationForm.responsiblePersonEmail) }}
-
-                        <h3>{{ 'Additional Info'|trans }}</h3>
+                        {{ form_widget(registrationForm.email) }}
+                        {{ form_row(registrationForm.plainPassword, { label: 'Пароль'}) }}
+                        {{ form_widget(registrationForm.phone) }}
+                        {{ form_widget(registrationForm.fullName) }}
+                        {{ form_widget(registrationForm.city) }}
+                        {{ form_widget(registrationForm.district) }}
+                        {{ form_row(registrationForm.balance) }}
                         {{ form_row(registrationForm.companyMasters) }}
                         {{ form_row(registrationForm.companyClients) }}
-
-                        <h3>{{ 'Balance'|trans }}</h3>
-                        {{ form_row(registrationForm.taxRate) }}
-                        {{ form_row(registrationForm.serviceTaxRate) }}
-
-{#                        {{ form_widget(registrationForm.district) }}#}
-{#                        {{ form_row(registrationForm.balance) }}#}
-
-                        <h3>{{ 'Bank'|trans }}</h3>
-                        {{ form_row(registrationForm.inn) }}
-                        {{ form_row(registrationForm.ogrn) }}
-                        {{ form_row(registrationForm.bank) }}
-                        {{ form_row(registrationForm.checkingAccount) }}
-                        {{ form_row(registrationForm.cardNumber) }}
-                        {{ form_row(registrationForm.cardFullName) }}
-
-
-                        <h3>{{ 'Company avatar'|trans }}</h3>
 
                         <div class="avatar_upload">
                             <img id="avatar" src="{{ asset('assets/images/avatar.png') }}" alt="" />
@@ -84,7 +62,6 @@
     <script>
         $(function(){
             $("#registration_company_form_phone").mask("+7(999) 999-9999");
-            $("#registration_company_form_responsiblePersonPhone").mask("+7(999) 999-9999");
         });
         // Remove avatar image upload
         function readURL(input) {

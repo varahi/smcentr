@@ -21,6 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\PercentType;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\File;
 
@@ -29,6 +30,19 @@ class RegistrationCompanyFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            // Account
+            ->add(
+                'fullName',
+                TextType::class,
+                [
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'Company name'
+                    ],
+                    'label' => 'Company name',
+                    'translation_domain' => 'messages',
+                ]
+            )
             ->add(
                 'email',
                 EmailType::class,
@@ -37,59 +51,10 @@ class RegistrationCompanyFormType extends AbstractType
                     'attr' => [
                         'placeholder' => 'form.email'
                     ],
-                    'label' => false,
+                    'label' => 'form.email',
                     'translation_domain' => 'forms',
                 ]
             )
-            ->add(
-                'phone',
-                TelType::class,
-                [
-                    'required' => true,
-                    'attr' => [
-                        'placeholder' => 'form.phone'
-                    ],
-                    'label' => false,
-                    'translation_domain' => 'forms',
-                ]
-            )
-            ->add(
-                'fullName',
-                TextType::class,
-                [
-                    'required' => true,
-                    'attr' => [
-                        'placeholder' => 'form.full_name'
-                    ],
-                    'label' => false,
-                    'translation_domain' => 'forms',
-                ]
-            )
-            ->add('city', EntityType::class, [
-                'class' => City::class,
-                'multiple'  => false,
-                'expanded'  => false,
-                'label' => 'List of housing',
-                'required' => true,
-            ])
-            ->add('district', EntityType::class, [
-                'class' => District::class,
-                'multiple'  => false,
-                'expanded'  => false,
-                'label' => 'List of housing',
-                'required' => true,
-            ])
-            ->add('getNotifications')
-
-            /*->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])*/
-
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -113,18 +78,209 @@ class RegistrationCompanyFormType extends AbstractType
                     'attr' => [
                         'placeholder' => 'form.password'
                     ],
-                    'label' => false
+                    'label' => 'form.password'
                 ],
                 'second_options' => [
                     'attr' => [
                         'placeholder' => 'form.confirm_password'
                     ],
-                    'label' => false
+                    'label' => 'form.confirm_password'
                 ],
                 'invalid_message' => 'Your password does not match the confirmation',
                 'translation_domain' => 'forms',
             ])
 
+            // Contact info
+            ->add('city', EntityType::class, [
+                'class' => City::class,
+                'multiple'  => false,
+                'expanded'  => false,
+                'label' => 'City',
+                'required' => true,
+                'placeholder' => 'Выберите город'
+            ])
+            ->add(
+                'responsiblePersonFullName',
+                TextType::class,
+                [
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'Responsible Person Full Name'
+                    ],
+                    'label' => 'Responsible Person Full Name',
+                    'translation_domain' => 'messages',
+                ]
+            )
+            ->add(
+                'responsiblePersonPhone',
+                TextType::class,
+                [
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'Responsible Person Phone'
+                    ],
+                    'label' => 'Responsible Person Phone',
+                    'translation_domain' => 'messages',
+                ]
+            )
+            ->add(
+                'responsiblePersonEmail',
+                EmailType::class,
+                [
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'Responsible Person Email'
+                    ],
+                    'label' => 'Responsible Person Email',
+                    'translation_domain' => 'messages',
+                ]
+            )
+
+            /*->add(
+                'phone',
+                TelType::class,
+                [
+                    'required' => true,
+                    'attr' => [
+                        'placeholder' => 'form.phone'
+                    ],
+                    'label' => false,
+                    'translation_domain' => 'forms',
+                ]
+            )*/
+
+            // Balance
+            ->add(
+                'taxRate',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Tax Rate'
+                    ],
+                    'label' => 'Tax Rate',
+                    'translation_domain' => 'messages',
+                ]
+            )
+            ->add(
+                'serviceTaxRate',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Service Tax Rate'
+                    ],
+                    'label' => 'Service Tax Rate',
+                    'translation_domain' => 'messages',
+                ]
+            )
+
+            // Bank
+            ->add(
+                'inn',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Inn'
+                    ],
+                    'label' => 'Inn',
+                    'translation_domain' => 'messages',
+                ]
+            )
+            ->add(
+                'ogrn',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Ogrn'
+                    ],
+                    'label' => 'Ogrn',
+                    'translation_domain' => 'messages',
+                ]
+            )
+            ->add(
+                'bank',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Bank'
+                    ],
+                    'label' => 'Bank',
+                    'translation_domain' => 'messages',
+                ]
+            )
+            ->add(
+                'checkingAccount',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Checking Account'
+                    ],
+                    'label' => 'Checking Account',
+                    'translation_domain' => 'messages',
+                ]
+            )
+            ->add(
+                'cardNumber',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Card Number'
+                    ],
+                    'label' => 'Card Number',
+                    'translation_domain' => 'messages',
+                ]
+            )
+            ->add(
+                'cardFullName',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Card Full Name'
+                    ],
+                    'label' => 'Card Full Name',
+                    'translation_domain' => 'messages',
+                ]
+            )
+
+            /*->add('balance', MoneyType::class, [
+                'required' => false,
+                'attr' => [
+                    'class' => 'input-select',
+                ],
+                'label_attr' => [
+                    'class' => 'label-class'
+                ],
+                'label' => 'Company balance',
+                'currency' => 'RUB'
+            ])*/
+
+            /*->add('district', EntityType::class, [
+                'class' => District::class,
+                'multiple'  => false,
+                'expanded'  => false,
+                'label' => 'List of housing',
+                'required' => true,
+            ])*/
+
+
+
+            /*->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'You should agree to our terms.',
+                    ]),
+                ],
+            ])*/
+
+            ->add('getNotifications')
             ->add('avatar', FileType::class, [
                 'required' => false,
                 'mapped' => false,
@@ -148,19 +304,6 @@ class RegistrationCompanyFormType extends AbstractType
                 'label' => false,
                 'translation_domain' => 'forms',
             ])
-
-            ->add('balance', MoneyType::class, [
-                'required' => false,
-                'attr' => [
-                    'class' => 'input-select',
-                ],
-                'label_attr' => [
-                    'class' => 'label-class'
-                ],
-                'label' => 'Company balance',
-                'currency' => 'RUB'
-            ])
-
             ->add('companyMasters', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
@@ -176,7 +319,6 @@ class RegistrationCompanyFormType extends AbstractType
                 },
                 'label' => 'Company Masters2',
             ])
-
             ->add('companyClients', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
