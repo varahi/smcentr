@@ -1,0 +1,23 @@
+{% extends 'layouts/login.html.twig' %}
+{% block body %}
+
+    <section id="auth_block">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% include 'partials/_logo_white.html.twig' %}
+                    <div class="auth_items block_shadow b_center">
+                        {% include 'partials/_message.html.twig' %}
+                        <h2 class="b_center">{{ 'Page not found'|trans }}</h2>
+                        <p>Что-то пошло не так. Запрашиваемая вами страница не найдена</p>
+                        {#{% include 'partials/_download_app.html.twig' %}#}
+                    </div>
+                    <p class="text-grey">
+                        Центр поддержки клиентов: <a href="#">8 800 100 00 00</a><br /> Звонок по России бесплатный
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

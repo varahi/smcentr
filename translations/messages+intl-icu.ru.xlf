@@ -725,6 +725,14 @@
         <source>Account</source>
         <target>Учетная запись</target>
       </trans-unit>
+      <trans-unit id="pGmrTKT" resname="Page not found">
+        <source>Page not found</source>
+        <target>Страница не найдена</target>
+      </trans-unit>
+      <trans-unit id="zBHUFdk" resname="Access denied">
+        <source>Access denied</source>
+        <target>Доступ запрещен</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
