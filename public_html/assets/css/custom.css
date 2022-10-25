@@ -213,3 +213,7 @@ input[required] + label:after {
 .company_form .reg_contact {
     width: 600px !important;
 }
+
+.check_notifications {
+    text-align: center;
+}

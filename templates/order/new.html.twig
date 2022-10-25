@@ -40,6 +40,7 @@
                                 <option value="{{ profession.id }}">{{ profession.name }}</option>
                             {% endfor %}
                         </select>
+
                         <label for="order_form_jobType" style="display: none"></label>
                         <select id="order_form_jobType" name="order_form[jobType]" required="required" disabled>
                             <option value="" selected="selected">Выберите тип работ *</option>
@@ -76,6 +77,25 @@
                         {{ form_row(orderForm.estimatedTime) }}
                         {{ form_row(orderForm.deadline) }}
 
+                        {% if is_granted('ROLE_COMPANY') %}
+                            {{ form_widget(orderForm.customTaxRate) }}
+                            <div class="check_notifications">
+                                <div class="cb_notifications">
+                                    <label class="checkbox">
+                                        {{ form_widget(orderForm.sendOwnMasters) }}
+                                        <span>Отправить уведомления своим мастерам</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="check_notifications">
+                                <div class="cb_notifications">
+                                    <label class="checkbox">
+                                        {{ form_widget(orderForm.sendAllMasters) }}
+                                        <span>Отправить уведомления всем мастерам</span>
+                                    </label>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -102,6 +122,7 @@
     <script>
         $(function(){
             $("#order_form_phone").mask("+7(999) 999-9999");
+            $("#order_form_company_phone").mask("+7(999) 999-9999");
         });
     </script>
     {% include 'partials/footer/_footer.html.twig' %}

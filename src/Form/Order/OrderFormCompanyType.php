@@ -7,14 +7,18 @@ use App\Entity\District;
 use App\Entity\JobType;
 use App\Entity\Order;
 use App\Entity\Profession;
+use App\Form\Invoice\InvoiceParamsFormType;
+use App\Form\JobFormType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -68,7 +72,7 @@ class OrderFormCompanyType extends AbstractType
                     'label' => 'Выберите сложноть заявки',
                     'translation_domain' => 'messages',
                     'choices'  => [
-                        //'Выберите сложноть заявки *' => null,
+                        'Выберите сложноть заявки *' => null,
                         '1' => '1',
                         '2' => '2',
                         '3' => '3',
@@ -112,6 +116,40 @@ class OrderFormCompanyType extends AbstractType
                     'label' => false,
                 ]
             )
+            ->add(
+                'customTaxRate',
+                MoneyType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Custom Tax Rate',
+                    ],
+                    'label' => 'Custom Tax Rate',
+                    'translation_domain' => 'messages',
+                    'currency' => '',
+                    'html5' => true
+                ]
+            )
+            ->add(
+                'sendOwnMasters',
+                CheckboxType::class,
+                [
+                    'mapped' => false,
+                    'required' => false,
+                    //'label' => 'Send Own Masters',
+                    //'data' => true, // Default checked
+                ]
+            )
+            ->add(
+                'sendAllMasters',
+                CheckboxType::class,
+                [
+                    'mapped' => false,
+                    'required' => false,
+                    //'label' => 'Send Own Masters',
+                    //'data' => true, // Default checked
+                ]
+            )
             /*->add('profession', EntityType::class, [
                 'class' => Profession::class,
                 'multiple'  => false,
@@ -120,14 +158,30 @@ class OrderFormCompanyType extends AbstractType
                 'required' => true,
                 'placeholder' => 'Выберите профессию *'
             ])
-            ->add('jobType', EntityType::class, [
+            */
+            /*->add('jobType', EntityType::class, [
                 'class' => JobType::class,
                 'multiple'  => false,
                 'expanded'  => false,
                 'label' => false,
                 'required' => true,
-                'placeholder' => 'Выберите тип работ *'
+                'placeholder' => 'Выберите тип работ *',
             ])*/
+
+            /*->add('jobType', JobFormType::class, [
+                'data_class' => JobType::class,
+                //'data' => '1',
+                'attr' => ['data-stripe' => 'name'],
+            ]);*/
+
+            /*->add('jobType', CollectionType::class, [
+                'entry_type' => JobFormType::class,
+                'entry_options' => [
+                    'label' => 'Label',
+                    'required' => false,
+                ],
+            ])*/
+
             /*->add('city', EntityType::class, [
                 'class' => City::class,
                 'multiple'  => false,

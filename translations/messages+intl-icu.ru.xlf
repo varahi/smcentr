@@ -737,6 +737,18 @@
         <source>Request a withdrawal</source>
         <target>Запрос на вывод средств</target>
       </trans-unit>
+        <trans-unit id="Custom Tax Rate" resname="Custom Tax Rate">
+            <source>Custom Tax Rate</source>
+            <target>Комиссия заявки в рублях</target>
+        </trans-unit>
+        <trans-unit id="Send Own Masters" resname="Send Own Masters">
+            <source>Send Own Masters</source>
+            <target>Послать уведомление своим мастерам</target>
+        </trans-unit>
+        <trans-unit id="Send All Masters" resname="Send All Masters">
+            <source>Send All Masters</source>
+            <target>Послать уведомление всем мастерам</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

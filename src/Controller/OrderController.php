@@ -173,6 +173,16 @@ class OrderController extends AbstractController
                         $order->setDistrict($district);
                     }
                 }
+
+                if (isset($_POST['order_form_company']['sendOwnMasters']) && $_POST['order_form_company']['sendOwnMasters'] == 1) {
+                    // ToDo: send notification to own masters
+                }
+
+                if (isset($_POST['order_form_company']['sendAllMasters']) && $_POST['order_form_company']['sendAllMasters'] == 1) {
+                    // ToDo: send notification to all masters
+                }
+
+
                 $order->setStatus(self::STATUS_NEW);
                 $order->setUsers($user);
                 $order->setLevel('3');

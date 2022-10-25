@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
@@ -49,15 +50,38 @@ class OrderCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        yield FormField::addPanel('Main Info')->setIcon('fa fa-info')->setCssClass('col-sm-8');
+        yield FormField::addRow();
+
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         //yield TextField::new('title');
         //yield TextField::new('price');
-        yield TelephoneField::new('phone');
-        yield TextareaField::new('description');
-        yield MoneyField::new('price')->setCurrency('RUB')->setCustomOption('storedAsCents', false);
-        yield TextareaField::new('address');
-        yield TextField::new('estimatedTime');
-        yield DateField::new('deadline');
+        yield TelephoneField::new('phone')->setColumns('col-md-4');
+        yield TextareaField::new('description')->setColumns('col-md-10');
+        yield MoneyField::new('price')->setCurrency('RUB')->setCustomOption('storedAsCents', false)->setColumns('col-md-3');
+        yield TextField::new('estimatedTime')->setColumns('col-md-3');
+        yield DateField::new('deadline')->setColumns('col-md-3');
+
+        yield TextField::new('address')->setColumns('col-md-10');
+
+        /*yield ChoiceField::new('status')->setChoices(
+            [
+                'Статус заявки *' => null,
+                '0' => '0',
+                '1' => '1',
+                '9' => '9',
+            ]
+        )->hideOnIndex();*/
+
+        yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle')->setCssClass('col-sm-4');
+        yield FormField::addRow();
+
+        yield AssociationField::new('city')->hideOnIndex()->setColumns('col-md-10');
+        yield AssociationField::new('district')->hideOnIndex()->setColumns('col-md-10');
+        yield AssociationField::new('users')->hideOnIndex()->setColumns('col-md-10');
+        yield AssociationField::new('performer')->hideOnIndex()->setColumns('col-md-10');
+        yield AssociationField::new('profession')->hideOnIndex()->setColumns('col-md-10');
+        yield AssociationField::new('jobType')->hideOnIndex()->setColumns('col-md-10');
         yield ChoiceField::new('level')->setChoices(
             [
                 'Сложноть заявки *' => null,
@@ -67,21 +91,11 @@ class OrderCrudController extends AbstractCrudController
                 '4' => '4',
                 '5' => '5',
             ]
-        )->hideOnIndex();
-        /*yield ChoiceField::new('status')->setChoices(
-            [
-                'Статус заявки *' => null,
-                '0' => '0',
-                '1' => '1',
-                '9' => '9',
-            ]
-        )->hideOnIndex();*/
-        yield AssociationField::new('city')->hideOnIndex();
-        yield AssociationField::new('district')->hideOnIndex();
-        yield AssociationField::new('users')->hideOnIndex();
-        yield AssociationField::new('performer')->hideOnIndex();
-        yield AssociationField::new('profession')->hideOnIndex();
-        yield AssociationField::new('jobType')->hideOnIndex();
+        )->hideOnIndex()->setColumns('col-md-10');
+
+        yield TextField::new('customTaxRate')->setColumns('col-md-10');
+        yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10');
+        yield BooleanField::new('sendAllMasters')->setColumns('col-md-10');
     }
 
     /*

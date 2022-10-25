@@ -110,6 +110,21 @@ class Order
      */
     private $notifications;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $customTaxRate;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $sendOwnMasters;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $sendAllMasters;
+
     public function __construct()
     {
         $this->created = new \DateTime();
@@ -357,6 +372,42 @@ class Order
                 $notification->setApplication(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCustomTaxRate(): ?string
+    {
+        return $this->customTaxRate;
+    }
+
+    public function setCustomTaxRate(?string $customTaxRate): self
+    {
+        $this->customTaxRate = $customTaxRate;
+
+        return $this;
+    }
+
+    public function isSendOwnMasters(): ?bool
+    {
+        return $this->sendOwnMasters;
+    }
+
+    public function setSendOwnMasters(?bool $sendOwnMasters): self
+    {
+        $this->sendOwnMasters = $sendOwnMasters;
+
+        return $this;
+    }
+
+    public function isSendAllMasters(): ?bool
+    {
+        return $this->sendAllMasters;
+    }
+
+    public function setSendAllMasters(?bool $sendAllMasters): self
+    {
+        $this->sendAllMasters = $sendAllMasters;
 
         return $this;
     }
