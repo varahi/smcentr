@@ -106,7 +106,7 @@ class Order
     private $estimatedTime;
 
     /**
-     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="application")
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="application", cascade={"persist", "remove"})
      */
     private $notifications;
 

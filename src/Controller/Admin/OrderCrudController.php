@@ -56,11 +56,11 @@ class OrderCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         //yield TextField::new('title');
         //yield TextField::new('price');
-        yield TelephoneField::new('phone')->setColumns('col-md-4');
+        yield TelephoneField::new('phone')->setColumns('col-md-4')->hideOnIndex();
         yield TextareaField::new('description')->setColumns('col-md-10');
         yield MoneyField::new('price')->setCurrency('RUB')->setCustomOption('storedAsCents', false)->setColumns('col-md-3');
-        yield TextField::new('estimatedTime')->setColumns('col-md-3');
-        yield DateField::new('deadline')->setColumns('col-md-3');
+        yield TextField::new('estimatedTime')->setColumns('col-md-3')->hideOnIndex();
+        yield DateField::new('deadline')->setColumns('col-md-3')->hideOnIndex();
 
         yield TextField::new('address')->setColumns('col-md-10');
 
@@ -78,7 +78,7 @@ class OrderCrudController extends AbstractCrudController
 
         yield AssociationField::new('city')->hideOnIndex()->setColumns('col-md-10');
         yield AssociationField::new('district')->hideOnIndex()->setColumns('col-md-10');
-        yield AssociationField::new('users')->hideOnIndex()->setColumns('col-md-10');
+        yield AssociationField::new('users')->setColumns('col-md-10')->setLabel('Customer');
         yield AssociationField::new('performer')->hideOnIndex()->setColumns('col-md-10');
         yield AssociationField::new('profession')->hideOnIndex()->setColumns('col-md-10');
         yield AssociationField::new('jobType')->hideOnIndex()->setColumns('col-md-10');
@@ -93,9 +93,9 @@ class OrderCrudController extends AbstractCrudController
             ]
         )->hideOnIndex()->setColumns('col-md-10');
 
-        yield TextField::new('customTaxRate')->setColumns('col-md-10');
-        yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10');
-        yield BooleanField::new('sendAllMasters')->setColumns('col-md-10');
+        yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideOnIndex();
+        yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10')->hideOnIndex();
+        yield BooleanField::new('sendAllMasters')->setColumns('col-md-10')->hideOnIndex();
     }
 
     /*

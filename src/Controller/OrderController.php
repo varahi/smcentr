@@ -222,6 +222,9 @@ class OrderController extends AbstractController
                             } else {
                                 $jobTypeIds = [];
                             }
+                        } else {
+                            $jobTypeIds = [];
+                            $professionIds = [];
                         }
 
                         /*if ($master->isGetNotifications() == 1 &&
@@ -267,7 +270,8 @@ class OrderController extends AbstractController
 
                 $message = $translator->trans('Order created', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
-                return $this->redirectToRoute('app_client_profile');
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
             }
 
             return $this->render('order/new.html.twig', [

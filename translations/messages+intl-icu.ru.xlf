@@ -749,6 +749,10 @@
             <source>Send All Masters</source>
             <target>Послать уведомление всем мастерам</target>
         </trans-unit>
+        <trans-unit id="Customer" resname="Customer">
+            <source>Customer</source>
+            <target>Заказчик</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>
