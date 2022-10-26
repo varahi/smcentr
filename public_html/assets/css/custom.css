@@ -217,3 +217,11 @@ input[required] + label:after {
 .check_notifications {
     text-align: center;
 }
+
+.status_created_by {
+    background: #e8e8e8;
+    border-radius: 60px;
+    padding: 2px 20px;
+    color: #000;
+    margin: 10px 0;
+}

@@ -1,0 +1,9 @@
+{# If value == 1, then created by client #}
+        {% if order.typeCreated == 1 %}
+            <div class="status_created_by">{{ 'Created by client'|trans }}</div>
+        {% endif %}
+
+        {# If value == 3, then created by company #}
+        {% if order.typeCreated == 3 %}
+            <div class="status_created_by">{{ 'Created by company'|trans }}</div>
+        {% endif %}

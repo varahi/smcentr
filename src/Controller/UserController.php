@@ -135,8 +135,8 @@ class UserController extends AbstractController
                 return $this->redirectToRoute("app_login");
             }
 
-            $queryOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user);
-            $queryOrders2 = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
+            //$queryOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user);
+            //$queryOrders2 = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
 
             // Pagination
             /*$newOrders = $paginator->paginate(
@@ -245,8 +245,9 @@ class UserController extends AbstractController
                 return $this->redirectToRoute("app_login");
             }
 
-            $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC');
-            $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC');
+            $newOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user);
+            $activeOrders = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
+            $completedOrders = $orderRepository->findByStatus(self::STATUS_COMPLETED, $user);
 
             // Resize image if exist
             if ($user->getAvatar()) {
@@ -256,6 +257,7 @@ class UserController extends AbstractController
             {
                 $response = new Response($this->twig->render('user/company/lk-company.html.twig', [
                     'user' => $user,
+                    'newOrders' => $newOrders,
                     'activeOrders' => $activeOrders,
                     'completedOrders' => $completedOrders
                 ]));

@@ -125,6 +125,11 @@ class Order
      */
     private $sendAllMasters;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $typeCreated;
+
     public function __construct()
     {
         $this->created = new \DateTime();
@@ -408,6 +413,18 @@ class Order
     public function setSendAllMasters(?bool $sendAllMasters): self
     {
         $this->sendAllMasters = $sendAllMasters;
+
+        return $this;
+    }
+
+    public function getTypeCreated(): ?string
+    {
+        return $this->typeCreated;
+    }
+
+    public function setTypeCreated(?string $typeCreated): self
+    {
+        $this->typeCreated = $typeCreated;
 
         return $this;
     }

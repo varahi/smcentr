@@ -33,6 +33,8 @@ class TicketController extends AbstractController
 
     public const ROLE_MASTER = 'ROLE_MASTER';
 
+    public const ROLE_COMPANY = 'ROLE_COMPANY';
+
     public const STATUS_NEW = '0';
 
     public const STATUS_ACTIVE = '1';
@@ -242,7 +244,9 @@ class TicketController extends AbstractController
         Mailer $mailer,
         UserRepository $userRepository
     ): Response {
-        if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER)) {
+        if ($this->isGranted(self::ROLE_CLIENT) ||
+            $this->isGranted(self::ROLE_MASTER) ||
+            $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
             $adminUsers = $userRepository->findByRole(self::ROLE_SUPER_ADMIN);
             $ticket = new Ticket();

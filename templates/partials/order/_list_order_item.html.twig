@@ -20,6 +20,7 @@
                     {{ order.district.name }}
                 </div>
                 <div class="date">{{ order.deadline|date("d.m.Y") }}</div>
+                {% include 'partials/order/_created_by.html.twig' %}
             </div>
             <div class="item_right">
                 <div class="id_item">

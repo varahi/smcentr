@@ -1,14 +1,28 @@
-<div class="col-md-4">
+<div class="col-md-4 active-order-item">
     <div class="job_item">
         <a id="job{{ order.id }}"></a>
             {% include 'partials/order/_order_main_info.html.twig' %}
         <div class="client_contact_visible">
             {% include 'partials/order/_contact_info.html.twig' %}
         </div>
-        {% if order.users %}
+        {% if is_granted('ROLE_CLIENT') %}
+            <div class="row">
+                {#<div class="col-md-6">
+                    <b>Имя мастера</b>: {{ order.performer.fullName }}
+                </div>#}
+                <div class="col-md-12">
+                    <b>Профессии мастера</b>:
+                    {% for profession in order.performer.professions %}
+                        {% if loop.last %}{{ profession.name }}{% else %}{{ profession.name }},{% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {#{% if order.users %}
         <div class="client_address_visible">
             {{ order.address }}
         </div>
-        {% endif %}
+        {% endif %}#}
     </div>
 </div>

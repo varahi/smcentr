@@ -34,6 +34,12 @@ class OrderController extends AbstractController
 
     public const STATUS_COMPLETED = '9';
 
+    public const CLIENT_CREATED = '1';
+
+    public const MASTER_CREATED = '2';
+
+    public const COMPANY_CREATED = '3';
+
     public const ROLE_CLIENT = 'ROLE_CLIENT';
 
     public const ROLE_MASTER = 'ROLE_MASTER';
@@ -194,6 +200,13 @@ class OrderController extends AbstractController
                     // ToDo: send notification to all masters
                 }
 
+                if ($user != null && in_array(self::ROLE_CLIENT, $user->getRoles())) {
+                    $order->setTypeCreated(self::CLIENT_CREATED);
+                }
+
+                if ($user != null && in_array(self::ROLE_COMPANY, $user->getRoles())) {
+                    $order->setTypeCreated(self::COMPANY_CREATED);
+                }
 
                 $order->setStatus(self::STATUS_NEW);
                 $order->setUsers($user);

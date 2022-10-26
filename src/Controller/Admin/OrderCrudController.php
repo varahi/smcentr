@@ -93,6 +93,15 @@ class OrderCrudController extends AbstractCrudController
             ]
         )->hideOnIndex()->setColumns('col-md-10');
 
+        yield ChoiceField::new('typeCreated')->setChoices(
+            [
+                'Кем создана заявка *' => null,
+                'Клиент' => '1',
+                'Мастер' => '2',
+                'Компания' => '3',
+            ]
+        )->hideOnIndex()->setColumns('col-md-10');
+
         yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideOnIndex();
         yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10')->hideOnIndex();
         yield BooleanField::new('sendAllMasters')->setColumns('col-md-10')->hideOnIndex();

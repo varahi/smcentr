@@ -88,6 +88,45 @@
         </div>
     </section>
 
+    {#    <!-- Созданные заявки -->#}
+    <section id="list_items">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>{{ 'New orders'|trans }}</h3>
+                </div>
+            </div>
+
+            {% if newOrders is not empty %}
+                <div class="row new_orders_list">
+                    {% for order in newOrders %}
+                        {% include 'partials/order/_new_order_item.html.twig' %}
+                    {% endfor %}
+                </div>
+
+                <script>
+                    $('.new_orders_list').simpleLoadMore({
+                        item: 'div.col-md-4',
+                        count: 3,
+                        counterInBtn: true,
+                        //btnText: 'View More {showing}/{total}',
+                        btnText: '{{ 'Show all new orders'|trans }}',
+                    });
+                </script>
+
+                {#<div class="row">
+                <div class="col-md-12">
+                    <div class="btn_center">
+                        <button>{{ 'Show all new orders'|trans }}</button>
+                    </div>
+                </div>
+            </div>#}
+
+            {% else %}
+                <p>{{ 'Empty orders list'|trans }}</p>
+            {% endif %}
+        </div>
+    </section>
 
     {#    <!-- Active заявки -->#}
     <section id="list_items">

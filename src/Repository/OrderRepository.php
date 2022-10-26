@@ -52,6 +52,7 @@ class OrderRepository extends ServiceEntityRepository
             ->from(self::ORDER_TABLE, 'o')
             ->where('o.status LIKE :status')
             ->setParameter('status', $status)
+            ->orderBy('o.created', 'DESC')
         ;
 
         return $qb->getQuery()->getResult();
@@ -68,6 +69,7 @@ class OrderRepository extends ServiceEntityRepository
             ->from(self::ORDER_TABLE, 'o')
             ->where('o.status LIKE :status')
             ->setParameter('status', $status)
+            ->orderBy('o.created', 'DESC')
         ;
 
         if (isset($professions) && !empty($professions)) {
@@ -95,6 +97,7 @@ class OrderRepository extends ServiceEntityRepository
             ->from(self::ORDER_TABLE, 'o')
             ->where('o.status LIKE :status')
             ->setParameter('status', $status)
+            ->orderBy('o.created', 'DESC')
         ;
 
         if (isset($professions) && !empty($professions)) {
