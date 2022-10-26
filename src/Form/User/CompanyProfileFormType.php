@@ -134,6 +134,32 @@ class CompanyProfileFormType extends AbstractType
                 'translation_domain' => 'forms',
             ])
 
+            // Balance
+            ->add(
+                'taxRate',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Tax Rate'
+                    ],
+                    'label' => 'Tax Rate',
+                    'translation_domain' => 'messages',
+                ]
+            )
+            ->add(
+                'serviceTaxRate',
+                TextType::class,
+                [
+                    'required' => false,
+                    'attr' => [
+                        'placeholder' => 'Service Tax Rate'
+                    ],
+                    'label' => 'Service Tax Rate',
+                    'translation_domain' => 'messages',
+                ]
+            )
+
             // Bank
             ->add(
                 'inn',

@@ -406,7 +406,7 @@ class OrderController extends AbstractController
             if (count($order->getCity()->getTaxRates()) > 0) {
                 foreach ($order->getCity()->getTaxRates() as $taxRate) {
                     if ($taxRate->getProfession()->getId() == $order->getProfession()->getId()) {
-                        $tax = $order->getPrice() * $taxRate->getPercent();
+                        $tax = $order->getPrice() * $taxRate->getPercent(); // For example 2880 * 0.05
                         $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
                         if ($order->getPerformer()->getBalance() <= $tax) {
                             // Redirect if order or performer not owner

@@ -51,6 +51,10 @@
                         {{ form_row(form.companyMasters) }}
                         {{ form_row(form.companyClients) }}
 
+                        <h3>{{ 'Balance'|trans }}</h3>
+                        {{ form_row(form.taxRate) }}
+                        {{ form_row(form.serviceTaxRate) }}
+
                         <h3>{{ 'Bank'|trans }}</h3>
                         {{ form_row(form.inn) }}
                         {{ form_row(form.ogrn) }}

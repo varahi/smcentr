@@ -31,6 +31,6 @@ class TaxRateCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield AssociationField::new('city');
         yield AssociationField::new('profession');
-        yield PercentField::new('percent');
+        yield PercentField::new('percent')->setColumns('col-md-2');
     }
 }

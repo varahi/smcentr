@@ -2,7 +2,13 @@
     <div class="phone">
         {% if order.users %}
             <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
-            <div class="phone_num"><a href="tel:+{{ order.users.phone }}">{{ order.users.phone }}</a></div>
+            <div class="phone_num">
+                {% if order.phone is not empty %}
+                    <a href="tel:+{{ order.phone }}">{{ order.phone }}</a>
+                {% else %}
+                    <a href="tel:+{{ order.users.phone }}">{{ order.users.phone }}</a>
+                {% endif %}
+            </div>
         {% endif %}
     </div>
     <div class="client_block">
