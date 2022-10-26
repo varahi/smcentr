@@ -175,7 +175,19 @@ class OrderController extends AbstractController
                 }
 
                 if (isset($_POST['order_form_company']['sendOwnMasters']) && $_POST['order_form_company']['sendOwnMasters'] == 1) {
-                    // ToDo: send notification to own masters
+                    $masterNotification = new UserNotification();
+                    if (count($user->getCompanyMasters()) > 0) {
+                        // send notification to own masters
+                        /*foreach ($user->getCompanyMasters() as $companyMaster) {
+                            $masterNotification->setUser($companyMaster);
+                            $message = $translator->trans('Notification new order for master', array(), 'messages');
+                            $masterNotification->setMessage($message);
+                            $masterNotification->setApplication($order);
+                            $masterNotification->setType(self::NOTIFICATION_NEW_ORDER);
+                            $masterNotification->setIsRead('0');
+                            $entityManager->persist($masterNotification);
+                        }*/
+                    }
                 }
 
                 if (isset($_POST['order_form_company']['sendAllMasters']) && $_POST['order_form_company']['sendAllMasters'] == 1) {
