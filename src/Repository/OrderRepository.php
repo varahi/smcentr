@@ -136,6 +136,27 @@ class OrderRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param $status
+     * @param $user
+     * @return float|int|mixed|string
+     */
+    public function findByStatusAndPhone($status, $user)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('o')
+            ->from(self::ORDER_TABLE, 'o')
+            ->where('o.status LIKE :status')
+            ->andWhere($qb->expr()->in('o.users', $user->getId()))
+            ->andWhere('o.phone LIKE :phone')
+            ->setParameter('phone', $user->getPhone())
+            ->setParameter('status', $status)
+            ->orderBy('o.created', 'DESC')
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findPerfomedByStatus($status, $user, $orderField, $orderDirection)
     {
         $field = 'o.'.$orderField;

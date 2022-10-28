@@ -145,7 +145,16 @@ class UserController extends AbstractController
                 self::LIMIT_PER_PAGE
             );*/
 
-            $newOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user);
+            $newOrdersClient = $orderRepository->findByStatus(self::STATUS_NEW, $user);
+            if ($user->getPhone()) {
+                $relatedNewOrders = $orderRepository->findByStatusAndPhone(self::STATUS_NEW, $user);
+                $newOrders = array_merge($newOrdersClient, $relatedNewOrders);
+            } else {
+                $newOrders = $newOrdersClient;
+            }
+
+            //dd($relatedNewOrders);
+
             $activeOrders = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
             $completedOrders = $orderRepository->findByStatus(self::STATUS_COMPLETED, $user);
 

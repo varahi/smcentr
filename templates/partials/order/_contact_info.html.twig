@@ -4,9 +4,9 @@
             <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
             <div class="phone_num">
                 {% if order.phone is not empty %}
-                    <a href="tel:+{{ order.phone }}">{{ order.phone }}</a>
+                    <a href="tel:{{ order.phone|trim|replace({'(': '', ')': '', ' ': '-', '.': '-', '+': ''}) }}">{{ order.phone }}</a>
                 {% else %}
-                    <a href="tel:+{{ order.users.phone }}">{{ order.users.phone }}</a>
+                    <a href="tel:{{ order.users.phone|trim|replace({'(': '', ')': '', ' ': '-', '.': '-', '+': ''}) }} }}">{{ order.users.phone }}</a>
                 {% endif %}
             </div>
         {% endif %}
@@ -15,9 +15,9 @@
         {% if order.users is not empty %}
             {{ order.users.fullName[:7] ~ '...' }}
         {% if order.users.avatar %}
-            <img src="{{ asset('uploads/files/' ~ order.users.avatar) }}" />
+            <img src="{{ asset('uploads/files/' ~ order.users.avatar) }}"  alt=""/>
         {% else %}
-            <img src="{{ asset('assets/images/avatar.png') }}">
+            <img src="{{ asset('assets/images/avatar.png') }}" alt="">
         {% endif %}
         {% endif %}
     </div>
@@ -26,15 +26,15 @@
     <div class="phone">
         {% if order.performer %}
             <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
-            <div class="phone_num"><a href="tel:+{{ order.performer.phone }}">{{ order.performer.phone }}</a></div>
+            <div class="phone_num"><a href="tel:{{ order.performer.phone|trim|replace({'(': '', ')': '', ' ': '-', '.': '-', '+': ''}) }} }}">{{ order.performer.phone }}</a></div>
         {% endif %}
     </div>
     <div class="client_block">
         {{ order.performer.fullName }}
         {% if order.performer.avatar %}
-            <img src="{{ asset('uploads/files/' ~ order.performer.avatar) }}" />
+            <img src="{{ asset('uploads/files/' ~ order.performer.avatar) }}"  alt=""/>
         {% else %}
-            <img src="{{ asset('assets/images/avatar.png') }}">
+            <img src="{{ asset('assets/images/avatar.png') }}" alt="">
         {% endif %}
     </div>
 {% else %}
