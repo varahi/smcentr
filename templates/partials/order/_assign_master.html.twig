@@ -1,0 +1,16 @@
+<div class="col-md-12">
+    <form class="form-search" autocomplete="off" name="assign" method="POST">
+        <div class="job_item">
+            <a id="job{{ order.id }}"></a>
+            {% include 'partials/order/_order_main_info.html.twig' %}
+            <br />
+            <select id="" name="assign_master" required class="required">
+                <option value="" selected="selected">Выберите мастера</option>
+                {% for master in masters %}
+                    <option value="{{ master.id }}">{{ master.fullName }}</option>
+                {% endfor %}
+            </select>
+            <button>{{ 'Submit'|trans }}</button>
+        </div>
+    </form>
+</div>

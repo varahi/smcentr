@@ -1,0 +1,40 @@
+{% extends 'layouts/base.html.twig' %}
+{% block title %}{{ 'Welcome'|trans }} {{ user.fullName }}{% endblock %}
+    {% block javascripts %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="{{ asset('assets/js/jquery.simpleLoadMore.js') }}"></script>
+        <script src="{{ asset('assets/js/dependableList.js') }}"></script>
+    {% endblock %}
+
+{% block body %}
+
+    <header id="sticky_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% include 'partials/navigation/_navbar.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="list_jobs">
+        <div class="container">
+            {% include 'partials/_message.html.twig' %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>{{ 'Assign a master'|trans }}</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="list_items">
+        <div class="container">
+            <div class="row new_orders_list">
+                {% include 'partials/order/_assign_master.html.twig' %}
+            </div>
+        </div>
+    </section>
+    {% include 'partials/footer/_footer.html.twig' %}
+{% endblock %}

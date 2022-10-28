@@ -225,3 +225,7 @@ input[required] + label:after {
     color: #000;
     margin: 10px 0;
 }
+
+.tabs {
+    margin-bottom: 20px;
+}

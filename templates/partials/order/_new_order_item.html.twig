@@ -1,6 +1,7 @@
 <div class="col-md-4">
     <div class="job_item">
         <a id="job{{ order.id }}"></a>
-        {% include 'partials/order/_order_main_info.html.twig' %}
+        {% set assigned = '' %}
+        {% include 'partials/order/_order_main_info.html.twig'  with {'assigned': 1} %}
     </div>
 </div>

@@ -765,6 +765,22 @@
         <source>Created by company</source>
         <target>Создано компанией</target>
       </trans-unit>
+      <trans-unit id="k_dJHnW" resname="Legal entity">
+        <source>Legal entity</source>
+        <target>Юридическое лицо</target>
+      </trans-unit>
+      <trans-unit id="e1fRPDN" resname="Individual entity">
+        <source>Individual entity</source>
+        <target>Физическое лицо</target>
+      </trans-unit>
+      <trans-unit id="HrdpKCT" resname="Assign a master">
+        <source>Assign a master</source>
+        <target>Назначить мастера</target>
+      </trans-unit>
+        <trans-unit id="The company has assigned you a task" resname="The company has assigned you a task">
+            <source>The company has assigned you a task</source>
+            <target>Компания назначила для вас задание</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

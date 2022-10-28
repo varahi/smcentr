@@ -484,4 +484,68 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
     }
+
+    /**
+     * @Route("/assign-master/order-{id}", name="app_assign_master")
+     */
+    public function assignMaster(
+        TranslatorInterface $translator,
+        NotifierInterface $notifier,
+        Order $order,
+        UserRepository $userRepository
+    ): Response {
+        if ($this->security->isGranted(self::ROLE_COMPANY)) {
+            $user = $this->security->getUser();
+            if ($user->getId() !== $order->getUsers()->getId()) {
+                // Redirect if order and client is not owner
+                $message = $translator->trans('Please login', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute('app_login');
+            }
+            $masters = $userRepository->findByCompany(self::ROLE_MASTER, $user);
+
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['assign_master']) {
+                    $master = $userRepository->findOneBy(['id' => $_POST['assign_master']]);
+                }
+
+                if (isset($master)) {
+                    // Set order to master
+                    $order->setPerformer($master);
+                    $order->setStatus(self::STATUS_ACTIVE);
+                    $entityManager = $this->doctrine->getManager();
+                    $entityManager->persist($order);
+                    $entityManager->flush();
+
+                    // Send notification to master
+                    $masterNotification = new UserNotification();
+                    $masterNotification->setUser($master);
+                    $message = $translator->trans('The company has assigned you a task', array(), 'messages');
+                    $masterNotification->setMessage($message);
+                    $masterNotification->setApplication($order);
+                    $masterNotification->setType(self::NOTIFICATION_CHANGE_STATUS);
+                    $masterNotification->setIsRead('0');
+                    $entityManager->persist($masterNotification);
+                    $entityManager->flush();
+
+                    // Flash and redirect
+                    $message = $translator->trans('Master assigned to order', array(), 'flash');
+                    $notifier->send(new Notification($message, ['browser']));
+                    return $this->redirectToRoute('app_company_profile');
+                }
+            }
+
+            $response = new Response($this->twig->render('user/company/assign_master.html.twig', [
+                'user' => $user,
+                'order' => $order,
+                'masters' => $masters
+            ]));
+
+            return $response;
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
+    }
 }

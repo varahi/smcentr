@@ -135,7 +135,7 @@ class CompanyProfileFormType extends AbstractType
             ])
 
             // Balance
-            ->add(
+            /*->add(
                 'taxRate',
                 TextType::class,
                 [
@@ -158,7 +158,7 @@ class CompanyProfileFormType extends AbstractType
                     'label' => 'Service Tax Rate',
                     'translation_domain' => 'messages',
                 ]
-            )
+            )*/
 
             // Bank
             ->add(

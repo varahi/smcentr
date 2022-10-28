@@ -9,6 +9,18 @@
         </div>
         <div class="date">{{ order.created|date("d.m.Y") }}</div>
         {% include 'partials/order/_created_by.html.twig' %}
+
+        {% if is_granted('ROLE_COMPANY') %}
+            {% if app.request.get('_route') == 'app_assign_master' %}
+            {% else %}
+                {% if assigned is defined and assigned == 1 %}
+                    <div class="status_created_by">
+                        <a href="{{ path('app_assign_master', { id: order.id}) }}">{{ 'Assign a master'|trans }}</a>
+                    </div>
+                    {% endif %}
+            {% endif %}
+        {% endif %}
+
     </div>
     <div class="item_right">
         <div class="id_item">

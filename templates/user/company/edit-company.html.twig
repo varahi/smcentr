@@ -51,17 +51,30 @@
                         {{ form_row(form.companyMasters) }}
                         {{ form_row(form.companyClients) }}
 
-                        <h3>{{ 'Balance'|trans }}</h3>
+                        {#<h3>{{ 'Balance'|trans }}</h3>
                         {{ form_row(form.taxRate) }}
-                        {{ form_row(form.serviceTaxRate) }}
+                        {{ form_row(form.serviceTaxRate) }}#}
 
                         <h3>{{ 'Bank'|trans }}</h3>
-                        {{ form_row(form.inn) }}
-                        {{ form_row(form.ogrn) }}
-                        {{ form_row(form.bank) }}
-                        {{ form_row(form.checkingAccount) }}
-                        {{ form_row(form.cardNumber) }}
-                        {{ form_row(form.cardFullName) }}
+                        <nav class="tabs">
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">{{ 'Legal entity'|trans }}</a>
+                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">{{ 'Individual entity'|trans }}</a>
+                        </div>
+                        </nav>
+
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                {{ form_row(form.inn) }}
+                                {{ form_row(form.ogrn) }}
+                                {{ form_row(form.bank) }}
+                                {{ form_row(form.checkingAccount) }}
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                {{ form_row(form.cardNumber) }}
+                                {{ form_row(form.cardFullName) }}
+                            </div>
+                        </div>
 
                         <div class="avatar_upload">
                             {% if user.avatar %}

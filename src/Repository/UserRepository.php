@@ -101,6 +101,25 @@ class UserRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param $role
+     * @param $company
+     * @return float|int|mixed|string
+     */
+    public function findByCompany($role, $company)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('u')
+            ->from(self::USER_TABLE, 'u')
+            ->where('u.roles LIKE :roles')
+            ->andWhere($qb->expr()->eq('u.master', $company->getId()))
+            ->setParameter('roles', '%"'.$role.'"%')
+            ->orderBy('u.id', 'ASC')
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

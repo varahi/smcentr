@@ -89,6 +89,10 @@
         <source>Notifications sent</source>
         <target>Уведомления отправлены</target>
       </trans-unit>
+      <trans-unit id="Master assigned to order" resname="Master assigned to order">
+        <source>Master assigned to order</source>
+        <target>Мастер назначен на задание</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
