@@ -108,7 +108,7 @@ class Notification
         return $this->isRead;
     }
 
-    public function setIsRead(?int $isRead): self
+    public function setIsRead(?string $isRead): self
     {
         $this->isRead = $isRead;
 

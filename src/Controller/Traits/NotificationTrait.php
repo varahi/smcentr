@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Controller\Traits;
 
 use App\Entity\Notification as UserNotification;
+use App\Entity\Order;
+use App\Entity\User;
 use App\Repository\CityRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
@@ -129,5 +131,29 @@ trait NotificationTrait
                 $entityManager->flush();
             }
         }
+    }
+
+    /**
+     * @param Order $order
+     * @param User $user
+     * @param string $type
+     * @param string $messageStr
+     * @return void
+     */
+    public function setNotification(
+        Order $order,
+        User $user,
+        string $type,
+        string $messageStr
+    ) {
+        $entityManager = $this->doctrine->getManager();
+        $notification = new UserNotification();
+        $notification->setUser($user);
+        $notification->setMessage($messageStr);
+        $notification->setType($type);
+        $notification->setApplication($order);
+        $notification->setIsRead('0');
+
+        $entityManager->persist($notification);
     }
 }

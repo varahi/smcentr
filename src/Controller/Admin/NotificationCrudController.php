@@ -3,9 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Notification;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -37,6 +41,18 @@ class NotificationCrudController extends AbstractCrudController
         return $filters
             ->add(EntityFilter::new('user'))
             ;
+    }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): \Doctrine\ORM\QueryBuilder
+    {
+        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        $qb
+            ->where($qb->expr()->eq('entity.type', 1))
+            ->orWhere($qb->expr()->eq('entity.type', 2))
+            ->orWhere($qb->expr()->eq('entity.type', 3))
+            ->orWhere($qb->expr()->eq('entity.type', 4))
+            ;
+        return $qb;
     }
 
     public function configureFields(string $pageName): iterable
