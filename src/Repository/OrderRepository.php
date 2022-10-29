@@ -141,16 +141,19 @@ class OrderRepository extends ServiceEntityRepository
      * @param $user
      * @return float|int|mixed|string
      */
-    public function findByStatusAndPhone($status, $user)
+    public function findByStatusPhoneAndCompany($status, $user)
     {
+        $role = 'ROLE_COMPANY';
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('o')
             ->from(self::ORDER_TABLE, 'o')
             ->where('o.status LIKE :status')
-            ->andWhere($qb->expr()->in('o.users', $user->getId()))
             ->andWhere('o.phone LIKE :phone')
+            ->join('o.users', 'u')
+            ->andWhere('u.roles LIKE :roles')
             ->setParameter('phone', $user->getPhone())
             ->setParameter('status', $status)
+            ->setParameter('roles', '%"'.$role.'"%')
             ->orderBy('o.created', 'DESC')
         ;
 

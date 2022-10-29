@@ -147,13 +147,13 @@ class UserController extends AbstractController
 
             $newOrdersClient = $orderRepository->findByStatus(self::STATUS_NEW, $user);
             if ($user->getPhone()) {
-                $relatedNewOrders = $orderRepository->findByStatusAndPhone(self::STATUS_NEW, $user);
-                $newOrders = array_merge($newOrdersClient, $relatedNewOrders);
+                $relatedNewOrders = $orderRepository->findByStatusPhoneAndCompany(self::STATUS_NEW, $user);
+                // Sorting 2 arrays, maybe use function usort
+                $newOrders = array_merge($relatedNewOrders, $newOrdersClient);
+                $this->sortByObjectProps($newOrders, 'getId', 'DESC');
             } else {
                 $newOrders = $newOrdersClient;
             }
-
-            //dd($relatedNewOrders);
 
             $activeOrders = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
             $completedOrders = $orderRepository->findByStatus(self::STATUS_COMPLETED, $user);
@@ -180,6 +180,19 @@ class UserController extends AbstractController
             return $this->redirectToRoute("app_login");
         }
     }
+
+    private function sortByObjectProps(&$items, $method, $order)
+    {
+        if (! is_array($items)) {
+            return false;
+        }
+
+        return usort($items, function ($a, $b) use ($method, $order) {
+            $cmp = strcmp($a->$method(), $b->$method());
+            return $order === 'asc' ? $cmp : -$cmp;
+        });
+    }
+
 
     /**
      * Require ROLE_MASTER for *every* controller method in this class.
