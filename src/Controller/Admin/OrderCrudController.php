@@ -63,16 +63,6 @@ class OrderCrudController extends AbstractCrudController
         yield DateField::new('deadline')->setColumns('col-md-3')->hideOnIndex();
 
         yield TextField::new('address')->setColumns('col-md-10');
-
-        /*yield ChoiceField::new('status')->setChoices(
-            [
-                'Статус заявки *' => null,
-                '0' => '0',
-                '1' => '1',
-                '9' => '9',
-            ]
-        )->hideOnIndex();*/
-
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle')->setCssClass('col-sm-4');
         yield FormField::addRow();
 
@@ -92,6 +82,15 @@ class OrderCrudController extends AbstractCrudController
                 '5' => '5',
             ]
         )->hideOnIndex()->setColumns('col-md-10');
+
+        yield ChoiceField::new('status')->setChoices(
+            [
+                'Статус заявки *' => null,
+                'Новая' => '0',
+                'В работе' => '1',
+                'Завершена' => '9',
+            ]
+        )->hideOnIndex()->setLabel('Order status')->setColumns('col-md-10');
 
         yield ChoiceField::new('typeCreated')->setChoices(
             [

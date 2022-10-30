@@ -387,13 +387,18 @@ class OrderController extends AbstractController
 
             // If order has custom tax from company
             if ($order->getCustomTaxRate()) {
-                $tax = $order->getPrice() * $order->getCustomTaxRate();
+                $tax = $order->getCustomTaxRate();
+
+            // If company has tax rate (Комисси списаний)
             } elseif ($order->getUsers()->getTaxRate()) {
                 $tax = $order->getPrice() * $order->getUsers()->getTaxRate();
+
+            // If company has service Tax Rate (Комиссия сервиса)
             } elseif ($order->getUsers()->getServiceTaxRate()) {
                 $tax = $order->getPrice() * $order->getUsers()->getServiceTaxRate();
+
+            // Calculate tax rate depends on city and profession
             } else {
-                // Calculate tax rate depends on city and profession
                 if (count($order->getCity()->getTaxRates()) > 0) {
                     foreach ($order->getCity()->getTaxRates() as $taxRate) {
                         if ($taxRate->getProfession()->getId() == $order->getProfession()->getId()) {
@@ -501,6 +506,7 @@ class OrderController extends AbstractController
                     // Send notification to master
                     $message = $translator->trans('The company has assigned you a task', array(), 'messages');
                     $this->setNotification($order, $master, self::NOTIFICATION_CHANGE_STATUS, $message);
+                    $entityManager->flush();
 
                     // Flash and redirect
                     $message = $translator->trans('Master assigned to order', array(), 'flash');

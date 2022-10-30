@@ -159,7 +159,7 @@ class UserMasterCrudController extends AbstractCrudController
         yield BooleanField::new('isVerified');
         yield BooleanField::new('isDisabled');
 
-        yield FormField::addPanel('Change password')->setIcon('fa fa-key');
+        /*yield FormField::addPanel('Change password')->setIcon('fa fa-key');
         yield FormField::addRow();
         yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
             ->setFormType(RepeatedType::class)
@@ -180,7 +180,7 @@ class UserMasterCrudController extends AbstractCrudController
                 'second_options'  => [ 'label' => 'Repeat password' ],
                 'error_bubbling'  => true,
                 'invalid_message' => 'The password fields do not match.',
-            ]);
+            ]);*/
 
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
         yield BooleanField::new('getNotifications');
@@ -218,7 +218,7 @@ class UserMasterCrudController extends AbstractCrudController
         yield AssociationField::new('notifications')->hideOnIndex()->setColumns('col-md-4');
     }
 
-    public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    /*public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
         $plainPassword = $entityDto->getInstance()->getPassword();
         $formBuilder   = parent::createEditFormBuilder($entityDto, $formOptions, $context);
@@ -233,16 +233,16 @@ class UserMasterCrudController extends AbstractCrudController
         $this->addEncodePasswordEventListener($formBuilder);
 
         return $formBuilder;
-    }
+    }*/
 
     protected function addEncodePasswordEventListener(FormBuilderInterface $formBuilder, $plainPassword = null): void
     {
         $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($plainPassword) {
             /** @var User $user */
-            $user = $event->getData();
+            /*$user = $event->getData();
             if ($user->getPassword() !== $plainPassword) {
                 $user->setPassword($this->passwordEncoder->hashPassword($user, $user->getPassword()));
-            }
+            }*/
         });
     }
 
@@ -251,7 +251,7 @@ class UserMasterCrudController extends AbstractCrudController
      * @param EntityManagerInterface $entityManager
      * @param $entityInstance
      */
-    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    public function _updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
 
         /*$user = $this->getUser();

@@ -781,6 +781,10 @@
             <source>The company has assigned you a task</source>
             <target>Компания назначила для вас задание</target>
         </trans-unit>
+        <trans-unit id="Order status" resname="Order status">
+            <source>Order status</source>
+            <target>Статус заявки</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>
