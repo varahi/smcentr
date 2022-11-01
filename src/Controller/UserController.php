@@ -672,14 +672,13 @@ class UserController extends AbstractController
     /**
      * Require ROLE_MASTER for *every* controller method in this class.
      *
-     * @IsGranted("ROLE_MASTER")
-     * @Route("/user/top-up-balancer", name="app_master_top_up_balance")
+     * @Route("/user/top-up-balancer", name="app_top_up_balance")
      */
     public function topUpBalance(
         TranslatorInterface $translator,
         NotifierInterface $notifier
     ) {
-        if ($this->isGranted(self::ROLE_MASTER)) {
+        if ($this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
 
             {

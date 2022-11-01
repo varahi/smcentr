@@ -69,13 +69,20 @@
                             <span>{{ 'Balance'|trans }}:</span>
                             <div>{{ user.balance|number_format(0, '.', ' ') }} <i>&#8381;</i></div>
                         </div>
-                        <a href="{{ path('app_master_top_up_balance') }}"><button>{{ 'Top up balance'|trans }}</button></a>
+                        <a href="{{ path('app_top_up_balance') }}"><button>{{ 'Top up balance'|trans }}</button></a>
                     </div>
                 </div>#}
 
                 <div class="col-md-4">
                     <div class="profile_balance">
-                        <div style="margin-bottom: 20px">
+
+                        <div class="balance">
+                            <span>{{ 'Balance'|trans }}:</span>
+                            <div>{{ user.balance|number_format(0, '.', ' ') }} <i>&#8381;</i></div>
+                        </div>
+                        <a href="{{ path('app_top_up_balance') }}"><button>{{ 'Top up balance'|trans }}</button></a>
+
+                        <div style="margin-bottom: 20px; margin-top: 20px" class="balance">
                             <a href="{{ path('app_withdrawal_request') }}"><button>{{ 'Request a withdrawal'|trans }}</button></a>
                         </div>
                         <div>

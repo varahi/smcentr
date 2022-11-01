@@ -382,7 +382,7 @@ class OrderController extends AbstractController
                 // Redirect if order or performer not owner
                 $message = $translator->trans('Please top up balance', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
-                return $this->redirectToRoute('app_master_top_up_balance');
+                return $this->redirectToRoute('app_top_up_balance');
             }*/
 
             // If order has custom tax from company
@@ -408,7 +408,7 @@ class OrderController extends AbstractController
                                 // Redirect if order or performer not owner
                                 $message = $translator->trans('Please top up balance', array(), 'flash');
                                 $notifier->send(new Notification($message, ['browser']));
-                                return $this->redirectToRoute('app_master_top_up_balance');
+                                return $this->redirectToRoute('app_top_up_balance');
                             }
                         }
                     }
