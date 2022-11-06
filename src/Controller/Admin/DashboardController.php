@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\TaxRate;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -17,6 +16,8 @@ use App\Entity\Profession;
 use App\Entity\User;
 use App\Entity\Pages;
 use App\Entity\Notification;
+use App\Entity\TaxRate;
+use App\Entity\Request;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -92,6 +93,7 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::linkToCrud('Orders list', 'fa fa-reorder', Order::class);
         yield MenuItem::linkToRoute('Tickets list', 'fa fa-support', 'app_ticket_list');
+        yield MenuItem::linkToCrud('Request', 'fa fa-mail-forward', Request::class);
         yield MenuItem::section('<hr />');
         yield MenuItem::linkToLogout('Logout', 'fa fa-user-times');
     }

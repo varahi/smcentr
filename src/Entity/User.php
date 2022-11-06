@@ -251,6 +251,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $cardFullName;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Request::class, mappedBy="user")
+     */
+    private $requests;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -263,6 +268,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->companyClients = new ArrayCollection();
         $this->companyMasters = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->requests = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -1006,5 +1012,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatarFile(?File $avatarFile = null)
     {
         $this->avatarFile = $avatarFile;
+    }
+
+    /**
+     * @return Collection<int, Request>
+     */
+    public function getRequests(): Collection
+    {
+        return $this->requests;
+    }
+
+    public function addRequest(Request $request): self
+    {
+        if (!$this->requests->contains($request)) {
+            $this->requests[] = $request;
+            $request->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequest(Request $request): self
+    {
+        if ($this->requests->removeElement($request)) {
+            // set the owning side to null (unless already changed)
+            if ($request->getUser() === $this) {
+                $request->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

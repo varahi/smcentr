@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Request as UserRequest;
 use App\Entity\Notification as UserNotification;
 use App\Form\User\ClientProfileFormType;
+use App\Form\Request\RequestFormType;
 use App\Form\User\CompanyProfileFormType;
 use App\Form\User\MasterProfileFormType;
-use App\Form\User\RegistrationFormType;
 use App\Repository\CityRepository;
 use App\Repository\DistrictRepository;
 use App\Repository\JobTypeRepository;
@@ -17,6 +18,7 @@ use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\FileUploader;
+use App\Service\Mailer;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,7 +27,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
@@ -36,14 +37,11 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as SecurityGranted;
 use App\ImageOptimizer;
-#use App\Controller\Traits\EmailVerifyTrait;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
 class UserController extends AbstractController
 {
-    //use EmailVerifyTrait;
-
     /**
      * Time in seconds 3600 - one hour
      */
@@ -703,15 +701,37 @@ class UserController extends AbstractController
      * @Route("/user/withdrawal-request", name="app_withdrawal_request")
      */
     public function withdrawalRequest(
+        Request $request,
         TranslatorInterface $translator,
-        NotifierInterface $notifier
-    ) {
+        NotifierInterface $notifier,
+        Mailer $mailer
+    ): Response {
         if ($this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
+            $userRequest = new UserRequest();
+            $form = $this->createForm(RequestFormType::class, $userRequest);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $userRequest->setUser($user);
+
+                $entityManager = $this->doctrine->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // ToDo: mail template
+                //$subject = $translator->trans('New company registered', array(), 'messages');
+                //$mailer->sendNewCompanyEmail($user, $subject, 'emails/new_company_registration.html.twig');
+
+                $message = $translator->trans('Request send to admin', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute("app_company_profile");
+            }
 
             {
-                $response = new Response($this->twig->render('user/master/top_up_balance.html.twig', [
+                $response = new Response($this->twig->render('user/company/withdrawal_request.html.twig', [
                     'user' => $user,
+                    'form' => $form->createView(),
                 ]));
 
                 $response->setSharedMaxAge(self::CACHE_MAX_AGE);

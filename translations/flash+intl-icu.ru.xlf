@@ -93,6 +93,10 @@
         <source>Master assigned to order</source>
         <target>Мастер назначен на задание</target>
       </trans-unit>
+      <trans-unit id="Request sent to admin" resname="Request sent to admin">
+        <source>Request sent to admin</source>
+        <target>Запрос отправлен администратору</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

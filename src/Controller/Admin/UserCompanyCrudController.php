@@ -152,10 +152,10 @@ class UserCompanyCrudController extends AbstractCrudController
         ;
 
 
-        yield FormField::addPanel('Change password')->setIcon('fa fa-key');
-        yield FormField::addRow();
+        /*yield FormField::addPanel('Change password')->setIcon('fa fa-key');
+        yield FormField::addRow();*/
 
-        yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
+        /*yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
             ->setFormType(RepeatedType::class)
             ->setRequired(false)
             ->setFormTypeOptions([
@@ -174,7 +174,7 @@ class UserCompanyCrudController extends AbstractCrudController
                 'second_options'  => [ 'label' => 'Repeat password' ],
                 'error_bubbling'  => true,
                 'invalid_message' => 'The password fields do not match.',
-            ]);
+            ]);*/
 
         yield FormField::addPanel('Money')->setIcon('fa fa-money');
         yield MoneyField::new('balance')->setCurrency('RUB')->setCustomOption('storedAsCents', false)->setColumns('col-md-4');
@@ -239,7 +239,7 @@ class UserCompanyCrudController extends AbstractCrudController
         yield AssociationField::new('assignments')->hideOnIndex()->setColumns('col-md-4');
     }
 
-    public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    /*public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
         $plainPassword = $entityDto->getInstance()->getPassword();
         $formBuilder   = parent::createEditFormBuilder($entityDto, $formOptions, $context);
@@ -259,11 +259,10 @@ class UserCompanyCrudController extends AbstractCrudController
     protected function addEncodePasswordEventListener(FormBuilderInterface $formBuilder, $plainPassword = null): void
     {
         $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($plainPassword) {
-            /** @var User $user */
             $user = $event->getData();
             if ($user->getPassword() !== $plainPassword) {
                 $user->setPassword($this->passwordEncoder->hashPassword($user, $user->getPassword()));
             }
         });
-    }
+    }*/
 }
