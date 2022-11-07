@@ -229,3 +229,22 @@ input[required] + label:after {
 .tabs {
     margin-bottom: 20px;
 }
+
+
+.form-background {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 1px 2px 0px #00000029;
+    padding: 15px;
+    color: #717380;
+    margin: 20px 0;
+    text-align: center;
+}
+.form-background h1 {
+    text-align: center;
+    color: #000;
+}
+span.money {
+    font-size: 16px;
+    color: #000;
+}

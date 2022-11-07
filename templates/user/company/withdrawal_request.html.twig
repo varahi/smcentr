@@ -17,12 +17,17 @@
         {% include 'partials/_message.html.twig' %}
         <div class="row">
             <div class="col-md-12">
-                <h1>{{ 'Request a withdrawal'|trans }}</h1>
 
-                {{ form_start(form, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+                <div class="form-background">
+                    <h1>{{ 'Request a withdrawal'|trans }}</h1>
+                    <p>Вы собираетесь послать запрос на вывод средств в сумме <span class="money">{{ user.balance|format_currency('RUB') }}</span></p>
+                    <p>Если вы уверены, нажмите кнопку отправить</p>
+                    {{ form_start(form, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+                    <input type="hidden" name="request_form[amount]" value="{{ user.balance }}">
+                    <button>{{ 'Send'|trans }}</button>
+                    {{ form_end(form) }}
+                </div>
 
-                    <button>Обновить</button>
-                {{ form_end(form) }}
             </div>
         </div>
     </div>

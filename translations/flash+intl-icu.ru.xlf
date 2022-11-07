@@ -97,6 +97,14 @@
         <source>Request sent to admin</source>
         <target>Запрос отправлен администратору</target>
       </trans-unit>
+      <trans-unit id="Your balance is zero" resname="Your balance is zero">
+        <source>Your balance is zero</source>
+        <target>Ваш баланс равен нулю, вывод средств невозможен</target>
+      </trans-unit>
+      <trans-unit id="Request send to admin" resname="Request send to admin">
+        <source>Request send to admin</source>
+        <target>Ваш запрос выслан администратору</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

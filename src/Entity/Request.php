@@ -42,6 +42,11 @@ class Request
      */
     private $user;
 
+    public function __construct()
+    {
+        $this->created = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

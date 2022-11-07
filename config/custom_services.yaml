@@ -1,6 +1,7 @@
 # This is a custom service what can be different for each domain
 parameters:
-  default_admin_email: webmaster@smcentr.su
+  default_admin_email: info@smcentr.su
+  noreply_email: noreply@smcentr.su
   default_subject: Subject from site smcentr.su
   default_domain: 'smcentr.su'
   default_scheme: 'https'

@@ -1,0 +1,48 @@
+<h1>Сообщение с сайта smcentr.su</h1>
+
+<p>Поступил запрос на вывод средств от компании {{ user.fullName }}</p>
+
+<h2>Подробности запроса:</h2>
+
+<table>
+    <tr>
+        <td>
+            Номер запроса:
+        </td>
+        <td>
+            {{ request.id }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Название компании:
+        </td>
+        <td>
+            {{ user.fullName }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            E-mail компании:
+        </td>
+        <td>
+            {{ user.email }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Сумма запроса:
+        </td>
+        <td>
+            {{ request.amount|format_currency('RUB', {fraction_digit: 0}) }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Дата создания запроса:
+        </td>
+        <td>
+            {{ request.created|date("d.m.Y - H:i") }}
+        </td>
+    </tr>
+</table>

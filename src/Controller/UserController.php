@@ -59,6 +59,12 @@ class UserController extends AbstractController
 
     public const ROLE_COMPANY = 'ROLE_COMPANY';
 
+    public const REQUEST_STATUS_NEW = '0';
+
+    public const REQUEST_STATUS_ACTIVE = '1';
+
+    public const REQUEST_STATUS_COMPLETED  = '9';
+
     private $security;
 
     private $twig;
@@ -712,16 +718,32 @@ class UserController extends AbstractController
             $form = $this->createForm(RequestFormType::class, $userRequest);
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $userRequest->setUser($user);
+            if ($form->isSubmitted()) {
+                $post = $request->request->get('request_form');
+                if ($post['amount'] <= 0) {
+                    $message = $translator->trans('Your balance is zero', array(), 'flash');
+                    $notifier->send(new Notification($message, ['browser']));
+                    return $this->redirectToRoute("app_company_profile");
+                }
 
                 $entityManager = $this->doctrine->getManager();
-                $entityManager->persist($user);
+                $userRequest->setUser($user);
+                $userRequest->setAmount($post['amount']);
+                $userRequest->setStatus(self::REQUEST_STATUS_NEW);
+                $userRequest->setName('Request');
+
+                // Save request to get id for set name
+                $entityManager->persist($userRequest);
+                $entityManager->flush();
+                $userRequest->setName($userRequest->getId() . ' Request from ' . $user->getUsername() . ' on ' . $post['amount']);
+
+                // Finally save request
+                $entityManager->persist($userRequest);
                 $entityManager->flush();
 
-                // ToDo: mail template
-                //$subject = $translator->trans('New company registered', array(), 'messages');
-                //$mailer->sendNewCompanyEmail($user, $subject, 'emails/new_company_registration.html.twig');
+                // Send an email
+                $subject = $translator->trans('Withdrawal request', array(), 'messages');
+                $mailer->sendWithdrawalRequestEmail($user, $subject, 'emails/new_withdrawal_request.html.twig', $userRequest);
 
                 $message = $translator->trans('Request send to admin', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));

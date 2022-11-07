@@ -6,6 +6,7 @@ use App\Entity\Answer;
 use App\Entity\Order;
 use App\Entity\Ticket;
 use App\Entity\User;
+use App\Entity\Request as UserRequest;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Twig\Environment;
@@ -16,16 +17,20 @@ class Mailer
 {
     private $adminEmail;
 
+    private $noreplyEmail;
+
     private $mailer;
 
     public function __construct(
         MailerInterface $mailer,
         Environment $twig,
-        string $adminEmail
+        string $adminEmail,
+        string $noreplyEmail
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->adminEmail = $adminEmail;
+        $this->noreplyEmail = $noreplyEmail;
     }
 
     /**
@@ -142,6 +147,26 @@ class Mailer
                 'user' => $user,
                 'date' => $date,
                 'ticket' => $ticket
+            ]);
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function sendWithdrawalRequestEmail(User $user, string $subject, string $template, UserRequest $request)
+    {
+        $date = new \DateTime();
+        $email = (new TemplatedEmail())
+            ->subject($subject)
+            ->htmlTemplate($template)
+            ->from($this->noreplyEmail)
+            ->to($this->adminEmail)
+            ->context([
+                'user' => $user,
+                'date' => $date,
+                'request' => $request
             ]);
 
         $this->mailer->send($email);
