@@ -7,7 +7,7 @@
             <select id="" name="assign_master" required class="required">
                 <option value="" selected="selected">Выберите мастера</option>
                 {% for master in masters %}
-                    <option value="{{ master.id }}">{{ master.fullName }}</option>
+                    <option value="{{ master.id }}">{{ master.email }} - {{ master.fullName }}</option>
                 {% endfor %}
             </select>
             <button>{{ 'Submit'|trans }}</button>

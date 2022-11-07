@@ -342,7 +342,7 @@ class UserController extends AbstractController
         NotificationRepository $notificationRepository,
         UserNotification $userNotification
     ): Response {
-        if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER)) {
+        if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
             if ($user->getId() == $userNotification->getUser()->getId()) {
                 $userNotification->setIsRead('1');

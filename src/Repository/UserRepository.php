@@ -120,6 +120,36 @@ class UserRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param $role
+     * @param $company
+     * @return float|int|mixed|string
+     */
+    public function findByCompanyProfessionAndJobType($role, $company, $profession, $jobType)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('u')
+            ->from(self::USER_TABLE, 'u')
+            ->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%"'.$role.'"%')
+            ->andWhere($qb->expr()->eq('u.master', $company->getId()))
+            ->orderBy('u.id', 'ASC');
+
+        if (isset($profession) && !empty($profession)) {
+            $qb
+                    ->join('u.professions', 'p')
+                    ->andWhere($qb->expr()->eq('p.id', $profession->getId()));
+        }
+
+        if (isset($jobType) && !empty($jobType)) {
+            $qb
+                    ->leftJoin('u.jobTypes', 'j')
+                    ->andWhere($qb->expr()->eq('j.id', $jobType->getId()));
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

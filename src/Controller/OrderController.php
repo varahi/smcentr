@@ -488,7 +488,8 @@ class OrderController extends AbstractController
                 $notifier->send(new Notification($message, ['browser']));
                 return $this->redirectToRoute('app_login');
             }
-            $masters = $userRepository->findByCompany(self::ROLE_MASTER, $user);
+
+            $masters = $userRepository->findByCompanyProfessionAndJobType(self::ROLE_MASTER, $user, $order->getProfession(), $order->getJobType());
 
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($_POST['assign_master']) {

@@ -28,7 +28,7 @@
                 <a class="nav-link" href="{{ path('app_support') }}">Техническая поддержка</a>
             </li>
 
-            {% if is_granted('ROLE_MASTER') or is_granted('ROLE_CLIENT') %}
+            {% if is_granted('ROLE_MASTER') or is_granted('ROLE_CLIENT') or is_granted('ROLE_COMPANY') %}
                 {% set nts = 0 %}
                 {% if user.notifications %}
                     {% for notification in user.notifications %}
