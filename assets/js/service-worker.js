@@ -1,10 +1,12 @@
-let cacheName = "pwa-smcentr-dev"
+let cacheName = "pwa-smcentr"
 let  appShellFiles = [
-    '/images/favicon/favicon-16x16.png',
-    '/images/favicon/apple-icon-144x144.png',
-    '/images/favicon/android-chrome-512x512.png',
+    '/assets/favicon/android-icon-36x36.png',
+    '/assets/favicon/android-icon-48x48.png',
+    '/assets/favicon/android-icon-72x72.png',
+    '/assets/favicon/android-icon-96x96.png',
+    '/assets/favicon/android-icon-144x144.png',
+    '/assets/favicon/android-icon-192x192.png',
     '/build/app.js',
-    '/build/app1.js',
 ]
 
 self.addEventListener('install', (e) => {
