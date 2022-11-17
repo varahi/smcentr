@@ -3,6 +3,7 @@ twig:
     format: Y-m-d, H:i:s
     timezone: Europe/Moscow
     interval_format: '%%d days'
+    cache: false
   number_format:
     decimals: 2
     decimal_point: ','

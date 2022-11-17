@@ -38,6 +38,9 @@
                             <p class="text-grey">{{ 'No account'|trans }}
                                 <a href="{{ path('app_registration') }}">{{ 'Register'|trans }}</a>
                             </p>
+{#                            <p class="text-grey">{{ 'Follow changes'|trans }}#}
+                                <button type="button" id="subscribe">Следить за изменениями</button>
+                            </p>
                         {% endif %}
                         {% include 'partials/_download_app.html.twig' %}
                     </div>
