@@ -29,6 +29,8 @@ class TicketController extends AbstractController
 
     public const ROLE_EDITOR = 'ROLE_EDITOR';
 
+    public const ROLE_SUPPORT = 'ROLE_SUPPORT';
+
     public const ROLE_CLIENT = 'ROLE_CLIENT';
 
     public const ROLE_MASTER = 'ROLE_MASTER';
@@ -90,7 +92,7 @@ class TicketController extends AbstractController
         NotifierInterface $notifier,
         TranslatorInterface $translator
     ): Response {
-        if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR)) {
+        if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR) || $this->isGranted(self::ROLE_SUPPORT)) {
             $user = $this->security->getUser();
 
             $newTickets = $ticketRepository->findAllByStatus(self::STATUS_NEW);
@@ -121,7 +123,7 @@ class TicketController extends AbstractController
         ManagerRegistry $doctrine,
         Mailer $mailer
     ): Response {
-        if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR)) {
+        if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR) || $this->isGranted(self::ROLE_SUPPORT)) {
             $user = $this->security->getUser();
             $answer = new Answer();
             $form = $this->createForm(AnswerFormType::class, $answer);
@@ -296,7 +298,7 @@ class TicketController extends AbstractController
         Ticket $ticket,
         ManagerRegistry $doctrine
     ) {
-        if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR)) {
+        if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR) || $this->isGranted(self::ROLE_SUPPORT)) {
             $entityManager = $doctrine->getManager();
             $ticket->setStatus(self::STATUS_ACTIVE);
             $entityManager->persist($ticket);

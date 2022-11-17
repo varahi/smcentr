@@ -175,7 +175,7 @@ class UserController extends AbstractController
                     'completedOrders' => $completedOrders
                 ]));
 
-                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;
             }
         } else {
@@ -237,7 +237,7 @@ class UserController extends AbstractController
                     'completedOrders' => $completedOrders
                 ]));
 
-                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;
             }
         } else {
@@ -288,7 +288,7 @@ class UserController extends AbstractController
                     'completedOrders' => $completedOrders
                 ]));
 
-                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;
             }
         } else {
@@ -321,7 +321,7 @@ class UserController extends AbstractController
                     'viewedNotifications' => $viewedNotifications
                 ]));
 
-                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;
             }
         } else {
@@ -434,8 +434,9 @@ class UserController extends AbstractController
 
                 $message = $translator->trans('Profile updated', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
-                $referer = $request->headers->get('referer');
-                return new RedirectResponse($referer);
+                return $this->redirectToRoute("app_client_profile");
+                //$referer = $request->headers->get('referer');
+                //return new RedirectResponse($referer);
             }
 
             {
@@ -446,7 +447,7 @@ class UserController extends AbstractController
                     'form' => $form->createView(),
                 ]));
 
-                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;
             }
         } else {
@@ -572,8 +573,9 @@ class UserController extends AbstractController
 
                 $message = $translator->trans('Profile updated', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
-                $referer = $request->headers->get('referer');
-                return new RedirectResponse($referer);
+                return $this->redirectToRoute('app_master_profile');
+                //$referer = $request->headers->get('referer');
+                //return new RedirectResponse($referer);
             }
 
             {
@@ -586,7 +588,7 @@ class UserController extends AbstractController
                     'form' => $form->createView(),
                 ]));
 
-                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;
             }
         } else {
@@ -651,8 +653,9 @@ class UserController extends AbstractController
 
                 $message = $translator->trans('Profile updated', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
-                $referer = $request->headers->get('referer');
-                return new RedirectResponse($referer);
+                return $this->redirectToRoute("app_company_profile");
+                //$referer = $request->headers->get('referer');
+                //return new RedirectResponse($referer);
             }
 
             {
@@ -663,7 +666,7 @@ class UserController extends AbstractController
                     'form' => $form->createView(),
                 ]));
 
-                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;
             }
         } else {
@@ -690,7 +693,7 @@ class UserController extends AbstractController
                     'user' => $user,
                 ]));
 
-                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;
             }
         } else {
@@ -756,7 +759,7 @@ class UserController extends AbstractController
                     'form' => $form->createView(),
                 ]));
 
-                $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+                //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;
             }
         } else {

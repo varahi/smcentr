@@ -69,7 +69,6 @@ class RegistrationController extends AbstractController
     /**
      * Require ROLE_MASTER for *every* controller method in this class.
      *
-     * @IsGranted("ROLE_SUPER_ADMIN")
      * @Route("/registration-company", name="app_registration_company")
      */
     public function registerCompany(

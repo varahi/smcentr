@@ -123,7 +123,7 @@ class UserMasterCrudController extends AbstractCrudController
 
         yield FormField::addRow();
         //yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
-        $roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
+        $roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_SUPPORT', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
         yield ChoiceField::new('roles')
             ->setChoices(array_combine($roles, $roles))
             ->allowMultipleChoices()
@@ -186,7 +186,8 @@ class UserMasterCrudController extends AbstractCrudController
         yield BooleanField::new('getNotifications');
         yield FormField::addRow();
         yield MoneyField::new('balance')->setCurrency('RUB')
-            ->setCustomOption('storedAsCents', false)->setColumns('col-md-4');
+            ->setCustomOption('storedAsCents', false)->setColumns('col-md-4')
+            ->setPermission('ROLE_SUPER_ADMIN');
         yield ImageField::new('avatar')
             ->setBasePath('uploads/files')
             ->setUploadDir('public_html/uploads/files')
@@ -215,7 +216,7 @@ class UserMasterCrudController extends AbstractCrudController
         yield AssociationField::new('assignments')->hideOnIndex()->setColumns('col-md-4');
 
         yield FormField::addRow();
-        yield AssociationField::new('notifications')->hideOnIndex()->setColumns('col-md-4');
+        yield AssociationField::new('notifications')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
     }
 
     /*public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface

@@ -127,7 +127,7 @@ class UserClientCrudController extends AbstractCrudController
 
         yield FormField::addRow();
 
-        $roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
+        $roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_SUPPORT', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
         yield ChoiceField::new('roles')
             ->setChoices(array_combine($roles, $roles))
             ->allowMultipleChoices()
@@ -150,7 +150,7 @@ class UserClientCrudController extends AbstractCrudController
         yield BooleanField::new('isVerified');
         yield BooleanField::new('isDisabled');
 
-        yield FormField::addPanel('Change password')->setIcon('fa fa-key');
+        yield FormField::addPanel('Change password')->setIcon('fa fa-key')->setPermission('ROLE_SUPER_ADMIN');
         yield FormField::addRow();
         yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
             ->setFormType(RepeatedType::class)
@@ -161,7 +161,8 @@ class UserClientCrudController extends AbstractCrudController
                 'second_options'  => [ 'label' => 'Repeat password' ],
                 'error_bubbling'  => true,
                 'invalid_message' => 'The password fields do not match.',
-            ]);
+            ])
+            ->setPermission('ROLE_SUPER_ADMIN');
         yield Field::new('password', 'New password')->onlyWhenUpdating()->setRequired(false)
             ->setFormType(RepeatedType::class)
             ->setRequired(false)
@@ -171,7 +172,8 @@ class UserClientCrudController extends AbstractCrudController
                 'second_options'  => [ 'label' => 'Repeat password' ],
                 'error_bubbling'  => true,
                 'invalid_message' => 'The password fields do not match.',
-            ]);
+            ])
+            ->setPermission('ROLE_SUPER_ADMIN');
 
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
         yield BooleanField::new('getNotifications');

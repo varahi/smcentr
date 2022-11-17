@@ -112,7 +112,7 @@ class UserCompanyCrudController extends AbstractCrudController
         yield EmailField::new('email')->setColumns('col-md-4');
 
         yield FormField::addRow();
-        /*$roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
+        /*$roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_SUPPORT', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
         yield ChoiceField::new('roles')
             ->setChoices(array_combine($roles, $roles))
             ->allowMultipleChoices()
@@ -130,7 +130,7 @@ class UserCompanyCrudController extends AbstractCrudController
         yield BooleanField::new('isVerified')->hideOnIndex();
         yield BooleanField::new('isDisabled');
 
-        yield FormField::addPanel('Contact Info')->setIcon('fa fa-info-circle');
+        yield FormField::addPanel('Contact info')->setIcon('fa fa-info-circle');
         yield FormField::addRow();
 
         yield AssociationField::new('city')->setColumns('col-md-4');
@@ -176,22 +176,25 @@ class UserCompanyCrudController extends AbstractCrudController
                 'invalid_message' => 'The password fields do not match.',
             ]);*/
 
-        yield FormField::addPanel('Money')->setIcon('fa fa-money');
-        yield MoneyField::new('balance')->setCurrency('RUB')->setCustomOption('storedAsCents', false)->setColumns('col-md-4');
+        yield FormField::addPanel('Requisites')->setIcon('fa fa-money')->setPermission('ROLE_SUPER_ADMIN');
+        yield MoneyField::new('balance')->setCurrency('RUB')
+            ->setCustomOption('storedAsCents', false)
+            ->setPermission('ROLE_SUPER_ADMIN')
+            ->setColumns('col-md-4');
         yield FormField::addRow();
-        yield TextField::new('inn')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
-        yield TextField::new('ogrn')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
+        yield TextField::new('inn')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
+        yield TextField::new('ogrn')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
         yield FormField::addRow();
-        yield TextField::new('checkingAccount')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
-        yield TextField::new('bank')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
+        yield TextField::new('checkingAccount')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
+        yield TextField::new('bank')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
         yield FormField::addRow();
-        yield TextField::new('cardNumber')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
-        yield TextField::new('cardFullName')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex();
+        yield TextField::new('cardNumber')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
+        yield TextField::new('cardFullName')->setColumns('col-md-4')->hideOnIndex()->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
 
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
         yield BooleanField::new('getNotifications');
-        yield PercentField::new('taxRate')->hideOnIndex()->setColumns('col-md-4');
-        yield PercentField::new('serviceTaxRate')->hideOnIndex()->setColumns('col-md-4');
+        yield PercentField::new('taxRate')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
+        yield PercentField::new('serviceTaxRate')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
 
         yield FormField::addRow();
         yield AssociationField::new('professions')

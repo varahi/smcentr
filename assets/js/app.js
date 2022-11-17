@@ -9,6 +9,7 @@ import '../css/bootstrap.min.css';
 import '../css/style.css';
 import '../css/owl.theme.default.min.css';
 import '../css/custom.css';
+import '../css/media_queries.css';
 
 //const $ = require('jquery');
 //import jquery from '../js/jquery.min.js'

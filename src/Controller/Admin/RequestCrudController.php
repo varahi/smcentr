@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 
 class RequestCrudController extends AbstractCrudController
 {
@@ -25,6 +26,12 @@ class RequestCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Request a withdrawal')
             ->setEntityLabelInPlural('Request a withdrawal')
             ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->disable('new');
     }
 
     public function configureFields(string $pageName): iterable

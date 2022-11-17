@@ -33,10 +33,12 @@ class UserAdminCrudController extends AbstractCrudController
     {
         $role = 'ROLE_SUPER_ADMIN';
         $role2 = 'ROLE_EDITOR';
+        $role3 = 'ROLE_SUPPORT';
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $qb->where('entity.roles LIKE :roles');
         $qb->setParameter('roles', '%"'.$role.'"%');
         $qb->setParameter('roles', '%"'.$role2.'"%');
+        $qb->setParameter('roles', '%"'.$role3.'"%');
         return $qb;
     }
 
@@ -62,9 +64,9 @@ class UserAdminCrudController extends AbstractCrudController
         yield EmailField::new('email');
         yield TextField::new('fullName');
         yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
-        yield ImageField::new('avatar')
+        /*yield ImageField::new('avatar')
             ->setBasePath('/uploads/files')
             ->setLabel('Avatar')
-            ->onlyOnIndex();
+            ->onlyOnIndex();*/
     }
 }

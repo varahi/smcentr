@@ -101,9 +101,9 @@ class OrderCrudController extends AbstractCrudController
             ]
         )->hideOnIndex()->setColumns('col-md-10');
 
-        yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideOnIndex();
-        yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10')->hideOnIndex();
-        yield BooleanField::new('sendAllMasters')->setColumns('col-md-10')->hideOnIndex();
+        yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideOnIndex()->setPermission('ROLE_EDITOR');
+        //yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10')->hideOnIndex();
+        //yield BooleanField::new('sendAllMasters')->setColumns('col-md-10')->hideOnIndex();
     }
 
     /*

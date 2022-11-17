@@ -793,6 +793,10 @@
             <source>Withdrawal request</source>
             <target>Запрос на вывод средств</target>
         </trans-unit>
+        <trans-unit id="Requisites" resname="Requisites">
+            <source>Requisites</source>
+            <target>Реквизиты</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

@@ -187,14 +187,13 @@
             </div>
         </div>
     </section>
-    {#<script>
-        $(function(){
-            $("#master_profile_form_phone").mask("+7(999) 999-9999");
-        });
-    </script>#}
+
     {% include 'partials/footer/_footer.html.twig' %}
 
     <script>
+        $(function(){
+            $("#master_profile_form_phone").mask("+7(999) 999-9999");
+        });
         if ($('#master_profile_form_professions_1').is(':checked')) {
             $( ".prof_1" ).addClass( 'show');
         }

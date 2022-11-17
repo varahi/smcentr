@@ -19,7 +19,7 @@ class SecurityController extends AbstractController
 
     public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
-    public const ROLE_ADMIN = 'ROLE_ADMIN';
+    public const ROLE_SUPPORT = 'ROLE_SUPPORT';
 
     public const ROLE_EDITOR = 'ROLE_EDITOR';
 
@@ -79,7 +79,7 @@ class SecurityController extends AbstractController
                 return $this->redirectToRoute("app_company_profile");
             } elseif (
                 $user != null && in_array(self::ROLE_EDITOR, $user->getRoles()) ||
-                $user != null && in_array(self::ROLE_ADMIN, $user->getRoles()) ||
+                $user != null && in_array(self::ROLE_SUPPORT, $user->getRoles()) ||
                 $user != null && in_array(self::ROLE_SUPER_ADMIN, $user->getRoles())
             ) {
                 return $this->redirectToRoute("app_backend");
@@ -101,7 +101,7 @@ class SecurityController extends AbstractController
             ]
         );
 
-        $response->setSharedMaxAge(self::CACHE_MAX_AGE);
+        //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
         return $response;
     }
 
