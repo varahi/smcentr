@@ -21,7 +21,7 @@ if ('Notification' in window) {
 }
 
 function saveTokenToDatabase() {
-    var url = 'http://smcentr.su.localhost/user-token'; // адрес скрипта на сервере который сохраняет ID устройства
+    var url = '/user-token'; // адрес скрипта на сервере который сохраняет ID устройства
     $.post(url, {
         //et5RE8KgsKs:APA91bHiqPo_5kgXYozxcuorulGxBzs9DGycPuXztAhcsE8mQrL41zAW9wPH3zLfo_Yy7FyYa9rIBiuiwTwlr7xX4GSeYet4bKq7Sb5ktLnK_Bo_aAvvjhZGlwrWVGwlBXYiqblRZoBC
         //d25NZDLqowo:APA91bHvEBrz-3ZgIvb8YazD6f3dpgQZdQ4be5i7P-XIQLNBIFtmhtHfxZkKeTIid-HsZ1KI6bmmp3MkNGD1hLzxDL23nsYejkjYks15q3Xj9emzAUND4kWgCaxPqgNgBYv83ML0y8U_
