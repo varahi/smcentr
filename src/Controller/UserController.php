@@ -718,7 +718,7 @@ class UserController extends AbstractController
         if ($this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
 
-            if($user->getBalance() <= 0) {
+            if ($user->getBalance() <= 0) {
                 $message = $translator->trans('Your balance is zero', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
                 return $this->redirectToRoute("app_company_profile");

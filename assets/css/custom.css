@@ -230,7 +230,6 @@ input[required] + label:after {
     margin-bottom: 20px;
 }
 
-
 .form-background {
     background: #fff;
     border-radius: 8px;
@@ -247,4 +246,20 @@ input[required] + label:after {
 span.money {
     font-size: 16px;
     color: #000;
+}
+
+span#subscribe {
+    color: #717380;
+    text-decoration: underline;
+}
+span#subscribe:hover {
+    text-decoration: none;
+}
+span.main-page-subscribe {
+    color: #FF8C00 !important;
+    text-decoration: none !important;
+}
+span.main-page-subscribe:hover {
+    color: #007bff !important;
+    text-decoration: underline !important;
 }

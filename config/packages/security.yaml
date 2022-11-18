@@ -43,7 +43,7 @@ security:
         ### ROLE_ADMIN - access to admin panel
         #- { path: ^/backend, roles: ROLE_SUPER_ADMIN, ROLE_EDITOR, ROLE_SUPPORT }
         #- { path: ^/backend, roles: ROLE_EDITOR }
-        #- { path: ^/backend, roles: ROLE_SUPPORT }
+        - { path: ^/backend, roles: ROLE_SUPPORT }
         - { path: ^/user/admin, roles: ROLE_ADMIN }
         ### Three different front-end groups
         - { path: ^/user/lk-client, roles: ROLE_CLIENT }

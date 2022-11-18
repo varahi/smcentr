@@ -789,14 +789,22 @@
         <source>Send</source>
         <target>Отправить</target>
       </trans-unit>
-        <trans-unit id="Withdrawal request" resname="Withdrawal request">
-            <source>Withdrawal request</source>
-            <target>Запрос на вывод средств</target>
-        </trans-unit>
-        <trans-unit id="Requisites" resname="Requisites">
-            <source>Requisites</source>
-            <target>Реквизиты</target>
-        </trans-unit>
+      <trans-unit id="jKr1RBm" resname="Withdrawal request">
+        <source>Withdrawal request</source>
+        <target>Запрос на вывод средств</target>
+      </trans-unit>
+      <trans-unit id="gq9iU7i" resname="Requisites">
+        <source>Requisites</source>
+        <target>Реквизиты</target>
+      </trans-unit>
+      <trans-unit id="U4KZOyS" resname="Follow changes">
+        <source>Follow changes</source>
+        <target>Следить за изменениями</target>
+      </trans-unit>
+      <trans-unit id="zA442px" resname="Subscribe">
+        <source>Subscribe</source>
+        <target>Подписаться</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

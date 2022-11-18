@@ -52,13 +52,15 @@ function sendTokenToServer(currentToken) {
     if (!isTokenSentToServer(currentToken)) {
         console.log('Отправка токена на сервер...');
 
-        var url = ''; // адрес скрипта на сервере который сохраняет ID устройства
+        var url = 'http://smcentr.su.localhost/user-token'; // адрес скрипта на сервере который сохраняет ID устройства
         $.post(url, {
             token: currentToken
         });
-
         setTokenSentToServer(currentToken);
+
+        //alert('Вы подписались на уведомления');
     } else {
+        //alert('Вы уже подписаны на уведомления');
         console.log('Токен уже отправлен на сервер.');
     }
 }

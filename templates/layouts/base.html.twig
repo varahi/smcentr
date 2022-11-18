@@ -16,8 +16,6 @@
         {{ encore_entry_script_tags('app') }}
         <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
         <script src="{{ asset('assets/js/jquery.simpleLoadMore.js') }}"></script>
-        <script type="text/javascript" src="//www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
-        <script type="text/javascript" src="{{ asset('assets/js/firebase_subscribe.js') }}"></script>
     {% endblock %}
 </head>
 <body>
@@ -25,11 +23,12 @@
 {% endblock %}
 
 {% block javascripts_footer %}
-
     <script src="{{ asset('assets/js/scripts.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.maskedinput.min.js') }}"></script>
+    <script type="text/javascript" src="//www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/firebase_subscribe.js') }}"></script>
 {% endblock %}
 
 </body>
