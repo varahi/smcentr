@@ -7,10 +7,17 @@
 imports:
     - { resource: custom_services.yaml }
 
+
 parameters:
     app.supported_locales: 'en|ru'
     router.request_context.host: '%env(default:default_domain:SYMFONY_DEFAULT_ROUTE_HOST)%'
     router.request_context.scheme: '%env(default:default_scheme:SYMFONY_DEFAULT_ROUTE_SCHEME)%'
+    default_admin_email: info@smcentr.su
+    noreply_email: noreply@smcentr.su
+    default_subject: Subject from site smcentr.su
+    default_domain: 'smcentr.su'
+    default_scheme: 'https'
+    firebase_api_key: ''
 
 services:
     # default configuration for services in *this* file
@@ -21,6 +28,8 @@ services:
           $targetDirectory: "%kernel.project_dir%/public_html/uploads/files"
           $adminEmail: "%env(string:default:default_admin_email:ADMIN_EMAIL)%"
           $noreplyEmail: "%env(string:default:noreply_email:NOREPLY_EMAIL)%"
+          $firebaseApiKey: "%env(string:default:noreply_email:FIREBASE_API_KEY)%"
+          $defaultDomain: "%env(string:default:noreply_email:DEFAULT_DOMAIN)%"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

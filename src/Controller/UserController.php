@@ -11,6 +11,7 @@ use App\Form\User\CompanyProfileFormType;
 use App\Form\User\MasterProfileFormType;
 use App\Repository\CityRepository;
 use App\Repository\DistrictRepository;
+use App\Repository\FirebaseRepository;
 use App\Repository\JobTypeRepository;
 use App\Repository\NotificationRepository;
 use App\Repository\OrderRepository;
@@ -18,6 +19,7 @@ use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\FileUploader;
+use App\Service\Firebase;
 use App\Service\Mailer;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -65,6 +67,8 @@ class UserController extends AbstractController
 
     public const REQUEST_STATUS_COMPLETED  = '9';
 
+    public const LIMIT_PER_PAGE = '3';
+
     private $security;
 
     private $twig;
@@ -75,7 +79,7 @@ class UserController extends AbstractController
 
     private $emailVerifier;
 
-    public const LIMIT_PER_PAGE = '3';
+    private $defaultDomain;
 
     /**
      * @param Security $security
@@ -83,6 +87,9 @@ class UserController extends AbstractController
      * @param ManagerRegistry $doctrine
      * @param ImageOptimizer $imageOptimizer
      * @param string $targetDirectory
+     * @param VerifyEmailHelperInterface $helper
+     * @param EmailVerifier $emailVerifier
+     * @param string $defaultDomain
      */
     public function __construct(
         Security $security,
@@ -91,7 +98,8 @@ class UserController extends AbstractController
         ImageOptimizer $imageOptimizer,
         string $targetDirectory,
         VerifyEmailHelperInterface $helper,
-        EmailVerifier $emailVerifier
+        EmailVerifier $emailVerifier,
+        string $defaultDomain
     ) {
         $this->security = $security;
         $this->twig = $twig;
@@ -100,6 +108,7 @@ class UserController extends AbstractController
         $this->targetDirectory = $targetDirectory;
         $this->verifyEmailHelper = $helper;
         $this->emailVerifier = $emailVerifier;
+        $this->defaultDomain = $defaultDomain;
     }
 
     /**
@@ -471,7 +480,9 @@ class UserController extends AbstractController
         ProfessionRepository $professionRepository,
         JobTypeRepository $jobTypeRepository,
         CityRepository $cityRepository,
-        DistrictRepository $districtRepository
+        DistrictRepository $districtRepository,
+        FirebaseRepository $firebaseRepository,
+        Firebase $firebase
     ): Response {
         if ($this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
@@ -571,11 +582,24 @@ class UserController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
+                $notification = [
+                    'title' => 'Some title',
+                    'body' => sprintf('Some action updated at %s.', date('H:i')),
+                    'icon' => $this->defaultDomain . '/assets/images/logo.svg',
+                    'click_action' => 'https://smcentr.localhost/',
+                ];
+
+                $tokens = $firebaseRepository->findAll();
+                if (count($tokens) > 0) {
+                    foreach ($tokens as $key => $token) {
+                        $firebase->sendSimplePushNotification($token->getToken(), $notification);
+                        //$ids[$key] = $token->getToken();
+                    }
+                }
+                //$firebase->sendPushNotification($ids, $notification);
                 $message = $translator->trans('Profile updated', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
                 return $this->redirectToRoute('app_master_profile');
-                //$referer = $request->headers->get('referer');
-                //return new RedirectResponse($referer);
             }
 
             {
