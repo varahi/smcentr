@@ -16,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FirebaseRepository extends ServiceEntityRepository
 {
+    public const TABLE = 'App\Entity\Firebase';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Firebase::class);
@@ -37,6 +39,22 @@ class FirebaseRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @param int $id
+     * @return int|mixed|string
+     */
+    public function findAllByUser($user)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('f')
+            ->from(self::TABLE, 'f')
+            ->join('f.user', 'u')
+            ->where($qb->expr()->eq('u.id', $user->getId()))
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

@@ -34,6 +34,9 @@ class FirebaseController extends AbstractController
             $firebase = new Firebase();
             $firebase->setHidden(0);
             $firebase->setToken($token);
+            if (null !== $this->security->getUser()) {
+                $firebase->setUser($this->security->getUser());
+            }
             $entityManager->persist($firebase);
             $entityManager->flush();
         }

@@ -256,6 +256,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $requests;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Firebase::class, mappedBy="user")
+     */
+    private $firebases;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -269,6 +274,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->companyMasters = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->requests = new ArrayCollection();
+        $this->firebases = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -1038,6 +1044,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($request->getUser() === $this) {
                 $request->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Firebase>
+     */
+    public function getFirebases(): Collection
+    {
+        return $this->firebases;
+    }
+
+    public function addFirebase(Firebase $firebase): self
+    {
+        if (!$this->firebases->contains($firebase)) {
+            $this->firebases[] = $firebase;
+            $firebase->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFirebase(Firebase $firebase): self
+    {
+        if ($this->firebases->removeElement($firebase)) {
+            // set the owning side to null (unless already changed)
+            if ($firebase->getUser() === $this) {
+                $firebase->setUser(null);
             }
         }
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\Traits\NotificationTrait;
+use App\Entity\Firebase;
 use App\Entity\Order;
 use App\Entity\Notification as UserNotification;
 use App\Form\Order\OrderFormCompanyType;
@@ -135,7 +136,8 @@ class OrderController extends AbstractController
         CityRepository $cityRepository,
         DistrictRepository $districtRepository,
         ProfessionRepository $professionRepository,
-        JobTypeRepository $jobTypeRepository
+        JobTypeRepository $jobTypeRepository,
+        Firebase $firebase
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
@@ -264,6 +266,10 @@ class OrderController extends AbstractController
                             // Send notifications for master
                             $message = $translator->trans('Notification new order for master', array(), 'messages');
                             $this->setNotification($order, $master, self::NOTIFICATION_NEW_ORDER, $message);
+
+                            // Send push notification
+                            $this->sendPushNotification('Новая заявка', $message, 'https://smcentr.su/');
+
                             $entityManager->flush();
                         }
                     }
@@ -272,6 +278,10 @@ class OrderController extends AbstractController
                 // Send notifications for user
                 $message = $translator->trans('Notification new order for user', array(), 'messages');
                 $this->setNotification($order, $user, self::NOTIFICATION_NEW_ORDER, $message);
+
+                // Send push notification
+                $this->sendPushNotification('Новая заявка', $message, 'https://smcentr.su/');
+
                 $entityManager->flush();
 
                 $message = $translator->trans('Order created', array(), 'flash');
@@ -314,7 +324,8 @@ class OrderController extends AbstractController
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         Order $order,
-        Mailer $mailer
+        Mailer $mailer,
+        Firebase $firebase
     ): Response {
         if ($this->security->isGranted(self::ROLE_CLIENT) || $this->security->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();
@@ -336,9 +347,15 @@ class OrderController extends AbstractController
                 $message = $translator->trans('Notification order closed', array(), 'messages');
                 $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $message);
 
+                // Send push notification
+                $this->sendPushNotification('Заявка закрыта', $message, 'https://smcentr.su/');
+
                 // Send notification for user
                 $message2 = $translator->trans('Notification order closed', array(), 'messages');
                 $this->setNotification($order, $order->getUsers(), self::NOTIFICATION_CHANGE_STATUS, $message2);
+
+                // Send push notification
+                $this->sendPushNotification('Заявка закрыта', $message2, 'https://smcentr.su/');
 
                 $entityManager->flush();
 
@@ -367,7 +384,8 @@ class OrderController extends AbstractController
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         Order $order,
-        Mailer $mailer
+        Mailer $mailer,
+        Firebase $firebase
     ): Response {
         if ($this->security->isGranted(self::ROLE_MASTER)) {
             $entityManager = $this->doctrine->getManager();
@@ -431,10 +449,17 @@ class OrderController extends AbstractController
             $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_BALANCE_MINUS, $messageStr1);
             $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $messageStr2);
 
+            // Send push notification
+            $this->sendCustomerPushNotification($message1, $messageStr1, 'https://smcentr.su/', $order->getPerformer());
+            $this->sendCustomerPushNotification('Вы взяли заявку', $messageStr2, 'https://smcentr.su/', $order->getPerformer());
+
             // Send notifications for user
             $message3 = $translator->trans('Your order has been processed', array(), 'messages');
             $messageStr3 = $message3 .' '.$order->getPerformer()->getFullName().' - '.$order->getPerformer()->getEmail();
             $this->setNotification($order, $order->getUsers(), self::NOTIFICATION_CHANGE_STATUS, $messageStr3);
+
+            // Send push notification
+            $this->sendCustomerPushNotification($message3, $messageStr3, 'https://smcentr.su/', $order->getUsers());
 
             // Set new order
             $order->getPerformer()->setBalance($newMasterBalance);
@@ -507,6 +532,10 @@ class OrderController extends AbstractController
                     // Send notification to master
                     $message = $translator->trans('The company has assigned you a task', array(), 'messages');
                     $this->setNotification($order, $master, self::NOTIFICATION_CHANGE_STATUS, $message);
+
+                    // Send push notification
+                    $this->sendCustomerPushNotification('Компания назначила для вас задание', $message, 'https://smcentr.su/', $master);
+
                     $entityManager->flush();
 
                     // Flash and redirect

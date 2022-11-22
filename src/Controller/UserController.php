@@ -582,7 +582,8 @@ class UserController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $notification = [
+                // Send push notification start
+                /*$notification = [
                     'title' => 'Some title',
                     'body' => sprintf('Some action updated at %s.', date('H:i')),
                     'icon' => $this->defaultDomain . '/assets/images/logo.svg',
@@ -593,10 +594,10 @@ class UserController extends AbstractController
                 if (count($tokens) > 0) {
                     foreach ($tokens as $key => $token) {
                         $firebase->sendSimplePushNotification($token->getToken(), $notification);
-                        //$ids[$key] = $token->getToken();
                     }
-                }
-                //$firebase->sendPushNotification($ids, $notification);
+                }*/
+                // Send push notification end
+
                 $message = $translator->trans('Profile updated', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
                 return $this->redirectToRoute('app_master_profile');

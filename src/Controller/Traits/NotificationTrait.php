@@ -7,6 +7,7 @@ namespace App\Controller\Traits;
 use App\Entity\Notification as UserNotification;
 use App\Entity\Order;
 use App\Entity\User;
+use App\Entity\Firebase;
 use App\Repository\CityRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
@@ -24,22 +25,32 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 trait NotificationTrait
 {
+    private $firebaseApiKey;
+
+    private $defaultDomain;
+
     /**
      * @param Security $security
      * @param Environment $twig
      * @param ManagerRegistry $doctrine
      * @param UrlGeneratorInterface $urlGenerator
+     * @param string $defaultDomain
+     * @param string $firebaseApiKey
      */
     public function __construct(
         Security $security,
         Environment $twig,
         ManagerRegistry $doctrine,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        string $defaultDomain,
+        string $firebaseApiKey
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
         $this->urlGenerator = $urlGenerator;
+        $this->defaultDomain = $defaultDomain;
+        $this->firebaseApiKey = $firebaseApiKey;
     }
 
     /**
@@ -126,7 +137,7 @@ trait NotificationTrait
                 $userNotification->setUser($user);
                 $userNotification->setMessage($post['message']);
                 $userNotification->setType(self::NOTIFICATION_MAILING);
-                $userNotification->setIsRead(0);
+                $userNotification->setIsRead((int)0);
                 $entityManager->persist($userNotification);
                 $entityManager->flush();
             }
@@ -152,8 +163,82 @@ trait NotificationTrait
         $notification->setMessage($messageStr);
         $notification->setType($type);
         $notification->setApplication($order);
-        $notification->setIsRead('0');
+        $notification->setIsRead((int)0);
 
         $entityManager->persist($notification);
+    }
+
+
+    public function sendPushNotification($title, $body, $click)
+    {
+        $notification = [
+            'title' => $title,
+            'body' => $body,
+            'icon' => $this->defaultDomain . '/assets/images/logo.svg',
+            'click_action' => $click,
+        ];
+
+        $entityManager = $this->doctrine->getManager();
+        $tokens = $entityManager->getRepository(Firebase::class)->findAll();
+        if (count($tokens) > 0) {
+            foreach ($tokens as $key => $token) {
+                $this->sendSimplePushNotification($token->getToken(), $notification);
+            }
+        }
+    }
+
+    public function sendCustomerPushNotification(
+        $title,
+        $body,
+        $click,
+        User $user
+    ) {
+        $notification = [
+            'title' => $title,
+            'body' => $body,
+            'icon' => $this->defaultDomain . '/assets/images/logo.svg',
+            'click_action' => $click,
+        ];
+
+        $entityManager = $this->doctrine->getManager();
+        $tokens = $entityManager->getRepository(Firebase::class)->findAllByUser($user);
+        if (count($tokens) > 0) {
+            foreach ($tokens as $key => $token) {
+                $this->sendSimplePushNotification($token->getToken(), $notification);
+            }
+        }
+    }
+
+    /**
+     * @param $token
+     * @param $msg
+     * @return void
+     */
+    public function sendSimplePushNotification($token, $notification)
+    {
+        ignore_user_abort();
+        ob_start();
+
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $serverApiKey = $this->firebaseApiKey;
+        $request_body = [
+            'notification' => $notification,
+            'to' => $token
+        ];
+        $fields = json_encode($request_body);
+        $request_headers = [
+            'Content-Type: application/json',
+            'Authorization: key=' . $serverApiKey,
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
     }
 }
