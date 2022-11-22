@@ -19,7 +19,7 @@ use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\FileUploader;
-use App\Service\Firebase;
+use App\Service\PushNotification;
 use App\Service\Mailer;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -482,7 +482,7 @@ class UserController extends AbstractController
         CityRepository $cityRepository,
         DistrictRepository $districtRepository,
         FirebaseRepository $firebaseRepository,
-        Firebase $firebase
+        PushNotification $firebase
     ): Response {
         if ($this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
