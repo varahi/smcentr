@@ -265,7 +265,9 @@ span.main-page-subscribe:hover {
 }
 
 /* PWA background image */
-#wrapper { display:none; }
+#wrapper {
+    display:none;
+}
 /*
 Using a media query to test for the display-mode of your application
 */
@@ -277,7 +279,8 @@ Using a media query to test for the display-mode of your application
 }
 
 #splash_screen {
-    /* all your splash screen styles */
+    /* splash screen styles */
+    background-color: #FF8C00;
     background-image: url(../images/strart_screen.svg);
-    background-size: 100%;
+/*    background-size: 100%;*/
 }
