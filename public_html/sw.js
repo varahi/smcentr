@@ -1,6 +1,7 @@
 var serviceWorkerOption = {
   "assets": [
     "/images/check_full.cfd965e2.svg",
+    "/images/strart_screen.106de8d1.svg",
     "/app.css",
     "/app.js",
     "/runtime.js"

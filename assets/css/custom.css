@@ -263,3 +263,21 @@ span.main-page-subscribe:hover {
     color: #007bff !important;
     text-decoration: underline !important;
 }
+
+/* PWA background image */
+#wrapper { display:none; }
+/*
+Using a media query to test for the display-mode of your application
+*/
+@media all and (display-mode: fullscreen) {
+    body {
+        margin: 0;
+        border: 5px solid #FF8C00;
+    }
+}
+
+#splash_screen {
+    /* all your splash screen styles */
+    background-image: url(../images/strart_screen.svg);
+    background-size: 100%;
+}

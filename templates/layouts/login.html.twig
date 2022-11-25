@@ -9,6 +9,18 @@
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
+    {% block javascripts_native %}
+        <script type="text/javascript">
+            /* with setTimeout you have control over how long the
+            splash screen sticks because the document will load first. */
+            setTimeout( function() {
+                var wrapper= document.getElementById("wrapper") ;
+                var splash_screen = document.getElementById("splash_screen") ;
+                document.body.removeChild(splash_screen) ;
+                wrapper.style.display = "initial" ;
+            } , 2000 ) ;
+        </script>
+    {% endblock %}
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
         <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
@@ -16,8 +28,11 @@
     {% endblock %}
 </head>
 <body>
+<div id="splash_screen"></div>
+<div id="wrapper">
 {% block body %}
 {% endblock %}
+</div>
 
 {% block javascripts_footer %}
     <script type="text/javascript" src="//www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
