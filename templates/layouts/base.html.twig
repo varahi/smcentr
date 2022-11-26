@@ -10,18 +10,18 @@
         {{ encore_entry_link_tags('app') }}
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/owl.carousel.min.css') }}">
     {% endblock %}
-    {% block javascripts_native %}
-        <script type="text/javascript">
-            /* with setTimeout you have control over how long the
-            splash screen sticks because the document will load first. */
-            setTimeout( function() {
-                var wrapper= document.getElementById("wrapper") ;
-                var splash_screen = document.getElementById("splash_screen") ;
-                document.body.removeChild(splash_screen) ;
-                wrapper.style.display = "initial" ;
-            } , 500 ) ;
-        </script>
-    {% endblock %}
+{#    {% block javascripts_native %}#}
+{#        <script type="text/javascript">#}
+{#            /* with setTimeout you have control over how long the#}
+{#            splash screen sticks because the document will load first. */#}
+{#            setTimeout( function() {#}
+{#                var wrapper= document.getElementById("wrapper") ;#}
+{#                var splash_screen = document.getElementById("splash_screen") ;#}
+{#                document.body.removeChild(splash_screen) ;#}
+{#                wrapper.style.display = "initial" ;#}
+{#            } , 500 ) ;#}
+{#        </script>#}
+{#    {% endblock %}#}
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
         <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
@@ -29,7 +29,7 @@
     {% endblock %}
 </head>
 <body>
-<div id="splash_screen"></div>
+{#<div id="splash_screen"></div>#}
 <div id="wrapper">
 {% block body %}
 {% endblock %}
