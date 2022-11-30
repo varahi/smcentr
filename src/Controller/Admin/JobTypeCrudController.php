@@ -44,7 +44,7 @@ class JobTypeCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield TextField::new('name');
         yield AssociationField::new('profession')->hideOnIndex();
-        yield AssociationField::new('users')->hideOnIndex();
+        //yield AssociationField::new('users')->hideOnIndex();
     }
 
     /*
