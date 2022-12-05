@@ -26,9 +26,12 @@
         <div class="id_item">
             ID {{ order.id }}
         </div>
-        <div class="prof">
-            {{ order.profession.name }}
-        </div>
+
+        {% if order.profession.__isInitialized__ == true %}
+            <div class="prof">
+                {{ order.profession.name }}
+            </div>
+        {% endif %}
         <div class="raiting">
             <p>Сложность</p>
             {% include 'partials/order/_order_stars.html.twig' %}
@@ -52,8 +55,10 @@
 {% set tax = '' %}
 {% if order.city.taxRates is not empty %}
     {% for taxRate in order.city.taxRates %}
+        {% if order.profession.__isInitialized__ == true %}
         {% if taxRate.id == order.profession.id %}
             {% set tax = taxRate.percent * order.price %}
+        {% endif %}
         {% endif %}
     {% endfor %}
 {% endif %}

@@ -22,6 +22,7 @@
             {{ order.jobType }}
         </td>
     </tr>
+    {% if order.profession.__isInitialized__ == true %}
     <tr>
         <td>
             Профессия:
@@ -30,6 +31,7 @@
             {{ order.profession }}
         </td>
     </tr>
+    {% endif %}
     <tr>
         <td>
             Стоимость заказа:
