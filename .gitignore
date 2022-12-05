@@ -36,3 +36,10 @@ public_html/uploads/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+backup/
+cgi-bin/
+document_errors/
+logs/
+#public_html/robots.txt
+public_shtml/

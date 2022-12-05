@@ -20,18 +20,24 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-    e.respondWith(
-        caches.match(e.request).then((r) => {
-            console.log('[Service Worker] Fetching resource: '+e.request.url);
-            return r || fetch(e.request).then((response) => {
-                return caches.open(cacheName).then((cache) => {
-                    console.log('[Service Worker] Caching new resource: '+e.request.url);
-                    if((e.request.url.indexOf('http') === 0)) {
-                        cache.put(e.request, response.clone());
-                    }
-                    return response;
+
+    // or you can do - if ( event.request.url.indexOf( '/blog/' ) !== -1 )
+    if ( event.request.url.match( '^.*(\/user\/).*$' ) ) {
+        return false;
+    } else {
+        e.respondWith(
+            caches.match(e.request).then((r) => {
+                console.log('[Service Worker] Fetching resource: '+e.request.url);
+                return r || fetch(e.request).then((response) => {
+                    return caches.open(cacheName).then((cache) => {
+                        console.log('[Service Worker] Caching new resource: '+e.request.url);
+                        if((e.request.url.indexOf('http') === 0)) {
+                            cache.put(e.request, response.clone());
+                        }
+                        return response;
+                    });
                 });
-            });
-        })
-    );
+            })
+        );
+    }
 });
