@@ -56,12 +56,12 @@ class Profession
     private $isHidden = false;
 
     /**
-     * @ORM\OneToMany(targetEntity=JobType::class, mappedBy="profession")
+     * @ORM\OneToMany(targetEntity=JobType::class, mappedBy="profession", cascade={"persist", "remove"})
      */
     private $jobTypes;
 
     /**
-     * @ORM\OneToMany(targetEntity=TaxRate::class, mappedBy="profession")
+     * @ORM\OneToMany(targetEntity=TaxRate::class, mappedBy="profession", cascade={"persist", "remove"})
      */
     private $taxRates;
 

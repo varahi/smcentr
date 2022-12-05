@@ -43,6 +43,6 @@ class CityCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield TextField::new('name');
         yield AssociationField::new('district')->hideOnIndex();
-        yield AssociationField::new('taxRates')->hideOnIndex();
+        //yield AssociationField::new('taxRates')->hideOnIndex();
     }
 }
