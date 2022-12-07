@@ -11,6 +11,7 @@ use App\Entity\Firebase;
 use App\Repository\CityRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
+use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Notifier\Notification\Notification;
@@ -56,7 +57,8 @@ trait NotificationTrait
         NotifierInterface $notifier,
         CityRepository $cityRepository,
         ProfessionRepository $professionRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        PushNotification $pushNotification
     ) {
         $post = $request->request->get('notification_form');
 
@@ -70,6 +72,13 @@ trait NotificationTrait
         // Find all masters by city and profession
         $users = $userRepository->findByCityAndProfession(self::ROLE_MASTER, $city, $profession);
         $this->sendNotification($post, $users);
+
+        // Send push notification
+        if (count($users) > 0) {
+            foreach ($users as $user) {
+                $pushNotification->sendPushNotification('Новая заявка', $post['message'], 'https://smcentr.su/');
+            }
+        }
     }
 
     public function notificationByCity(
@@ -77,7 +86,8 @@ trait NotificationTrait
         NotifierInterface $notifier,
         CityRepository $cityRepository,
         UserRepository $userRepository,
-        $role
+        $role,
+        PushNotification $pushNotification
     ) {
         $post = $request->request->get('notification_form');
         if ($post['city'] == '') {
@@ -89,21 +99,37 @@ trait NotificationTrait
         $city = $cityRepository->findOneBy(['id' => $post['city']]);
         $users = $userRepository->findByCity($role, $city);
         $this->sendNotification($post, $users);
+
+        // Send push notification
+        if (count($users) > 0) {
+            foreach ($users as $user) {
+                $pushNotification->sendPushNotification('Новая заявка', $post['message'], 'https://smcentr.su/');
+            }
+        }
     }
 
     public function notificationAllUsersByRole(
         Request $request,
         UserRepository $userRepository,
-        $role
+        $role,
+        PushNotification $pushNotification
     ) {
         $post = $request->request->get('notification_form');
         $users = $userRepository->findByRole($role);
         $this->sendNotification($post, $users);
+
+        // Send push notification
+        if (count($users) > 0) {
+            foreach ($users as $user) {
+                $pushNotification->sendPushNotification('Новая заявка', $post['message'], 'https://smcentr.su/');
+            }
+        }
     }
 
     public function notificationAllUsers(
         Request $request,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        PushNotification $pushNotification
     ) {
         $post = $request->request->get('notification_form');
         $clientUsers = $userRepository->findByRole(self::ROLE_CLIENT);
@@ -111,6 +137,13 @@ trait NotificationTrait
         $companyUsers = $userRepository->findByRole(self::ROLE_COMPANY);
         $users = array_merge($clientUsers, $masterUsers, $companyUsers);
         $this->sendNotification($post, $users);
+
+        // Send push notification
+        if (count($users) > 0) {
+            foreach ($users as $user) {
+                $pushNotification->sendPushNotification('Новая заявка', $post['message'], 'https://smcentr.su/');
+            }
+        }
     }
 
     /**
