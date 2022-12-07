@@ -194,6 +194,8 @@
         $(function(){
             $("#master_profile_form_phone").mask("+7(999) 999-9999");
         });
+
+        /*ToDo: optimize js code*/
         if ($('#master_profile_form_professions_1').is(':checked')) {
             $( ".prof_1" ).addClass( 'show');
         }
@@ -203,6 +205,22 @@
         if ($('#master_profile_form_professions_3').is(':checked')) {
             $( ".prof_3" ).addClass( 'show');
         }
+        if ($('#master_profile_form_professions_4').is(':checked')) {
+            $( ".prof_4" ).addClass( 'show');
+        }
+        if ($('#master_profile_form_professions_5').is(':checked')) {
+            $( ".prof_5" ).addClass( 'show');
+        }
+        if ($('#master_profile_form_professions_6').is(':checked')) {
+            $( ".prof_6" ).addClass( 'show');
+        }
+        if ($('#master_profile_form_professions_7').is(':checked')) {
+            $( ".prof_7" ).addClass( 'show');
+        }
+        if ($('#master_profile_form_professions_8').is(':checked')) {
+            $( ".prof_8" ).addClass( 'show');
+        }
+
 
         $("#master_profile_form_professions_1").click(function(){
             $(".prof_1").toggle(100);
@@ -213,6 +231,22 @@
         $("#master_profile_form_professions_3").click(function(){
             $(".prof_3").toggle(100);
         });
+        $("#master_profile_form_professions_4").click(function(){
+            $(".prof_4").toggle(100);
+        });
+        $("#master_profile_form_professions_5").click(function(){
+            $(".prof_5").toggle(100);
+        });
+        $("#master_profile_form_professions_6").click(function(){
+            $(".prof_6").toggle(100);
+        });
+        $("#master_profile_form_professions_7").click(function(){
+            $(".prof_7").toggle(100);
+        });
+        $("#master_profile_form_professions_8").click(function(){
+            $(".prof_8").toggle(100);
+        });
+
 
         // New avatar uploaded
         function readURL(input) {
@@ -298,6 +332,21 @@
         });
         $("#registration_master_form_professions_3").click(function(){
             $(".prof_3").toggle(100);
+        });
+        $("#registration_master_form_professions_4").click(function(){
+            $(".prof_4").toggle(100);
+        });
+        $("#registration_master_form_professions_5").click(function(){
+            $(".prof_5").toggle(100);
+        });
+        $("#registration_master_form_professions_6").click(function(){
+            $(".prof_6").toggle(100);
+        });
+        $("#registration_master_form_professions_7").click(function(){
+            $(".prof_7").toggle(100);
+        });
+        $("#registration_master_form_professions_8").click(function(){
+            $(".prof_8").toggle(100);
         });
     </script>
 
