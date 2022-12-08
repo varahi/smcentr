@@ -58,8 +58,7 @@ trait NotificationTrait
         CityRepository $cityRepository,
         ProfessionRepository $professionRepository,
         UserRepository $userRepository,
-        PushNotification $pushNotification,
-        TranslatorInterface $translator
+        PushNotification $pushNotification
     ) {
         $post = $request->request->get('notification_form');
 
@@ -77,7 +76,8 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                //$pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification('Уведомление с сайта smcentr.su', $post['message'], 'https://smcentr.su/');
             }
         }
     }
@@ -88,8 +88,7 @@ trait NotificationTrait
         CityRepository $cityRepository,
         UserRepository $userRepository,
         $role,
-        PushNotification $pushNotification,
-        TranslatorInterface $translator
+        PushNotification $pushNotification
     ) {
         $post = $request->request->get('notification_form');
         if ($post['city'] == '') {
@@ -105,7 +104,8 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                //$pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification('Уведомление с сайта smcentr.su', $post['message'], 'https://smcentr.su/');
             }
         }
     }
@@ -114,8 +114,7 @@ trait NotificationTrait
         Request $request,
         UserRepository $userRepository,
         $role,
-        PushNotification $pushNotification,
-        TranslatorInterface $translator
+        PushNotification $pushNotification
     ) {
         $post = $request->request->get('notification_form');
         $users = $userRepository->findByRole($role);
@@ -124,7 +123,8 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                //$pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification('Уведомление с сайта smcentr.su', $post['message'], 'https://smcentr.su/');
             }
         }
     }
@@ -132,8 +132,7 @@ trait NotificationTrait
     public function notificationAllUsers(
         Request $request,
         UserRepository $userRepository,
-        PushNotification $pushNotification,
-        TranslatorInterface $translator
+        PushNotification $pushNotification
     ) {
         $post = $request->request->get('notification_form');
         $clientUsers = $userRepository->findByRole(self::ROLE_CLIENT);
@@ -145,7 +144,8 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                //$pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification('Уведомление с сайта smcentr.su', $post['message'], 'https://smcentr.su/');
             }
         }
     }

@@ -1,0 +1,85 @@
+<script>
+    $(function(){
+        $("#registration_master_form_phone").mask("+7(999) 999-9999");
+    });
+    // New avatar uploaded
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#avatar')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function readDoc1(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#doc1')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function readDoc2(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#doc2')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function readDoc3(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#doc3')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    // Hover on upload button
+    $( ".upload_file_1" ).hover(
+        function() {
+            $( ".upload-1" ).addClass( 'hover');
+        }, function() {
+            $( ".upload-1" ).removeClass( 'hover');
+        }
+    );
+    $( ".upload_file_2" ).hover(
+        function() {
+            $( ".upload-2" ).addClass( 'hover');
+        }, function() {
+            $( ".upload-2" ).removeClass( 'hover');
+        }
+    );
+    $( ".upload_file_3" ).hover(
+        function() {
+            $( ".upload-3" ).addClass( 'hover');
+        }, function() {
+            $( ".upload-3" ).removeClass( 'hover');
+        }
+    );
+    $( ".upload_file_4" ).hover(
+        function() {
+            $( ".upload-4" ).addClass( 'hover');
+        }, function() {
+            $( ".upload-4" ).removeClass( 'hover');
+        }
+    );
+
+    {% for profession in professions %}
+    $("#registration_master_form_professions_{{ profession.id }}").click(function(){
+        $(".prof_{{ profession.id }}").toggle(100);
+    });
+    {% endfor %}
+</script>
