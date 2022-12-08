@@ -132,7 +132,6 @@
                     </div>
                 </div>
 
-                {#ToDo: set checkboxes#}
                 <div class="col-md-12">
                     <div class="reg_prof">
                         <h3>Специализация</h3>
@@ -195,58 +194,14 @@
             $("#master_profile_form_phone").mask("+7(999) 999-9999");
         });
 
-        /*ToDo: optimize js code*/
-        if ($('#master_profile_form_professions_1').is(':checked')) {
-            $( ".prof_1" ).addClass( 'show');
+        {% for profession in professions %}
+        if ($('#master_profile_form_professions_{{ profession.id }}').is(':checked')) {
+            $( ".prof_{{ profession.id }}" ).addClass( 'show');
         }
-        if ($('#master_profile_form_professions_2').is(':checked')) {
-            $( ".prof_2" ).addClass( 'show');
-        }
-        if ($('#master_profile_form_professions_3').is(':checked')) {
-            $( ".prof_3" ).addClass( 'show');
-        }
-        if ($('#master_profile_form_professions_4').is(':checked')) {
-            $( ".prof_4" ).addClass( 'show');
-        }
-        if ($('#master_profile_form_professions_5').is(':checked')) {
-            $( ".prof_5" ).addClass( 'show');
-        }
-        if ($('#master_profile_form_professions_6').is(':checked')) {
-            $( ".prof_6" ).addClass( 'show');
-        }
-        if ($('#master_profile_form_professions_7').is(':checked')) {
-            $( ".prof_7" ).addClass( 'show');
-        }
-        if ($('#master_profile_form_professions_8').is(':checked')) {
-            $( ".prof_8" ).addClass( 'show');
-        }
-
-
-        $("#master_profile_form_professions_1").click(function(){
-            $(".prof_1").toggle(100);
+        $("#master_profile_form_professions_{{ profession.id }}").click(function(){
+            $(".prof_{{ profession.id }}").toggle(100);
         });
-        $("#master_profile_form_professions_2").click(function(){
-            $(".prof_2").toggle(100);
-        });
-        $("#master_profile_form_professions_3").click(function(){
-            $(".prof_3").toggle(100);
-        });
-        $("#master_profile_form_professions_4").click(function(){
-            $(".prof_4").toggle(100);
-        });
-        $("#master_profile_form_professions_5").click(function(){
-            $(".prof_5").toggle(100);
-        });
-        $("#master_profile_form_professions_6").click(function(){
-            $(".prof_6").toggle(100);
-        });
-        $("#master_profile_form_professions_7").click(function(){
-            $(".prof_7").toggle(100);
-        });
-        $("#master_profile_form_professions_8").click(function(){
-            $(".prof_8").toggle(100);
-        });
-
+        {% endfor %}
 
         // New avatar uploaded
         function readURL(input) {
@@ -324,30 +279,11 @@
             }
         );
 
-        $("#registration_master_form_professions_1").click(function(){
-            $(".prof_1").toggle(100);
+        {% for profession in professions %}
+        $("#registration_master_form_professions_{{ profession.id }}").click(function(){
+            $(".prof_{{ profession.id }}").toggle(100);
         });
-        $("#registration_master_form_professions_2").click(function(){
-            $(".prof_2").toggle(100);
-        });
-        $("#registration_master_form_professions_3").click(function(){
-            $(".prof_3").toggle(100);
-        });
-        $("#registration_master_form_professions_4").click(function(){
-            $(".prof_4").toggle(100);
-        });
-        $("#registration_master_form_professions_5").click(function(){
-            $(".prof_5").toggle(100);
-        });
-        $("#registration_master_form_professions_6").click(function(){
-            $(".prof_6").toggle(100);
-        });
-        $("#registration_master_form_professions_7").click(function(){
-            $(".prof_7").toggle(100);
-        });
-        $("#registration_master_form_professions_8").click(function(){
-            $(".prof_8").toggle(100);
-        });
+        {% endfor %}
     </script>
 
 {% endblock %}

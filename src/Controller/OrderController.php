@@ -268,7 +268,7 @@ class OrderController extends AbstractController
                             $this->setNotification($order, $master, self::NOTIFICATION_NEW_ORDER, $message);
 
                             // Send push notification
-                            $pushNotification->sendPushNotification('Новая заявка', $message, 'https://smcentr.su/');
+                            $pushNotification->sendPushNotification($translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
 
                             $entityManager->flush();
                         }
@@ -280,7 +280,7 @@ class OrderController extends AbstractController
                 $this->setNotification($order, $user, self::NOTIFICATION_NEW_ORDER, $message);
 
                 // Send push notification
-                $pushNotification->sendPushNotification('Новая заявка', $message, 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
 
                 $entityManager->flush();
 
@@ -348,14 +348,14 @@ class OrderController extends AbstractController
                 $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $message);
 
                 // Send push notification
-                $pushNotification->sendPushNotification('Заявка закрыта', $message, 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message, 'https://smcentr.su/');
 
                 // Send notification for user
                 $message2 = $translator->trans('Notification order closed', array(), 'messages');
                 $this->setNotification($order, $order->getUsers(), self::NOTIFICATION_CHANGE_STATUS, $message2);
 
                 // Send push notification
-                $pushNotification->sendPushNotification('Заявка закрыта', $message2, 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message2, 'https://smcentr.su/');
 
                 $entityManager->flush();
 
@@ -451,7 +451,7 @@ class OrderController extends AbstractController
 
             // Send push notification
             $pushNotification->sendCustomerPushNotification($message1, $messageStr1, 'https://smcentr.su/', $order->getPerformer());
-            $pushNotification->sendCustomerPushNotification('Вы взяли заявку', $messageStr2, 'https://smcentr.su/', $order->getPerformer());
+            $pushNotification->sendCustomerPushNotification($translator->trans('You accepted application', array(), 'flash'), $messageStr2, 'https://smcentr.su/', $order->getPerformer());
 
             // Send notifications for user
             $message3 = $translator->trans('Your order has been processed', array(), 'messages');
@@ -535,7 +535,7 @@ class OrderController extends AbstractController
                     $this->setNotification($order, $master, self::NOTIFICATION_CHANGE_STATUS, $message);
 
                     // Send push notification
-                    $pushNotification->sendCustomerPushNotification('Компания назначила для вас задание', $message, 'https://smcentr.su/', $master);
+                    $pushNotification->sendCustomerPushNotification($this->translator->trans('The company has assigned you a task', array(), 'flash'), $message, 'https://smcentr.su/', $master);
 
                     $entityManager->flush();
 

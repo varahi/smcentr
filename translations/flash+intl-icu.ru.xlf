@@ -105,6 +105,18 @@
         <source>Request send to admin</source>
         <target>Ваш запрос выслан администратору</target>
       </trans-unit>
+      <trans-unit id="Website push notification" resname="Website push notification">
+        <source>Website push notification</source>
+        <target>Уведомление с сайта smcentr.su</target>
+      </trans-unit>
+      <trans-unit id="New order on site" resname="New order on site">
+        <source>New order on site</source>
+        <target>Новая заявка на сайте smcentr.su</target>
+      </trans-unit>
+      <trans-unit id="You accepted application" resname="You accepted application">
+        <source>You have accepted an application</source>
+        <target>Вы взяли заявку сайте smcentr.su</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

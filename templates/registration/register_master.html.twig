@@ -192,15 +192,11 @@
             }
         );
 
-        $("#registration_master_form_professions_1").click(function(){
-            $(".prof_1").toggle(100);
+        {% for profession in professions %}
+        $("#registration_master_form_professions_{{ profession.id }}").click(function(){
+            $(".prof_{{ profession.id }}").toggle(100);
         });
-        $("#registration_master_form_professions_2").click(function(){
-            $(".prof_2").toggle(100);
-        });
-        $("#registration_master_form_professions_3").click(function(){
-            $(".prof_3").toggle(100);
-        });
+        {% endfor %}
     </script>
 
 {% endblock %}

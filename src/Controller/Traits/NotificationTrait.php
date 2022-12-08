@@ -7,7 +7,6 @@ namespace App\Controller\Traits;
 use App\Entity\Notification as UserNotification;
 use App\Entity\Order;
 use App\Entity\User;
-use App\Entity\Firebase;
 use App\Repository\CityRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
@@ -20,12 +19,15 @@ use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  *
  */
 trait NotificationTrait
 {
+    private $translator;
+
     /**
      * @param Security $security
      * @param Environment $twig
@@ -36,12 +38,14 @@ trait NotificationTrait
         Security $security,
         Environment $twig,
         ManagerRegistry $doctrine,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        TranslatorInterface $translator
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
     }
 
     /**
@@ -76,7 +80,7 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification('Новая заявка', $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($this->translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
             }
         }
     }
@@ -103,7 +107,7 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification('Новая заявка', $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($this->translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
             }
         }
     }
@@ -121,7 +125,7 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification('Новая заявка', $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($this->translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
             }
         }
     }
@@ -141,7 +145,7 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification('Новая заявка', $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($this->translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
             }
         }
     }
