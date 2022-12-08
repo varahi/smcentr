@@ -89,42 +89,42 @@ class NotificationController extends AbstractController
 
                 // Notifications to masters of the chosen profession and the chosen city
                 if ($post['notificationType'] == 10) {
-                    $this->masterNotificationByProfessionAndCity($request, $notifier, $cityRepository, $professionRepository, $userRepository, $pushNotification);
+                    $this->masterNotificationByProfessionAndCity($request, $notifier, $cityRepository, $professionRepository, $userRepository, $pushNotification, $translator);
                 }
 
                 // Notifications to clients of the chosen city
                 if ($post['notificationType'] == 20) {
-                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_CLIENT, $pushNotification);
+                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_CLIENT, $pushNotification, $translator);
                 }
 
                 // Notifications to masters of the chosen city
                 if ($post['notificationType'] == 30) {
-                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_MASTER, $pushNotification);
+                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_MASTER, $pushNotification, $translator);
                 }
 
                 // Notifications to all masters
                 if ($post['notificationType'] == 40) {
-                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_MASTER, $pushNotification);
+                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_MASTER, $pushNotification, $translator);
                 }
 
                 // Notifications to all clients
                 if ($post['notificationType'] == 50) {
-                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_CLIENT, $pushNotification);
+                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_CLIENT, $pushNotification, $translator);
                 }
 
                 // Notifications to companies of the chosen city
                 if ($post['notificationType'] == 60) {
-                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_COMPANY, $pushNotification);
+                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_COMPANY, $pushNotification, $translator);
                 }
 
                 // Notifications to all companies
                 if ($post['notificationType'] == 70) {
-                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_COMPANY, $pushNotification);
+                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_COMPANY, $pushNotification, $translator);
                 }
 
                 // Notifications to all users
                 if ($post['notificationType'] == 80) {
-                    $this->notificationAllUsers($request, $userRepository, $pushNotification);
+                    $this->notificationAllUsers($request, $userRepository, $pushNotification, $translator);
                 }
 
                 $message = $translator->trans('Notifications sent', array(), 'flash');

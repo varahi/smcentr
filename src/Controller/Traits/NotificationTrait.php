@@ -26,8 +26,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 trait NotificationTrait
 {
-    private $translator;
-
     /**
      * @param Security $security
      * @param Environment $twig
@@ -38,14 +36,12 @@ trait NotificationTrait
         Security $security,
         Environment $twig,
         ManagerRegistry $doctrine,
-        UrlGeneratorInterface $urlGenerator,
-        TranslatorInterface $translator
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
         $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
     }
 
     /**
@@ -62,7 +58,8 @@ trait NotificationTrait
         CityRepository $cityRepository,
         ProfessionRepository $professionRepository,
         UserRepository $userRepository,
-        PushNotification $pushNotification
+        PushNotification $pushNotification,
+        TranslatorInterface $translator
     ) {
         $post = $request->request->get('notification_form');
 
@@ -80,7 +77,7 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification($this->translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
             }
         }
     }
@@ -91,7 +88,8 @@ trait NotificationTrait
         CityRepository $cityRepository,
         UserRepository $userRepository,
         $role,
-        PushNotification $pushNotification
+        PushNotification $pushNotification,
+        TranslatorInterface $translator
     ) {
         $post = $request->request->get('notification_form');
         if ($post['city'] == '') {
@@ -107,7 +105,7 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification($this->translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
             }
         }
     }
@@ -116,7 +114,8 @@ trait NotificationTrait
         Request $request,
         UserRepository $userRepository,
         $role,
-        PushNotification $pushNotification
+        PushNotification $pushNotification,
+        TranslatorInterface $translator
     ) {
         $post = $request->request->get('notification_form');
         $users = $userRepository->findByRole($role);
@@ -125,7 +124,7 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification($this->translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
             }
         }
     }
@@ -133,7 +132,8 @@ trait NotificationTrait
     public function notificationAllUsers(
         Request $request,
         UserRepository $userRepository,
-        PushNotification $pushNotification
+        PushNotification $pushNotification,
+        TranslatorInterface $translator
     ) {
         $post = $request->request->get('notification_form');
         $clientUsers = $userRepository->findByRole(self::ROLE_CLIENT);
@@ -145,7 +145,7 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                $pushNotification->sendPushNotification($this->translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
+                $pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
             }
         }
     }
