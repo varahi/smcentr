@@ -5,13 +5,13 @@
     <section id="reg_client">
         <div class="container">
             {% include 'partials/_logo_black.html.twig' %}
+            {% include 'partials/_message.html.twig' %}
 
             <div class="row">
                 <div class="col-md-12">
                     <h1>Регистрация Клиента</h1>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-12"></div>
                 {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}

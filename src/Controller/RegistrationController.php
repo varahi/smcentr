@@ -135,17 +135,41 @@ class RegistrationController extends AbstractController
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         ManagerRegistry $doctrine,
-        FileUploader $fileUploader
+        FileUploader $fileUploader,
+        UserRepository $userRepository
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             // encode the plain password
-            $user->setPassword(
-                $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
-            );
+            $post = $_POST['registration_form'];
+            $existingUser = $userRepository->findOneBy(['email' => $post['email']]);
+
+            // Check if user existing
+            if (null !== $existingUser) {
+                $message = $translator->trans('User existing', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
+            }
+
+            // Check if password mismatch
+            if ($post['plainPassword']['first'] !=='' && $post['plainPassword']['second'] !=='') {
+                if (strcmp($post['plainPassword']['first'], $post['plainPassword']['second']) == 0) {
+                    // encode the plain password
+                    $user->setPassword(
+                        $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
+                    );
+                } else {
+                    $message = $translator->trans('Mismatch password', array(), 'flash');
+                    $notifier->send(new Notification($message, ['browser']));
+                    $referer = $request->headers->get('referer');
+                    return new RedirectResponse($referer);
+                }
+            }
+
             $user->setUsername($form->get('email')->getData());
             $user->setRoles(array('ROLE_CLIENT'));
             // Upload avatar file if exist
@@ -201,7 +225,8 @@ class RegistrationController extends AbstractController
         ManagerRegistry $doctrine,
         ProfessionRepository $professionRepository,
         JobTypeRepository $jobTypeRepository,
-        FileUploader $fileUploader
+        FileUploader $fileUploader,
+        UserRepository $userRepository
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationMasterFormType::class, $user);
@@ -211,10 +236,32 @@ class RegistrationController extends AbstractController
         $jobTypes = $jobTypeRepository->findAllOrder(['name' => 'ASC']);
 
         if ($form->isSubmitted()) {
-            // encode the plain password
-            $user->setPassword(
-                $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
-            );
+            $post = $_POST['registration_master_form'];
+            $existingUser = $userRepository->findOneBy(['email' => $post['email']]);
+
+            // Check if user existing
+            if (null !== $existingUser) {
+                $message = $translator->trans('User existing', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
+            }
+
+            // Check if password mismatch
+            if ($post['plainPassword']['first'] !=='' && $post['plainPassword']['second'] !=='') {
+                if (strcmp($post['plainPassword']['first'], $post['plainPassword']['second']) == 0) {
+                    // encode the plain password
+                    $user->setPassword(
+                        $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
+                    );
+                } else {
+                    $message = $translator->trans('Mismatch password', array(), 'flash');
+                    $notifier->send(new Notification($message, ['browser']));
+                    $referer = $request->headers->get('referer');
+                    return new RedirectResponse($referer);
+                }
+            }
+
             $user->setUsername($form->get('email')->getData());
             $user->setRoles(array('ROLE_MASTER'));
 

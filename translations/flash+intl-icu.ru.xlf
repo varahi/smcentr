@@ -117,6 +117,10 @@
         <source>You have accepted an application</source>
         <target>Вы взяли заявку сайте smcentr.su</target>
       </trans-unit>
+      <trans-unit id="User existing" resname="User existing">
+        <source>User existing</source>
+        <target>Пользователь с таким почтовым ящиком уже зарегистрирован в системе</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
