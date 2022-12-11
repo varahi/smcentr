@@ -107,7 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $balance;
 
     /**
-     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="users")
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="users", cascade={"persist", "remove"})
      */
     private $orders;
 
@@ -132,7 +132,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $jobTypes;
 
     /**
-     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="performer")
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="performer", cascade={"persist", "remove"})
      */
     private $assignments;
 
@@ -142,12 +142,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $created;
 
     /**
-     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $ticket;
 
     /**
-     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $answers;
 
@@ -192,7 +192,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $companyMasters;
 
     /**
-     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $notifications;
 
@@ -252,7 +252,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $cardFullName;
 
     /**
-     * @ORM\OneToMany(targetEntity=Request::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Request::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $requests;
 
@@ -260,6 +260,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToMany(targetEntity=Firebase::class, mappedBy="user")
      */
     private $firebases;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ResetPasswordRequest::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $resetPasswordRequest;
 
     public function __construct()
     {
@@ -275,6 +280,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->notifications = new ArrayCollection();
         $this->requests = new ArrayCollection();
         $this->firebases = new ArrayCollection();
+        $this->resetPasswordRequest = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -1079,4 +1085,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getResetPasswordRequest(): ArrayCollection
+    {
+        return $this->resetPasswordRequest;
+    }
+
+    /**
+     * @param ArrayCollection $resetPasswordRequest
+     */
+    public function setResetPasswordRequest(ArrayCollection $resetPasswordRequest): void
+    {
+        $this->resetPasswordRequest = $resetPasswordRequest;
+    }
+
+//    public function removeResetPasswordRequest(ResetPasswordRequest $resetPasswordRequest): self
+//    {
+//        if ($this->requests->removeElement($resetPasswordRequest)) {
+//            // set the owning side to null (unless already changed)
+//            if ($resetPasswordRequest->getUser() === $this) {
+//                $resetPasswordRequest->setUser(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 }

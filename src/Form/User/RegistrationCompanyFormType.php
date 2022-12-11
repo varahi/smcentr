@@ -304,7 +304,8 @@ class RegistrationCompanyFormType extends AbstractType
                 'label' => false,
                 'translation_domain' => 'forms',
             ])
-            ->add('companyMasters', EntityType::class, [
+
+            /*->add('companyMasters', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
                 'multiple'  => true,
@@ -319,6 +320,7 @@ class RegistrationCompanyFormType extends AbstractType
                 },
                 'label' => 'Company Masters2',
             ])
+
             ->add('companyClients', EntityType::class, [
                 'class' => User::class,
                 'required' => false,
@@ -333,7 +335,7 @@ class RegistrationCompanyFormType extends AbstractType
                         ->orderBy('u.username', 'ASC');
                 },
                 'label' => 'Company Clients2',
-            ])
+            ])*/
         ;
     }
 

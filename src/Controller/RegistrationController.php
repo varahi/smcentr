@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Profession;
 use App\Entity\User;
+use App\Form\User\RegistrationAdminFormType;
 use App\Form\User\RegistrationCompanyFormType;
 use App\Form\User\RegistrationFormType;
 use App\Form\User\RegistrationMasterFormType;
@@ -64,6 +65,69 @@ class RegistrationController extends AbstractController
     {
         return $this->render('registration/index.html.twig', [
         ]);
+    }
+
+    /**
+     *
+     * @Route("/registration-admin", name="app_registration_admin")
+     */
+    public function registerAdmin(
+        Request $request,
+        TranslatorInterface $translator,
+        NotifierInterface $notifier,
+        UserPasswordHasherInterface $passwordHasher,
+        ManagerRegistry $doctrine,
+        Mailer $mailer
+    ): Response {
+        if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR)) {
+            $user = new User();
+            $form = $this->createForm(RegistrationAdminFormType::class, $user);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted()) {
+                $post = $_POST['registration_admin_form'];
+                $plainPassword = $post['plainPassword']['first'];
+
+                // encode the plain password
+                $user->setPassword(
+                    $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
+                );
+
+                $user->setUsername($form->get('email')->getData());
+
+                // 1 - super admin, 2 - editor, 3 - support
+                if ($post['role'] == 1) {
+                    $user->setRoles(["ROLE_SUPER_ADMIN","ROLE_EDITOR","ROLE_SUPPORT"]);
+                } elseif ($post['role'] == 2) {
+                    $user->setRoles(["ROLE_EDITOR","ROLE_SUPPORT"]);
+                } elseif ($post['role'] == 3) {
+                    //$user->setRoles(array('ROLE_SUPPORT'));
+                    $user->setRoles(["ROLE_SUPPORT"]);
+                }
+
+                $user->setIsVerified('1');
+
+                $entityManager = $doctrine->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $subject = $translator->trans('New admin registered', array(), 'messages');
+                $mailer->sendNewCompanyEmail($user, $subject, 'emails/new_admin_registration.html.twig', $plainPassword);
+
+                $message = $translator->trans('Admin registered', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
+            }
+
+            return $this->render('registration/register_admin.html.twig', [
+                'registrationForm' => $form->createView(),
+            ]);
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
     }
 
     /**

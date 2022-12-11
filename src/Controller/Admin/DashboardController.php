@@ -56,9 +56,10 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Districts', 'fa fa-building', District::class),
             MenuItem::linkToCrud('Professions', 'fa fa-users', Profession::class),
             MenuItem::linkToCrud('Job Types', 'fa fa-industry', JobType::class),
-            MenuItem::section('<hr />'),
             MenuItem::linkToCrud('Tax Rate', 'fa fa-percent', TaxRate::class)
         ])->setPermission('ROLE_EDITOR');
+
+        yield MenuItem::section('<hr />');
 
         yield MenuItem::section('Users');
         yield MenuItem::subMenu('Users', 'fa fa fa-cog')->setSubItems([
@@ -69,16 +70,37 @@ class DashboardController extends AbstractDashboardController
 
             MenuItem::linkToRoute('Create company', 'fa fa-users', 'app_registration_company')->setPermission('ROLE_EDITOR'),
             //MenuItem::linkToRoute('Edit company', 'fa fa-users', 'app_registration_company'),
-            MenuItem::section('<hr />')->setPermission('ROLE_EDITOR'),
-            //MenuItem::linkToCrud('Moderators', 'fa fa-user', User::class)->setController(UserAdminCrudController::class),
-            MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)
-                ->setController(UserAdminCrudController::class)->setPermission('ROLE_EDITOR'),
-            MenuItem::section(''),
 
+            //MenuItem::section('<hr />')->setPermission('ROLE_EDITOR'),
+            //MenuItem::linkToCrud('Moderators', 'fa fa-user', User::class)->setController(UserAdminCrudController::class),
+            //MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class)->setPermission('ROLE_EDITOR'),
+            //MenuItem::section(''),
+        ]);
+
+        yield MenuItem::section('Admins');
+        yield MenuItem::subMenu('Admins', 'fa fa fa-user-secret')->setSubItems([
+            MenuItem::linkToCrud('Super admins', 'fa fa-user', User::class)
+                ->setController(UserAdminCrudController::class)->setPermission('ROLE_EDITOR'),
+            MenuItem::linkToCrud('Editors', 'fa fa-user', User::class)
+                ->setController(UserEditorCrudController::class)->setPermission('ROLE_EDITOR'),
+            MenuItem::linkToCrud('Support', 'fa fa-user', User::class)
+                ->setController(UserSupportCrudController::class)->setPermission('ROLE_EDITOR'),
+
+            MenuItem::linkToRoute('Create admin', 'fa fa-users', 'app_registration_admin')->setPermission('ROLE_EDITOR'),
+        ]);
+
+        yield MenuItem::section('<hr />');
+
+        yield MenuItem::section('Notifications');
+        yield MenuItem::subMenu('Notifications', 'fa fa fa-sticky-note')->setSubItems([
             MenuItem::linkToCrud('Notifications', 'fa fa-bell', Notification::class)->setPermission('ROLE_EDITOR'),
+            MenuItem::linkToCrud('Push Notifications', 'fa fa-bell', Notification::class)
+                ->setPermission('ROLE_EDITOR')->setController(PushNotificationCrudController::class),
             MenuItem::linkToRoute('Create notification', 'fa fa-bell-o', 'app_new_notification')
                 ->setPermission('ROLE_SUPER_ADMIN'),
-        ]);
+            ]);
+
+        yield MenuItem::section('<hr />');
 
         yield MenuItem::section('Information');
         yield MenuItem::subMenu('Information', 'fa fa fa-info')->setSubItems([

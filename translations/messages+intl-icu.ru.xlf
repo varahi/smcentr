@@ -805,6 +805,42 @@
         <source>Subscribe</source>
         <target>Подписаться</target>
       </trans-unit>
+      <trans-unit id="Oxd29UT" resname="Push Notifications">
+        <source>Push Notifications</source>
+        <target>Пуш уведомления</target>
+      </trans-unit>
+      <trans-unit id="jZefZZO" resname="Super admins">
+        <source>Super admins</source>
+        <target>Супер пользователи</target>
+      </trans-unit>
+      <trans-unit id="ux1hmGD" resname="Editors">
+        <source>Editors</source>
+        <target>Модераторы</target>
+      </trans-unit>
+      <trans-unit id="LtDvttG" resname="Super admin">
+        <source>Super admin</source>
+        <target>Супер пользователь</target>
+      </trans-unit>
+      <trans-unit id="k2oWHDk" resname="Editor">
+        <source>Editor</source>
+        <target>Модератор</target>
+      </trans-unit>
+      <trans-unit id="yHzFRvj" resname="New admin registered">
+        <source>New admin registered</source>
+        <target>Создан новый администратор</target>
+      </trans-unit>
+      <trans-unit id="fapG1B9" resname="Admin registration">
+        <source>Admin registration</source>
+        <target>Создать адинистратора</target>
+      </trans-unit>
+        <trans-unit id="Create admin" resname="Create admin">
+            <source>Admin registration</source>
+            <target>Создать адинистратора</target>
+        </trans-unit>
+        <trans-unit id="Full name" resname="Full name">
+            <source>Full name</source>
+            <target>Полное имя</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

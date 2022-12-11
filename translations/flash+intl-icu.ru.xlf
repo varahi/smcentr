@@ -121,6 +121,10 @@
         <source>User existing</source>
         <target>Пользователь с таким почтовым ящиком уже зарегистрирован в системе</target>
       </trans-unit>
+      <trans-unit id="Admin registered" resname="Admin registered">
+        <source>Admin registered</source>
+        <target>Создан новый администратор</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

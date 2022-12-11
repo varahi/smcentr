@@ -1,0 +1,46 @@
+{% extends 'layouts/login.html.twig' %}
+{% block title %}{{ 'Company registration'|trans }}{% endblock %}
+{% block body %}
+
+    <section id="reg_client">
+        <div class="container">
+            {% include 'partials/_message.html.twig' %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>{{ 'Admin registration'|trans }}</h1>
+                </div>
+            </div>
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <div class="md-6" style="margin-right: 30px">
+                            <div class="btn_profile_edit">
+                                <a href="{{ path('app_backend') }}"><button>{{ 'To admin panel'|trans }}</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="row">
+                <div class="col-md-12"></div>
+                {{ form_start(registrationForm, {'attr' : {'class': 'form-std company_form', 'autocomplete': 'off'}} ) }}
+                <div class="col-md-12">
+                    <div class="reg_contact reg_company">
+                        <h3>{{ 'Account'|trans }}</h3>
+                        {{ form_row(registrationForm.fullName) }}
+                        {{ form_row(registrationForm.email) }}
+                        {{ form_row(registrationForm.plainPassword, { label: 'Пароль'}) }}
+                        <select id="registration_admin_form" name="registration_admin_form[role]" required>
+                            <option value="">Выберите группу пользователя *</option>
+                            <option value="1">Супер админ</option>
+                            <option value="2">Модератор</option>
+                            <option value="3">Поддержка</option>
+                        </select>
+                    </div>
+                    <button>Регистрация</button>
+                </div>
+                {{ form_end(registrationForm) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}

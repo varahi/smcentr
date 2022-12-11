@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
@@ -22,10 +21,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Twig;
-use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 
-class UserAdminCrudController extends AbstractCrudController
+class UserSupportCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
@@ -39,32 +36,33 @@ class UserAdminCrudController extends AbstractCrudController
         $role3 = 'ROLE_SUPPORT';
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $qb->where('entity.roles LIKE :roles');
-        $qb->setParameter('roles', '%"'.$role.'"%');
+        //$qb->setParameter('roles', '%"'.$role.'"%');
         //$qb->setParameter('roles', '%"'.$role2.'"%');
-        //$qb->setParameter('roles', '%"'.$role3.'"%');
+        $qb->setParameter('roles', '["ROLE_SUPPORT"]');
         return $qb;
     }
 
     /*public function configureFilters(Filters $filters): Filters
     {
-        return $filters->add(EntityFilter::new('professions'));
+        return $filters
+            ->add(EntityFilter::new('professions'))
+            ;
     }*/
 
     public function configureActions(Actions $actions): Actions
     {
         return $actions
             ->disable('new');
-        //->disable('new', 'edit', 'delete');
     }
 
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Super admin')
-            ->setEntityLabelInPlural('Super admin')
-            ->setHelp('edit', 'Группа администраторов. Обладает всеми правами доступа')
-            ->setHelp('index', 'Группа администраторов. Обладает всеми правами доступа')
+            ->setEntityLabelInSingular('Support')
+            ->setEntityLabelInPlural('Support')
             ->setSearchFields(['firstName', 'lastName', 'email'])
+            ->setHelp('index', 'Группа поддержки. Только редактирование (добавление, удаление) заявок, клиентов, назначение мастеров на зявку, блокировка пользователей, техническая поддержка')
+            ->setHelp('edit', 'Группа поддержки. Только редактирование (добавление, удаление) заявок, клиентов, назначение мастеров на зявку, блокировка пользователей, техническая поддержка')
             ->setDefaultSort(['id' => 'DESC']);
     }
 
@@ -73,15 +71,10 @@ class UserAdminCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield EmailField::new('email');
         yield TextField::new('fullName');
-
         //yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
         /*yield ImageField::new('avatar')
             ->setBasePath('/uploads/files')
             ->setLabel('Avatar')
             ->onlyOnIndex();*/
-
-/*        return [
-            FormField::addPanel('Basic information'),
-        ];*/
     }
 }

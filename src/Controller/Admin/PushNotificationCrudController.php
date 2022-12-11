@@ -20,7 +20,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 
-class NotificationCrudController extends AbstractCrudController
+class PushNotificationCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
@@ -47,11 +47,7 @@ class NotificationCrudController extends AbstractCrudController
     {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $qb
-            ->where($qb->expr()->eq('entity.type', 1))
-            ->orWhere($qb->expr()->eq('entity.type', 2))
-            ->orWhere($qb->expr()->eq('entity.type', 3))
-            ->orWhere($qb->expr()->eq('entity.type', 4))
-            ->orWhere($qb->expr()->eq('entity.type', 4))
+            ->where($qb->expr()->eq('entity.type', 10))
             ;
         return $qb;
     }
