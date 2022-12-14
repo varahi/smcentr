@@ -338,24 +338,33 @@ class OrderController extends AbstractController
                 $entityManager->flush();
 
                 // Mail to owner for close order
-                if ($order->getUsers()->isGetNotifications() == 1) {
-                    $subject = $translator->trans('Your order closed by perfomer', array(), 'messages');
-                    $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_performer.html.twig', $order);
+                if ($this->security->isGranted(self::ROLE_MASTER)) {
+                    if ($order->getUsers()->isGetNotifications() == 1) {
+                        $subject = $translator->trans('Your order closed by perfomer', array(), 'messages');
+                        $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_performer.html.twig', $order);
+
+                        // Send notification for master
+                        $message = $translator->trans('Notification order closed', array(), 'messages');
+                        $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $message);
+
+                        // Send push notification
+                        $pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message, 'https://smcentr.su/');
+                    }
                 }
 
-                // Send notification for master
-                $message = $translator->trans('Notification order closed', array(), 'messages');
-                $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $message);
+                if ($this->security->isGranted(self::ROLE_CLIENT)) {
+                    if ($order->getUsers()->isGetNotifications() == 1) {
+                        $subject = $translator->trans('Your order closed by client', array(), 'messages');
+                        $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_client.html.twig', $order);
 
-                // Send push notification
-                $pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message, 'https://smcentr.su/');
+                        // Send notification for user
+                        $message2 = $translator->trans('Notification order closed', array(), 'messages');
+                        $this->setNotification($order, $order->getUsers(), self::NOTIFICATION_CHANGE_STATUS, $message2);
 
-                // Send notification for user
-                $message2 = $translator->trans('Notification order closed', array(), 'messages');
-                $this->setNotification($order, $order->getUsers(), self::NOTIFICATION_CHANGE_STATUS, $message2);
-
-                // Send push notification
-                $pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message2, 'https://smcentr.su/');
+                        // Send push notification
+                        $pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message2, 'https://smcentr.su/');
+                    }
+                }
 
                 $entityManager->flush();
 

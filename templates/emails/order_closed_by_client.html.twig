@@ -1,0 +1,73 @@
+<h1>Сообщение с сайта smcentr.su</h1>
+
+<p>Клиент {{ order.users.email }} - {{ order.users.fullName }} закрыл ваш заказ</p>
+<h2>Подробности заказа:</h2>
+
+<table>
+    <tr>
+        <td>
+            Id заказа:
+        </td>
+        <td>
+            {{ order.id }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Тип работы:
+        </td>
+        <td>
+            {{ order.jobType }}
+        </td>
+    </tr>
+    {% if order.profession.__isInitialized__ == true %}
+        <tr>
+            <td>
+                Профессия:
+            </td>
+            <td>
+                {{ order.profession }}
+            </td>
+        </tr>
+    {% endif %}
+    <tr>
+        <td>
+            Стоимость заказа:
+        </td>
+        <td>
+            {{ order.price|format_currency('RUB', {fraction_digit: 0}) }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Описание заказа:
+        </td>
+        <td>
+            {{ order.description }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Уровень сложности:
+        </td>
+        <td>
+            {{ order.level }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Телефон:
+        </td>
+        <td>
+            {{ order.phone }}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Срок исполнения заказа:
+        </td>
+        <td>
+            {{ order.deadline|date("d.m.Y") }}
+        </td>
+    </tr>
+</table>

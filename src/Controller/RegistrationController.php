@@ -77,6 +77,7 @@ class RegistrationController extends AbstractController
         NotifierInterface $notifier,
         UserPasswordHasherInterface $passwordHasher,
         ManagerRegistry $doctrine,
+        UserRepository $userRepository,
         Mailer $mailer
     ): Response {
         if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR)) {
@@ -87,6 +88,15 @@ class RegistrationController extends AbstractController
             if ($form->isSubmitted()) {
                 $post = $_POST['registration_admin_form'];
                 $plainPassword = $post['plainPassword']['first'];
+
+                // Check if user existing
+                $existingUser = $userRepository->findOneBy(['email' => $post['email']]);
+                if (null !== $existingUser) {
+                    $message = $translator->trans('User existing', array(), 'flash');
+                    $notifier->send(new Notification($message, ['browser']));
+                    $referer = $request->headers->get('referer');
+                    return new RedirectResponse($referer);
+                }
 
                 // encode the plain password
                 $user->setPassword(
@@ -153,6 +163,15 @@ class RegistrationController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $post = $_POST['registration_company_form'];
                 $plainPassword = $post['plainPassword']['first'];
+
+                // Check if user existing
+                $existingUser = $userRepository->findOneBy(['email' => $post['email']]);
+                if (null !== $existingUser) {
+                    $message = $translator->trans('User existing', array(), 'flash');
+                    $notifier->send(new Notification($message, ['browser']));
+                    $referer = $request->headers->get('referer');
+                    return new RedirectResponse($referer);
+                }
 
                 // encode the plain password
                 $user->setPassword(

@@ -37,6 +37,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use App\Service\Mailer;
+use Symfony\Component\Stopwatch\Section;
 
 class UserMasterCrudController extends AbstractCrudController
 {
@@ -119,7 +120,7 @@ class UserMasterCrudController extends AbstractCrudController
 
         yield FormField::addRow();
         yield EmailField::new('email')->setColumns('col-md-4');
-        yield TextField::new('fullName')->setColumns('col-md-4');
+        yield TextField::new('fullName')->setColumns('col-md-4')->hideOnIndex();
 
         //yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
         /*$roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_SUPPORT', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
@@ -182,18 +183,46 @@ class UserMasterCrudController extends AbstractCrudController
                 'invalid_message' => 'The password fields do not match.',
             ]);
 
-        yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
-        yield BooleanField::new('getNotifications')->hideOnIndex();
+        yield FormField::addPanel('Documents')->setIcon('fa fa-info-circle');
         yield FormField::addRow();
-        yield MoneyField::new('balance')->setCurrency('RUB')
-            ->setCustomOption('storedAsCents', false)->setColumns('col-md-4')
-            ->setPermission('ROLE_SUPER_ADMIN');
+
         yield ImageField::new('avatar')
             ->setBasePath('uploads/files')
             ->setUploadDir('public_html/uploads/files')
             ->setFormType(FileUploadType::class)
             ->setRequired(false)
             ->setColumns('col-md-4');
+
+        yield ImageField::new('doc1')
+            ->setBasePath('uploads/files')
+            ->setUploadDir('public_html/uploads/files')
+            ->setFormType(FileUploadType::class)
+            ->setRequired(false)
+            ->setColumns('col-md-4');
+
+        yield FormField::addRow();
+        yield ImageField::new('doc2')
+            ->setBasePath('uploads/files')
+            ->setUploadDir('public_html/uploads/files')
+            ->setFormType(FileUploadType::class)
+            ->setRequired(false)
+            ->setColumns('col-md-4');
+
+        yield ImageField::new('doc3')
+            ->setBasePath('uploads/files')
+            ->setUploadDir('public_html/uploads/files')
+            ->setFormType(FileUploadType::class)
+            ->setRequired(false)
+            ->setColumns('col-md-4');
+
+        yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
+        yield BooleanField::new('getNotifications')->hideOnIndex();
+        yield FormField::addRow();
+
+        yield MoneyField::new('balance')->setCurrency('RUB')
+            ->setCustomOption('storedAsCents', false)->setColumns('col-md-4')
+            ->setPermission('ROLE_SUPER_ADMIN')->hideOnIndex();
+
 
         yield FormField::addRow();
         yield AssociationField::new('city')->setColumns('col-md-4')->setRequired('1');

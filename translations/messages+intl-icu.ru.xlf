@@ -265,6 +265,10 @@
         <source>Your order closed by perfomer</source>
         <target>Ваш заказ закрыт исполнителем - smcentr.su</target>
       </trans-unit>
+        <trans-unit id="Your order closed by client" resname="Your order closed by client">
+            <source>Your order closed by client</source>
+            <target>Ваш заказ закрыт клиентом - smcentr.su</target>
+        </trans-unit>
       <trans-unit id="gnOme1W" resname="Admins">
         <source>Admins</source>
         <target>Администраторы</target>
