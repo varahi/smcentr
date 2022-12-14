@@ -60,11 +60,11 @@ class UserMasterCrudController extends AbstractCrudController
         return User::class;
     }
 
-    public function configureActions(Actions $actions): Actions
+    /*public function configureActions(Actions $actions): Actions
     {
         return $actions
             ->disable('new');
-    }
+    }*/
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): \Doctrine\ORM\QueryBuilder
     {
@@ -121,17 +121,17 @@ class UserMasterCrudController extends AbstractCrudController
         yield EmailField::new('email')->setColumns('col-md-4');
         yield TextField::new('fullName')->setColumns('col-md-4');
 
-        yield FormField::addRow();
         //yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
-        $roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_SUPPORT', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
+        /*$roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_SUPPORT', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
         yield ChoiceField::new('roles')
             ->setChoices(array_combine($roles, $roles))
             ->allowMultipleChoices()
             ->renderAsBadges()
             ->setPermission('ROLE_SUPER_ADMIN')
             ->hideOnIndex()
-            ->setColumns('col-md-4');
+            ->setColumns('col-md-4');*/
 
+        yield FormField::addRow();
         yield AssociationField::new('master')
             //->setFormTypeOption('disabled', 'disabled')
             ->setLabel('Master Company')
@@ -159,7 +159,7 @@ class UserMasterCrudController extends AbstractCrudController
         yield BooleanField::new('isVerified');
         yield BooleanField::new('isDisabled');
 
-        /*yield FormField::addPanel('Change password')->setIcon('fa fa-key');
+        yield FormField::addPanel('Change password')->setIcon('fa fa-key');
         yield FormField::addRow();
         yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
             ->setFormType(RepeatedType::class)
@@ -180,10 +180,10 @@ class UserMasterCrudController extends AbstractCrudController
                 'second_options'  => [ 'label' => 'Repeat password' ],
                 'error_bubbling'  => true,
                 'invalid_message' => 'The password fields do not match.',
-            ]);*/
+            ]);
 
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
-        yield BooleanField::new('getNotifications');
+        yield BooleanField::new('getNotifications')->hideOnIndex();
         yield FormField::addRow();
         yield MoneyField::new('balance')->setCurrency('RUB')
             ->setCustomOption('storedAsCents', false)->setColumns('col-md-4')
@@ -196,8 +196,8 @@ class UserMasterCrudController extends AbstractCrudController
             ->setColumns('col-md-4');
 
         yield FormField::addRow();
-        yield AssociationField::new('city')->setColumns('col-md-4');
-        yield AssociationField::new('district')->setColumns('col-md-4');
+        yield AssociationField::new('city')->setColumns('col-md-4')->setRequired('1');
+        yield AssociationField::new('district')->setColumns('col-md-4')->hideOnIndex();
 
         yield FormField::addRow();
         yield AssociationField::new('professions')
@@ -219,10 +219,13 @@ class UserMasterCrudController extends AbstractCrudController
         yield AssociationField::new('notifications')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
     }
 
-    /*public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
-        $plainPassword = $entityDto->getInstance()->getPassword();
-        $formBuilder   = parent::createEditFormBuilder($entityDto, $formOptions, $context);
+        if ($entityDto->getInstance() !== null) {
+            $plainPassword = $entityDto->getInstance()->getPassword();
+        }
+
+        $formBuilder  = parent::createEditFormBuilder($entityDto, $formOptions, $context);
         $this->addEncodePasswordEventListener($formBuilder, $plainPassword);
 
         return $formBuilder;
@@ -234,17 +237,28 @@ class UserMasterCrudController extends AbstractCrudController
         $this->addEncodePasswordEventListener($formBuilder);
 
         return $formBuilder;
-    }*/
+    }
 
     protected function addEncodePasswordEventListener(FormBuilderInterface $formBuilder, $plainPassword = null): void
     {
         $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($plainPassword) {
             /** @var User $user */
-            /*$user = $event->getData();
+            $user = $event->getData();
             if ($user->getPassword() !== $plainPassword) {
                 $user->setPassword($this->passwordEncoder->hashPassword($user, $user->getPassword()));
-            }*/
+            }
         });
+    }
+
+    public function createEntity(string $entityFqcn)
+    {
+        $user = new User();
+        $user->setRoles(['ROLE_MASTER']);
+        if ($user->getEmail()) {
+            $user->setUsername($user->getEmail());
+        }
+
+        return $user;
     }
 
     /**

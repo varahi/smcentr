@@ -65,11 +65,11 @@ class UserClientCrudController extends AbstractCrudController
         }
     }
 
-    public function configureActions(Actions $actions): Actions
+    /*public function configureActions(Actions $actions): Actions
     {
         return $actions
             ->disable('new');
-    }
+    }*/
 
     public static function getEntityFqcn(): string
     {
@@ -127,14 +127,14 @@ class UserClientCrudController extends AbstractCrudController
 
         yield FormField::addRow();
 
-        $roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_SUPPORT', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
+        /*$roles = [ 'ROLE_SUPER_ADMIN', 'ROLE_SUPPORT', 'ROLE_EDITOR', 'ROLE_CLIENT', 'ROLE_MASTER', 'ROLE_COMPANY' ];
         yield ChoiceField::new('roles')
             ->setChoices(array_combine($roles, $roles))
             ->allowMultipleChoices()
             ->renderAsBadges()
             ->setPermission('ROLE_SUPER_ADMIN')
             ->hideOnIndex()
-            ->setColumns('col-md-4');
+            ->setColumns('col-md-4');*/
 
         yield AssociationField::new('client')
             //->setFormTypeOption('disabled', 'disabled')
@@ -176,7 +176,7 @@ class UserClientCrudController extends AbstractCrudController
             ->setPermission('ROLE_SUPER_ADMIN');
 
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
-        yield BooleanField::new('getNotifications');
+        yield BooleanField::new('getNotifications')->hideOnIndex();
         yield FormField::addRow();
 
         yield ImageField::new('avatar')
@@ -186,8 +186,8 @@ class UserClientCrudController extends AbstractCrudController
             ->setRequired(false)
             ->setColumns('col-md-4');
 
-        yield FormField::addRow();
-        yield AssociationField::new('professions')
+        //yield FormField::addRow();
+        /*yield AssociationField::new('professions')
             ->setFormTypeOptions([
                 'by_reference' => false,
             ])->hideOnIndex()
@@ -196,11 +196,11 @@ class UserClientCrudController extends AbstractCrudController
             ->setFormTypeOptions([
                 'by_reference' => false,
             ])->hideOnIndex()
-            ->setColumns('col-md-4');
+            ->setColumns('col-md-4');*/
 
         yield FormField::addRow();
-        yield AssociationField::new('city')->setColumns('col-md-4');
-        yield AssociationField::new('district')->setColumns('col-md-4');
+        yield AssociationField::new('city')->setColumns('col-md-4')->setRequired('1');
+        yield AssociationField::new('district')->setColumns('col-md-4')->hideOnIndex();
 
         yield FormField::addRow();
         yield AssociationField::new('orders')->hideOnIndex()->setColumns('col-md-4');
@@ -209,8 +209,11 @@ class UserClientCrudController extends AbstractCrudController
 
     public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
-        $plainPassword = $entityDto->getInstance()->getPassword();
-        $formBuilder   = parent::createEditFormBuilder($entityDto, $formOptions, $context);
+        if ($entityDto->getInstance() !== null) {
+            $plainPassword = $entityDto->getInstance()->getPassword();
+        }
+
+        $formBuilder  = parent::createEditFormBuilder($entityDto, $formOptions, $context);
         $this->addEncodePasswordEventListener($formBuilder, $plainPassword);
 
         return $formBuilder;
@@ -235,14 +238,14 @@ class UserClientCrudController extends AbstractCrudController
         });
     }
 
-    /*
-    public function configureFields(string $pageName): iterable
+    public function createEntity(string $entityFqcn)
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        $user = new User();
+        $user->setRoles(['ROLE_CLIENT']);
+        if ($user->getEmail()) {
+            $user->setUsername($user->getEmail());
+        }
+
+        return $user;
     }
-    */
 }

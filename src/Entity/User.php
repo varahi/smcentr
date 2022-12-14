@@ -30,9 +30,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=180, unique=true, nullable=true)
      */
-    private $username;
+    private $username = null;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -46,9 +46,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $password;
+    private $password = null;
 
     /**
      * @ORM\Column(type="boolean")
@@ -306,7 +306,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setUsername(string $username): self
     {
-        $this->username = $username;
+        //$this->username = $username;
+
+        if (!is_null($username)) {
+            $this->username = $username;
+        } else {
+            $this->email = $username;
+        }
 
         return $this;
     }
@@ -338,15 +344,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return (string) $this->password;
     }
 
     public function setPassword(?string $password): self
     {
-        $this->password = $password;
-
+        //$this->password = $password;
+        if (!is_null($password)) {
+            $this->password = $password;
+        }
         return $this;
     }
 

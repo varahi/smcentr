@@ -77,12 +77,12 @@ class UserCompanyCrudController extends AbstractCrudController
             ;
     }
 
-    public function configureActions(Actions $actions): Actions
+    /*public function configureActions(Actions $actions): Actions
     {
         return $actions
             ->disable('new');
         //->disable('new', 'delete');
-    }
+    }*/
 
 
     public function configureCrud(Crud $crud): Crud
@@ -130,14 +130,39 @@ class UserCompanyCrudController extends AbstractCrudController
         yield BooleanField::new('isVerified')->hideOnIndex();
         yield BooleanField::new('isDisabled');
 
+        yield FormField::addPanel('Change password')->setIcon('fa fa-key')->setPermission('ROLE_SUPER_ADMIN');
+        yield FormField::addRow();
+        yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
+            ->setFormType(RepeatedType::class)
+            ->setRequired(false)
+            ->setFormTypeOptions([
+                'type'            => PasswordType::class,
+                'first_options'   => [ 'label' => 'New password' ],
+                'second_options'  => [ 'label' => 'Repeat password' ],
+                'error_bubbling'  => true,
+                'invalid_message' => 'The password fields do not match.',
+            ])
+            ->setPermission('ROLE_SUPER_ADMIN');
+        yield Field::new('password', 'New password')->onlyWhenUpdating()->setRequired(false)
+            ->setFormType(RepeatedType::class)
+            ->setRequired(false)
+            ->setFormTypeOptions([
+                'type'            => PasswordType::class,
+                'first_options'   => [ 'label' => 'New password' ],
+                'second_options'  => [ 'label' => 'Repeat password' ],
+                'error_bubbling'  => true,
+                'invalid_message' => 'The password fields do not match.',
+            ])
+            ->setPermission('ROLE_SUPER_ADMIN');
+
         yield FormField::addPanel('Contact info')->setIcon('fa fa-info-circle');
         yield FormField::addRow();
 
-        yield AssociationField::new('city')->setColumns('col-md-4');
+        yield AssociationField::new('city')->setColumns('col-md-4')->setRequired('1');
+        yield TextField::new('responsiblePersonFullName')->setColumns('col-md-4')->hideOnIndex();
         //yield AssociationField::new('district')->setColumns('col-md-4')->hideOnIndex();
 
         yield FormField::addRow();
-        yield TextField::new('responsiblePersonFullName')->setColumns('col-md-4')->hideOnIndex();
         yield TextField::new('responsiblePersonPhone')->setColumns('col-md-4')->hideOnIndex();
         yield TextField::new('responsiblePersonEmail')->setColumns('col-md-4')->hideOnIndex();
 
@@ -151,30 +176,6 @@ class UserCompanyCrudController extends AbstractCrudController
             //->setFormType(VichImageType::class)
         ;
 
-
-        /*yield FormField::addPanel('Change password')->setIcon('fa fa-key');
-        yield FormField::addRow();*/
-
-        /*yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
-            ->setFormType(RepeatedType::class)
-            ->setRequired(false)
-            ->setFormTypeOptions([
-                'type'            => PasswordType::class,
-                'first_options'   => [ 'label' => 'New password' ],
-                'second_options'  => [ 'label' => 'Repeat password' ],
-                'error_bubbling'  => true,
-                'invalid_message' => 'The password fields do not match.',
-            ]);
-        yield Field::new('password', 'New password')->onlyWhenUpdating()->setRequired(false)
-            ->setFormType(RepeatedType::class)
-            ->setRequired(false)
-            ->setFormTypeOptions([
-                'type'            => PasswordType::class,
-                'first_options'   => [ 'label' => 'New password' ],
-                'second_options'  => [ 'label' => 'Repeat password' ],
-                'error_bubbling'  => true,
-                'invalid_message' => 'The password fields do not match.',
-            ]);*/
 
         yield FormField::addPanel('Requisites')->setIcon('fa fa-money')->setPermission('ROLE_SUPER_ADMIN');
         yield MoneyField::new('balance')->setCurrency('RUB')
@@ -242,10 +243,13 @@ class UserCompanyCrudController extends AbstractCrudController
         yield AssociationField::new('assignments')->hideOnIndex()->setColumns('col-md-4');
     }
 
-    /*public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
-        $plainPassword = $entityDto->getInstance()->getPassword();
-        $formBuilder   = parent::createEditFormBuilder($entityDto, $formOptions, $context);
+        if ($entityDto->getInstance() !== null) {
+            $plainPassword = $entityDto->getInstance()->getPassword();
+        }
+
+        $formBuilder  = parent::createEditFormBuilder($entityDto, $formOptions, $context);
         $this->addEncodePasswordEventListener($formBuilder, $plainPassword);
 
         return $formBuilder;
@@ -262,10 +266,22 @@ class UserCompanyCrudController extends AbstractCrudController
     protected function addEncodePasswordEventListener(FormBuilderInterface $formBuilder, $plainPassword = null): void
     {
         $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($plainPassword) {
+            /** @var User $user */
             $user = $event->getData();
             if ($user->getPassword() !== $plainPassword) {
                 $user->setPassword($this->passwordEncoder->hashPassword($user, $user->getPassword()));
             }
         });
-    }*/
+    }
+
+    public function createEntity(string $entityFqcn)
+    {
+        $user = new User();
+        $user->setRoles(['ROLE_COMPANY']);
+        if ($user->getEmail()) {
+            $user->setUsername($user->getEmail());
+        }
+
+        return $user;
+    }
 }
