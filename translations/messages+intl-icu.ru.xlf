@@ -845,6 +845,18 @@
             <source>Full name</source>
             <target>Полное имя</target>
         </trans-unit>
+        <trans-unit id="Passport main page" resname="Passport main page">
+            <source>Passport main page</source>
+            <target>Главная страница паспорта</target>
+        </trans-unit>
+        <trans-unit id="Registration page" resname="Registration page">
+            <source>Registration page</source>
+            <target>Страница регистрации</target>
+        </trans-unit>
+        <trans-unit id="Selfie with a passport" resname="Selfie with a passport">
+            <source>Selfie with a passport</source>
+            <target>Селфи с паспортом</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

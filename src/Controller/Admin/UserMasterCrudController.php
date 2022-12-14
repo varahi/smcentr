@@ -198,6 +198,7 @@ class UserMasterCrudController extends AbstractCrudController
             ->setUploadDir('public_html/uploads/files')
             ->setFormType(FileUploadType::class)
             ->setRequired(false)
+            ->setLabel('Passport main page')
             ->setColumns('col-md-4');
 
         yield FormField::addRow();
@@ -206,6 +207,7 @@ class UserMasterCrudController extends AbstractCrudController
             ->setUploadDir('public_html/uploads/files')
             ->setFormType(FileUploadType::class)
             ->setRequired(false)
+            ->setLabel('Registration page')
             ->setColumns('col-md-4');
 
         yield ImageField::new('doc3')
@@ -213,6 +215,7 @@ class UserMasterCrudController extends AbstractCrudController
             ->setUploadDir('public_html/uploads/files')
             ->setFormType(FileUploadType::class)
             ->setRequired(false)
+            ->setLabel('Selfie with a passport')
             ->setColumns('col-md-4');
 
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
@@ -222,7 +225,6 @@ class UserMasterCrudController extends AbstractCrudController
         yield MoneyField::new('balance')->setCurrency('RUB')
             ->setCustomOption('storedAsCents', false)->setColumns('col-md-4')
             ->setPermission('ROLE_SUPER_ADMIN')->hideOnIndex();
-
 
         yield FormField::addRow();
         yield AssociationField::new('city')->setColumns('col-md-4')->setRequired('1');
@@ -308,15 +310,4 @@ class UserMasterCrudController extends AbstractCrudController
             $this->mailer->updateCrudUserEmail($user, $subject, 'emails/update_crud_user.html.twig');
         }*/
     }
-
-    /*
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
-    }
-    */
 }
