@@ -399,18 +399,15 @@ class OrderController extends AbstractController
         if ($this->security->isGranted(self::ROLE_MASTER)) {
             $entityManager = $this->doctrine->getManager();
             $user = $this->security->getUser();
-            $order->setPerformer($user);
-            $order->setStatus(self::STATUS_ACTIVE);
-            $entityManager->flush();
 
             // Set balance for master
             $masterBalance = (float)$order->getPerformer()->getBalance();
-            /*if ($masterBalance == null || $masterBalance == 0) {
+            if ($masterBalance == null || $masterBalance == 0) {
                 // Redirect if order or performer not owner
                 $message = $translator->trans('Please top up balance', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
                 return $this->redirectToRoute('app_top_up_balance');
-            }*/
+            }
 
             // If order has custom tax from company
             if ($order->getCustomTaxRate()) {
@@ -439,11 +436,13 @@ class OrderController extends AbstractController
                             }
                         }
                     }
-                    $user->setBalance($newMasterBalance);
-                    $entityManager->persist($user);
-                    $entityManager->flush();
                 }
             }
+
+            // Set performer and order status
+            $order->setPerformer($user);
+            $order->setStatus(self::STATUS_ACTIVE);
+            $entityManager->flush();
 
             // Set new master balance
             $newMasterBalance = $order->getPerformer()->getBalance() - $tax;

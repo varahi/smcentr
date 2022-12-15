@@ -4,9 +4,11 @@
         <div class="city">
             {{ order.city.name }}
         </div>
-        <div class="raion">
-            {{ order.district.name }}
-        </div>
+        {% if order.district %}
+            <div class="raion">
+                {{ order.district.name }}
+            </div>
+        {% endif %}
         <div class="date">{{ order.created|date("d.m.Y") }}</div>
         {% include 'partials/order/_created_by.html.twig' %}
 
@@ -27,7 +29,7 @@
             ID {{ order.id }}
         </div>
 
-        {% if order.profession.__isInitialized__ == true %}
+        {% if order.profession %}
             <div class="prof">
                 {{ order.profession.name }}
             </div>
@@ -55,7 +57,7 @@
 {% set tax = '' %}
 {% if order.city.taxRates is not empty %}
     {% for taxRate in order.city.taxRates %}
-        {% if order.profession.__isInitialized__ == true %}
+        {% if order.profession %}
         {% if taxRate.id == order.profession.id %}
             {% set tax = taxRate.percent * order.price %}
         {% endif %}

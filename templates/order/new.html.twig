@@ -60,7 +60,7 @@
                         </select>
 
                         <label for="order_form_district" style="display: none"></label>
-                        <select id="order_form_district" name="order_form[district]" required="required" disabled>
+                        <select id="order_form_district" name="order_form[district]" disabled>
                             <option value="" selected="selected">Выберите район *</option>
                             {% for district in districts %}
                                 <option data-list-id="{{ district.city.id }}" value="{{ district.id }}">{{ district.name }}</option>
