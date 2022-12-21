@@ -11,6 +11,7 @@ use App\Repository\DistrictRepository;
 use App\Repository\JobTypeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProfessionRepository;
+use App\Repository\ProjectRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -60,6 +61,8 @@ class OrderController extends AbstractController
 
     private $doctrine;
 
+    private $projectId;
+
     /**
      * @param Security $security
      * @param Environment $twig
@@ -68,11 +71,13 @@ class OrderController extends AbstractController
     public function __construct(
         Security $security,
         Environment $twig,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        int $projectId
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
+        $this->projectId = $projectId;
     }
 
     /**
@@ -394,11 +399,18 @@ class OrderController extends AbstractController
         NotifierInterface $notifier,
         Order $order,
         Mailer $mailer,
-        PushNotification $pushNotification
+        PushNotification $pushNotification,
+        ProjectRepository $projectRepository
     ): Response {
         if ($this->security->isGranted(self::ROLE_MASTER)) {
             $entityManager = $this->doctrine->getManager();
             $user = $this->security->getUser();
+
+            // First we should add user as performer and save it
+            // Set performer and order status
+            $order->setPerformer($user);
+            $order->setStatus(self::STATUS_ACTIVE);
+            $entityManager->flush();
 
             // Set balance for master
             $masterBalance = (float)$order->getPerformer()->getBalance();
@@ -439,15 +451,17 @@ class OrderController extends AbstractController
                 }
             }
 
-            // Set performer and order status
-            $order->setPerformer($user);
-            $order->setStatus(self::STATUS_ACTIVE);
-            $entityManager->flush();
-
             // Set new master balance
             $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
+            $project = $projectRepository->findOneBy(['id' => $this->projectId]);
+            $currentProjectBalance = (float)$project->getBalance();
+            $newProjectBalance = $currentProjectBalance + $tax;
+
             $user->setBalance($newMasterBalance);
+            $project->setBalance($newProjectBalance);
+
             $entityManager->persist($user);
+            $entityManager->persist($project);
             $entityManager->flush();
 
             // Send notifications for masters
@@ -474,7 +488,6 @@ class OrderController extends AbstractController
             $entityManager->persist($order);
 
             $entityManager->flush();
-
 
             if ($order->getUsers()->isGetNotifications() == 1) {
                 // Mail to owner of the order
@@ -543,7 +556,7 @@ class OrderController extends AbstractController
                     $this->setNotification($order, $master, self::NOTIFICATION_CHANGE_STATUS, $message);
 
                     // Send push notification
-                    $pushNotification->sendCustomerPushNotification($this->translator->trans('The company has assigned you a task', array(), 'flash'), $message, 'https://smcentr.su/', $master);
+                    $pushNotification->sendCustomerPushNotification($translator->trans('The company has assigned you a task', array(), 'flash'), $message, 'https://smcentr.su/', $master);
 
                     $entityManager->flush();
 

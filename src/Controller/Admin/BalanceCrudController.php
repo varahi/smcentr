@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 
 class BalanceCrudController extends AbstractCrudController
@@ -38,6 +39,7 @@ class BalanceCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        //yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield MoneyField::new('balance')->setCurrency('RUB')
             ->setCustomOption('storedAsCents', false)->setColumns('col-md-3')->setCssClass('big-text');
     }
