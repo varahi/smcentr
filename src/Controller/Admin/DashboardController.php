@@ -18,6 +18,9 @@ use App\Entity\Pages;
 use App\Entity\Notification;
 use App\Entity\TaxRate;
 use App\Entity\Request;
+use App\Entity\Project;
+use Symfony\Component\Security\Core\User\UserInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -32,6 +35,23 @@ class DashboardController extends AbstractDashboardController
 
         //return parent::index();
         $routeBuilder = $this->get(AdminUrlGenerator::class);
+
+        // Option 1. You can make your dashboard redirect to some common page of your backend
+        //
+        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
+        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
+
+        // Option 2. You can make your dashboard redirect to different pages depending on the user
+        //
+        // if ('jane' === $this->getUser()->getUsername()) {
+        //     return $this->redirect('...');
+        // }
+
+        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
+        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
+        //
+        // return $this->render('some/path/my-dashboard.html.twig');
+
         return $this->redirect($routeBuilder->setController(CityCrudController::class)->generateUrl());
     }
 
@@ -47,8 +67,9 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         //yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToRoute('adminpanel.back_to_site', 'fa fa-home', 'app_login');
-        //yield MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class);
+        //yield MenuItem::linkToRoute('adminpanel.back_to_site', 'fa fa-home', 'app_backend');
+        yield MenuItem::linkToCrud('System balance', 'fa fa-money', Project::class)
+            ->setController(BalanceCrudController::class)->setCssClass('bold');
 
         yield MenuItem::section('References')->setPermission('ROLE_EDITOR');
         yield MenuItem::subMenu('References', 'fa fa-tags')->setSubItems([
@@ -118,5 +139,42 @@ class DashboardController extends AbstractDashboardController
             ->setPermission('ROLE_EDITOR');
         yield MenuItem::section('<hr />');
         yield MenuItem::linkToLogout('Logout', 'fa fa-user-times');
+    }
+
+    /*    public function configureUserMenu(UserInterface $user): UserMenu
+        {
+            return parent::configureUserMenu($user)
+                ->setName($user->getFullName() .' - '. $user->getEmail())
+                ->displayUserName(true)
+                // you can return an URL with the avatar image
+                //->setAvatarUrl('https://sun9-58.userapi.com/s/v1/ig2/oVJeve9PSHuJD8vSj7c3kK25n25ijALknVvlvcHvEZoSEs4EnVfN8vYM92quqi27G27mk5uC87IvDw1rH7a1h5AJ.jpg?size=50x50&quality=95&crop=0,29,575,575&ava=1')
+                //->setAvatarUrl($user->getAvatar())
+                // use this method if you don't want to display the user image
+                ->displayUserAvatar(true)
+                //->setGravatarEmail($user->getEmail())
+
+                // you can use any type of menu item, except submenus
+                ->addMenuItems([
+                    MenuItem::linkToRoute('My Profile', 'fa fa-id-card', '...', ['...' => '...']),
+                    //MenuItem::linkToRoute('Settings', 'fa fa-user-cog', '...', ['...' => '...']),
+                    //MenuItem::section(),
+                    //MenuItem::linkToLogout('Logout', 'fa fa-sign-out'),
+                ]);
+        }*/
+
+    public function configureUserMenu(UserInterface $user): UserMenu
+    {
+        $userMenuItems = [
+            MenuItem::linkToUrl('Profile', 'fa-id-card', '/admin/profile'),
+            MenuItem::linkToUrl('Settings', 'fa-user-cog', '/admin/settings'),
+            MenuItem::linkToLogout('__ea__user.sign_out', 'fa-sign-out')
+        ];
+
+        return UserMenu::new()
+            ->displayUserName()
+            ->displayUserAvatar()
+            ->setName(method_exists($user, '__toString') ? (string) $user : $user->getUsername())
+            ->setAvatarUrl(null)
+            ->setMenuItems($userMenuItems);
     }
 }

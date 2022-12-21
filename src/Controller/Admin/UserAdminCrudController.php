@@ -22,6 +22,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType;
 use EasyCorp\Bundle\EasyAdminBundle\Twig;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 
@@ -73,6 +74,15 @@ class UserAdminCrudController extends AbstractCrudController
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield EmailField::new('email');
         yield TextField::new('fullName');
+
+
+        yield ImageField::new('avatar')
+            ->setBasePath('uploads/files')
+            ->setUploadDir('public_html/uploads/files')
+            ->setFormType(FileUploadType::class)
+            ->setRequired(false)
+            ->setColumns('col-md-4');
+
 
         //yield ArrayField::new('roles')->hideOnIndex()->setPermission('ROLE_SUPER_ADMIN');
         /*yield ImageField::new('avatar')

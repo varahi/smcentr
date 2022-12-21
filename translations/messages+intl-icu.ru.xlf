@@ -59,7 +59,7 @@
       </trans-unit>
       <trans-unit id="xlBPes1" resname="Take orders">
         <source>Take orders</source>
-        <target>Принимать заказы</target>
+        <target>Принимать заявки</target>
       </trans-unit>
       <trans-unit id="DHf_Cas" resname="Client">
         <source>Client</source>
@@ -67,7 +67,7 @@
       </trans-unit>
       <trans-unit id="iT2QAdM" resname="Place orders">
         <source>Place orders</source>
-        <target>Размещать заказы</target>
+        <target>Размещать заявки</target>
       </trans-unit>
       <trans-unit id="9.St3k0" resname="adminpanel.user">
         <source>adminpanel.user</source>
@@ -187,19 +187,19 @@
       </trans-unit>
       <trans-unit id="6_ZxK1S" resname="Take order">
         <source>Take order</source>
-        <target>Взять заказ</target>
+        <target>Взять заявку</target>
       </trans-unit>
       <trans-unit id="pFDKJZ." resname="Orders list">
         <source>Orders list</source>
-        <target>Список заказов</target>
+        <target>Список заявок</target>
       </trans-unit>
       <trans-unit id=".7c.k3q" resname="Are you sure you want to take order">
         <source>Are you sure you want to take order</source>
-        <target>Вы уверены, что хотите взять заказ в работу?</target>
+        <target>Вы уверены, что хотите взять заявку в работу?</target>
       </trans-unit>
       <trans-unit id="ko9P5Sm" resname="Order history">
         <source>Order history</source>
-        <target>История заказов</target>
+        <target>История заявок</target>
       </trans-unit>
       <trans-unit id="eIARgzp" resname="Notifications">
         <source>Notifications</source>
@@ -239,7 +239,7 @@
       </trans-unit>
       <trans-unit id="t_is3VI" resname="Orders">
         <source>Orders</source>
-        <target>Заказы</target>
+        <target>Заявки</target>
       </trans-unit>
       <trans-unit id="KY6mQRC" resname="Ignore text">
         <source>Ignore text</source>
@@ -263,11 +263,11 @@
       </trans-unit>
       <trans-unit id="JVar36j" resname="Your order closed by perfomer">
         <source>Your order closed by perfomer</source>
-        <target>Ваш заказ закрыт исполнителем - smcentr.su</target>
+        <target>Ваша заявка закрыта исполнителем - smcentr.su</target>
       </trans-unit>
         <trans-unit id="Your order closed by client" resname="Your order closed by client">
             <source>Your order closed by client</source>
-            <target>Ваш заказ закрыт клиентом - smcentr.su</target>
+            <target>Ваша заявка закрыт клиентом - smcentr.su</target>
         </trans-unit>
       <trans-unit id="gnOme1W" resname="Admins">
         <source>Admins</source>
@@ -323,7 +323,7 @@
       </trans-unit>
       <trans-unit id="htp8BYO" resname="New order available">
         <source>New order available</source>
-        <target>Доступен новый заказ</target>
+        <target>Доступна новая заявка</target>
       </trans-unit>
       <trans-unit id="nUKH11S" resname="Please confirm your password">
         <source>Please confirm your password</source>
@@ -339,7 +339,7 @@
       </trans-unit>
       <trans-unit id="dURBbtw" resname="Tax Rate">
         <source>Tax Rate</source>
-        <target>Комисси списаний %</target>
+        <target>Комиссия компании</target>
       </trans-unit>
       <trans-unit id="aXUvIxO" resname="News">
         <source>News</source>
@@ -707,7 +707,7 @@
       </trans-unit>
       <trans-unit id="BAbUB8q" resname="Service Tax Rate">
         <source>Service Tax Rate</source>
-        <target>Комиссия сервиса %</target>
+        <target>Комиссия сервиса</target>
       </trans-unit>
       <trans-unit id="OlhPnGv" resname="Responsible Person Full Name">
         <source>Responsible Person Full Name</source>
@@ -856,6 +856,11 @@
         <trans-unit id="Selfie with a passport" resname="Selfie with a passport">
             <source>Selfie with a passport</source>
             <target>Селфи с паспортом</target>
+        </trans-unit>
+
+        <trans-unit id="System balance" resname="System balance">
+            <source>System balance</source>
+            <target>Баланс системы</target>
         </trans-unit>
     </body>
   </file>
