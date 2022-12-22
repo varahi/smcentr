@@ -165,8 +165,8 @@ class DashboardController extends AbstractDashboardController
     public function configureUserMenu(UserInterface $user): UserMenu
     {
         $userMenuItems = [
-            MenuItem::linkToUrl('Profile', 'fa-id-card', '/admin/profile'),
-            MenuItem::linkToUrl('Settings', 'fa-user-cog', '/admin/settings'),
+            //MenuItem::linkToUrl('Profile', 'fa-id-card', '/admin/profile'),
+            //MenuItem::linkToUrl('Settings', 'fa-user-cog', '/admin/settings'),
             MenuItem::linkToLogout('__ea__user.sign_out', 'fa-sign-out')
         ];
 

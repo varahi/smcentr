@@ -1,3 +1,4 @@
+
 // firebase_subscribe.js
 firebase.initializeApp({
     messagingSenderId: '925306306254'
@@ -16,7 +17,11 @@ if ('Notification' in window) {
 
     // по клику, запрашиваем у пользователя разрешение на уведомления
     // и подписываем его
-    $('#subscribe').on('click', function () {
+    //$('#subscribe').on('click', function () {
+    //    subscribe();
+    //});
+
+    $(window).on('load', function() {
         subscribe();
     });
 }
@@ -28,7 +33,7 @@ function subscribe() {
             // получаем ID устройства
             messaging.getToken()
                 .then(function (currentToken) {
-                    console.log(currentToken);
+                    //console.log(currentToken);
 
                     if (currentToken) {
                         sendTokenToServer(currentToken);
@@ -50,18 +55,17 @@ function subscribe() {
 // отправка ID на сервер
 function sendTokenToServer(currentToken) {
     if (!isTokenSentToServer(currentToken)) {
-        console.log('Отправка токена на сервер...');
+        //console.log('Отправка токена на сервер...');
 
         var url = '/user-token'; // адрес скрипта на сервере который сохраняет ID устройства
         $.post(url, {
             token: currentToken
         });
         setTokenSentToServer(currentToken);
-
         //alert('Вы подписались на уведомления');
     } else {
         //alert('Вы уже подписаны на уведомления');
-        console.log('Токен уже отправлен на сервер.');
+        //console.log('Токен уже отправлен на сервер.');
     }
 }
 

@@ -44,7 +44,7 @@ class PushNotification
         $notification = [
             'title' => $title,
             'body' => $body,
-            'icon' => $this->defaultDomain . '/assets/images/logo.svg',
+            'icon' => $this->defaultDomain . '/assets/images/logo_black.svg',
             'click_action' => $click,
         ];
 
@@ -69,7 +69,7 @@ class PushNotification
         $notification = [
             'title' => $title,
             'body' => $body,
-            'icon' => $this->defaultDomain . '/assets/images/logo.svg',
+            'icon' => $this->defaultDomain . '/assets/images/logo_black.svg',
             'click_action' => $click,
         ];
 
