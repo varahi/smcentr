@@ -22,6 +22,10 @@ class BalanceCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('System balance')
             ->setEntityLabelInPlural('System balance')
+            ->overrideTemplates([
+                'crud/index' => 'bundles/EasyAdminBundle/crud/balance.html.twig',
+            ])
+
             ;
     }
 
