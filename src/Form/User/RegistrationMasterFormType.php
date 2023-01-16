@@ -65,7 +65,7 @@ class RegistrationMasterFormType extends AbstractType
                     'translation_domain' => 'forms',
                 ]
             )
-            ->add('city', EntityType::class, [
+            /*->add('city', EntityType::class, [
                 'class' => City::class,
                 'multiple'  => false,
                 'expanded'  => false,
@@ -78,7 +78,7 @@ class RegistrationMasterFormType extends AbstractType
                 'expanded'  => false,
                 'label' => 'List of housing',
                 'required' => true,
-            ])
+            ])*/
 
             /*->add('professions', EntityType::class, [
                 'class' => Profession::class,

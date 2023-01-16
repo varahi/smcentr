@@ -1,7 +1,13 @@
 {% extends 'layouts/login.html.twig' %}
 {% block title %}Регистрация клиента{% endblock %}
-{% block body %}
 
+    {% block javascripts %}
+        <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/js/jquery.maskedinput.min.js') }}"></script>
+        <script src="{{ asset('assets/js/dependableList.js') }}"></script>
+    {% endblock %}
+
+{% block body %}
     <section id="reg_master">
         <div class="container">
             {% include 'partials/_logo_black.html.twig' %}
@@ -22,8 +28,26 @@
                         {{ form_row(registrationForm.plainPassword, { label: 'Пароль'}) }}
                         {{ form_widget(registrationForm.phone) }}
                         {{ form_widget(registrationForm.fullName) }}
-                        {{ form_widget(registrationForm.city) }}
-                        {{ form_widget(registrationForm.district) }}
+
+                        <label for="registration_master_form_city" style="display: none;"></label>
+                        <select id="registration_master_form_city" name="registration_master_form[city]" required>
+                            <option value="">Выберите город *</option>
+                            {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="registration_master_form_district" style="display: none"></label>
+                        <select id="registration_master_form_district" name="registration_master_form[district]">
+                            {% for district in districts %}
+                                <option data-list-id="{{ district.city.id }}" value="{{ district.id }}">
+                                    {{ district.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+
+{#                        {{ form_widget(registrationForm.city) }}
+                        {{ form_widget(registrationForm.district) }}#}
 
                         <div class="avatar_upload">
                             <img id="avatar" src="{{ asset('assets/images/avatar.png') }}" alt="" />

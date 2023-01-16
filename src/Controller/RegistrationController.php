@@ -8,6 +8,8 @@ use App\Form\User\RegistrationAdminFormType;
 use App\Form\User\RegistrationCompanyFormType;
 use App\Form\User\RegistrationFormType;
 use App\Form\User\RegistrationMasterFormType;
+use App\Repository\CityRepository;
+use App\Repository\DistrictRepository;
 use App\Repository\JobTypeRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
@@ -219,11 +221,15 @@ class RegistrationController extends AbstractController
         NotifierInterface $notifier,
         ManagerRegistry $doctrine,
         FileUploader $fileUploader,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        CityRepository $cityRepository,
+        DistrictRepository $districtRepository
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
+        $cities = $cityRepository->findAllOrder(['name' => 'ASC']);
+        $districts = $districtRepository->findAllOrder(['name' => 'ASC']);
 
         if ($form->isSubmitted()) {
             // encode the plain password
@@ -250,6 +256,20 @@ class RegistrationController extends AbstractController
                     $notifier->send(new Notification($message, ['browser']));
                     $referer = $request->headers->get('referer');
                     return new RedirectResponse($referer);
+                }
+            }
+
+            // Set city and district
+            if ($post['city'] !=='') {
+                $city = $cityRepository->findOneBy(['id' => $post['city']]);
+                if ($city) {
+                    $user->setCity($city);
+                }
+            }
+            if ($post['district'] !=='') {
+                $district = $districtRepository->findOneBy(['id' => $post['district']]);
+                if ($district) {
+                    $user->setDistrict($district);
                 }
             }
 
@@ -293,6 +313,8 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/register_client.html.twig', [
+            'cities' => $cities,
+            'districts' => $districts,
             'registrationForm' => $form->createView(),
         ]);
     }
@@ -309,7 +331,9 @@ class RegistrationController extends AbstractController
         ProfessionRepository $professionRepository,
         JobTypeRepository $jobTypeRepository,
         FileUploader $fileUploader,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        CityRepository $cityRepository,
+        DistrictRepository $districtRepository
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationMasterFormType::class, $user);
@@ -317,6 +341,8 @@ class RegistrationController extends AbstractController
 
         $professions = $professionRepository->findAllOrder(['name' => 'ASC']);
         $jobTypes = $jobTypeRepository->findAllOrder(['name' => 'ASC']);
+        $cities = $cityRepository->findAllOrder(['name' => 'ASC']);
+        $districts = $districtRepository->findAllOrder(['name' => 'ASC']);
 
         if ($form->isSubmitted()) {
             $post = $_POST['registration_master_form'];
@@ -384,6 +410,20 @@ class RegistrationController extends AbstractController
                 }
             }
 
+            // Set city and district
+            if ($post['city'] !=='') {
+                $city = $cityRepository->findOneBy(['id' => $post['city']]);
+                if ($city) {
+                    $user->setCity($city);
+                }
+            }
+            if ($post['district'] !=='') {
+                $district = $districtRepository->findOneBy(['id' => $post['district']]);
+                if ($district) {
+                    $user->setDistrict($district);
+                }
+            }
+
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -418,6 +458,8 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register_master.html.twig', [
             'professions' => $professions,
             'jobTypes' => $jobTypes,
+            'cities' => $cities,
+            'districts' => $districts,
             'registrationForm' => $form->createView(),
         ]);
     }

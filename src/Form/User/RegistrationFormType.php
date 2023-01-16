@@ -63,7 +63,7 @@ class RegistrationFormType extends AbstractType
                     'translation_domain' => 'forms',
                 ]
             )
-            ->add('city', EntityType::class, [
+/*            ->add('city', EntityType::class, [
                 'class' => City::class,
                 'multiple'  => false,
                 'expanded'  => false,
@@ -76,7 +76,7 @@ class RegistrationFormType extends AbstractType
                 'expanded'  => false,
                 'label' => 'List of housing',
                 'required' => true,
-            ])
+            ])*/
             ->add(
                 'getNotifications',
                 CheckboxType::class,
