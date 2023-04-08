@@ -79,9 +79,13 @@ class UserClientCrudController extends AbstractCrudController
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): \Doctrine\ORM\QueryBuilder
     {
         $role = 'ROLE_CLIENT';
-        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $qb->where('entity.roles LIKE :roles');
-        $qb->setParameter('roles', '%"'.$role.'"%');
+        if (isset($_GET['query'])) {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        } else {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+            $qb->where('entity.roles LIKE :roles');
+            $qb->setParameter('roles', '%"'.$role.'"%');
+        }
 
         return $qb;
     }
@@ -109,7 +113,7 @@ class UserClientCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Client')
             ->setEntityLabelInPlural('Client')
-            ->setSearchFields(['firstName', 'lastName', 'email'])
+            ->setSearchFields(['firstName', 'lastName', 'email', 'phone'])
             ->setDefaultSort(['id' => 'DESC']);
     }
 

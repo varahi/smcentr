@@ -265,10 +265,10 @@
         <source>Your order closed by perfomer</source>
         <target>Ваша заявка закрыта исполнителем - smcentr.su</target>
       </trans-unit>
-        <trans-unit id="Your order closed by client" resname="Your order closed by client">
-            <source>Your order closed by client</source>
-            <target>Ваша заявка закрыт клиентом - smcentr.su</target>
-        </trans-unit>
+      <trans-unit id="HxLkfrV" resname="Your order closed by client">
+        <source>Your order closed by client</source>
+        <target>Ваша заявка закрыт клиентом - smcentr.su</target>
+      </trans-unit>
       <trans-unit id="gnOme1W" resname="Admins">
         <source>Admins</source>
         <target>Администраторы</target>
@@ -615,7 +615,7 @@
       </trans-unit>
       <trans-unit id="PIm.v8D" resname="Master account verified">
         <source>Master account verified</source>
-        <target>Ваш аккаунт подтвержден администратором</target>
+        <target>Ваш аккаунт подтвержден администратором на smcentr.su</target>
       </trans-unit>
       <trans-unit id="Pw.zGOX" resname="Company avatar">
         <source>Company avatar</source>
@@ -837,31 +837,42 @@
         <source>Admin registration</source>
         <target>Создать адинистратора</target>
       </trans-unit>
-        <trans-unit id="Create admin" resname="Create admin">
-            <source>Admin registration</source>
-            <target>Создать адинистратора</target>
-        </trans-unit>
-        <trans-unit id="Full name" resname="Full name">
-            <source>Full name</source>
-            <target>Полное имя</target>
-        </trans-unit>
-        <trans-unit id="Passport main page" resname="Passport main page">
-            <source>Passport main page</source>
-            <target>Главная страница паспорта</target>
-        </trans-unit>
-        <trans-unit id="Registration page" resname="Registration page">
-            <source>Registration page</source>
-            <target>Страница регистрации</target>
-        </trans-unit>
-        <trans-unit id="Selfie with a passport" resname="Selfie with a passport">
-            <source>Selfie with a passport</source>
-            <target>Селфи с паспортом</target>
-        </trans-unit>
-
-        <trans-unit id="System balance" resname="System balance">
-            <source>System balance</source>
-            <target>Баланс системы</target>
-        </trans-unit>
+      <trans-unit id="Vg83_pO" resname="Create admin">
+        <source>Create admin</source>
+        <target>Создать адинистратора</target>
+      </trans-unit>
+      <trans-unit id="8Tpkui." resname="Full name">
+        <source>Full name</source>
+        <target>Полное имя</target>
+      </trans-unit>
+      <trans-unit id="lG.d6ey" resname="Passport main page">
+        <source>Passport main page</source>
+        <target>Главная страница паспорта</target>
+      </trans-unit>
+      <trans-unit id="uE5Yw8m" resname="Registration page">
+        <source>Registration page</source>
+        <target>Страница регистрации</target>
+      </trans-unit>
+      <trans-unit id="uAuWjwc" resname="Selfie with a passport">
+        <source>Selfie with a passport</source>
+        <target>Селфи с паспортом</target>
+      </trans-unit>
+      <trans-unit id="GA94l8Z" resname="System balance">
+        <source>System balance</source>
+        <target>Баланс системы</target>
+      </trans-unit>
+      <trans-unit id="ZOtylv3" resname="Masters non verified">
+        <source>Masters non verified</source>
+        <target>Не подтвержденные мастера</target>
+      </trans-unit>
+      <trans-unit id="i3dKe.9" resname="Top up balance text1">
+        <source>Top up balance text1</source>
+        <target>Для пополнения баланса переведите на карту 5536 9177 4782 1988 (Банк Тинькофф) 1500 рублей и в сообщении к платежу укажите ваш номер телефона зарегистрированный в системе.</target>
+      </trans-unit>
+      <trans-unit id="J5BLgi9" resname="Top up balance text2">
+        <source>Top up balance text2</source>
+        <target>Средства зачислятся на счет с 18:00 до 21:00.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

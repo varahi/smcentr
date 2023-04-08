@@ -40,7 +40,7 @@ use Symfony\Component\Form\FormEvents;
 use App\Service\Mailer;
 use Symfony\Component\Stopwatch\Section;
 
-class UserMasterCrudController extends AbstractCrudController
+class UserMasterNonVerifiedCrudController extends AbstractCrudController
 {
     private UserPasswordHasherInterface $passwordEncoder;
 
@@ -73,17 +73,16 @@ class UserMasterCrudController extends AbstractCrudController
         $role = 'ROLE_MASTER';
         if (isset($_GET['query'])) {
             $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-            $qb->andWhere($qb->expr()->eq('entity.isVerified', 1))
+            $qb->andWhere($qb->expr()->eq('entity.isVerified', 0))
             ;
         } else {
             $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
             $qb
                 ->where('entity.roles LIKE :roles')
                 ->setParameter('roles', '%"'.$role.'"%')
-                ->andWhere($qb->expr()->eq('entity.isVerified', 1))
+                ->andWhere($qb->expr()->eq('entity.isVerified', 0))
             ;
         }
-
         return $qb;
     }
 
@@ -108,8 +107,8 @@ class UserMasterCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Master')
-            ->setEntityLabelInPlural('Master')
+            ->setEntityLabelInSingular('Masters non verified')
+            ->setEntityLabelInPlural('Masters non verified')
             ->setSearchFields(['firstName', 'lastName', 'email', 'phone'])
             ->setDefaultSort(['id' => 'DESC']);
     }

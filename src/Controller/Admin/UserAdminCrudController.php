@@ -38,11 +38,17 @@ class UserAdminCrudController extends AbstractCrudController
         $role = 'ROLE_SUPER_ADMIN';
         $role2 = 'ROLE_EDITOR';
         $role3 = 'ROLE_SUPPORT';
-        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $qb->where('entity.roles LIKE :roles');
-        $qb->setParameter('roles', '%"'.$role.'"%');
-        //$qb->setParameter('roles', '%"'.$role2.'"%');
-        //$qb->setParameter('roles', '%"'.$role3.'"%');
+
+        if (isset($_GET['query'])) {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        } else {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+            $qb->where('entity.roles LIKE :roles');
+            $qb->setParameter('roles', '%"'.$role.'"%');
+            //$qb->setParameter('roles', '%"'.$role2.'"%');
+            //$qb->setParameter('roles', '%"'.$role3.'"%');
+        }
+
         return $qb;
     }
 
@@ -65,7 +71,7 @@ class UserAdminCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Super admin')
             ->setHelp('edit', 'Группа администраторов. Обладает всеми правами доступа')
             ->setHelp('index', 'Группа администраторов. Обладает всеми правами доступа')
-            ->setSearchFields(['firstName', 'lastName', 'email'])
+            ->setSearchFields(['firstName', 'lastName', 'email', 'phone'])
             ->setDefaultSort(['id' => 'DESC']);
     }
 

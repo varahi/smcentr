@@ -34,11 +34,17 @@ class UserSupportCrudController extends AbstractCrudController
         $role = 'ROLE_SUPER_ADMIN';
         $role2 = 'ROLE_EDITOR';
         $role3 = 'ROLE_SUPPORT';
-        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $qb->where('entity.roles LIKE :roles');
-        //$qb->setParameter('roles', '%"'.$role.'"%');
-        //$qb->setParameter('roles', '%"'.$role2.'"%');
-        $qb->setParameter('roles', '["ROLE_SUPPORT"]');
+
+        if (isset($_GET['query'])) {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        } else {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+            $qb->where('entity.roles LIKE :roles');
+            //$qb->setParameter('roles', '%"'.$role.'"%');
+            //$qb->setParameter('roles', '%"'.$role2.'"%');
+            $qb->setParameter('roles', '["ROLE_SUPPORT"]');
+        }
+
         return $qb;
     }
 

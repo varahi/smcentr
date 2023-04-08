@@ -79,7 +79,7 @@
       </trans-unit>
       <trans-unit id="Access blocked" resname="Access blocked">
         <source>Access blocked</source>
-        <target>Ваш аккунт заблокирован, пожалуйста свяжитесь с нашей службой поддержки для прояснения ситуации</target>
+        <target>Ваш профиль заблокирован за нарушение правил сервиса свяжитесь с администрацией сайта.</target>
       </trans-unit>
       <trans-unit id="Notification mark as read" resname="Notification mark as read">
         <source>Notification mark as read</source>

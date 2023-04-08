@@ -85,6 +85,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Users');
         yield MenuItem::subMenu('Users', 'fa fa fa-cog')->setSubItems([
             MenuItem::linkToCrud('Masters', 'fa fa-user', User::class)->setController(UserMasterCrudController::class),
+            MenuItem::linkToCrud('Masters non verified', 'fa fa-user', User::class)->setController(UserMasterNonVerifiedCrudController::class),
             MenuItem::linkToCrud('Clients', 'fa fa-user', User::class)->setController(UserClientCrudController::class),
             MenuItem::linkToCrud('Companies', 'fa fa-users', User::class)
                 ->setController(UserCompanyCrudController::class),

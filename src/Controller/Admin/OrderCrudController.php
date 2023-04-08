@@ -44,7 +44,7 @@ class OrderCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Orders')
             ->setEntityLabelInPlural('Orders')
-            ->setSearchFields(['title', 'price', 'description'])
+            ->setSearchFields(['title', 'price', 'description', 'id'])
             ->setDefaultSort(['id' => 'DESC']);
     }
 

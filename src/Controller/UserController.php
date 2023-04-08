@@ -114,9 +114,16 @@ class UserController extends AbstractController
     /**
      * @Route("/master-balance", name="app_master_balance")
      */
-    public function masterBalance(): Response
-    {
+    public function masterBalance(
+        TranslatorInterface $translator,
+        NotifierInterface $notifier
+    ): Response {
         $user = $this->security->getUser();
+        if ($user->isIsDisabled() == 1) {
+            $message = $translator->trans('Please verify you profile', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_logout");
+        }
 
         return $this->render('user/master/master-balance.html.twig', [
             'user' => $user,
@@ -223,6 +230,11 @@ class UserController extends AbstractController
         if ($this->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();
 
+            if ($user->isIsDisabled() == 1) {
+                $message = $translator->trans('Please verify you profile', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute("app_logout");
+            }
             if ($user->isIsVerified() == 0) {
                 // Send a new email link to verify email
                 $this->verifyEmail($user);
@@ -320,6 +332,11 @@ class UserController extends AbstractController
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
+            if ($user->isIsDisabled() == 1) {
+                $message = $translator->trans('Please verify you profile', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute("app_logout");
+            }
             {
                 $newNotifications = $notificationRepository->findNewByUser($user->getId());
                 $viewedNotifications = $notificationRepository->findViewedByUser($user->getId());
@@ -486,6 +503,12 @@ class UserController extends AbstractController
     ): Response {
         if ($this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
+            if ($user->isIsDisabled() == 1) {
+                $message = $translator->trans('Please verify you profile', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute("app_logout");
+            }
+
             $form = $this->createForm(MasterProfileFormType::class, $user);
             $form->handleRequest($request);
 
@@ -712,7 +735,11 @@ class UserController extends AbstractController
     ) {
         if ($this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
-
+            if ($user->isIsDisabled() == 1) {
+                $message = $translator->trans('Please verify you profile', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute("app_logout");
+            }
             {
                 $response = new Response($this->twig->render('user/master/top_up_balance.html.twig', [
                     'user' => $user,
