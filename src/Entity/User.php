@@ -266,6 +266,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $resetPasswordRequest;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $level;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -1121,4 +1126,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 //
 //        return $this;
 //    }
+
+    /**
+     * @return mixed
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * @param mixed $level
+     */
+    public function setLevel($level): void
+    {
+        $this->level = $level;
+    }
 }

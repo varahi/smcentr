@@ -29,7 +29,7 @@ class OrderFormType extends AbstractType
                 [
                     'required' => true,
                     'attr' => [
-                        'placeholder' => 'Цена заявки *',
+                        'placeholder' => 'Стоимость работ *',
                     ],
                     'label' => false,
                     'currency' => '',
@@ -60,7 +60,8 @@ class OrderFormType extends AbstractType
                     'label' => false,
                 ]
             )
-            /*->add(
+            /*
+            ->add(
                 'level',
                 ChoiceType::class,
                 [
@@ -77,7 +78,8 @@ class OrderFormType extends AbstractType
                     ],
                     'data' => '3'
                 ]
-            )*/
+            )
+            */
             ->add(
                 'phone',
                 TelType::class,

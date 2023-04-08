@@ -33,7 +33,7 @@ class OrderFormCompanyType extends AbstractType
                 [
                     'required' => true,
                     'attr' => [
-                        'placeholder' => 'Цена заявки *',
+                        'placeholder' => 'Стоимость работ *',
                     ],
                     'label' => false,
                     'currency' => '',

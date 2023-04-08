@@ -235,13 +235,6 @@ class UserController extends AbstractController
                 $notifier->send(new Notification($message, ['browser']));
                 return $this->redirectToRoute("app_logout");
             }
-            if ($user->isIsVerified() == 0) {
-                // Send a new email link to verify email
-                $this->verifyEmail($user);
-                $message = $translator->trans('Please verify you profile', array(), 'flash');
-                $notifier->send(new Notification($message, ['browser']));
-                return $this->redirectToRoute("app_login");
-            }
 
             $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC');
             $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC');

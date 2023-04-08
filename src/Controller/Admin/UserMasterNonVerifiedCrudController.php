@@ -238,6 +238,20 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
             ->setCustomOption('storedAsCents', false)->setColumns('col-md-4')
             ->setPermission('ROLE_SUPER_ADMIN')->hideOnIndex();
 
+        yield ChoiceField::new('level')->setChoices(
+            [
+                'Профессиональный рейтинг' => null,
+                '1' => '1',
+                '2' => '2',
+                '3' => '3',
+                '4' => '4',
+                '5' => '5'
+            ]
+        )
+            ->setColumns('col-md-4')
+            ->setLabel('Professional rating')
+            ->hideOnIndex();
+
         yield FormField::addRow();
         yield AssociationField::new('city')->setColumns('col-md-4')->setRequired('1');
         yield AssociationField::new('district')->setColumns('col-md-4')->hideOnIndex();

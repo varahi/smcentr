@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Order;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * @extends ServiceEntityRepository<Order>
@@ -90,7 +92,7 @@ class OrderRepository extends ServiceEntityRepository
      * @param $status
      * @return float|int|mixed|string
      */
-    public function findAllByStatusProfessionJobTypesAndCity($status, array $professions, array $jobTypes, string $city)
+    public function findAllByStatusProfessionJobTypesAndCity($status, array $professions, array $jobTypes, string $city, User $user)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('o')
@@ -112,6 +114,9 @@ class OrderRepository extends ServiceEntityRepository
         }
         if (isset($city) && !empty($city)) {
             $qb->andWhere($qb->expr()->eq('o.city', $city));
+        }
+        if ($user->getLevel()) {
+            $qb->andWhere($qb->expr()->lte('o.level', $user->getLevel()));
         }
 
         return $qb->getQuery()->getResult();

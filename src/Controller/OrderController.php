@@ -115,7 +115,7 @@ class OrderController extends AbstractController
                 $cityId = null;
             }
 
-            $newOrders = $orderRepository->findAllByStatusProfessionJobTypesAndCity(self::STATUS_NEW, $professionIds, $jobTypeIds, $cityId);
+            $newOrders = $orderRepository->findAllByStatusProfessionJobTypesAndCity(self::STATUS_NEW, $professionIds, $jobTypeIds, $cityId, $user);
 
             return $this->render('order/orders_list.html.twig', [
                 'user' => $user,

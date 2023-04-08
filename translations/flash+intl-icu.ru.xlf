@@ -7,7 +7,7 @@
     <body>
       <trans-unit id="User registered" resname="User registered">
         <source>User registered</source>
-        <target>Вы успешно зарегистрировались. После подтверждения вашего профиля вы сможете войти в систему.</target>
+        <target>Вы успешно зарегистрировались в системе для продолжения работы вам необходимо подтвердить активацию аккаунта  перейдя по ссылке отправленной на вашу почту.</target>
       </trans-unit>
       <trans-unit id="User master registered" resname="User master registered">
         <source>User registered</source>

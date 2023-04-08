@@ -264,6 +264,15 @@ span.main-page-subscribe:hover {
     text-decoration: underline !important;
 }
 
+#list_items .job_item .top_item .item_right .status {
+    max-width: 100px;
+    text-align: center;
+    float: right;
+}
+.status_created_by {
+    min-width: 180px;
+}
+
 /* PWA background image */
 /*#wrapper {
     display:none;

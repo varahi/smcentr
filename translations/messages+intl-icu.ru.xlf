@@ -873,6 +873,10 @@
         <source>Top up balance text2</source>
         <target>Средства зачислятся на счет с 18:00 до 21:00.</target>
       </trans-unit>
+        <trans-unit id="Professional rating" resname="Professional rating">
+            <source>Professional rating</source>
+            <target>Профессиональный рейтинг</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>
