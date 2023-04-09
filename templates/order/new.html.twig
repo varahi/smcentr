@@ -78,6 +78,8 @@
                         {{ form_row(orderForm.deadline) }}
 
                         {% if is_granted('ROLE_COMPANY') %}
+                            {{ form_row(orderForm.users) }}
+                            {{ form_row(orderForm.performer) }}
                             {{ form_widget(orderForm.customTaxRate) }}
                             <div class="check_notifications">
                                 <div class="cb_notifications">

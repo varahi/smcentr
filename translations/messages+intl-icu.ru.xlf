@@ -873,10 +873,18 @@
         <source>Top up balance text2</source>
         <target>Средства зачислятся на счет с 18:00 до 21:00.</target>
       </trans-unit>
-        <trans-unit id="Professional rating" resname="Professional rating">
-            <source>Professional rating</source>
-            <target>Профессиональный рейтинг</target>
-        </trans-unit>
+      <trans-unit id="6R_kOTt" resname="Professional rating">
+        <source>Professional rating</source>
+        <target>Профессиональный рейтинг</target>
+      </trans-unit>
+      <trans-unit id="D5i01_0" resname="Create master">
+        <source>Create master</source>
+        <target>Создать мастера</target>
+      </trans-unit>
+      <trans-unit id="zcDh_Yu" resname="Create client">
+        <source>Create client</source>
+        <target>Создать клиента</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

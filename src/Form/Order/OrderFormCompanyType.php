@@ -7,8 +7,10 @@ use App\Entity\District;
 use App\Entity\JobType;
 use App\Entity\Order;
 use App\Entity\Profession;
+use App\Entity\User;
 use App\Form\Invoice\InvoiceParamsFormType;
 use App\Form\JobFormType;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -26,6 +28,7 @@ class OrderFormCompanyType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $userId = $options['userId'];
         $builder
             ->add(
                 'price',
@@ -150,6 +153,42 @@ class OrderFormCompanyType extends AbstractType
                     //'data' => true, // Default checked
                 ]
             )
+            ->add('performer', EntityType::class, [
+                'class' => User::class,
+                'required' => false,
+                'multiple'  => false,
+                'expanded'  => false,
+                'by_reference' => false,
+                'query_builder' => function (EntityRepository $er) use ($userId) {
+                    return $er->createQueryBuilder('u')
+                        ->where('u.roles LIKE :roles')
+                        ->andWhere('u.isVerified = 1')
+                        ->andWhere('u.master = :id')
+                        ->setParameter('roles', '%"'.'ROLE_MASTER'.'"%')
+                        ->setParameter(':id', $userId)
+                        ->orderBy('u.username', 'ASC');
+                },
+                'label' => 'Исполнитель',
+            ])
+
+            ->add('users', EntityType::class, [
+                'class' => User::class,
+                'required' => false,
+                'multiple'  => false,
+                'expanded'  => false,
+                'by_reference' => false,
+                'query_builder' => function (EntityRepository $er) use ($userId) {
+                    return $er->createQueryBuilder('u')
+                        ->where('u.roles LIKE :roles')
+                        ->andWhere('u.isVerified = 1')
+                        ->andWhere('u.client = :id')
+                        ->setParameter('roles', '%"'.'ROLE_CLIENT'.'"%')
+                        ->setParameter(':id', $userId)
+                        ->orderBy('u.username', 'ASC');
+                },
+                'label' => 'Клиент',
+            ])
+
             /*->add('profession', EntityType::class, [
                 'class' => Profession::class,
                 'multiple'  => false,
@@ -205,6 +244,9 @@ class OrderFormCompanyType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Order::class,
+        ]);
+        $resolver->setRequired([
+            'userId',
         ]);
     }
 }

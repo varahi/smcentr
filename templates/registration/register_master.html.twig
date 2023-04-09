@@ -15,7 +15,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <h1>Регистрация мастера</h1>
+                    <h1>Регистрация мастера  {% if is_granted('ROLE_COMPANY') %} для компании "{{ currentUser.fullName }}"{% endif %}</h1>
                 </div>
             </div>
 

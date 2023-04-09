@@ -158,7 +158,9 @@ class OrderController extends AbstractController
                 $form = $this->createForm(OrderFormType::class, $order);
             }
             if ($this->isGranted(self::ROLE_COMPANY)) {
-                $form = $this->createForm(OrderFormCompanyType::class, $order);
+                $form = $this->createForm(OrderFormCompanyType::class, $order, [
+                    'userId' => $user->getId(),
+                ]);
             }
 
             $form->handleRequest($request);

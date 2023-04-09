@@ -24,6 +24,7 @@ use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -42,22 +43,30 @@ class RegistrationController extends AbstractController
 
     public const ROLE_MASTER = 'ROLE_MASTER';
 
+    public const ROLE_CLIENT = 'ROLE_CLIENT';
+
+    public const ROLE_COMPANY = 'ROLE_COMPANY';
+
     private $emailVerifier;
 
     private $mailer;
 
     private $adminEmail;
 
+    private $security;
+
     public function __construct(
         EmailVerifier $emailVerifier,
         VerifyEmailHelperInterface $helper,
         MailerInterface $mailer,
-        string $adminEmail
+        string $adminEmail,
+        Security $security
     ) {
         $this->emailVerifier = $emailVerifier;
         $this->verifyEmailHelper = $helper;
         $this->mailer = $mailer;
         $this->adminEmail = $adminEmail;
+        $this->security = $security;
     }
 
     /**
@@ -281,6 +290,16 @@ class RegistrationController extends AbstractController
                 $avatarFileName = $fileUploader->upload($avatarFile);
                 $user->setAvatar($avatarFileName);
             }
+
+            // Set company assigment if it compnay
+            if ($this->security->getUser()) {
+                $currentUser = $this->security->getUser();
+                if ($currentUser != null && in_array(self::ROLE_COMPANY, $currentUser->getRoles())) {
+                    $currentUser->setClient($user);
+                    $user->setIsVerified(true);
+                }
+            }
+
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -294,18 +313,21 @@ class RegistrationController extends AbstractController
             );
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation(
-                'app_verify_email',
-                $user,
-                (new TemplatedEmail())
-                    ->from(new Address('noreply@smcentr.su', 'Admin'))
-                    ->to($user->getEmail())
-                    ->subject('Пожалуйста подтвердите ваш пароль')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-                    ->context([
-                        'verifyUrl' => $signatureComponents->getSignedUrl()
-                    ])
-            );
+            // Don't send email if created by company
+            if (!$this->security->getUser()) {
+                $this->emailVerifier->sendEmailConfirmation(
+                    'app_verify_email',
+                    $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('noreply@smcentr.su', 'Admin'))
+                        ->to($user->getEmail())
+                        ->subject('Пожалуйста подтвердите ваш пароль')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                        ->context([
+                            'verifyUrl' => $signatureComponents->getSignedUrl()
+                        ])
+                );
+            }
 
             $message = $translator->trans('User registered', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
@@ -315,6 +337,7 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register_client.html.twig', [
             'cities' => $cities,
             'districts' => $districts,
+            'currentUser' => $this->security->getUser(),
             'registrationForm' => $form->createView(),
         ]);
     }
@@ -424,6 +447,15 @@ class RegistrationController extends AbstractController
                 }
             }
 
+            // Set company assigment if it compnay
+            if ($this->security->getUser()) {
+                $currentUser = $this->security->getUser();
+                if ($currentUser != null && in_array(self::ROLE_COMPANY, $currentUser->getRoles())) {
+                    $currentUser->setMaster($user);
+                    $user->setIsVerified(true);
+                }
+            }
+
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -437,18 +469,21 @@ class RegistrationController extends AbstractController
             );
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation(
-                'app_verify_email',
-                $user,
-                (new TemplatedEmail())
-                    ->from(new Address('noreply@smcentr.su', 'Admin'))
-                    ->to($this->adminEmail)
-                    ->subject('В сервисе smcentr.su зарегистрировался новый мастер')
-                    ->htmlTemplate('registration/confirmation_email_masster.html.twig')
-                    ->context([
-                        'verifyUrl' => $signatureComponents->getSignedUrl()
-                    ])
-            );
+            // Don't send email if created by company
+            if (!$this->security->getUser()) {
+                $this->emailVerifier->sendEmailConfirmation(
+                    'app_verify_email',
+                    $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('noreply@smcentr.su', 'Admin'))
+                        ->to($this->adminEmail)
+                        ->subject('В сервисе smcentr.su зарегистрировался новый мастер')
+                        ->htmlTemplate('registration/confirmation_email_masster.html.twig')
+                        ->context([
+                            'verifyUrl' => $signatureComponents->getSignedUrl()
+                        ])
+                );
+            }
 
             $message = $translator->trans('User master registered', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
@@ -460,6 +495,7 @@ class RegistrationController extends AbstractController
             'jobTypes' => $jobTypes,
             'cities' => $cities,
             'districts' => $districts,
+            'currentUser' => $this->security->getUser(),
             'registrationForm' => $form->createView(),
         ]);
     }
