@@ -20,7 +20,7 @@ import '../css/media_queries.css';
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-        navigator.serviceWorker.register("https://smcentr.su/sw.js", { scope: "/" }).then(() => {
+        navigator.serviceWorker.register("/sw.js", { scope: "/" }).then(() => {
         });
     });
 }
