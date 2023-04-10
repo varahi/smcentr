@@ -165,7 +165,7 @@ class OrderRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findPerfomedByStatus($status, $user, $orderField, $orderDirection)
+    public function findPerfomedByStatus($status, $user, $orderField, $orderDirection, $limit = '')
     {
         $field = 'o.'.$orderField;
 
@@ -177,6 +177,10 @@ class OrderRepository extends ServiceEntityRepository
             ->setParameter('status', $status)
             ->orderBy($field, $orderDirection)
         ;
+
+        if ($limit) {
+            $qb->setMaxResults($limit);
+        }
 
         return $qb->getQuery()->getResult();
     }

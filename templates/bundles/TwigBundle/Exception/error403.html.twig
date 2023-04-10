@@ -1,6 +1,5 @@
 {% extends 'layouts/login.html.twig' %}
 {% block body %}
-
     <section id="auth_block">
         <div class="container">
             <div class="row">
@@ -12,12 +11,9 @@
                         <p>Вам запрещен доступ к этой странице. Запрашиваемая вами страница не найдена</p>
                         {#{% include 'partials/_download_app.html.twig' %}#}
                     </div>
-                    <p class="text-grey">
-                        Центр поддержки клиентов: <a href="#">8 800 100 00 00</a><br /> Звонок по России бесплатный
-                    </p>
+                    {% include 'partials/misc/_support.html.twig' %}
                 </div>
             </div>
         </div>
     </section>
-
 {% endblock %}

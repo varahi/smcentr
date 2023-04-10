@@ -236,9 +236,6 @@ class UserController extends AbstractController
                 return $this->redirectToRoute("app_logout");
             }
 
-            $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC');
-            $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC');
-
             // Resize image if exist
             if ($user->getAvatar()) {
                 $this->imageOptimizer->resize($this->targetDirectory.'/'.$user->getAvatar());
@@ -247,8 +244,8 @@ class UserController extends AbstractController
             {
                 $response = new Response($this->twig->render('user/master/lk-master.html.twig', [
                     'user' => $user,
-                    'activeOrders' => $activeOrders,
-                    'completedOrders' => $completedOrders
+                    'activeOrders' => $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC', '999'),
+                    'completedOrders' => $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC', '999')
                 ]));
 
                 //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
