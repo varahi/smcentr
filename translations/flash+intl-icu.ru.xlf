@@ -59,7 +59,7 @@
       </trans-unit>
       <trans-unit id="Please verify you profile" resname="Please verify you profile">
         <source>Please verify you profile</source>
-        <target>Пожалуйста подтвердите свой профиль перейдя по ссылке указанной в письме</target>
+        <target>Пожалуйста, подтвердите свой профиль перейдя по ссылке указанной в письме</target>
       </trans-unit>
       <trans-unit id="Please top up balance" resname="Please top up balance">
         <source>Please top up balance</source>
@@ -124,6 +124,10 @@
       <trans-unit id="Admin registered" resname="Admin registered">
         <source>Admin registered</source>
         <target>Создан новый администратор</target>
+      </trans-unit>
+      <trans-unit id="Your account has not been activated yet" resname="Your account has not been activated yet">
+        <source>Your account has not been activated yet</source>
+        <target>Ваш аккаунт еще не был активирован.</target>
       </trans-unit>
     </body>
   </file>

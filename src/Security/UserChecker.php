@@ -12,6 +12,10 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class UserChecker implements UserCheckerInterface
 {
+    public const ROLE_CLIENT = 'ROLE_CLIENT';
+
+    public const ROLE_MASTER = 'ROLE_MASTER';
+
     private EmailVerifier $emailVerifier;
 
     private $translator;
@@ -28,8 +32,9 @@ class UserChecker implements UserCheckerInterface
 
     public function checkPreAuth(UserInterface $user)
     {
+        //($user != null && in_array(self::ROLE_MASTER, $user->getRoles()))
         if ($user->isIsDisabled() == 1) {
-            $message = $this->translator->trans('Please verify you profile', array(), 'flash');
+            $message = $this->translator->trans('Please verify you profile', [], 'flash');
             throw new CustomUserMessageAuthenticationException($message);
             //throw new CustomUserMessageAuthenticationException("Ваш аккунт заблокирован, пожалуйста свяжитесь с нашей службой поддержки для прояснения ситуации !");
         }
@@ -42,20 +47,29 @@ class UserChecker implements UserCheckerInterface
                 ['id' => $user->getId()] // add the user's id as an extra query param
             );
 
-            $this->emailVerifier->sendEmailConfirmation(
-                'app_verify_email',
-                $user,
-                (new TemplatedEmail())
-                    ->from(new Address('noreply@smcentr.su', 'Admin'))
-                    ->to($user->getEmail())
-                    ->subject($this->translator->trans('Please Confirm your Email', array(), 'message'))
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-                    ->context([
-                        'verifyUrl' => $signatureComponents->getSignedUrl()
-                    ])
-            );
+            // Send verification email only for client
+            if (in_array(self::ROLE_CLIENT, $user->getRoles())) {
+                $this->emailVerifier->sendEmailConfirmation(
+                    'app_verify_email',
+                    $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('noreply@smcentr.su', 'Admin'))
+                        ->to($user->getEmail())
+                        ->subject($this->translator->trans('Please Confirm your Email', [], 'message'))
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                        ->context([
+                            'verifyUrl' => $signatureComponents->getSignedUrl()
+                        ])
+                );
+            }
 
-            $message = $this->translator->trans('Your account has not been activated yet', array(), 'flash');
+            if (in_array(self::ROLE_CLIENT, $user->getRoles())) {
+                $message = $this->translator->trans('Please verify you profile', [], 'flash');
+            }
+            if (in_array(self::ROLE_MASTER, $user->getRoles())) {
+                $message = $this->translator->trans('Your account has not been activated yet', [], 'flash');
+            }
+
             throw new CustomUserMessageAuthenticationException($message);
         }
     }
@@ -63,7 +77,7 @@ class UserChecker implements UserCheckerInterface
     public function checkPostAuth(UserInterface $user)
     {
         if ($user->isIsDisabled() == 1) {
-            $message = $this->translator->trans('Please verify you profile', array(), 'flash');
+            $message = $this->translator->trans('Please verify you profile', [], 'flash');
             throw new CustomUserMessageAuthenticationException($message);
         }
     }

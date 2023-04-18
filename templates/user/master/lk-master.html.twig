@@ -93,6 +93,12 @@
                     {% endfor %}
                 </div>
 
+
+{#                {% if activeOrders|length > 3 %}#}
+{#                    <div class="load-more__btn-wrap"><a href="#" class="load-more__btn">{{ 'Show all active orders'|trans }}</a></div>#}
+{#                {% endif %}#}
+
+
                 <script>
                     $('.active_orders_list').simpleLoadMore({
                         item: 'div.col-md-4',
