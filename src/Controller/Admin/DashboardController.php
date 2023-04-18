@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Payment;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -139,6 +140,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Request a withdrawal', 'fa fa-mail-forward', Request::class)
             ->setPermission('ROLE_EDITOR');
         yield MenuItem::section('<hr />');
+        yield MenuItem::linkToCrud('Payments', 'fa fa-money', Payment::class);
+
         yield MenuItem::linkToLogout('Logout', 'fa fa-user-times');
     }
 

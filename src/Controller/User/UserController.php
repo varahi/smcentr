@@ -43,7 +43,6 @@ use Twig\Environment;
 
 class UserController extends AbstractController
 {
-
     public const ROLE_CLIENT = 'ROLE_CLIENT';
 
     public const ROLE_MASTER = 'ROLE_MASTER';

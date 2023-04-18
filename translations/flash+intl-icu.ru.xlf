@@ -129,6 +129,18 @@
         <source>Your account has not been activated yet</source>
         <target>Ваш аккаунт еще не был активирован.</target>
       </trans-unit>
+      <trans-unit id="Amount of payment" resname="Amount of payment">
+        <source>Amount of payment</source>
+        <target>Сумма платежа должна быть не менее 1000 руб.</target>
+      </trans-unit>
+      <trans-unit id="Payment Success" resname="Payment Success">
+        <source>Payment Success</source>
+        <target>Платеж успешно совершен</target>
+      </trans-unit>
+      <trans-unit id="Payment Error" resname="Payment Error">
+        <source>Payment Error</source>
+        <target>Ошибка платежа</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

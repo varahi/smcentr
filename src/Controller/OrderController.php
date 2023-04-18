@@ -41,8 +41,6 @@ class OrderController extends AbstractController
 
     public const CLIENT_CREATED = '1';
 
-    public const MASTER_CREATED = '2';
-
     public const COMPANY_CREATED = '3';
 
     public const ROLE_CLIENT = 'ROLE_CLIENT';

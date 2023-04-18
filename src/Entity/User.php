@@ -271,6 +271,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $level;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="user")
+     */
+    private $payment;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -286,6 +291,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->requests = new ArrayCollection();
         $this->firebases = new ArrayCollection();
         $this->resetPasswordRequest = new ArrayCollection();
+        $this->payment = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -1141,5 +1147,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLevel($level): void
     {
         $this->level = $level;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayment(): Collection
+    {
+        return $this->payment;
+    }
+
+    public function addPayment(Payment $payment): self
+    {
+        if (!$this->payment->contains($payment)) {
+            $this->payment[] = $payment;
+            $payment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): self
+    {
+        if ($this->payment->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getUser() === $this) {
+                $payment->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

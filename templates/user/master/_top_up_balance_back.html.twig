@@ -12,23 +12,17 @@
     </div>
 </header>
 
-<section id="reg_client">
+<section id="list_jobs">
     <div class="container">
         {% include 'partials/_message.html.twig' %}
         <div class="row">
             <div class="col-md-12">
-                <div class="reg_contact">
-                    <form class="form-std" autocomplete="off" name="assign" method="POST" action="{{ path('app_payment') }}">
-                        <h1>{{ 'Top up balance'|trans }}</h1>
-                        <p>Введите поплняемую сумму</p>
-                        <input type="number" id="payment_sum" name="payment[amount]" required="required" placeholder="Сумма в руб. не менее 1000 руб.">
-                        <button>{{ 'Submit'|trans }}</button>
-                    </form>
-                </div>
+                <h1>{{ 'Top up balance'|trans }}</h1>
+                <p>{{ 'Top up balance text1'|trans }}</p>
+                <p>{{ 'Top up balance text2'|trans }}</p>
             </div>
         </div>
     </div>
-    <br /><br />
 </section>
 
     {% include 'partials/footer/_footer.html.twig' %}
