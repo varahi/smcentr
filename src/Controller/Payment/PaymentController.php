@@ -108,7 +108,7 @@ class PaymentController extends AbstractController
             ->orderId($payment->getId())
             ->oneStep()
             ->receipt(newReceipt()
-                ->email('info@smcentr.su')
+                ->email($payment->getUser()->getEmail())
                 ->taxationOSN()
                 ->addItem(newReceiptItem()
                     ->name($payment->getTitle())
