@@ -90,9 +90,27 @@ class FinalController extends AbstractController
      * @Route("/payment-error", name="app_payment_error")
      * @return Response
      */
-    public function getErrorResponse(): Response {
-        $message = $this->translator->trans('Payment Error', array(), 'flash');
-        $this->notifier->send(new Notification($message, ['browser']));
+    public function getErrorResponse(
+        Request $request,
+        PaymentRepository $paymentRepository
+    ): Response {
+        // Redirect if user not master
+        if (!$this->isGranted(self::ROLE_MASTER)) {
+            $message = $this->translator->trans('Please login', array(), 'flash');
+            $this->notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
+        $params = $request->query->all();
+        if ($params['ErrorCode'] == 1051) {
+            $message = $this->translator->trans($params['Message'], array(), 'flash');
+            $this->notifier->send(new Notification($message, ['browser']));
+            $payment = $paymentRepository->findOneBy(['id' => $params['OrderId']]);
+            if($payment) {
+                $entityManager = $this->doctrine->getManager();
+                $entityManager->remove($payment);
+                $entityManager->flush();
+            }
+        }
         return $this->redirectToRoute("app_master_profile");
     }
 }

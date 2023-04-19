@@ -68,7 +68,7 @@ class PaymentController extends AbstractController
         // Redicrect if payment so small
         // счет ведется в копейках
         $amount = $_POST['payment']['amount']*100;
-        if ($amount < 1000) {
+        if ($amount < 100000) {
             $message = $this->translator->trans('Amount of payment', array(), 'flash');
             $this->notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute("app_top_up_balance");
