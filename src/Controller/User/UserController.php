@@ -168,7 +168,7 @@ class UserController extends AbstractController
     /**
      * Require ROLE_MASTER for *every* controller method in this class.
      *
-     * @Route("/user/top-up-balancer", name="app_top_up_balance")
+     * @Route("/user/top-up-balance", name="app_top_up_balance")
      */
     public function topUpBalance(
         TranslatorInterface $translator,
@@ -184,6 +184,7 @@ class UserController extends AbstractController
             {
                 $response = new Response($this->twig->render('user/master/top_up_balance.html.twig', [
                     'user' => $user,
+                    'minAmount' => $_ENV['MIN_AMOUNT']
                 ]));
 
                 //$response->setSharedMaxAge(self::CACHE_MAX_AGE);

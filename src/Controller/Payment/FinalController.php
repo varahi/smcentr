@@ -26,8 +26,6 @@ class FinalController extends AbstractController
      */
     public function __construct(
         Security $security,
-        string $merchantName,
-        string $merchantId,
         string $terminalId,
         string $terminalPass,
         TranslatorInterface $translator,
@@ -35,8 +33,6 @@ class FinalController extends AbstractController
         ManagerRegistry $doctrine
     ) {
         $this->security = $security;
-        $this->merchantName = $merchantName;
-        $this->merchantId = $merchantId;
         $this->terminalId = $terminalId;
         $this->terminalPass = $terminalPass;
         $this->translator = $translator;

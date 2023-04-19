@@ -21,7 +21,7 @@
                     <form class="form-std" autocomplete="off" name="assign" method="POST" action="{{ path('app_payment') }}">
                         <h1>{{ 'Top up balance'|trans }}</h1>
                         <p>Введите пополняемую сумму</p>
-                        <input type="number" id="payment_sum" name="payment[amount]" required="required" placeholder="Сумма в руб. не менее 1000 руб.">
+                        <input type="number" id="payment_sum" name="payment[amount]" required="required" placeholder="Сумма в руб. не менее {{ minAmount }} руб.">
                         <button>{{ 'Submit'|trans }}</button>
                     </form>
                 </div>

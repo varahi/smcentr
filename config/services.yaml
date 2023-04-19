@@ -18,10 +18,9 @@ parameters:
     default_scheme: 'https'
     firebase_api_key: ''
     project_id: '1'
-    merchant_name: ''
-    merchant_id: ''
     terminal_id: ''
     terminal_pass: ''
+    min_amount: ''
 
 services:
     # default configuration for services in *this* file
@@ -35,10 +34,9 @@ services:
           $firebaseApiKey: "%env(string:default:firebase_api_key:FIREBASE_API_KEY)%"
           $defaultDomain: "%env(string:default:default_domain:DEFAULT_DOMAIN)%"
           $projectId: "%env(string:default:project_id:PROJECT_ID)%"
-          $merchantName: "%env(string:default:merchant_name:MERCHANT_NAME)%"
-          $merchantId: "%env(string:default:merchant_id:MERCHANT_ID)%"
           $terminalId: "%env(string:default:terminal_id:TERMINAL_ID)%"
           $terminalPass: "%env(string:default:terminal_pass:TERMINAL_PASS)%"
+          $minAmount: "%env(string:default:min_amount:MIN_AMOUNT)%"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

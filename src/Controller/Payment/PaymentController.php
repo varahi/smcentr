@@ -28,27 +28,27 @@ class PaymentController extends AbstractController
 
     private $terminalPass;
 
+    private $minAmount;
+
     /**
      * @param Security $security
      */
     public function __construct(
         Security $security,
-        string $merchantName,
-        string $merchantId,
         string $terminalId,
         string $terminalPass,
+        string $minAmount,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         ManagerRegistry $doctrine
     ) {
         $this->security = $security;
-        $this->merchantName = $merchantName;
-        $this->merchantId = $merchantId;
         $this->terminalId = $terminalId;
         $this->terminalPass = $terminalPass;
         $this->translator = $translator;
         $this->notifier = $notifier;
         $this->doctrine = $doctrine;
+        $this->minAmount = $minAmount;
     }
 
     /**
@@ -67,8 +67,9 @@ class PaymentController extends AbstractController
 
         // Redicrect if payment so small
         // счет ведется в копейках
+        $minAmount = $this->minAmount * 100;
         $amount = $_POST['payment']['amount']*100;
-        if ($amount < 100000) {
+        if ($amount < $minAmount) {
             $message = $this->translator->trans('Amount of payment', array(), 'flash');
             $this->notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute("app_top_up_balance");
