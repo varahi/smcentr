@@ -6,8 +6,8 @@
     </header>
     <body>
       <trans-unit id="form.email" resname="form.email">
-        <source>E-mail</source>
-        <target>E-mail</target>
+        <source>E-mail *</source>
+        <target>E-mail *</target>
       </trans-unit>
       <trans-unit id="form.phone" resname="form.phone">
         <source>Phone *</source>
@@ -15,11 +15,11 @@
       </trans-unit>
       <trans-unit id="form.password" resname="form.password">
         <source>Password *</source>
-        <target>Пароль</target>
+        <target>Пароль *</target>
       </trans-unit>
       <trans-unit id="form.confirm_password" resname="form.confirm_password">
         <source>Confirm Password *</source>
-        <target>Подтвердите пароль</target>
+        <target>Подтвердите пароль *</target>
       </trans-unit>
       <trans-unit id="form.full_name" resname="form.full_name">
         <source>Full name *</source>

@@ -19,6 +19,11 @@
                 </div>
             </div>
 
+            <div id="info" class="load-info">
+                <h2>Данные отправляются. Пожалуйста, не закрывайте страницу</h2>
+                <div class="loader"></div>
+            </div>
+
             {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
             <div class="row">
                 <div class="col-md-6">
@@ -52,7 +57,7 @@
                         <div class="avatar_upload">
                             <img id="avatar" src="{{ asset('assets/images/avatar.png') }}" alt="" />
                             <div class="">
-                                <p>Аватар пользователя</p>
+                                <p>Аватар пользователя *</p>
                                 <div class="upload_file upload_file_1">
                                     {{ form_widget(registrationForm.avatar) }}
                                     <button class="upload upload-1">{{ 'Upload'|trans }}<i></i></button>
@@ -67,7 +72,7 @@
                             <div class="p_upload_item">
 
                                 <div class="file_upload">
-                                    <p>Главная страница</p>
+                                    <p>Главная страница *</p>
                                     <span><img id="doc1" alt="" /></span>
 {#                                    <span><img id="doc1" src="{{ asset('assets/images/file_upload.svg') }}" alt="" /> #}{#file-pasport.jpg#}{#</span>#}
                                 </div>
@@ -80,7 +85,7 @@
 
                             <div class="p_upload_item">
                                 <div class="file_upload">
-                                    <p>Страница прописки</p>
+                                    <p>Страница прописки *</p>
                                     <span><img id="doc2" alt="" /></span>
 {#                                    <span><img id="doc2" src="{{ asset('assets/images/file_upload.svg') }}" alt="" />#}{#file-regitration.jpg#}{#</span>#}
                                 </div>
@@ -92,7 +97,7 @@
 
                             <div class="p_upload_item">
                                 <div class="file_upload">
-                                    <p>Селфи с паспортом</p>
+                                    <p>Селфи с паспортом *</p>
                                     <span><img id="doc3" alt="" /></span>
 {#                                    <span><img id="doc3" src="{{ asset('assets/images/file_upload.svg') }}" alt="" />#}{#file-selfi.jpg#}{#</span>#}
                                 </div>

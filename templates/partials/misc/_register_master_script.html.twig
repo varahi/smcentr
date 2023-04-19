@@ -83,4 +83,21 @@
         $(".prof_{{ profession.id }}").toggle(100);
     });
     {% endfor %}
+
+    function checkParams() {
+        var email = $('#registration_master_form_email').val();
+        var pass1 = $('#registration_master_form_plainPassword_first').val();
+        var pass2 = $('#registration_master_form_plainPassword_second').val();
+        var phone = $('#registration_master_form_phone').val();
+        var fullName = $('#registration_master_form_fullName').val();
+        if (email.length != 0 && pass1.length != 0 && pass2.length != 0 && phone.length != 0 && fullName.length != 0){
+            $('#submit').removeAttr('disabled');
+        } else {
+            $('#submit').attr('disabled', 'disabled');
+        }
+    }
+    $("#submit").click(function() {
+        $('#info').removeClass('load-info');
+    });
+
 </script>

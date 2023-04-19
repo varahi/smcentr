@@ -35,7 +35,8 @@ class RegistrationMasterFormType extends AbstractType
                 [
                     'required' => true,
                     'attr' => [
-                        'placeholder' => 'form.email'
+                        'placeholder' => 'form.email',
+                        'onkeyup' => 'checkParams()'
                     ],
                     'label' => false,
                     'translation_domain' => 'forms',
@@ -47,7 +48,8 @@ class RegistrationMasterFormType extends AbstractType
                 [
                     'required' => true,
                     'attr' => [
-                        'placeholder' => 'form.phone'
+                        'placeholder' => 'form.phone',
+                        'onkeyup' => 'checkParams()'
                     ],
                     'label' => false,
                     'translation_domain' => 'forms',
@@ -59,7 +61,8 @@ class RegistrationMasterFormType extends AbstractType
                 [
                     'required' => true,
                     'attr' => [
-                        'placeholder' => 'form.full_name'
+                        'placeholder' => 'form.full_name',
+                        'onkeyup' => 'checkParams()'
                     ],
                     'label' => false,
                     'translation_domain' => 'forms',
@@ -126,13 +129,15 @@ class RegistrationMasterFormType extends AbstractType
                 //'second_options' => ['label' => 'form.confirm_password'],
                 'first_options' => [
                     'attr' => [
-                        'placeholder' => 'form.password'
+                        'placeholder' => 'form.password',
+                        'onkeyup' => 'checkParams()'
                     ],
                     'label' => false
                 ],
                 'second_options' => [
                     'attr' => [
-                        'placeholder' => 'form.confirm_password'
+                        'placeholder' => 'form.confirm_password',
+                        'onkeyup' => 'checkParams()'
                     ],
                     'label' => false
                 ],
@@ -141,7 +146,7 @@ class RegistrationMasterFormType extends AbstractType
             ])
 
             ->add('avatar', FileType::class, [
-                'required' => false,
+                'required' => true,
                 'mapped' => false,
                 'constraints' => [
                     new Image([
@@ -165,7 +170,7 @@ class RegistrationMasterFormType extends AbstractType
             ])
 
             ->add('doc1', FileType::class, [
-                'required' => false,
+                'required' => true,
                 'mapped' => false,
                 'constraints' => [
                     new Image([
@@ -189,7 +194,7 @@ class RegistrationMasterFormType extends AbstractType
             ])
 
             ->add('doc2', FileType::class, [
-                'required' => false,
+                'required' => true,
                 'mapped' => false,
                 'constraints' => [
                     new Image([
@@ -213,7 +218,7 @@ class RegistrationMasterFormType extends AbstractType
             ])
 
             ->add('doc3', FileType::class, [
-                'required' => false,
+                'required' => true,
                 'mapped' => false,
                 'constraints' => [
                     new Image([
