@@ -33,7 +33,8 @@ class RegistrationFormType extends AbstractType
                 [
                     'required' => true,
                     'attr' => [
-                        'placeholder' => 'form.email'
+                        'placeholder' => 'form.email',
+                        'onkeyup' => 'checkParams()'
                     ],
                     'label' => false,
                     'translation_domain' => 'forms',
@@ -45,7 +46,8 @@ class RegistrationFormType extends AbstractType
                 [
                     'required' => true,
                     'attr' => [
-                        'placeholder' => 'form.phone'
+                        'placeholder' => 'form.phone',
+                        'onkeyup' => 'checkParams()'
                     ],
                     'label' => false,
                     'translation_domain' => 'forms',
@@ -57,7 +59,8 @@ class RegistrationFormType extends AbstractType
                 [
                     'required' => true,
                     'attr' => [
-                        'placeholder' => 'form.full_name'
+                        'placeholder' => 'form.full_name',
+                        'onkeyup' => 'checkParams()'
                     ],
                     'label' => false,
                     'translation_domain' => 'forms',

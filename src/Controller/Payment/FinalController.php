@@ -101,7 +101,7 @@ class FinalController extends AbstractController
             $message = $this->translator->trans($params['Message'], array(), 'flash');
             $this->notifier->send(new Notification($message, ['browser']));
             $payment = $paymentRepository->findOneBy(['id' => $params['OrderId']]);
-            if($payment) {
+            if ($payment) {
                 $entityManager = $this->doctrine->getManager();
                 $entityManager->remove($payment);
                 $entityManager->flush();

@@ -20,7 +20,7 @@
             </div>
 
             <div id="info" class="load-info">
-                <h2>Данные отправляются. Пожалуйста, не закрывайте страницу</h2>
+                <h2>{{ 'Data is sent'|trans }}</h2>
                 <div class="loader"></div>
             </div>
 
@@ -49,7 +49,6 @@
                                 </option>
                             {% endfor %}
                         </select>
-
 
 {#                        {{ form_widget(registrationForm.city) }}
                         {{ form_widget(registrationForm.district) }}#}

@@ -163,7 +163,7 @@ class RegistrationMasterFormType extends AbstractType
                     ])
                 ],
                 'attr' => [
-                    'onchange' => 'readURL(this);'
+                    'onchange' => 'readURL(this); checkParams();'
                 ],
                 'label' => false,
                 'translation_domain' => 'forms',
@@ -187,7 +187,7 @@ class RegistrationMasterFormType extends AbstractType
                     ])
                 ],
                 'attr' => [
-                    'onchange' => 'readDoc1(this);'
+                    'onchange' => 'readDoc1(this); checkParams();'
                 ],
                 'label' => false,
                 'translation_domain' => 'forms',
@@ -211,7 +211,7 @@ class RegistrationMasterFormType extends AbstractType
                     ])
                 ],
                 'attr' => [
-                    'onchange' => 'readDoc2(this);'
+                    'onchange' => 'readDoc2(this); checkParams();'
                 ],
                 'label' => false,
                 'translation_domain' => 'forms',
@@ -235,7 +235,7 @@ class RegistrationMasterFormType extends AbstractType
                     ])
                 ],
                 'attr' => [
-                    'onchange' => 'readDoc3(this);'
+                    'onchange' => 'readDoc3(this); checkParams();'
                 ],
                 'label' => false,
                 'translation_domain' => 'forms',

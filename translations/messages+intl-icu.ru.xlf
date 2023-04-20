@@ -885,6 +885,10 @@
         <source>Create client</source>
         <target>Создать клиента</target>
       </trans-unit>
+      <trans-unit id="SbnuW.D" resname="Data is sent">
+        <source>Data is sent</source>
+        <target>Данные отправляются. Пожалуйста, не закрывайте страницу.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

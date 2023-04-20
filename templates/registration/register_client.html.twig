@@ -18,6 +18,12 @@
                     <h1>Регистрация Клиента {% if is_granted('ROLE_COMPANY') %} для компании "{{ currentUser.fullName }}"{% endif %}</h1>
                 </div>
             </div>
+
+            <div id="info" class="load-info">
+                <h2>{{ 'Data is sent'|trans }}</h2>
+                <div class="loader"></div>
+            </div>
+
             <div class="row">
                 <div class="col-md-12"></div>
                 {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
@@ -92,5 +98,28 @@
                 $( ".upload" ).removeClass( 'hover');
             }
         );
+
+        function checkParams() {
+            var email = $('#registration_form_email').val();
+            var pass1 = $('#registration_form_plainPassword_first').val();
+            var pass2 = $('#registration_form_plainPassword_second').val();
+            var phone = $('#registration_form_phone').val();
+            var fullName = $('#registration_form_fullName').val();
+            if (
+                email.length != 0 &&
+                pass1.length != 0 &&
+                pass2.length != 0 &&
+                phone.length != 0 &&
+                fullName.length != 0
+            ){
+                $('#submit').removeAttr('disabled');
+            } else {
+                $('#submit').attr('disabled', 'disabled');
+            }
+        }
+        $("#submit").click(function() {
+            $('#info').removeClass('load-info');
+        });
+
     </script>
 {% endblock %}
