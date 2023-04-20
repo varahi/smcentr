@@ -8,6 +8,12 @@
     {% endblock %}
 
 {% block body %}
+    <div id="overlay">
+        <div id="info" class="load-info">
+            <h2>{{ 'Data is sent'|trans }}</h2>
+            <div class="loader"></div>
+        </div>
+    </div>
     <section id="reg_client">
         <div class="container">
             {% include 'partials/_logo_black.html.twig' %}
@@ -18,12 +24,6 @@
                     <h1>Регистрация Клиента {% if is_granted('ROLE_COMPANY') %} для компании "{{ currentUser.fullName }}"{% endif %}</h1>
                 </div>
             </div>
-
-            <div id="info" class="load-info">
-                <h2>{{ 'Data is sent'|trans }}</h2>
-                <div class="loader"></div>
-            </div>
-
             <div class="row">
                 <div class="col-md-12"></div>
                 {{ form_start(registrationForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
@@ -118,7 +118,7 @@
             }
         }
         $("#submit").click(function() {
-            $('#info').removeClass('load-info');
+            $('#overlay').css({ display: "block" });
         });
 
     </script>

@@ -11,6 +11,7 @@ button:disabled {
     height: 120px;
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
+    margin: 0 auto;
 }
 
 /* Safari */
@@ -24,6 +25,23 @@ button:disabled {
     100% { transform: rotate(360deg); }
 }
 
-.load-info {
+#overlay {
     display: none;
+    width: 100%;
+    height: auto;
+    min-height: 1540px;
+    position: absolute;
+    z-index: 999;
+    background: #fff;
+    text-align: center;
+    opacity: 0.95;
+}
+#info {
+    position: fixed;
+    width: 500px;
+    height: 200px;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px; /* Negative half of height. */
+    margin-left: -250px; /* Negative half of width. */
 }
