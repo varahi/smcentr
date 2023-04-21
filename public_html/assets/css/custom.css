@@ -6,7 +6,7 @@ button:disabled {
 .loader {
     border: 16px solid #f3f3f3;
     border-radius: 50%;
-    border-top: 16px solid #3498db;
+    border-top: 16px solid #FF8C00;
     width: 120px;
     height: 120px;
     -webkit-animation: spin 2s linear infinite; /* Safari */
@@ -28,14 +28,19 @@ button:disabled {
 #overlay {
     display: none;
     width: 100%;
-    height: auto;
-    min-height: 1540px;
-    position: absolute;
+    height: 100vh;
+    min-height: auto;
+    position: fixed;
     z-index: 999;
     background: #fff;
     text-align: center;
     opacity: 0.95;
 }
+
+#overlay h2 {
+font-size: 24px;
+}
+
 #info {
     position: fixed;
     width: 500px;
@@ -44,4 +49,19 @@ button:disabled {
     left: 50%;
     margin-top: -100px; /* Negative half of height. */
     margin-left: -250px; /* Negative half of width. */
+}
+
+@media (max-width: 600px) {
+
+#info {
+    position: fixed;
+    width: auto;
+    height: 200px;
+    top: 50%;
+    left: 0;
+    margin-top: 0;
+    margin-left: 0;
+    margin: 0 auto;
+}
+
 }
