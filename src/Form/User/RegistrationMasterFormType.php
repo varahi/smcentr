@@ -146,7 +146,7 @@ class RegistrationMasterFormType extends AbstractType
             ])
 
             ->add('avatar', FileType::class, [
-                'required' => true,
+                'required' => false,
                 'mapped' => false,
                 'constraints' => [
                     new Image([
@@ -163,7 +163,7 @@ class RegistrationMasterFormType extends AbstractType
                     ])
                 ],
                 'attr' => [
-                    'onchange' => 'readURL(this); checkParams();'
+                    'onchange' => 'readURL(this);'
                 ],
                 'label' => false,
                 'translation_domain' => 'forms',

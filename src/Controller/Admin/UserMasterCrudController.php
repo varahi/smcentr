@@ -111,7 +111,9 @@ class UserMasterCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Master')
             ->setEntityLabelInPlural('Master')
             ->setSearchFields(['firstName', 'lastName', 'email', 'phone'])
-            ->setDefaultSort(['id' => 'DESC']);
+            ->setDefaultSort(['id' => 'DESC'])
+                ->setFormThemes(['bundles/EasyAdminBundle/crud/form_theme.html.twig', '@EasyAdmin/crud/form_theme.html.twig'])
+            ;
     }
 
     public function configureAssets(Assets $assets): Assets
@@ -155,7 +157,7 @@ class UserMasterCrudController extends AbstractCrudController
                     ->orderBy('entity.fullName', 'ASC');
             });
 
-        yield TelephoneField::new('phone')->setColumns('col-md-4')->hideOnIndex();
+        yield TelephoneField::new('phone')->setColumns('col-md-4');
 
         /*yield AssociationField::new('master')
             ->setLabel('Master Company')
@@ -204,7 +206,7 @@ class UserMasterCrudController extends AbstractCrudController
             ->setUploadDir('public_html/uploads/files')
             ->setFormType(FileUploadType::class)
             ->setRequired(false)
-            ->setColumns('col-md-4');
+            ->setColumns('col-md-4')->hideOnIndex();
 
         yield ImageField::new('doc1')
             ->setBasePath('uploads/files')
@@ -212,7 +214,7 @@ class UserMasterCrudController extends AbstractCrudController
             ->setFormType(FileUploadType::class)
             ->setRequired(false)
             ->setLabel('Passport main page')
-            ->setColumns('col-md-4');
+            ->setColumns('col-md-4')->hideOnIndex();
 
         yield FormField::addRow();
         yield ImageField::new('doc2')
@@ -221,7 +223,7 @@ class UserMasterCrudController extends AbstractCrudController
             ->setFormType(FileUploadType::class)
             ->setRequired(false)
             ->setLabel('Registration page')
-            ->setColumns('col-md-4');
+            ->setColumns('col-md-4')->hideOnIndex();
 
         yield ImageField::new('doc3')
             ->setBasePath('uploads/files')
@@ -229,7 +231,7 @@ class UserMasterCrudController extends AbstractCrudController
             ->setFormType(FileUploadType::class)
             ->setRequired(false)
             ->setLabel('Selfie with a passport')
-            ->setColumns('col-md-4');
+            ->setColumns('col-md-4')->hideOnIndex();
 
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
         yield BooleanField::new('getNotifications')->hideOnIndex();
