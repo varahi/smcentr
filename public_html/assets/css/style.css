@@ -145,6 +145,10 @@ margin-bottom: 30px;
     color: #717380;
 }
 
+.text-bbb {
+    color: #bbb;
+}
+
 .m_t_15 {
     margin-top: 15px;
 margin-bottom: 5px;
@@ -718,7 +722,7 @@ footer ul li {
 
 #auth_block,
 #variants_reg {
-height: auto;
+height: 100vh;
 }
 
     .auth_items {
