@@ -29,7 +29,7 @@
                 <div class="col-md-8">
                     <div class="profile_master">
                         <div class="profile_img">
-                            {% if user.avatar %}
+                            {% if user.avatar is not null %}
                                 <div class="rounded">
                                     <img src="{{ asset('uploads/files/' ~ user.avatar) }}" width="121" height="121" alt="" />
                                 </div>
@@ -85,35 +85,35 @@
         </div>
     </section>
 
-    <section id="list_items">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h3>{{ 'Active tickets'|trans }}</h3>
-                </div>
-            </div>
-            {% if activeTickets is not empty %}
-                <div class="row">
-                    {% for ticket in activeTickets %}
-                        {% include 'partials/ticket/_ticket_item.html.twig' %}
-                    {% endfor %}
-                </div>
+{#    <section id="list_items">#}
+{#        <div class="container">#}
+{#            <div class="row">#}
+{#                <div class="col-md-12">#}
+{#                    <h3>{{ 'Active tickets'|trans }}</h3>#}
+{#                </div>#}
+{#            </div>#}
+{#            {% if activeTickets is not empty %}#}
+{#                <div class="row">#}
+{#                    {% for ticket in activeTickets %}#}
+{#                        {% include 'partials/ticket/_ticket_item.html.twig' %}#}
+{#                    {% endfor %}#}
+{#                </div>#}
 
-                {% if activeTickets|length > 3 %}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="btn_center">
-                                <button>{{ 'Show all active tickets'|trans }}</button>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
+{#                {% if activeTickets|length > 3 %}#}
+{#                    <div class="row">#}
+{#                        <div class="col-md-12">#}
+{#                            <div class="btn_center">#}
+{#                                <button>{{ 'Show all active tickets'|trans }}</button>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                {% endif %}#}
 
-            {% else %}
-                <p>{{ 'Empty orders list'|trans }}</p>
-            {% endif %}
-        </div>
-    </section>
+{#            {% else %}#}
+{#                <p>{{ 'Empty orders list'|trans }}</p>#}
+{#            {% endif %}#}
+{#        </div>#}
+{#    </section>#}
 
 
     <section id="list_items">

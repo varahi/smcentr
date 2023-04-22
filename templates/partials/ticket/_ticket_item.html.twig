@@ -12,12 +12,14 @@
                     <p>{{ 'Priority'|trans }}</p>
                     {% include 'partials/ticket/_ticket_stars.html.twig' %}
                 </div>
-                {% if ticket.status == 0 %}
+                {% if ticket.status == 0 or ticket.status == 1 %}
                     <div class="status">{{ 'New'|trans }}</div>
                 {% endif %}
-                {% if ticket.status == 1 %}
-                    <div class="status_performed">{{ 'Active'|trans }}</div>
-                {% endif %}
+
+{#                {% if ticket.status == 1 %}#}
+{#                    <div class="status_performed">{{ 'Active'|trans }}</div>#}
+{#                {% endif %}#}
+
                 {% if ticket.status == 9 %}
                     <div class="status_complite">{{ 'Completed'|trans }}</div>
                 {% endif %}

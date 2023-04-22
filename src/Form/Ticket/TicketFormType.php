@@ -46,9 +46,9 @@ class TicketFormType extends AbstractType
                 [
                     'required' => true,
                     'label' => false,
+                    'placeholder' => 'Выберите срочность обращения *',
                     'translation_domain' => 'messages',
                     'choices'  => [
-                        'Выберите срочность обращения *' => null,
                         '1' => '1',
                         '2' => '2',
                         '3' => '3',

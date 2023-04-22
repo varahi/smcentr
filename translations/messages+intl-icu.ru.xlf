@@ -127,7 +127,7 @@
       </trans-unit>
       <trans-unit id="rS9mOfI" resname="Empty orders list">
         <source>Empty orders list</source>
-        <target>Список заявок пуст</target>
+        <target>Нет записей</target>
       </trans-unit>
       <trans-unit id="bo2uIvC" resname="Are you sure you want to close order">
         <source>Are you sure you want to close order</source>
@@ -315,7 +315,7 @@
       </trans-unit>
       <trans-unit id="2r.xpsh" resname="New tickets">
         <source>New tickets</source>
-        <target>Новые заявки</target>
+        <target>Новые тикеты</target>
       </trans-unit>
       <trans-unit id="d3mtVqb" resname="Show all new tickets">
         <source>Show all new tickets</source>
@@ -399,11 +399,11 @@
       </trans-unit>
       <trans-unit id="i0VW.ZT" resname="Active tickets">
         <source>Active tickets</source>
-        <target>Заявки в работе</target>
+        <target>Активные тикеты</target>
       </trans-unit>
       <trans-unit id="tADaUbt" resname="Completed tickets">
         <source>Completed tickets</source>
-        <target>Завершенные заявки</target>
+        <target>Завершенные тикеты</target>
       </trans-unit>
       <trans-unit id="OoFk5tV" resname="To ticket list">
         <source>To ticket list</source>

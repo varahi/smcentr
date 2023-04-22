@@ -406,6 +406,12 @@ class OrderController extends AbstractController
             $entityManager = $this->doctrine->getManager();
             $user = $this->security->getUser();
 
+            if ((int)$order->getStatus() !== (int)self::STATUS_NEW) {
+                $message = $translator->trans('Order already in work', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute('app_orders_list');
+            }
+
             // First we should add user as performer and save it
             // Set performer and order status
             $order->setPerformer($user);
@@ -415,6 +421,10 @@ class OrderController extends AbstractController
             // Set balance for master
             $masterBalance = (float)$order->getPerformer()->getBalance();
             if ($masterBalance == null || $masterBalance == 0) {
+
+                // Remove perfomer and status
+                $this->clearOrderPerfomer($order);
+
                 // Redirect if order or performer not owner
                 $message = $translator->trans('Please top up balance', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
@@ -441,6 +451,9 @@ class OrderController extends AbstractController
                             $tax = $order->getPrice() * $taxRate->getPercent(); // For example 2880 * 0.05
                             $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
                             if ($order->getPerformer()->getBalance() <= $tax) {
+                                // Remove perfomer and status
+                                $this->clearOrderPerfomer($order);
+
                                 // Redirect if order or performer not owner
                                 $message = $translator->trans('Please top up balance', array(), 'flash');
                                 $notifier->send(new Notification($message, ['browser']));
@@ -452,6 +465,14 @@ class OrderController extends AbstractController
             }
 
             // Set new master balance
+            if (!isset($tax)) {
+                // Remove perfomer and status
+                $this->clearOrderPerfomer($order);
+                $message = $translator->trans('No task defined', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute('app_orders_list');
+            }
+
             $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
             $project = $projectRepository->findOneBy(['id' => $this->projectId]);
             $currentProjectBalance = (float)$project->getBalance();
@@ -515,6 +536,14 @@ class OrderController extends AbstractController
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute('app_login');
         }
+    }
+
+    private function clearOrderPerfomer($order)
+    {
+        $order->setPerformer(null);
+        $order->setStatus(self::STATUS_NEW);
+        $entityManager = $this->doctrine->getManager();
+        $entityManager->flush();
     }
 
     /**

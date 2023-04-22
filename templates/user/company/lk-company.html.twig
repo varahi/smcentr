@@ -29,7 +29,7 @@
                 <div class="col-md-8">
                     <div class="profile_master">
                         <div class="profile_img">
-                            {% if user.avatar %}
+                            {% if user.avatar is not null %}
                                 <div class="rounded">
                                     <img src="{{ asset('uploads/files/' ~ user.avatar) }}" width="121" height="121" alt="" />
                                 </div>

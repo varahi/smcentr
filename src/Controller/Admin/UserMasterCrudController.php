@@ -340,4 +340,9 @@ class UserMasterCrudController extends AbstractCrudController
             $this->mailer->updateCrudUserEmail($user, $subject, 'emails/update_crud_user.html.twig');
         }*/
     }
+
+//    public function configureActions(Actions $actions): Actions
+//    {
+//        return $actions->add(CRUD::PAGE_INDEX, 'detail');
+//    }
 }

@@ -47,3 +47,5 @@ mailru-domain6DWk8DoDKeKZV7To.html
 public_html/index.html.txt
 public_html/mailru-domain6DWk8DoDKeKZV7To.html
 yarn.lock
+public_html/push/
+tests/PagesControllerTest.php

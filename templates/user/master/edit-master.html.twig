@@ -57,7 +57,7 @@
                         </select>
 
                         <div class="avatar_upload">
-                            {% if user.avatar %}
+                            {% if user.avatar is not null %}
                                 <img src="{{ asset('uploads/files/' ~ user.avatar) }}" class="user-rounded" width="121" height="121" />
                             {% else %}
                                 <img id="avatar" src="{{ asset('assets/images/avatar.png') }}">

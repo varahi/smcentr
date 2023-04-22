@@ -141,6 +141,14 @@
         <source>Payment Error</source>
         <target>Ошибка платежа</target>
       </trans-unit>
+      <trans-unit id="Order already in work" resname="Order already in work">
+        <source>Order already in work</source>
+        <target>Выбранная вами заявка уже в работе у другого мастера</target>
+      </trans-unit>
+      <trans-unit id="No task defined" resname="No task defined">
+        <source>No task defined</source>
+        <target>Для пользователя или компании не определена комиссия. Невозможно взять заказ на исполнение.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
