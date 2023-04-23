@@ -21,6 +21,8 @@ class FinalController extends AbstractController
 
     public const STATUS_ERROR = '9';
 
+    private $paymentTax;
+
     /**
      * @param Security $security
      */
@@ -30,7 +32,8 @@ class FinalController extends AbstractController
         string $terminalPass,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        string $paymentTax
     ) {
         $this->security = $security;
         $this->terminalId = $terminalId;
@@ -38,6 +41,7 @@ class FinalController extends AbstractController
         $this->translator = $translator;
         $this->notifier = $notifier;
         $this->doctrine = $doctrine;
+        $this->paymentTax = $paymentTax;
     }
 
     /**
@@ -69,7 +73,11 @@ class FinalController extends AbstractController
 
             $payment->setStatus(self::STATUS_PAID);
             $entityManager = $this->doctrine->getManager();
-            $user->setBalance($user->getBalance() + $params['Amount']/100);
+            // Calc amount for user
+            $amount = $params['Amount']/100;
+            $tax = $amount * $this->paymentTax;
+            $newAmount = $amount - $tax;
+            $user->setBalance($user->getBalance() + $newAmount);
             $entityManager->flush();
 
             $message = $this->translator->trans('Payment Success', array(), 'flash');

@@ -50,9 +50,7 @@
                 {% endif %}
             </div>
         </div>
-        <div class="description">
-            {{ order.description }}
-        </div>
+        {% include 'partials/order/_list_order_description.html.twig' %}
         <div class="btn_price">
             {% if order.status == 0 %}
                 {#<a href="{{ path('app_take_order', { id: order.id}) }}" onclick="return confirm('{{ 'Are you sure you want to take order'|trans }}') ">
@@ -66,7 +64,6 @@
             {% endif %}
             <span><span>{{ order.price|number_format(0, '.', ' ') }} <i>&#8381;</i></span></span>
         </div>
-
         <div class="client_contact">
             <div class="phone">
                 {% if order.status == 0 %}

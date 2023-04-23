@@ -1,0 +1,17 @@
+<div class="description">
+    {% if order.description %}
+        <b>{{ 'Description'|trans }}:</b> {{ order.description }}
+    {% endif %}
+    {% if order.address %}
+        <br />
+        <b>{{ 'Address'|trans }}:</b> {{ order.city.name }}, {{ order.address }}
+    {% endif %}
+    {% if order.estimatedTime %}
+        <br />
+        <b>{{ 'Estimated Time'|trans }}:</b> {{ order.estimatedTime }} {{ 'Hours'|trans }}
+    {% endif %}
+    {% if order.deadline %}
+        <br />
+        <b>{{ 'Deadline'|trans }}:</b> {{ order.deadline|date("d.m.Y") }}
+    {% endif %}
+</div>

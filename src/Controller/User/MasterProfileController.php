@@ -27,6 +27,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 use Twig\Environment;
+use App\Service\PhoneNumberService;
 
 class MasterProfileController extends AbstractController
 {
@@ -56,7 +57,8 @@ class MasterProfileController extends AbstractController
         string $targetDirectory,
         VerifyEmailHelperInterface $helper,
         EmailVerifier $emailVerifier,
-        string $defaultDomain
+        string $defaultDomain,
+        PhoneNumberService $phoneNumberService
     ) {
         $this->security = $security;
         $this->twig = $twig;
@@ -66,6 +68,7 @@ class MasterProfileController extends AbstractController
         $this->verifyEmailHelper = $helper;
         $this->emailVerifier = $emailVerifier;
         $this->defaultDomain = $defaultDomain;
+        $this->phoneNumberService = $phoneNumberService;
     }
 
     /**
@@ -114,12 +117,35 @@ class MasterProfileController extends AbstractController
                 $this->imageOptimizer->resize($this->targetDirectory.'/'.$user->getAvatar());
             }
 
+            $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC', '999');
+            $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC', '999');
+            $entityManager = $this->doctrine->getManager();
+
             {
                 $response = new Response($this->twig->render('user/master/lk-master.html.twig', [
                     'user' => $user,
                     'activeOrders' => $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC', '999'),
                     'completedOrders' => $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC', '999')
                 ]));
+
+                // Check and set phone numbers for instructors
+                if (count($activeOrders) > 0) {
+                    foreach ($activeOrders as $item) {
+                        if ($item->getPhone()) {
+                            $item->setPhone($this->phoneNumberService->formatPhoneNumber($item->getPhone()));
+                            $entityManager->flush();
+                        }
+                    }
+                }
+
+                if (count($completedOrders) > 0) {
+                    foreach ($activeOrders as $item) {
+                        if ($item->getPhone()) {
+                            $item->setPhone($this->phoneNumberService->formatPhoneNumber($item->getPhone()));
+                            $entityManager->flush();
+                        }
+                    }
+                }
 
                 //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
                 return $response;

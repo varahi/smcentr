@@ -47,13 +47,9 @@
         {% if order.status == 9 %}
             <div class="status_complite">{{ 'Completed'|trans }}</div>
         {% endif %}
-
     </div>
 </div>
-<div class="description">
-    {{ order.description }}
-</div>
-
+{% include 'partials/order/_list_order_description.html.twig' %}
 {% set tax = '' %}
 {% if order.city.taxRates is not empty %}
     {% for taxRate in order.city.taxRates %}

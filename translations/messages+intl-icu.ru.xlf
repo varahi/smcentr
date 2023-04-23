@@ -315,11 +315,11 @@
       </trans-unit>
       <trans-unit id="2r.xpsh" resname="New tickets">
         <source>New tickets</source>
-        <target>Новые тикеты</target>
+        <target>Новые обращения</target>
       </trans-unit>
       <trans-unit id="d3mtVqb" resname="Show all new tickets">
         <source>Show all new tickets</source>
-        <target>Показать все новые тикеты</target>
+        <target>Показать все новые обращения</target>
       </trans-unit>
       <trans-unit id="htp8BYO" resname="New order available">
         <source>New order available</source>
@@ -888,6 +888,10 @@
       <trans-unit id="SbnuW.D" resname="Data is sent">
         <source>Data is sent</source>
         <target>Данные отправляются. Пожалуйста, не закрывайте страницу.</target>
+      </trans-unit>
+      <trans-unit id="xOZvWMT" resname="Up balance text">
+        <source>Up balance text</source>
+        <target>Введите пополняемую сумму</target>
       </trans-unit>
     </body>
   </file>

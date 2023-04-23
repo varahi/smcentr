@@ -435,7 +435,7 @@ class OrderController extends AbstractController
             if ($order->getCustomTaxRate()) {
                 $tax = $order->getCustomTaxRate();
 
-            // If company has tax rate (Комисси списаний)
+            // If company has tax rate (Комиссия компании)
             } elseif ($order->getUsers()->getTaxRate()) {
                 $tax = $order->getPrice() * $order->getUsers()->getTaxRate();
 
