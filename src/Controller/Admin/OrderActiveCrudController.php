@@ -20,12 +20,27 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 
-class OrderCrudController extends AbstractCrudController
+class OrderActiveCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return Order::class;
+    }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): \Doctrine\ORM\QueryBuilder
+    {
+        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        $qb
+            ->where($qb->expr()->eq('entity.status', 1))
+        ;
+
+        return $qb;
     }
 
     public function configureFilters(Filters $filters): Filters
@@ -42,10 +57,16 @@ class OrderCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Orders')
-            ->setEntityLabelInPlural('Orders')
+            ->setEntityLabelInSingular('Active orders list')
+            ->setEntityLabelInPlural('Active orders list')
             ->setSearchFields(['title', 'price', 'description', 'id'])
             ->setDefaultSort(['id' => 'DESC']);
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->disable('new');
     }
 
     public function configureFields(string $pageName): iterable
@@ -74,7 +95,7 @@ class OrderCrudController extends AbstractCrudController
         yield AssociationField::new('jobType')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield ChoiceField::new('level')->setChoices(
             [
-                'Выберите' => null,
+                'Выберите' => '',
                 '1' => '1',
                 '2' => '2',
                 '3' => '3',
@@ -85,16 +106,16 @@ class OrderCrudController extends AbstractCrudController
 
         yield ChoiceField::new('status')->setChoices(
             [
-                'Выберите' => null,
+                'Выберите' => '',
                 'Новая' => '0',
                 'В работе' => '1',
                 'Завершена' => '9',
             ]
-        )->hideOnIndex()->setLabel('Order status')->setColumns('col-md-10')->setRequired(true);
+        )->setLabel('Order status')->setColumns('col-md-10')->setRequired(true);
 
         yield ChoiceField::new('typeCreated')->setChoices(
             [
-                'Выберите' => null,
+                'Выберите' => '',
                 'Клиент' => '1',
                 'Мастер' => '2',
                 'Компания' => '3',

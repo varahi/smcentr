@@ -71,7 +71,7 @@ class UserAdminCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Super admin')
             ->setHelp('edit', 'Группа администраторов. Обладает всеми правами доступа')
             ->setHelp('index', 'Группа администраторов. Обладает всеми правами доступа')
-            ->setSearchFields(['firstName', 'lastName', 'email', 'phone'])
+            ->setSearchFields(['id', 'firstName', 'lastName', 'email', 'phone'])
             ->setDefaultSort(['id' => 'DESC']);
     }
 

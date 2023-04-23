@@ -66,7 +66,7 @@ class UserEditorCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Editor')
             ->setEntityLabelInPlural('Editor')
-            ->setSearchFields(['firstName', 'lastName', 'email', 'phone'])
+            ->setSearchFields(['id', 'firstName', 'lastName', 'email', 'phone'])
             ->setHelp('edit', 'Группа модераторов. Полный доступ без редактирования баланса мастеров и фирм')
             ->setHelp('index', 'Группа модераторов. Полный доступ без редактирования баланса мастеров и фирм')
             ->setDefaultSort(['id' => 'DESC']);

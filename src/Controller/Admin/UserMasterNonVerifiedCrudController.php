@@ -109,7 +109,7 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Masters non verified')
             ->setEntityLabelInPlural('Masters non verified')
-            ->setSearchFields(['firstName', 'lastName', 'email', 'phone'])
+            ->setSearchFields(['id', 'firstName', 'lastName', 'email', 'phone'])
             ->setDefaultSort(['id' => 'DESC']);
     }
 

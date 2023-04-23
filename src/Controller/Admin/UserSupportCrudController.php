@@ -66,7 +66,7 @@ class UserSupportCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Support')
             ->setEntityLabelInPlural('Support')
-            ->setSearchFields(['firstName', 'lastName', 'email'])
+            ->setSearchFields(['id', 'firstName', 'lastName', 'email'])
             ->setHelp('index', 'Группа поддержки. Только редактирование (добавление, удаление) заявок, клиентов, назначение мастеров на зявку, блокировка пользователей, техническая поддержка')
             ->setHelp('edit', 'Группа поддержки. Только редактирование (добавление, удаление) заявок, клиентов, назначение мастеров на зявку, блокировка пользователей, техническая поддержка')
             ->setDefaultSort(['id' => 'DESC']);

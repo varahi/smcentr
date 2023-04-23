@@ -893,6 +893,26 @@
         <source>Up balance text</source>
         <target>Введите пополняемую сумму</target>
       </trans-unit>
+        <trans-unit id="New orders list" resname="New orders list">
+            <source>New orders list</source>
+            <target>Новые заявки</target>
+        </trans-unit>
+        <trans-unit id="Active orders list" resname="Active orders list">
+            <source>Active orders list</source>
+            <target>Активные заявки</target>
+        </trans-unit>
+        <trans-unit id="Completed orders list" resname="Completed orders list">
+            <source>Completed orders list</source>
+            <target>Завершенные заявки</target>
+        </trans-unit>
+        <trans-unit id="Payments" resname="Payments">
+            <source>Payments</source>
+            <target>Платежи</target>
+        </trans-unit>
+        <trans-unit id="Payment" resname="Payment">
+            <source>Payment</source>
+            <target>Платеж</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>
