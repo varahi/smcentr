@@ -891,7 +891,7 @@
       </trans-unit>
       <trans-unit id="xOZvWMT" resname="Up balance text">
         <source>Up balance text</source>
-        <target>Введите пополняемую сумму</target>
+        <target>Будет списана комиссия банка 5%</target>
       </trans-unit>
         <trans-unit id="New orders list" resname="New orders list">
             <source>New orders list</source>
