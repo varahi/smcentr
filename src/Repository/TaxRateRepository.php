@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\City;
+use App\Entity\Profession;
 use App\Entity\TaxRate;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,6 +39,22 @@ class TaxRateRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @param City $city
+     * @param Profession $profession
+     * @return float|int|mixed|string
+     */
+    public function findByCityAndProfession(City $city, Profession $profession)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('t')
+            ->from($this->_entityName, 't')
+            ->where($qb->expr()->eq('t.city', $city->getId()))
+            ->andWhere($qb->expr()->eq('t.profession', $profession->getId()))
+        ;
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
 //    /**

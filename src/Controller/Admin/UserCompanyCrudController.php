@@ -190,7 +190,7 @@ class UserCompanyCrudController extends AbstractCrudController
 
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle');
         yield BooleanField::new('getNotifications');
-        yield PercentField::new('taxRate')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
+        //yield PercentField::new('taxRate')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
         yield PercentField::new('serviceTaxRate')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
 
         yield FormField::addRow();

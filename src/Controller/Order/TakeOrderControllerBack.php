@@ -5,7 +5,6 @@ namespace App\Controller\Order;
 use App\Controller\Traits\NotificationTrait;
 use App\Entity\Order;
 use App\Repository\ProjectRepository;
-use App\Repository\TaxRateRepository;
 use App\Service\Mailer;
 use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,7 +19,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-class TakeOrderController extends AbstractController
+class TakeOrderControllerBack extends AbstractController
 {
     use NotificationTrait;
 
@@ -35,12 +34,6 @@ class TakeOrderController extends AbstractController
     public const NOTIFICATION_BALANCE_MINUS = '3';
 
     public const NOTIFICATION_CHANGE_STATUS = '1';
-
-    private const CREATED_BY_CLIENT = '1';
-
-    private const CREATED_BY_MASTER = '2';
-
-    private const CREATED_BY_COMPANY = '3';
 
     private $projectId;
 
@@ -64,7 +57,7 @@ class TakeOrderController extends AbstractController
     }
 
     /**
-     * @Route("/take-order/order-{id}", name="app_take_order")
+     * @Route("/take-order-back/order-{id}", name="app_take_order_back")
      */
     public function takeOrder(
         Request $request,
@@ -73,8 +66,7 @@ class TakeOrderController extends AbstractController
         Order $order,
         Mailer $mailer,
         PushNotification $pushNotification,
-        ProjectRepository $projectRepository,
-        TaxRateRepository $taxRateRepository
+        ProjectRepository $projectRepository
     ): Response {
         if (!$this->security->isGranted(self::ROLE_MASTER)) {
             $message = $translator->trans('Please login', array(), 'flash');
@@ -90,32 +82,6 @@ class TakeOrderController extends AbstractController
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute('app_orders_list');
         }
-
-        // Tax from order created by client
-        if ($order->getTypeCreated() == self::CREATED_BY_CLIENT) {
-            $taxRate = $taxRateRepository->findByCityAndProfession($order->getCity(), $order->getProfession()) ?? null;
-            if (!$taxRate) {
-                $message = $translator->trans('No task defined', array(), 'flash');
-                $notifier->send(new Notification($message, ['browser']));
-                return $this->redirectToRoute('app_orders_list');
-            }
-
-            $tax = $order->getPrice() * $taxRate->getPercent(); // For example 2880 * 0.0
-            $newMasterBalance = $user->getBalance() - $tax;
-
-            if ($user->getBalance() <= $tax) {
-                // Redirect if order or performer not owner
-                $message = $translator->trans('Please top up balance', array(), 'flash');
-                $notifier->send(new Notification($message, ['browser']));
-                return $this->redirectToRoute('app_top_up_balance');
-            }
-        }
-
-        if ($order->getTypeCreated() == self::CREATED_BY_COMPANY) {
-            // Client logick
-            dd($order);
-        }
-
 
         // First we should add user as performer and save it
         // Set performer and order status
@@ -136,6 +102,39 @@ class TakeOrderController extends AbstractController
             return $this->redirectToRoute('app_top_up_balance');
         }
 
+        // If order has custom tax from company
+        if ($order->getCustomTaxRate()) {
+            $tax = $order->getCustomTaxRate();
+
+        // If company has tax rate (Комиссия компании)
+        } elseif ($order->getUsers()->getTaxRate()) {
+            $tax = $order->getPrice() * $order->getUsers()->getTaxRate();
+
+        // If company has service Tax Rate (Комиссия сервиса)
+        } elseif ($order->getUsers()->getServiceTaxRate()) {
+            $tax = $order->getPrice() * $order->getUsers()->getServiceTaxRate();
+
+        // Calculate tax rate depends on city and profession
+        } else {
+            if (count($order->getCity()->getTaxRates()) > 0) {
+                foreach ($order->getCity()->getTaxRates() as $taxRate) {
+                    if ($taxRate->getProfession()->getId() == $order->getProfession()->getId()) {
+                        $tax = $order->getPrice() * $taxRate->getPercent(); // For example 2880 * 0.05
+                        $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
+                        if ($order->getPerformer()->getBalance() <= $tax) {
+                            // Remove perfomer and status
+                            $this->clearOrderPerfomer($order);
+
+                            // Redirect if order or performer not owner
+                            $message = $translator->trans('Please top up balance', array(), 'flash');
+                            $notifier->send(new Notification($message, ['browser']));
+                            return $this->redirectToRoute('app_top_up_balance');
+                        }
+                    }
+                }
+            }
+        }
+
         // Set new master balance
         if (!isset($tax)) {
             // Remove perfomer and status
@@ -145,7 +144,7 @@ class TakeOrderController extends AbstractController
             return $this->redirectToRoute('app_orders_list');
         }
 
-        //$newMasterBalance = $order->getPerformer()->getBalance() - $tax;
+        $newMasterBalance = $order->getPerformer()->getBalance() - $tax;
         $project = $projectRepository->findOneBy(['id' => $this->projectId]);
         $currentProjectBalance = (float)$project->getBalance();
         $newProjectBalance = $currentProjectBalance + $tax;
