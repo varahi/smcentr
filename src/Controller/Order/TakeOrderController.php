@@ -6,6 +6,7 @@ use App\Controller\Traits\NotificationTrait;
 use App\Entity\Order;
 use App\Repository\ProjectRepository;
 use App\Repository\TaxRateRepository;
+use App\Repository\UserRepository;
 use App\Service\Mailer;
 use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
@@ -74,7 +75,8 @@ class TakeOrderController extends AbstractController
         Mailer $mailer,
         PushNotification $pushNotification,
         ProjectRepository $projectRepository,
-        TaxRateRepository $taxRateRepository
+        TaxRateRepository $taxRateRepository,
+        UserRepository $userRepository
     ): Response {
         if (!$this->security->isGranted(self::ROLE_MASTER)) {
             $message = $translator->trans('Please login', array(), 'flash');
@@ -103,38 +105,44 @@ class TakeOrderController extends AbstractController
             $tax = $order->getPrice() * $taxRate->getPercent(); // For example 2880 * 0.0
             $newMasterBalance = $user->getBalance() - $tax;
 
+            // Redirect for top up balance
             if ($user->getBalance() <= $tax) {
-                // Redirect if order or performer not owner
                 $message = $translator->trans('Please top up balance', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
                 return $this->redirectToRoute('app_top_up_balance');
             }
         }
 
+        // Tax from order created by company
+        $orderTaxRate = '';
         if ($order->getTypeCreated() == self::CREATED_BY_COMPANY) {
             // Client logick
-            dd($order);
+            $company = $userRepository->findOneBy(['id' => $order->getUsers()->getId()]);
+            $orderTaxRate = $order->getCustomTaxRate(); // roubles
+            $tax = $order->getPrice() * $company->getServiceTaxRate(); // percents
+
+            // Redirect for top up balance
+            if ($user->getBalance() <= $tax + $orderTaxRate) {
+                $message = $translator->trans('Please top up balance', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute('app_top_up_balance');
+            }
+
+            $newMasterBalance = $user->getBalance() - $tax - $orderTaxRate;
+            $currentCompanyBalance = (float)$company->getBalance();
+            $newCompanyBalance = $currentCompanyBalance + $orderTaxRate;
+            $company->setBalance($newCompanyBalance);
         }
 
-
-        // First we should add user as performer and save it
         // Set performer and order status
         $order->setPerformer($user);
         $order->setStatus(self::STATUS_ACTIVE);
         $entityManager->flush();
 
-        // Set balance for master
-        $masterBalance = (float)$order->getPerformer()->getBalance();
-        if ($masterBalance == null || $masterBalance == 0) {
-
-            // Remove perfomer and status
-            $this->clearOrderPerfomer($order);
-
-            // Redirect if order or performer not owner
-            $message = $translator->trans('Please top up balance', array(), 'flash');
-            $notifier->send(new Notification($message, ['browser']));
-            return $this->redirectToRoute('app_top_up_balance');
-        }
+        // Set main project balance
+        $project = $projectRepository->findOneBy(['id' => $this->projectId]);
+        $currentProjectBalance = (float)$project->getBalance();
+        $newProjectBalance = $currentProjectBalance + $tax;
 
         // Set new master balance
         if (!isset($tax)) {
@@ -145,21 +153,17 @@ class TakeOrderController extends AbstractController
             return $this->redirectToRoute('app_orders_list');
         }
 
-        //$newMasterBalance = $order->getPerformer()->getBalance() - $tax;
-        $project = $projectRepository->findOneBy(['id' => $this->projectId]);
-        $currentProjectBalance = (float)$project->getBalance();
-        $newProjectBalance = $currentProjectBalance + $tax;
-
         $user->setBalance($newMasterBalance);
         $project->setBalance($newProjectBalance);
-
-        $entityManager->persist($user);
-        $entityManager->persist($project);
         $entityManager->flush();
 
+
+        /* ----------------------- Notificatins block --------------------- */
         // Send notifications for masters
+
+        $fullTax = $tax + $orderTaxRate;
         $message1 = $translator->trans('Withdrawal from the balance', array(), 'messages');
-        $messageStr1 = $message1 .' '.$tax.' руб.' .' за заявку';
+        $messageStr1 = $message1 .' '.$fullTax.' руб.' .' за заявку';
         $messageStr2 = $translator->trans('You got an order', array(), 'messages');
         $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_BALANCE_MINUS, $messageStr1);
         $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $messageStr2);
@@ -190,8 +194,8 @@ class TakeOrderController extends AbstractController
         if ($order->getUsers()->isGetNotifications() == 1) {
             // Mail to owner of the order
             //$subject = $translator->trans('Your order taked to work', array(), 'messages');
-            if (isset($tax)) {
-                $subject = 'Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано ' . $tax . ' руб. комиссии.';
+            if (isset($fullTax)) {
+                $subject = 'Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано ' . $fullTax . ' руб. комиссии.';
             } else {
                 $subject = 'Вы успешно приняли заявку, она добавилась в ваш профиль.';
             }
@@ -199,8 +203,8 @@ class TakeOrderController extends AbstractController
         }
 
         //$message = $translator->trans('Order taked', array(), 'flash');
-        if (isset($tax)) {
-            $message = 'Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано ' . $tax . ' руб. комиссии.';
+        if (isset($fullTax)) {
+            $message = 'Вы успешно приняли заявку, она добавилась в ваш профиль. С вашего баланса будет списано ' . $fullTax . ' руб. комиссии.';
         } else {
             $message = 'Вы успешно приняли заявку, она добавилась в ваш профиль.';
         }
@@ -210,9 +214,10 @@ class TakeOrderController extends AbstractController
         return new RedirectResponse($referer);
     }
 
-    private function clearOrderPerfomer($order)
+    public function clearOrderPerfomer($order)
     {
         $order->setPerformer(null);
+        $order->setClearOrder(false);
         $order->setStatus(self::STATUS_NEW);
         $entityManager = $this->doctrine->getManager();
         $entityManager->flush();

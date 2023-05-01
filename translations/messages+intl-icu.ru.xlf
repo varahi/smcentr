@@ -913,6 +913,10 @@
             <source>Payment</source>
             <target>Платеж</target>
         </trans-unit>
+        <trans-unit id="Clear Order" resname="Clear Order">
+            <source>Clear Order</source>
+            <target>Отменить заявку</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

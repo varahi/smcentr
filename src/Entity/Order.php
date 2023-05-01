@@ -130,6 +130,11 @@ class Order
      */
     private $typeCreated;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $clearOrder;
+
     public function __construct()
     {
         $this->created = new \DateTime();
@@ -425,6 +430,18 @@ class Order
     public function setTypeCreated(?string $typeCreated): self
     {
         $this->typeCreated = $typeCreated;
+
+        return $this;
+    }
+
+    public function isClearOrder(): ?bool
+    {
+        return $this->clearOrder;
+    }
+
+    public function setClearOrder(?bool $clearOrder): self
+    {
+        $this->clearOrder = $clearOrder;
 
         return $this;
     }

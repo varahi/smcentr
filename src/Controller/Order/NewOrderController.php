@@ -81,171 +81,171 @@ class NewOrderController extends AbstractController
         JobTypeRepository $jobTypeRepository,
         PushNotification $pushNotification
     ): Response {
-        if (!$this->isGranted(self::ROLE_CLIENT) || !$this->isGranted(self::ROLE_COMPANY)) {
+        if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_COMPANY)) {
+            $user = $this->security->getUser();
+            $masters = $userRepository->findByRole(self::ROLE_MASTER);
+            $cities = $cityRepository->findAllOrder(['name' => 'ASC']);
+            $districts = $districtRepository->findAllOrder(['name' => 'ASC']);
+            $professions = $professionRepository->findAllOrder(['name' => 'ASC']);
+            $jobTypes = $jobTypeRepository->findAllOrder(['name' => 'ASC']);
+
+            $order = new Order();
+
+            if ($this->isGranted(self::ROLE_CLIENT)) {
+                $form = $this->createForm(OrderFormType::class, $order);
+            }
+            if ($this->isGranted(self::ROLE_COMPANY)) {
+                $form = $this->createForm(OrderFormCompanyType::class, $order, [
+                    'userId' => $user->getId(),
+                ]);
+            }
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted()) {
+                $post = $request->request->get('order_form');
+                if ($post['profession'] !=='') {
+                    $profession = $professionRepository->findOneBy(['id' => $post['profession']]);
+                    if ($profession) {
+                        $order->setProfession($profession);
+                    }
+                }
+                if ($post['jobType'] !=='') {
+                    $jobType = $jobTypeRepository->findOneBy(['id' => $post['jobType']]);
+                    if ($jobType) {
+                        $order->setJobType($jobType);
+                    }
+                }
+                if ($post['city'] !=='') {
+                    $city = $cityRepository->findOneBy(['id' => $post['city']]);
+                    if ($city) {
+                        $order->setCity($city);
+                    }
+                }
+                if ($post['district'] !=='') {
+                    $district = $districtRepository->findOneBy(['id' => $post['district']]);
+                    if ($district) {
+                        $order->setDistrict($district);
+                    }
+                }
+
+                if (isset($_POST['order_form_company']['sendOwnMasters']) && $_POST['order_form_company']['sendOwnMasters'] == 1) {
+                    $masterNotification = new UserNotification();
+                    if (count($user->getCompanyMasters()) > 0) {
+                        // send notification to own masters
+                        /*foreach ($user->getCompanyMasters() as $companyMaster) {
+                            $masterNotification->setUser($companyMaster);
+                            $message = $translator->trans('Notification new order for master', array(), 'messages');
+                            $masterNotification->setMessage($message);
+                            $masterNotification->setApplication($order);
+                            $masterNotification->setType(self::NOTIFICATION_NEW_ORDER);
+                            $masterNotification->setIsRead('0');
+                            $entityManager->persist($masterNotification);
+                        }*/
+                    }
+                }
+
+                if (isset($_POST['order_form_company']['sendAllMasters']) && $_POST['order_form_company']['sendAllMasters'] == 1) {
+                    // ToDo: send notification to all masters
+                }
+
+                if ($user != null && in_array(self::ROLE_CLIENT, $user->getRoles())) {
+                    $order->setTypeCreated(self::CLIENT_CREATED);
+                }
+
+                if ($user != null && in_array(self::ROLE_COMPANY, $user->getRoles())) {
+                    $order->setTypeCreated(self::COMPANY_CREATED);
+                }
+
+                $order->setStatus(self::STATUS_NEW);
+                $order->setUsers($user);
+                $order->setLevel('3');
+
+                $entityManager = $doctrine->getManager();
+                $entityManager->persist($order);
+                $entityManager->flush();
+
+                // Mails to master about a new order
+                if (count($masters) > 0) {
+                    foreach ($masters as $master) {
+                        if (count($master->getProfessions()) > 0 && count($master->getJobTypes()) > 0) {
+                            if ($master->getProfessions() && count($master->getProfessions()) > 0) {
+                                foreach ($master->getProfessions() as $profession) {
+                                    $professionIds[] = $profession->getId();
+                                }
+                            } else {
+                                $professionIds = [];
+                            }
+
+                            if ($master->getJobTypes() && count($master->getJobTypes()) > 0) {
+                                foreach ($master->getJobTypes() as $jobType) {
+                                    $jobTypeIds[] = $jobType->getId();
+                                }
+                            } else {
+                                $jobTypeIds = [];
+                            }
+                        } else {
+                            $jobTypeIds = [];
+                            $professionIds = [];
+                        }
+
+                        /*if ($master->isGetNotifications() == 1 &&
+                            $order->getCity()->getId() == $master->getCity()->getId() &&
+                            in_array($order->getJobType()->getId(), $jobTypeIds) &&
+                            in_array($order->getProfession()->getId(), $professionIds)
+                        ) {
+                            $subject = $translator->trans('New order available', array(), 'messages');
+                            $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
+                        }*/
+
+                        // Send notifications for masters
+                        if ($master->isGetNotifications() == 1 &&
+                            $order->getCity()->getId() == $master->getCity()->getId() &&
+                            in_array($order->getJobType()->getId(), $jobTypeIds) &&
+                            in_array($order->getProfession()->getId(), $professionIds)
+                        ) {
+                            $subject = $translator->trans('New order available', array(), 'messages');
+                            $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
+
+                            // Send notifications for master
+                            $message = $translator->trans('Notification new order for master', array(), 'messages');
+                            $this->setNotification($order, $master, self::NOTIFICATION_NEW_ORDER, $message);
+
+                            // Send push notification
+                            $pushNotification->sendPushNotification($translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+
+                            $entityManager->flush();
+                        }
+                    }
+                }
+
+                // Send notifications for user
+                $message = $translator->trans('Notification new order for user', array(), 'messages');
+                $this->setNotification($order, $user, self::NOTIFICATION_NEW_ORDER, $message);
+
+                // Send push notification
+                $pushNotification->sendPushNotification($translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+
+                $entityManager->flush();
+
+                $message = $translator->trans('Order created', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
+            }
+
+            return $this->render('order/new.html.twig', [
+                'user' => $user,
+                'cities' => $cities,
+                'districts' => $districts,
+                'professions' => $professions,
+                'jobTypes' => $jobTypes,
+                'orderForm' => $form->createView()
+            ]);
+        } else {
             $message = $translator->trans('Please login', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute("app_login");
         }
-
-        $user = $this->security->getUser();
-        $masters = $userRepository->findByRole(self::ROLE_MASTER);
-        $cities = $cityRepository->findAllOrder(['name' => 'ASC']);
-        $districts = $districtRepository->findAllOrder(['name' => 'ASC']);
-        $professions = $professionRepository->findAllOrder(['name' => 'ASC']);
-        $jobTypes = $jobTypeRepository->findAllOrder(['name' => 'ASC']);
-
-        $order = new Order();
-
-        if ($this->isGranted(self::ROLE_CLIENT)) {
-            $form = $this->createForm(OrderFormType::class, $order);
-        }
-        if ($this->isGranted(self::ROLE_COMPANY)) {
-            $form = $this->createForm(OrderFormCompanyType::class, $order, [
-                'userId' => $user->getId(),
-            ]);
-        }
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            $post = $request->request->get('order_form');
-            if ($post['profession'] !=='') {
-                $profession = $professionRepository->findOneBy(['id' => $post['profession']]);
-                if ($profession) {
-                    $order->setProfession($profession);
-                }
-            }
-            if ($post['jobType'] !=='') {
-                $jobType = $jobTypeRepository->findOneBy(['id' => $post['jobType']]);
-                if ($jobType) {
-                    $order->setJobType($jobType);
-                }
-            }
-            if ($post['city'] !=='') {
-                $city = $cityRepository->findOneBy(['id' => $post['city']]);
-                if ($city) {
-                    $order->setCity($city);
-                }
-            }
-            if ($post['district'] !=='') {
-                $district = $districtRepository->findOneBy(['id' => $post['district']]);
-                if ($district) {
-                    $order->setDistrict($district);
-                }
-            }
-
-            if (isset($_POST['order_form_company']['sendOwnMasters']) && $_POST['order_form_company']['sendOwnMasters'] == 1) {
-                $masterNotification = new UserNotification();
-                if (count($user->getCompanyMasters()) > 0) {
-                    // send notification to own masters
-                    /*foreach ($user->getCompanyMasters() as $companyMaster) {
-                        $masterNotification->setUser($companyMaster);
-                        $message = $translator->trans('Notification new order for master', array(), 'messages');
-                        $masterNotification->setMessage($message);
-                        $masterNotification->setApplication($order);
-                        $masterNotification->setType(self::NOTIFICATION_NEW_ORDER);
-                        $masterNotification->setIsRead('0');
-                        $entityManager->persist($masterNotification);
-                    }*/
-                }
-            }
-
-            if (isset($_POST['order_form_company']['sendAllMasters']) && $_POST['order_form_company']['sendAllMasters'] == 1) {
-                // ToDo: send notification to all masters
-            }
-
-            if ($user != null && in_array(self::ROLE_CLIENT, $user->getRoles())) {
-                $order->setTypeCreated(self::CLIENT_CREATED);
-            }
-
-            if ($user != null && in_array(self::ROLE_COMPANY, $user->getRoles())) {
-                $order->setTypeCreated(self::COMPANY_CREATED);
-            }
-
-            $order->setStatus(self::STATUS_NEW);
-            $order->setUsers($user);
-            $order->setLevel('3');
-
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($order);
-            $entityManager->flush();
-
-            // Mails to master about a new order
-            if (count($masters) > 0) {
-                foreach ($masters as $master) {
-                    if (count($master->getProfessions()) > 0 && count($master->getJobTypes()) > 0) {
-                        if ($master->getProfessions() && count($master->getProfessions()) > 0) {
-                            foreach ($master->getProfessions() as $profession) {
-                                $professionIds[] = $profession->getId();
-                            }
-                        } else {
-                            $professionIds = [];
-                        }
-
-                        if ($master->getJobTypes() && count($master->getJobTypes()) > 0) {
-                            foreach ($master->getJobTypes() as $jobType) {
-                                $jobTypeIds[] = $jobType->getId();
-                            }
-                        } else {
-                            $jobTypeIds = [];
-                        }
-                    } else {
-                        $jobTypeIds = [];
-                        $professionIds = [];
-                    }
-
-                    /*if ($master->isGetNotifications() == 1 &&
-                        $order->getCity()->getId() == $master->getCity()->getId() &&
-                        in_array($order->getJobType()->getId(), $jobTypeIds) &&
-                        in_array($order->getProfession()->getId(), $professionIds)
-                    ) {
-                        $subject = $translator->trans('New order available', array(), 'messages');
-                        $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
-                    }*/
-
-                    // Send notifications for masters
-                    if ($master->isGetNotifications() == 1 &&
-                        $order->getCity()->getId() == $master->getCity()->getId() &&
-                        in_array($order->getJobType()->getId(), $jobTypeIds) &&
-                        in_array($order->getProfession()->getId(), $professionIds)
-                    ) {
-                        $subject = $translator->trans('New order available', array(), 'messages');
-                        $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
-
-                        // Send notifications for master
-                        $message = $translator->trans('Notification new order for master', array(), 'messages');
-                        $this->setNotification($order, $master, self::NOTIFICATION_NEW_ORDER, $message);
-
-                        // Send push notification
-                        $pushNotification->sendPushNotification($translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
-
-                        $entityManager->flush();
-                    }
-                }
-            }
-
-            // Send notifications for user
-            $message = $translator->trans('Notification new order for user', array(), 'messages');
-            $this->setNotification($order, $user, self::NOTIFICATION_NEW_ORDER, $message);
-
-            // Send push notification
-            $pushNotification->sendPushNotification($translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
-
-            $entityManager->flush();
-
-            $message = $translator->trans('Order created', array(), 'flash');
-            $notifier->send(new Notification($message, ['browser']));
-            $referer = $request->headers->get('referer');
-            return new RedirectResponse($referer);
-        }
-
-        return $this->render('order/new.html.twig', [
-            'user' => $user,
-            'cities' => $cities,
-            'districts' => $districts,
-            'professions' => $professions,
-            'jobTypes' => $jobTypes,
-            'orderForm' => $form->createView()
-        ]);
     }
 }

@@ -5,13 +5,12 @@ namespace App\Controller\Admin;
 use App\Entity\Order;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -25,9 +24,19 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use App\Controller\Order\TakeOrderController;
 
 class OrderActiveCrudController extends AbstractCrudController
 {
+    public function __construct(
+        TakeOrderController $orderController
+    ) {
+        $this->orderController = $orderController;
+    }
+
     public static function getEntityFqcn(): string
     {
         return Order::class;
@@ -125,16 +134,26 @@ class OrderActiveCrudController extends AbstractCrudController
         yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideOnIndex()->setPermission('ROLE_EDITOR');
         //yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10')->hideOnIndex();
         //yield BooleanField::new('sendAllMasters')->setColumns('col-md-10')->hideOnIndex();
+        yield BooleanField::new('clearOrder')->setColumns('col-md-10')->hideOnIndex();
     }
 
-    /*
-    public function configureFields(string $pageName): iterable
+    public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        $formBuilder  = parent::createEditFormBuilder($entityDto, $formOptions, $context);
+        $this->setClearOrder($formBuilder);
+
+        return $formBuilder;
     }
-    */
+
+    protected function setClearOrder(FormBuilderInterface $formBuilder): void
+    {
+        $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            /** @var Order order */
+            $order = $event->getData();
+
+            if ($order->isClearOrder() == true) {
+                $this->orderController->clearOrderPerfomer($order);
+            }
+        });
+    }
 }
