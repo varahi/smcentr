@@ -39,6 +39,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use App\Service\Mailer;
 use Symfony\Component\Stopwatch\Section;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserMasterNonVerifiedCrudController extends AbstractCrudController
 {
@@ -51,22 +52,18 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
 
     public function __construct(
         UserPasswordHasherInterface $passwordEncoder,
-        Mailer $mailer
+        Mailer $mailer,
+        TranslatorInterface $translator
     ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
+        $this->translator = $translator;
     }
 
     public static function getEntityFqcn(): string
     {
         return User::class;
     }
-
-    /*public function configureActions(Actions $actions): Actions
-    {
-        return $actions
-            ->disable('new');
-    }*/
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): \Doctrine\ORM\QueryBuilder
     {
@@ -96,13 +93,6 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
             ->add(EntityFilter::new('district'))
             ;
     }
-
-    /*public function configureActions(Actions $actions): Actions
-    {
-        return $actions
-            ->disable('new', 'edit', 'delete');
-    }*/
-
 
     public function configureCrud(Crud $crud): Crud
     {
@@ -301,6 +291,10 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
         $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) use ($plainPassword) {
             /** @var User $user */
             $user = $event->getData();
+            if ($user->isIsVerified() == true) {
+                $subject = $this->translator->trans('Master account verified', array(), 'messages');
+                $this->mailer->sendMasterVerifedEmail($user, $subject, 'emails/master_verified.html.twig');
+            }
             if ($user->getPassword() !== $plainPassword) {
                 $user->setPassword($this->passwordEncoder->hashPassword($user, $user->getPassword()));
             }

@@ -65,12 +65,6 @@ class UserClientCrudController extends AbstractCrudController
         }
     }
 
-    /*public function configureActions(Actions $actions): Actions
-    {
-        return $actions
-            ->disable('new');
-    }*/
-
     public static function getEntityFqcn(): string
     {
         return User::class;

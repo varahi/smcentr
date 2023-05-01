@@ -85,6 +85,8 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Users');
         yield MenuItem::subMenu('Users', 'fa fa fa-cog')->setSubItems([
+            //MenuItem::linkToRoute('Masters non verified', 'fa fa-user', 'app_edit_master_list'),
+
             MenuItem::linkToCrud('Masters', 'fa fa-user', User::class)->setController(UserMasterCrudController::class),
             MenuItem::linkToCrud('Masters non verified', 'fa fa-user', User::class)->setController(UserMasterNonVerifiedCrudController::class),
             MenuItem::linkToCrud('Clients', 'fa fa-user', User::class)->setController(UserClientCrudController::class),
@@ -93,7 +95,6 @@ class DashboardController extends AbstractDashboardController
 
             MenuItem::linkToRoute('Create company', 'fa fa-users', 'app_registration_company')->setPermission('ROLE_EDITOR'),
             //MenuItem::linkToRoute('Edit company', 'fa fa-users', 'app_registration_company'),
-
             //MenuItem::section('<hr />')->setPermission('ROLE_EDITOR'),
             //MenuItem::linkToCrud('Moderators', 'fa fa-user', User::class)->setController(UserAdminCrudController::class),
             //MenuItem::linkToCrud('Admins', 'fa fa-user', User::class)->setController(UserAdminCrudController::class)->setPermission('ROLE_EDITOR'),
