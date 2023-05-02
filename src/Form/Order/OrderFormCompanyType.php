@@ -2,14 +2,8 @@
 
 namespace App\Form\Order;
 
-use App\Entity\City;
-use App\Entity\District;
-use App\Entity\JobType;
 use App\Entity\Order;
-use App\Entity\Profession;
 use App\Entity\User;
-use App\Form\Invoice\InvoiceParamsFormType;
-use App\Form\JobFormType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -20,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -29,6 +22,8 @@ class OrderFormCompanyType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $userId = $options['userId'];
+        $level = $options['level'];
+
         $builder
             ->add(
                 'price',
@@ -82,7 +77,7 @@ class OrderFormCompanyType extends AbstractType
                         '4' => '4',
                         '5' => '5',
                     ],
-                    'data' => '3'
+                    'data' => $level
                 ]
             )
             ->add(
@@ -158,7 +153,7 @@ class OrderFormCompanyType extends AbstractType
                 'required' => false,
                 'multiple'  => false,
                 'expanded'  => false,
-                'by_reference' => false,
+                'by_reference' => true,
                 'query_builder' => function (EntityRepository $er) use ($userId) {
                     return $er->createQueryBuilder('u')
                         ->where('u.roles LIKE :roles')
@@ -176,7 +171,7 @@ class OrderFormCompanyType extends AbstractType
                 'required' => false,
                 'multiple'  => false,
                 'expanded'  => false,
-                'by_reference' => false,
+                'by_reference' => true,
                 'query_builder' => function (EntityRepository $er) use ($userId) {
                     return $er->createQueryBuilder('u')
                         ->where('u.roles LIKE :roles')
@@ -247,6 +242,7 @@ class OrderFormCompanyType extends AbstractType
         ]);
         $resolver->setRequired([
             'userId',
+            'level'
         ]);
     }
 }

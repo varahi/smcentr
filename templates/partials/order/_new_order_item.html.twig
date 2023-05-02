@@ -3,5 +3,14 @@
         <a id="job{{ order.id }}"></a>
         {% set assigned = '' %}
         {% include 'partials/order/_order_main_info.html.twig'  with {'assigned': 1} %}
+
+        {% if is_granted('ROLE_COMPANY') %}
+            <a href="{{ path('app_edit_order', { id: order.id}) }}">{{ 'Edit order'|trans }}</a>
+        {% endif %}<br />
+        {% if is_granted('ROLE_COMPANY') %}
+            <a href="{{ path('app_delete_order', { id: order.id}) }}" onclick="return confirm('{{ 'Are you sure you want to delete order'|trans }}') ">
+                {{ 'Delete order'|trans }}
+            </a>
+        {% endif %}
     </div>
 </div>
