@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-class OrderController extends AbstractController
+class ListOrderController extends AbstractController
 {
     use NotificationTrait;
 
@@ -51,7 +51,7 @@ class OrderController extends AbstractController
     /**
      * @Route("/orders-list", name="app_orders_list")
      */
-    public function index(
+    public function list(
         Request $request,
         OrderRepository $orderRepository,
         TranslatorInterface $translator,

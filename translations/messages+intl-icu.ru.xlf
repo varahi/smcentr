@@ -893,30 +893,46 @@
         <source>Up balance text</source>
         <target>Будет списана комиссия банка 5%</target>
       </trans-unit>
-        <trans-unit id="New orders list" resname="New orders list">
-            <source>New orders list</source>
-            <target>Новые заявки</target>
-        </trans-unit>
-        <trans-unit id="Active orders list" resname="Active orders list">
-            <source>Active orders list</source>
-            <target>Активные заявки</target>
-        </trans-unit>
-        <trans-unit id="Completed orders list" resname="Completed orders list">
-            <source>Completed orders list</source>
-            <target>Завершенные заявки</target>
-        </trans-unit>
-        <trans-unit id="Payments" resname="Payments">
-            <source>Payments</source>
-            <target>Платежи</target>
-        </trans-unit>
-        <trans-unit id="Payment" resname="Payment">
-            <source>Payment</source>
-            <target>Платеж</target>
-        </trans-unit>
-        <trans-unit id="Clear Order" resname="Clear Order">
-            <source>Clear Order</source>
-            <target>Отменить заявку</target>
-        </trans-unit>
+      <trans-unit id="KeDuIFr" resname="New orders list">
+        <source>New orders list</source>
+        <target>Новые заявки</target>
+      </trans-unit>
+      <trans-unit id="ao7ACXw" resname="Active orders list">
+        <source>Active orders list</source>
+        <target>Активные заявки</target>
+      </trans-unit>
+      <trans-unit id="e9DXeNT" resname="Completed orders list">
+        <source>Completed orders list</source>
+        <target>Завершенные заявки</target>
+      </trans-unit>
+      <trans-unit id="Yy4cWDl" resname="Payments">
+        <source>Payments</source>
+        <target>Платежи</target>
+      </trans-unit>
+      <trans-unit id="cEjzizP" resname="Payment">
+        <source>Payment</source>
+        <target>Платеж</target>
+      </trans-unit>
+      <trans-unit id="DRFzhQv" resname="Clear Order">
+        <source>Clear Order</source>
+        <target>Отменить заявку</target>
+      </trans-unit>
+      <trans-unit id="bmNVJt3" resname="Edit order">
+        <source>Edit order</source>
+        <target>Редактировать заявку</target>
+      </trans-unit>
+      <trans-unit id="7HCdHXT" resname="Delete order">
+        <source>Delete order</source>
+        <target>Удалить заявку</target>
+      </trans-unit>
+      <trans-unit id="IehJKTi" resname="Hours">
+        <source>Hours</source>
+        <target>Часов</target>
+      </trans-unit>
+      <trans-unit id="mmWLb5O" resname="Are you sure you want to delete order">
+        <source>Are you sure you want to delete order</source>
+        <target>Вы уверены, что хотите удалить заявку</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

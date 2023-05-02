@@ -1,0 +1,154 @@
+{% extends 'layouts/base.html.twig' %}
+{% block title %}Добро пожаловать {{ user.fullName }}{% endblock %}
+    {% block javascripts %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="{{ asset('assets/js/jquery.simpleLoadMore.js') }}"></script>
+        <script src="{{ asset('assets/js/dependableList.js') }}"></script>
+    {% endblock %}
+{% block body %}
+
+    <header id="sticky_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% include 'partials/navigation/_navbar.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="reg_client">
+        <div class="container">
+            {% include 'partials/_message.html.twig' %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Создание заявки</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12"></div>
+                {{ form_start(orderForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+                <div class="col-md-12">
+                    <div class="reg_contact">
+                        <h3>Заполните все поля</h3>
+
+                        <label for="order_form_profession" style="display: none"></label>
+                        <select id="order_form_profession" name="order_form[profession]" required="required">
+                            <option value="" selected="selected">Выберите профессию *</option>
+                            {% for profession in professions %}
+                                <option value="{{ profession.id }}" {% if profession.id == order.profession.id %} selected {% endif %}>
+                                    {{ profession.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="order_form_jobType" style="display: none"></label>
+                        <select id="order_form_jobType" name="order_form[jobType]" required="required" disabled>
+                            <option value="" selected="selected">Выберите тип работ *</option>
+                            {% for jobType in jobTypes %}
+                                {% if jobType.profession is not null or jobType.profession is not empty %}
+                                    <option data-list-id="{{ jobType.profession.id }}"
+                                            {% if jobType.profession.id == order.jobType.profession.id %} selected {% endif %}
+                                            value="{{ jobType.id }}">
+                                        {{ jobType.name }}
+                                    </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+
+                        <label for="order_form_city" style="display: none"></label>
+                        <select id="order_form_city" name="order_form[city]" required="required">
+                            <option value="" selected="selected">Выберите город *</option>
+                            {% for city in cities %}
+                                <option value="{{ city.id }}" {% if city.id == order.city.id %} selected {% endif %}>
+                                    {{ city.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="order_form_district" style="display: none"></label>
+                        <select id="order_form_district" name="order_form[district]" disabled>
+                            <option value="" selected="selected">Выберите район *</option>
+                            {% for district in districts %}
+                                {% if user.avatar is not null %}
+                                    <option data-list-id="{{ district.city.id }}" value="{{ district.id }}">
+                                        {{ district.name }}
+                                    </option>
+                                {% else %}
+                                    <option data-list-id="{{ district.city.id }}"
+                                            {% if district.city.id == order.district.city.id %} selected {% endif %}
+                                            value="{{ district.id }}">
+                                        {{ district.name }}
+                                    </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+
+                        {{ form_widget(orderForm.address) }}
+                        {{ form_widget(orderForm.description) }}
+                        {{ form_widget(orderForm.price) }}
+                        {% if is_granted('ROLE_COMPANY') %}
+                            {{ form_widget(orderForm.level) }}
+                        {% endif %}
+                        {{ form_widget(orderForm.phone) }}
+                        {{ form_row(orderForm.estimatedTime) }}
+                        {{ form_row(orderForm.deadline) }}
+
+                        {% if is_granted('ROLE_COMPANY') %}
+                            <div style="display: none">
+                                {{ form_row(orderForm.users) }}
+                            </div>
+                            {{ form_row(orderForm.performer) }}
+                            {{ form_row(orderForm.customTaxRate) }}
+
+
+                            <div class="check_notifications" style="display: none">
+                                <div class="cb_notifications">
+                                    <label class="checkbox">
+                                        {{ form_widget(orderForm.sendOwnMasters) }}
+                                        <span>Отправить уведомления своим мастерам</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="check_notifications" style="display: none">
+                                <div class="cb_notifications">
+                                    <label class="checkbox">
+                                        {{ form_widget(orderForm.sendAllMasters) }}
+                                        <span>Отправить уведомления всем мастерам</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="reg_bottom">
+                        <button id="myBtn">Обновить заявку</button>
+                    </div>
+                </div>
+                {{ form_end(orderForm) }}
+
+                <script type="text/javascript">
+                    createDependableList ( '#order_form_city', '#order_form_district' );
+                    createDependableList ( '#order_form_profession', '#order_form_jobType' );
+                    $('#order_form_city').change(function() {
+                        $('#order_form_district').prop('disabled', false);
+                    });
+                    $('#order_form_profession').change(function() {
+                        $('#order_form_jobType').prop('disabled', false);
+                    });
+                </script>
+            </div>
+        </div>
+    </section>
+    <script>
+        $(function(){
+            $("#order_form_phone").mask("+7(999) 999-9999");
+            $("#order_form_company_phone").mask("+7(999) 999-9999");
+        });
+    </script>
+    {% include 'partials/footer/_footer.html.twig' %}
+{% endblock %}

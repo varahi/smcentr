@@ -42,6 +42,8 @@ class NewOrderController extends AbstractController
 
     public const STATUS_NEW = '0';
 
+    private const DEFAULT_LEVEL = '3';
+
     public const NOTIFICATION_NEW_ORDER = '4';
 
     private $projectId;
@@ -97,6 +99,7 @@ class NewOrderController extends AbstractController
             if ($this->isGranted(self::ROLE_COMPANY)) {
                 $form = $this->createForm(OrderFormCompanyType::class, $order, [
                     'userId' => $user->getId(),
+                    'level' => self::DEFAULT_LEVEL
                 ]);
             }
 

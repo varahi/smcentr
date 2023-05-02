@@ -149,6 +149,14 @@
         <source>No task defined</source>
         <target>Для пользователя или компании не определена комиссия. Невозможно взять заказ на исполнение.</target>
       </trans-unit>
+      <trans-unit id="Order updated" resname="Order updated">
+        <source>Order updated</source>
+        <target>Заявка обновлена</target>
+      </trans-unit>
+      <trans-unit id="Order removed" resname="Order removed">
+        <source>Order removed</source>
+        <target>Заявка удалена</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
