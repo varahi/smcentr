@@ -59,12 +59,18 @@ class NewOrderController extends AbstractController
         Security $security,
         Environment $twig,
         ManagerRegistry $doctrine,
-        int $projectId
+        int $projectId,
+        Mailer $mailer,
+        TranslatorInterface $translator,
+        PushNotification $pushNotification
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
         $this->projectId = $projectId;
+        $this->mailer = $mailer;
+        $this->translator = $translator;
+        $this->pushNotification = $pushNotification;
     }
 
     /**
@@ -73,15 +79,12 @@ class NewOrderController extends AbstractController
     public function newOrder(
         Request $request,
         UserRepository $userRepository,
-        TranslatorInterface $translator,
         NotifierInterface $notifier,
         ManagerRegistry $doctrine,
-        Mailer $mailer,
         CityRepository $cityRepository,
         DistrictRepository $districtRepository,
         ProfessionRepository $professionRepository,
-        JobTypeRepository $jobTypeRepository,
-        PushNotification $pushNotification
+        JobTypeRepository $jobTypeRepository
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
@@ -168,70 +171,18 @@ class NewOrderController extends AbstractController
                 $entityManager->persist($order);
                 $entityManager->flush();
 
-                // Mails to master about a new order
-                if (count($masters) > 0) {
-                    foreach ($masters as $master) {
-                        if (count($master->getProfessions()) > 0 && count($master->getJobTypes()) > 0) {
-                            if ($master->getProfessions() && count($master->getProfessions()) > 0) {
-                                foreach ($master->getProfessions() as $profession) {
-                                    $professionIds[] = $profession->getId();
-                                }
-                            } else {
-                                $professionIds = [];
-                            }
-
-                            if ($master->getJobTypes() && count($master->getJobTypes()) > 0) {
-                                foreach ($master->getJobTypes() as $jobType) {
-                                    $jobTypeIds[] = $jobType->getId();
-                                }
-                            } else {
-                                $jobTypeIds = [];
-                            }
-                        } else {
-                            $jobTypeIds = [];
-                            $professionIds = [];
-                        }
-
-                        /*if ($master->isGetNotifications() == 1 &&
-                            $order->getCity()->getId() == $master->getCity()->getId() &&
-                            in_array($order->getJobType()->getId(), $jobTypeIds) &&
-                            in_array($order->getProfession()->getId(), $professionIds)
-                        ) {
-                            $subject = $translator->trans('New order available', array(), 'messages');
-                            $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
-                        }*/
-
-                        // Send notifications for masters
-                        if ($master->isGetNotifications() == 1 &&
-                            $order->getCity()->getId() == $master->getCity()->getId() &&
-                            in_array($order->getJobType()->getId(), $jobTypeIds) &&
-                            in_array($order->getProfession()->getId(), $professionIds)
-                        ) {
-                            $subject = $translator->trans('New order available', array(), 'messages');
-                            $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
-
-                            // Send notifications for master
-                            $message = $translator->trans('Notification new order for master', array(), 'messages');
-                            $this->setNotification($order, $master, self::NOTIFICATION_NEW_ORDER, $message);
-
-                            // Send push notification
-                            $pushNotification->sendPushNotification($translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
-
-                            $entityManager->flush();
-                        }
-                    }
-                }
+                $this->newOrderNotifications($masters, $order);
 
                 // Send notifications for user
-                $message = $translator->trans('Notification new order for user', array(), 'messages');
+                $message = $this->translator->trans('Notification new order for user', array(), 'messages');
                 $this->setNotification($order, $user, self::NOTIFICATION_NEW_ORDER, $message);
 
                 // Send push notification
-                $pushNotification->sendPushNotification($translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+                $this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
 
                 $entityManager->flush();
 
-                $message = $translator->trans('Order created', array(), 'flash');
+                $message = $this->translator->trans('Order created', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
                 $referer = $request->headers->get('referer');
                 return new RedirectResponse($referer);
@@ -246,9 +197,67 @@ class NewOrderController extends AbstractController
                 'orderForm' => $form->createView()
             ]);
         } else {
-            $message = $translator->trans('Please login', array(), 'flash');
+            $message = $this->translator->trans('Please login', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute("app_login");
+        }
+    }
+
+    private function newOrderNotifications($masters, $order)
+    {
+        // Mails to master about a new order
+        if (count($masters) > 0) {
+            foreach ($masters as $master) {
+                if (count($master->getProfessions()) > 0 && count($master->getJobTypes()) > 0) {
+                    if ($master->getProfessions() && count($master->getProfessions()) > 0) {
+                        foreach ($master->getProfessions() as $profession) {
+                            $professionIds[] = $profession->getId();
+                        }
+                    } else {
+                        $professionIds = [];
+                    }
+
+                    if ($master->getJobTypes() && count($master->getJobTypes()) > 0) {
+                        foreach ($master->getJobTypes() as $jobType) {
+                            $jobTypeIds[] = $jobType->getId();
+                        }
+                    } else {
+                        $jobTypeIds = [];
+                    }
+                } else {
+                    $jobTypeIds = [];
+                    $professionIds = [];
+                }
+
+                /*if ($master->isGetNotifications() == 1 &&
+                    $order->getCity()->getId() == $master->getCity()->getId() &&
+                    in_array($order->getJobType()->getId(), $jobTypeIds) &&
+                    in_array($order->getProfession()->getId(), $professionIds)
+                ) {
+                    $subject = $translator->trans('New order available', array(), 'messages');
+                    $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
+                }*/
+
+                // Send notifications for masters
+                if ($master->isGetNotifications() == 1 &&
+                    $order->getCity()->getId() == $master->getCity()->getId() &&
+                    in_array($order->getJobType()->getId(), $jobTypeIds) &&
+                    in_array($order->getProfession()->getId(), $professionIds)
+                ) {
+                    $subject = $this->translator->trans('New order available', array(), 'messages');
+                    $this->mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
+
+                    // Send notifications for master
+                    $message = $this->translator->trans('Notification new order for master', array(), 'messages');
+                    $this->setNotification($order, $master, self::NOTIFICATION_NEW_ORDER, $message);
+
+                    // Send push notification
+                    $this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+
+                    $entityManager = $this->doctrine->getManager();
+                    $entityManager->flush();
+                }
+            }
         }
     }
 }

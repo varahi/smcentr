@@ -10,7 +10,7 @@
     </div>
     <div class="date">{{ notification.created|date("H:i d.m.Y") }}</div>
 
-    {% if is_granted('ROLE_MASTER') %}
+    {% if is_granted('ROLE_MASTER') or is_granted('ROLE_COMPANY') %}
         {% if notification.type == 1 or notification.type == 4 %}
             <div class="title">{{ notification.message }}
                 <a href="{{ path('app_master_profile') }}#job{{ notification.application.id }}">ID {{ notification.application.id }}</a>
