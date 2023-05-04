@@ -75,7 +75,8 @@ class AssignMasterController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $masters = $userRepository->findByCompanyProfessionAndJobType(self::ROLE_MASTER, $user, $order->getProfession(), $order->getJobType());
+        //$masters = $userRepository->findByCompanyProfessionAndJobType(self::ROLE_MASTER, $user, $order->getProfession(), $order->getJobType());
+        $masters = $userRepository->findByCompany(self::ROLE_MASTER, $user);
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($_POST['assign_master']) {

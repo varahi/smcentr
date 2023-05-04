@@ -48,11 +48,21 @@
                             {% endfor %}
                         </select>
                         <label for="master_profile_form_district" style="display: none"></label>
+
+
                         <select id="master_profile_form_district" name="master_profile_form[district]">
+                            <option>Выберите район</option>
                             {% for district in districts %}
-                                <option data-list-id="{{ district.city.id }}" value="{{ district.id }}" {% if district.city.id == user.city.id %} selected {% endif %}>
-                                    {{ district.name }}
-                                </option>
+
+                                {% if user.district is not null %}
+                                    <option data-list-id="{{ district.city.id }}" value="{{ district.id }}" {% if district.id == user.district.id %} selected {% endif %}>
+                                        {{ district.name }}
+                                    </option>
+                                {% else %}
+                                    <option data-list-id="{{ district.city.id }}" value="{{ district.id }}">
+                                        {{ district.name }}
+                                    </option>
+                                 {% endif %}
                             {% endfor %}
                         </select>
 

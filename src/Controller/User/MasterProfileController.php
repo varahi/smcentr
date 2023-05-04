@@ -246,10 +246,15 @@ class MasterProfileController extends AbstractController
                         $user->setCity($city);
                     }
                 }
+
                 if ($post['district'] !=='') {
                     $district = $districtRepository->findOneBy(['id' => $post['district']]);
                     if ($district) {
                         $user->setDistrict($district);
+                        // Set null district if city has not district
+                        if (count($city->getDistrict()) == 0) {
+                            $user->setDistrict(null);
+                        }
                     }
                 }
 

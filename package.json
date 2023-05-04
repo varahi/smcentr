@@ -4,8 +4,8 @@
     "@symfony/stimulus-bridge": "^1.1.0",
     "@symfony/webpack-encore": "^0.33.0",
     "bootstrap": "^5.1.3",
-    "jquery": "^3.5.1",
     "core-js": "^3.0.0",
+    "jquery": "^3.5.1",
     "regenerator-runtime": "^0.13.2",
     "stimulus": "^2.0.0",
     "webpack-notifier": "^1.6.0"
@@ -19,6 +19,7 @@
     "build": "encore production --progress"
   },
   "dependencies": {
+    "Select2": "^3.5.7",
     "serviceworker-webpack-plugin": "^1.0.1"
   }
 }
