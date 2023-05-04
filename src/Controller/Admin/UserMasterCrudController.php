@@ -99,7 +99,7 @@ class UserMasterCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Master')
             ->setSearchFields(['id', 'firstName', 'lastName', 'email', 'phone'])
             ->setDefaultSort(['id' => 'DESC'])
-                ->setFormThemes(['bundles/EasyAdminBundle/crud/form_theme.html.twig', '@EasyAdmin/crud/form_theme.html.twig'])
+            ->setFormThemes(['bundles/EasyAdminBundle/crud/form_theme.html.twig', '@EasyAdmin/crud/form_theme.html.twig'])
             ;
     }
 

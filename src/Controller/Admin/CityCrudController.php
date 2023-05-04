@@ -24,7 +24,7 @@ class CityCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Cities')
             ->setEntityLabelInPlural('Cities')
-            ->setSearchFields(['name'])
+            ->setSearchFields(['name', 'id'])
             ->setDefaultSort(['id' => 'DESC']);
     }
 

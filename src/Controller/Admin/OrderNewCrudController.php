@@ -34,10 +34,14 @@ class OrderNewCrudController extends AbstractCrudController
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): \Doctrine\ORM\QueryBuilder
     {
-        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $qb
-            ->where($qb->expr()->eq('entity.status', 0))
-        ;
+        if (isset($_GET['query'])) {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        } else {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+            $qb
+                ->where($qb->expr()->eq('entity.status', 0))
+            ;
+        }
 
         return $qb;
     }
