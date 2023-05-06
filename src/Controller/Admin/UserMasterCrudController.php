@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\EasyAdmin\WhatsAppField;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -144,7 +145,8 @@ class UserMasterCrudController extends AbstractCrudController
                     ->orderBy('entity.fullName', 'ASC');
             });
 
-        yield TelephoneField::new('phone')->setColumns('col-md-4');
+        //yield TelephoneField::new('phone')->setColumns('col-md-4');
+        yield WhatsAppField::new('phone')->setColumns('col-md-4')->setTemplatePath('bundles/EasyAdminBundle/field/whatsapp.html.twig');
 
         /*yield AssociationField::new('master')
             ->setLabel('Master Company')

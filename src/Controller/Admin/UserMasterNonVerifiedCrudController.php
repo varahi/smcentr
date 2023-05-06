@@ -2,7 +2,10 @@
 
 namespace App\Controller\Admin;
 
+use App\EasyAdmin\WhatsAppField;
+use App\Entity\Order;
 use App\Entity\User;
+use App\Service\PhoneNumberService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -53,11 +56,13 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
     public function __construct(
         UserPasswordHasherInterface $passwordEncoder,
         Mailer $mailer,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        PhoneNumberService $phoneNumberService
     ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
         $this->translator = $translator;
+        $this->phoneNumberService = $phoneNumberService;
     }
 
     public static function getEntityFqcn(): string
@@ -144,7 +149,8 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
                     ->orderBy('entity.fullName', 'ASC');
             });
 
-        yield TelephoneField::new('phone')->setColumns('col-md-4')->hideOnIndex();
+        //yield TelephoneField::new('phone')->setColumns('col-md-4')->hideOnIndex();
+        yield WhatsAppField::new('phone')->setColumns('col-md-4')->setTemplatePath('bundles/EasyAdminBundle/field/whatsapp.html.twig');
 
         /*yield AssociationField::new('master')
             ->setLabel('Master Company')
@@ -159,8 +165,8 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
                 'by_reference' => false,
             ]);*/
 
-        yield BooleanField::new('isVerified');
-        yield BooleanField::new('isDisabled');
+        yield BooleanField::new('isVerified')->hideOnIndex();
+        yield BooleanField::new('isDisabled')->hideOnIndex();
 
         yield FormField::addPanel('Change password')->setIcon('fa fa-key');
         yield FormField::addRow();
@@ -274,6 +280,7 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
 
         $formBuilder  = parent::createEditFormBuilder($entityDto, $formOptions, $context);
         $this->addEncodePasswordEventListener($formBuilder, $plainPassword);
+        $this->setPhormatPhoneNumber($formBuilder);
 
         return $formBuilder;
     }
@@ -312,22 +319,14 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
         return $user;
     }
 
-    /**
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param $entityInstance
-     */
-    public function _updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    protected function setPhormatPhoneNumber(FormBuilderInterface $formBuilder): void
     {
-
-        /*$user = $this->getUser();
-        if (!$user instanceof User) {
-            throw new \LogicException('Currently logged in user is not an instance of User?!');
-        }
-
-        if (method_exists($entityInstance, 'setIsVerified')) {
-            $subject = 'Bla bla bla';
-            $this->mailer->updateCrudUserEmail($user, $subject, 'emails/update_crud_user.html.twig');
-        }*/
+        $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            /** @var User order */
+            $data = $event->getData();
+            if ($data->getPhone()) {
+                $this->phoneNumberService->formatPhoneNumber($data->getPhone());
+            }
+        });
     }
 }

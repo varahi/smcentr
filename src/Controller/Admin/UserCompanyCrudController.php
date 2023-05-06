@@ -193,17 +193,6 @@ class UserCompanyCrudController extends AbstractCrudController
         //yield PercentField::new('taxRate')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
         yield PercentField::new('serviceTaxRate')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
 
-        yield FormField::addRow();
-        yield AssociationField::new('professions')
-            ->setFormTypeOptions([
-                'by_reference' => false,
-            ])->hideOnIndex()
-            ->setColumns('col-md-4');
-        yield AssociationField::new('jobTypes')
-            ->setFormTypeOptions([
-                'by_reference' => false,
-            ])->hideOnIndex()
-            ->setColumns('col-md-4');
 
         yield FormField::addRow();
         yield AssociationField::new('companyMasters')

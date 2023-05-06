@@ -178,7 +178,7 @@ class NewOrderController extends AbstractController
                 $this->setNotification($order, $user, self::NOTIFICATION_NEW_ORDER, $message);
 
                 // Send push notification
-                $this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+                //$this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
 
                 $entityManager->flush();
 

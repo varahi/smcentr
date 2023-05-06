@@ -14,4 +14,8 @@
         <br />
         <b>{{ 'Deadline'|trans }}:</b> {{ order.deadline|date("d.m.Y") }}
     {% endif %}
+    {% if order.quantity %}
+       <br />
+       <b>{{ 'Quantity'|trans }}:</b> {{ order.quantity }} шт.
+    {% endif %}
 </div>

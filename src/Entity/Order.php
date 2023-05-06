@@ -135,6 +135,11 @@ class Order
      */
     private $clearOrder;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $quantity;
+
     public function __construct()
     {
         $this->created = new \DateTime();
@@ -442,6 +447,18 @@ class Order
     public function setClearOrder(?bool $clearOrder): self
     {
         $this->clearOrder = $clearOrder;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity): self
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

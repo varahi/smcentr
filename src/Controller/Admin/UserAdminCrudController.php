@@ -87,25 +87,27 @@ class UserAdminCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        yield FormField::addTab('Main Info', 'fa fa-info');
+        yield FormField::addRow();
         yield FormField::addPanel('Main Info')->setIcon('fa fa-info');
-        yield FormField::addRow()->setColumns('col-md-4');
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
         yield EmailField::new('email');
         yield TextField::new('fullName');
         yield ImageField::new('avatar')
-            ->setColumns('col-md-4')
             ->setBasePath('uploads/files')
             ->setUploadDir('public_html/uploads/files')
             ->setFormType(FileUploadType::class)
             ->setRequired(false)
-            ->setColumns('col-md-4');
+        ;
 
 
+        yield FormField::addTab('Password', 'fa fa-info');
         yield FormField::addPanel('Change password')->setIcon('fa fa-key');
         yield FormField::addRow();
+
         yield Field::new('password', 'New password')->onlyWhenCreating()->setRequired(true)
             ->setFormType(RepeatedType::class)
-            ->setColumns('col-md-8')
+            ->setColumns('col-md-4')
             ->hideOnIndex()
             ->setRequired(false)
             ->setFormTypeOptions([
@@ -115,9 +117,10 @@ class UserAdminCrudController extends AbstractCrudController
                 'error_bubbling'  => true,
                 'invalid_message' => 'The password fields do not match.',
             ]);
+
+
         yield Field::new('password', 'New password')->onlyWhenUpdating()->setRequired(false)
             ->setFormType(RepeatedType::class)
-            ->setColumns('col-md-4')
             ->hideOnIndex()
             ->setRequired(false)
             ->setFormTypeOptions([

@@ -80,7 +80,24 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Job Types', 'fa fa-industry', JobType::class),
             MenuItem::linkToCrud('Tax Rate', 'fa fa-percent', TaxRate::class)
         ])->setPermission('ROLE_EDITOR');
+        yield MenuItem::section('<hr />');
 
+        //yield MenuItem::linkToCrud('Orders list', 'fa fa-reorder', Order::class);
+        yield MenuItem::section('Orders');
+        yield MenuItem::subMenu('Orders list', 'fa fa-reorder')->setSubItems([
+            MenuItem::linkToCrud('New orders list', 'fa fa-reorder', Order::class)
+                ->setController(OrderNewCrudController::class),
+            MenuItem::linkToCrud('Active orders list', 'fa fa-reorder', Order::class)
+                ->setController(OrderActiveCrudController::class),
+            MenuItem::linkToCrud('Completed orders list', 'fa fa-reorder', Order::class)
+                ->setController(OrderCompletedCrudController::class),
+        ]);
+        yield MenuItem::section('<hr />');
+
+        yield MenuItem::linkToRoute('Tickets list', 'fa fa-support', 'app_ticket_list');
+        yield MenuItem::linkToCrud('Request a withdrawal', 'fa fa-mail-forward', Request::class)
+            ->setPermission('ROLE_EDITOR');
+        yield MenuItem::linkToCrud('Payments', 'fa fa-money', Payment::class);
         yield MenuItem::section('<hr />');
 
         yield MenuItem::section('Users');
@@ -135,27 +152,6 @@ class DashboardController extends AbstractDashboardController
                 ->setController(PrivacyCrudController::class)
                 ->setPermission('ROLE_EDITOR'),
         ])->setPermission('ROLE_EDITOR');
-
-        yield MenuItem::section('<hr />');
-
-
-        //yield MenuItem::linkToCrud('Orders list', 'fa fa-reorder', Order::class);
-        yield MenuItem::section('Orders');
-        yield MenuItem::subMenu('Orders list', 'fa fa-reorder')->setSubItems([
-            MenuItem::linkToCrud('New orders list', 'fa fa-reorder', Order::class)
-                ->setController(OrderNewCrudController::class),
-            MenuItem::linkToCrud('Active orders list', 'fa fa-reorder', Order::class)
-                ->setController(OrderActiveCrudController::class),
-            MenuItem::linkToCrud('Completed orders list', 'fa fa-reorder', Order::class)
-                ->setController(OrderCompletedCrudController::class),
-        ]);
-
-        yield MenuItem::section('<hr />');
-
-        yield MenuItem::linkToRoute('Tickets list', 'fa fa-support', 'app_ticket_list');
-        yield MenuItem::linkToCrud('Request a withdrawal', 'fa fa-mail-forward', Request::class)
-            ->setPermission('ROLE_EDITOR');
-        yield MenuItem::linkToCrud('Payments', 'fa fa-money', Payment::class);
 
         yield MenuItem::section('<hr />');
 
