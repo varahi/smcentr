@@ -3,14 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\EasyAdmin\WhatsAppField;
-use App\Entity\Order;
 use App\Entity\User;
 use App\Service\PhoneNumberService;
-use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -18,8 +15,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Doctrine\ORM\EntityRepository;
@@ -27,7 +22,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -41,7 +35,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use App\Service\Mailer;
-use Symfony\Component\Stopwatch\Section;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserMasterNonVerifiedCrudController extends AbstractCrudController
@@ -104,7 +97,7 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Masters non verified')
             ->setEntityLabelInPlural('Masters non verified')
-            ->setSearchFields(['id', 'firstName', 'lastName', 'email', 'phone'])
+            ->setSearchFields(['id', 'username',  'firstName', 'lastName',  'fullName', 'email', 'phone'])
             ->setDefaultSort(['id' => 'DESC']);
     }
 

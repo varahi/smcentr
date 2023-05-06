@@ -21,7 +21,7 @@
         {% endif %}
         {% endif %}
     </div>
-{% elseif is_granted('ROLE_CLIENT') %}
+{% elseif is_granted('ROLE_CLIENT') or is_granted('ROLE_COMPANY')%}
     <div class="phone">
         {% if order.performer %}
             <img src="{{ asset('assets/images/phone.svg') }}" alt="" />

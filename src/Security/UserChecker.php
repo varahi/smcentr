@@ -16,6 +16,8 @@ class UserChecker implements UserCheckerInterface
 
     public const ROLE_MASTER = 'ROLE_MASTER';
 
+    public const ROLE_COMPANY = 'ROLE_COMPANY';
+
     public const ROLE_ADMIN = 'ROLE_ADMIN';
 
     public const ROLE_SUPPORT = 'ROLE_SUPPORT';
@@ -71,6 +73,9 @@ class UserChecker implements UserCheckerInterface
                 $message = $this->translator->trans('Please verify you profile', [], 'flash');
             }
             if (in_array(self::ROLE_MASTER, $user->getRoles())) {
+                $message = $this->translator->trans('Your account has not been activated yet', [], 'flash');
+            }
+            if (in_array(self::ROLE_COMPANY, $user->getRoles())) {
                 $message = $this->translator->trans('Your account has not been activated yet', [], 'flash');
             }
             if (in_array(self::ROLE_ADMIN, $user->getRoles())) {

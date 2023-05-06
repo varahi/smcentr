@@ -97,6 +97,20 @@ class CompanyProfileController extends AbstractController
             $activeOrders = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user);
             $completedOrders = $orderRepository->findByStatus(self::STATUS_COMPLETED, $user);
 
+            // Redirect if empty request
+            if (isset($_POST['orderId']) && $_POST['orderId'] =='') {
+                $message = $translator->trans('Empty request', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                return $this->redirectToRoute("app_company_profile");
+            }
+
+            // Find by id
+            if (isset($_POST['orderId']) && $_POST['orderId'] !=='') {
+                $newOrders = $orderRepository->findByStatus(self::STATUS_NEW, $user, $_POST['orderId']);
+                $activeOrders = $orderRepository->findByStatus(self::STATUS_ACTIVE, $user, $_POST['orderId']);
+                $completedOrders = $orderRepository->findByStatus(self::STATUS_COMPLETED, $user, $_POST['orderId']);
+            }
+
             // Resize image if exist
             if ($user->getAvatar()) {
                 $this->imageOptimizer->resize($this->targetDirectory.'/'.$user->getAvatar());

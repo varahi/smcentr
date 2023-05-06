@@ -2,10 +2,15 @@
     {% if order.description %}
         <b>{{ 'Description'|trans }}:</b> {{ order.description }}
     {% endif %}
-    {% if order.address %}
-        <br />
-        <b>{{ 'Address'|trans }}:</b> {{ order.city.name }}, {{ order.address }}
+
+    {% if order.status == 0 %}
+    {% else%}
+        {% if order.address %}
+            <br />
+            <b>{{ 'Address'|trans }}:</b> {{ order.city.name }}, {{ order.address }}
+        {% endif %}
     {% endif %}
+
     {% if order.estimatedTime %}
         <br />
         <b>{{ 'Estimated Time'|trans }}:</b> {{ order.estimatedTime }} {{ 'Hours'|trans }}

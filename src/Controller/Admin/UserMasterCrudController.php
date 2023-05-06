@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\EasyAdmin\WhatsAppField;
+use App\Service\PhoneNumberService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -52,10 +53,12 @@ class UserMasterCrudController extends AbstractCrudController
 
     public function __construct(
         UserPasswordHasherInterface $passwordEncoder,
-        Mailer $mailer
+        Mailer $mailer,
+        PhoneNumberService $phoneNumberService
     ) {
         $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
+        $this->phoneNumberService = $phoneNumberService;
     }
 
     public static function getEntityFqcn(): string
@@ -98,7 +101,7 @@ class UserMasterCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Master')
             ->setEntityLabelInPlural('Master')
-            ->setSearchFields(['id', 'firstName', 'lastName', 'email', 'phone'])
+            ->setSearchFields(['id', 'username',  'firstName', 'lastName',  'fullName', 'email', 'phone'])
             ->setDefaultSort(['id' => 'DESC'])
             ->setFormThemes(['bundles/EasyAdminBundle/crud/form_theme.html.twig', '@EasyAdmin/crud/form_theme.html.twig'])
             ;
@@ -277,6 +280,7 @@ class UserMasterCrudController extends AbstractCrudController
 
         $formBuilder  = parent::createEditFormBuilder($entityDto, $formOptions, $context);
         $this->addEncodePasswordEventListener($formBuilder, $plainPassword);
+        $this->setPhormatPhoneNumber($formBuilder);
 
         return $formBuilder;
     }
@@ -311,27 +315,14 @@ class UserMasterCrudController extends AbstractCrudController
         return $user;
     }
 
-    /**
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param $entityInstance
-     */
-    public function _updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    protected function setPhormatPhoneNumber(FormBuilderInterface $formBuilder): void
     {
-
-        /*$user = $this->getUser();
-        if (!$user instanceof User) {
-            throw new \LogicException('Currently logged in user is not an instance of User?!');
-        }
-
-        if (method_exists($entityInstance, 'setIsVerified')) {
-            $subject = 'Bla bla bla';
-            $this->mailer->updateCrudUserEmail($user, $subject, 'emails/update_crud_user.html.twig');
-        }*/
+        $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            /** @var User order */
+            $data = $event->getData();
+            if ($data->getPhone()) {
+                $this->phoneNumberService->formatPhoneNumber($data->getPhone());
+            }
+        });
     }
-
-//    public function configureActions(Actions $actions): Actions
-//    {
-//        return $actions->add(CRUD::PAGE_INDEX, 'detail');
-//    }
 }
