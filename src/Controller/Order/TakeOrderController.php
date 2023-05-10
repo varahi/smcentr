@@ -60,7 +60,8 @@ class TakeOrderController extends AbstractController
         TranslatorInterface $translator,
         PushNotification $pushNotification,
         UserRepository $userRepository,
-        Mailer $mailer
+        Mailer $mailer,
+        UnsetOrderController $unsetOrderController
     ) {
         $this->security = $security;
         $this->twig = $twig;
@@ -70,6 +71,7 @@ class TakeOrderController extends AbstractController
         $this->pushNotification = $pushNotification;
         $this->userRepository = $userRepository;
         $this->mailer = $mailer;
+        $this->unsetOrderController = $unsetOrderController;
     }
 
     /**
@@ -150,7 +152,7 @@ class TakeOrderController extends AbstractController
         // Set new master balance
         if (!isset($tax)) {
             // Remove perfomer and status
-            $this->clearOrderPerfomer($order);
+            $this->unsetOrderController->clearOrderPerfomer($order);
             $message = $this->translator->trans('No task defined', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute('app_orders_list');
@@ -203,7 +205,6 @@ class TakeOrderController extends AbstractController
         }
     }
 
-
     private function sendPushNotifications($order, $fullTax)
     {
 
@@ -230,17 +231,5 @@ class TakeOrderController extends AbstractController
 
         // Send push notification
         $this->pushNotification->sendCustomerPushNotification($message3, $messageStr3, 'https://smcentr.su/', $order->getUsers());
-    }
-
-    /*
-     * This method should be public because it uses not only this class
-     */
-    public function clearOrderPerfomer($order)
-    {
-        $order->setPerformer(null);
-        $order->setClearOrder(false);
-        $order->setStatus(self::STATUS_NEW);
-        $entityManager = $this->doctrine->getManager();
-        $entityManager->flush();
     }
 }

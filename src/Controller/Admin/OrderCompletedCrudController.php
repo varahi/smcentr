@@ -88,6 +88,7 @@ class OrderCompletedCrudController extends AbstractCrudController
         yield DateField::new('deadline')->setColumns('col-md-3')->hideOnIndex();
 
         yield TextField::new('address')->setColumns('col-md-10');
+        yield AssociationField::new('performer')->hideOnIndex()->setColumns('col-md-10');
         yield FormField::addRow();
         yield IntegerField::new('quantity')->setColumns('col-md-2');
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle')->setCssClass('col-sm-4');
@@ -96,7 +97,6 @@ class OrderCompletedCrudController extends AbstractCrudController
         yield AssociationField::new('city')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield AssociationField::new('district')->hideOnIndex()->setColumns('col-md-10');
         yield AssociationField::new('users')->setColumns('col-md-10')->setLabel('Customer')->setRequired(true);
-        yield AssociationField::new('performer')->hideOnIndex()->setColumns('col-md-10');
         yield AssociationField::new('profession')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield AssociationField::new('jobType')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield ChoiceField::new('level')->setChoices(
