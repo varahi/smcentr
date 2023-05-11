@@ -1,8 +1,7 @@
 <div class="description">
     {% if order.description %}
-        <b>{{ 'Description'|trans }}:</b> {{ order.description }}
+        <b>{{ 'Description'|trans }}:</b> {{ order.description }} {% if order.quantity %} - {{ order.quantity }} шт.{% endif %}
     {% endif %}
-
     {% if order.status == 0 %}
     {% else%}
         {% if order.address %}
@@ -19,8 +18,8 @@
         <br />
         <b>{{ 'Deadline'|trans }}:</b> {{ order.deadline|date("d.m.Y") }}
     {% endif %}
-    {% if order.quantity %}
-       <br />
-       <b>{{ 'Quantity'|trans }}:</b> {{ order.quantity }} шт.
-    {% endif %}
+{#    {% if order.quantity %}#}
+{#       <br />#}
+{#       <b>{{ 'Quantity'|trans }}:</b> {{ order.quantity }} шт.#}
+{#    {% endif %}#}
 </div>

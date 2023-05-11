@@ -3,10 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Order;
+use App\Service\Order\SetBalanceService;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -24,9 +27,18 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class OrderNewCrudController extends AbstractCrudController
 {
+    public function __construct(
+        SetBalanceService $setBalanceService
+    ) {
+        $this->setBalanceService = $setBalanceService;
+    }
+
     public static function getEntityFqcn(): string
     {
         return Order::class;
@@ -121,19 +133,37 @@ class OrderNewCrudController extends AbstractCrudController
             ]
         )->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
 
-        yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideOnIndex()->setPermission('ROLE_EDITOR');
+        yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideWhenUpdating()
+            ->hideOnIndex()->setPermission('ROLE_EDITOR');
+        yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideWhenCreating()
+            ->setDisabled()
+            ->hideOnIndex()->setPermission('ROLE_EDITOR');
+
         //yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10')->hideOnIndex();
         //yield BooleanField::new('sendAllMasters')->setColumns('col-md-10')->hideOnIndex();
     }
 
-    /*
-    public function configureFields(string $pageName): iterable
+    public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        $formBuilder  = parent::createEditFormBuilder($entityDto, $formOptions, $context);
+        //$this->updateTax($formBuilder);
+        return $formBuilder;
     }
-    */
+
+    public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    {
+        $formBuilder = parent::createNewFormBuilder($entityDto, $formOptions, $context);
+        $this->updateBalance($formBuilder);
+
+        return $formBuilder;
+    }
+
+    protected function updateBalance(FormBuilderInterface $formBuilder): void
+    {
+        $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            /** @var Order order */
+            $order = $event->getData();
+            $this->setBalanceService->setBalance($order);
+        });
+    }
 }

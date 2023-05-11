@@ -67,3 +67,7 @@ font-size: 24px;
 .client_contact_visible {
     display: block;
 }
+
+.select2-container {
+    max-width: 300px;
+}
