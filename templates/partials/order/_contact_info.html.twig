@@ -13,7 +13,7 @@
     </div>
     <div class="client_block">
         {% if order.users is not empty %}
-            {{ order.users.fullName[:7] ~ '...' }}
+            {{ order.users.fullName[:700] ~ '' }}
         {% if order.users.avatar %}
             <img src="{{ asset('uploads/files/' ~ order.users.avatar) }}"  alt=""/>
         {% else %}
@@ -21,8 +21,7 @@
         {% endif %}
         {% endif %}
     </div>
-{% elseif is_granted('ROLE_CLIENT') %}
-
+{% elseif is_granted('ROLE_CLIENT') or is_granted('ROLE_COMPANY')%}
     <div class="phone">
         {% if order.performer %}
             <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
@@ -30,11 +29,13 @@
         {% endif %}
     </div>
     <div class="client_block">
-        {{ order.performer.fullName }}
-        {% if order.performer.avatar %}
-            <img src="{{ asset('uploads/files/' ~ order.performer.avatar) }}"  alt=""/>
-        {% else %}
-            <img src="{{ asset('assets/images/avatar.png') }}" alt="">
+        {% if order.performer is not null %}
+            {{ order.performer.fullName }}
+            {% if order.performer.avatar %}
+                <img src="{{ asset('uploads/files/' ~ order.performer.avatar) }}"  alt=""/>
+            {% else %}
+                <img src="{{ asset('assets/images/avatar.png') }}" alt="">
+            {% endif %}
         {% endif %}
     </div>
 {% else %}

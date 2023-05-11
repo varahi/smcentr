@@ -674,9 +674,9 @@
                 {{ form_label(form.file, placeholder, { label_attr: { class: 'custom-file-label' }}) }}
             </div>
             {% if currentFiles %}
-                <div class="_custom-file">
+                <div class="_custom-file custom-img-file">
                     <a href="/uploads/files/{{ currentFiles.0.filename }}" target="_blank">
-                        <img src="/uploads/files/{{ currentFiles.0.filename }}" class="img-fluid" width="200">
+                        <img src="/uploads/files/{{ currentFiles.0.filename }}" class="img-fluid" width="200" alt="">
                     </a>
                 </div>
             {% endif %}

@@ -1,8 +1,12 @@
 <h1>Сообщение с сайта smcentr.su</h1>
 
-<p>Мастер {{ order.performer.email }} - {{ order.performer.fullName }} взял ваш заказ в разработку</p>
-<h2>Подробности заказа:</h2>
+{% if order.performer is not null %}
+    <p>Мастер {{ order.performer.email }} - {{ order.performer.fullName }} взял заказ в разработку</p>
+{% else %}
+    <p>Мастер взял заказ в разработку</p>
+{% endif %}
 
+<h2>Подробности заказа:</h2>
 <table>
     <tr>
         <td>

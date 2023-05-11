@@ -35,10 +35,14 @@ class OrderCompletedCrudController extends AbstractCrudController
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): \Doctrine\ORM\QueryBuilder
     {
-        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $qb
-            ->where($qb->expr()->eq('entity.status', 9))
-        ;
+        if (isset($_GET['query'])) {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        } else {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+            $qb
+                ->where($qb->expr()->eq('entity.status', 9))
+            ;
+        }
 
         return $qb;
     }
@@ -84,13 +88,15 @@ class OrderCompletedCrudController extends AbstractCrudController
         yield DateField::new('deadline')->setColumns('col-md-3')->hideOnIndex();
 
         yield TextField::new('address')->setColumns('col-md-10');
+        yield AssociationField::new('performer')->hideOnIndex()->setColumns('col-md-10');
+        yield FormField::addRow();
+        yield IntegerField::new('quantity')->setColumns('col-md-2');
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle')->setCssClass('col-sm-4');
         yield FormField::addRow();
 
         yield AssociationField::new('city')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield AssociationField::new('district')->hideOnIndex()->setColumns('col-md-10');
         yield AssociationField::new('users')->setColumns('col-md-10')->setLabel('Customer')->setRequired(true);
-        yield AssociationField::new('performer')->hideOnIndex()->setColumns('col-md-10');
         yield AssociationField::new('profession')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield AssociationField::new('jobType')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield ChoiceField::new('level')->setChoices(
@@ -122,19 +128,10 @@ class OrderCompletedCrudController extends AbstractCrudController
             ]
         )->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
 
-        yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideOnIndex()->setPermission('ROLE_EDITOR');
+        yield TextField::new('customTaxRate')->setColumns('col-md-10')
+            ->setDisabled()
+            ->hideOnIndex()->setPermission('ROLE_EDITOR');
         //yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10')->hideOnIndex();
         //yield BooleanField::new('sendAllMasters')->setColumns('col-md-10')->hideOnIndex();
     }
-
-    /*
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
-    }
-    */
 }

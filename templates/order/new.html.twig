@@ -70,9 +70,12 @@
                         {{ form_widget(orderForm.address) }}
                         {{ form_widget(orderForm.description) }}
                         {{ form_widget(orderForm.price) }}
+                        {{ form_widget(orderForm.quantity) }}
+
                         {% if is_granted('ROLE_COMPANY') %}
                             {{ form_widget(orderForm.level) }}
                         {% endif %}
+
                         {{ form_widget(orderForm.phone) }}
                         {{ form_row(orderForm.estimatedTime) }}
                         {{ form_row(orderForm.deadline) }}

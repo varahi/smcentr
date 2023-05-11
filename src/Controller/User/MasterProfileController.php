@@ -103,57 +103,56 @@ class MasterProfileController extends AbstractController
         NotifierInterface $notifier,
         OrderRepository $orderRepository
     ): Response {
-        if ($this->isGranted(self::ROLE_MASTER)) {
-            $user = $this->security->getUser();
-
-            if ($user->isIsDisabled() == 1) {
-                $message = $translator->trans('Please verify you profile', array(), 'flash');
-                $notifier->send(new Notification($message, ['browser']));
-                return $this->redirectToRoute("app_logout");
-            }
-
-            // Resize image if exist
-            if ($user->getAvatar()) {
-                $this->imageOptimizer->resize($this->targetDirectory.'/'.$user->getAvatar());
-            }
-
-            $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC', '999');
-            $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC', '999');
-            $entityManager = $this->doctrine->getManager();
-
-            {
-                $response = new Response($this->twig->render('user/master/lk-master.html.twig', [
-                    'user' => $user,
-                    'activeOrders' => $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC', '999'),
-                    'completedOrders' => $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC', '999')
-                ]));
-
-                // Check and set phone numbers for instructors
-                if (count($activeOrders) > 0) {
-                    foreach ($activeOrders as $item) {
-                        if ($item->getPhone()) {
-                            $item->setPhone($this->phoneNumberService->formatPhoneNumber($item->getPhone()));
-                            $entityManager->flush();
-                        }
-                    }
-                }
-
-                if (count($completedOrders) > 0) {
-                    foreach ($activeOrders as $item) {
-                        if ($item->getPhone()) {
-                            $item->setPhone($this->phoneNumberService->formatPhoneNumber($item->getPhone()));
-                            $entityManager->flush();
-                        }
-                    }
-                }
-
-                //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
-                return $response;
-            }
-        } else {
+        if (!$this->isGranted(self::ROLE_MASTER)) {
             $message = $translator->trans('Please login', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute("app_login");
+        }
+
+        $user = $this->security->getUser();
+        if ($user->isIsDisabled() == 1) {
+            $message = $translator->trans('Please verify you profile', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_logout");
+        }
+
+        // Resize image if exist
+        if ($user->getAvatar()) {
+            $this->imageOptimizer->resize($this->targetDirectory.'/'.$user->getAvatar());
+        }
+
+        $activeOrders = $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC', '999');
+        $completedOrders = $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC', '999');
+        $entityManager = $this->doctrine->getManager();
+
+        {
+            $response = new Response($this->twig->render('user/master/lk-master.html.twig', [
+                'user' => $user,
+                'activeOrders' => $orderRepository->findPerfomedByStatus(self::STATUS_ACTIVE, $user, 'created', 'DESC', '999'),
+                'completedOrders' => $orderRepository->findPerfomedByStatus(self::STATUS_COMPLETED, $user, 'closed', 'DESC', '999')
+            ]));
+
+            // Check and set phone numbers for instructors
+            if (count($activeOrders) > 0) {
+                foreach ($activeOrders as $item) {
+                    if ($item->getPhone()) {
+                        $item->setPhone($this->phoneNumberService->formatPhoneNumber($item->getPhone()));
+                        $entityManager->flush();
+                    }
+                }
+            }
+
+            if (count($completedOrders) > 0) {
+                foreach ($activeOrders as $item) {
+                    if ($item->getPhone()) {
+                        $item->setPhone($this->phoneNumberService->formatPhoneNumber($item->getPhone()));
+                        $entityManager->flush();
+                    }
+                }
+            }
+
+            //$response->setSharedMaxAge(self::CACHE_MAX_AGE);
+            return $response;
         }
     }
 
@@ -247,10 +246,15 @@ class MasterProfileController extends AbstractController
                         $user->setCity($city);
                     }
                 }
+
                 if ($post['district'] !=='') {
                     $district = $districtRepository->findOneBy(['id' => $post['district']]);
                     if ($district) {
                         $user->setDistrict($district);
+                        // Set null district if city has not district
+                        if (count($city->getDistrict()) == 0) {
+                            $user->setDistrict(null);
+                        }
                     }
                 }
 

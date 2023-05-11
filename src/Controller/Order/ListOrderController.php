@@ -55,8 +55,7 @@ class ListOrderController extends AbstractController
         Request $request,
         OrderRepository $orderRepository,
         TranslatorInterface $translator,
-        NotifierInterface $notifier,
-        ManagerRegistry $doctrine
+        NotifierInterface $notifier
     ): Response {
         if ($this->isGranted(self::ROLE_MASTER)) {
             $user = $this->security->getUser();

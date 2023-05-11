@@ -9,7 +9,7 @@
                 {% for master in masters %}
                     <option value="{{ master.id }}">{{ master.email }} - {{ master.fullName }}</option>
                 {% endfor %}
-            </select>
+            </select><br /><br />
             <button>{{ 'Submit'|trans }}</button>
         </div>
     </form>

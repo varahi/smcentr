@@ -27,14 +27,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use App\Controller\Order\TakeOrderController;
+use App\Controller\Order\UnsetOrderController;
 
 class OrderActiveCrudController extends AbstractCrudController
 {
     public function __construct(
-        TakeOrderController $orderController
+        UnsetOrderController $unsetOrderController
     ) {
-        $this->orderController = $orderController;
+        $this->unsetOrderController = $unsetOrderController;
     }
 
     public static function getEntityFqcn(): string
@@ -44,10 +44,14 @@ class OrderActiveCrudController extends AbstractCrudController
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): \Doctrine\ORM\QueryBuilder
     {
-        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $qb
-            ->where($qb->expr()->eq('entity.status', 1))
-        ;
+        if (isset($_GET['query'])) {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        } else {
+            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+            $qb
+                ->where($qb->expr()->eq('entity.status', 1))
+            ;
+        }
 
         return $qb;
     }
@@ -93,13 +97,15 @@ class OrderActiveCrudController extends AbstractCrudController
         yield DateField::new('deadline')->setColumns('col-md-3')->hideOnIndex();
 
         yield TextField::new('address')->setColumns('col-md-10');
+        yield AssociationField::new('performer')->hideOnIndex()->setColumns('col-md-10');
+        yield FormField::addRow();
+        yield IntegerField::new('quantity')->setColumns('col-md-2');
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle')->setCssClass('col-sm-4');
         yield FormField::addRow();
 
         yield AssociationField::new('city')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield AssociationField::new('district')->hideOnIndex()->setColumns('col-md-10');
         yield AssociationField::new('users')->setColumns('col-md-10')->setLabel('Customer')->setRequired(true);
-        yield AssociationField::new('performer')->hideOnIndex()->setColumns('col-md-10');
         yield AssociationField::new('profession')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield AssociationField::new('jobType')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield ChoiceField::new('level')->setChoices(
@@ -131,7 +137,9 @@ class OrderActiveCrudController extends AbstractCrudController
             ]
         )->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
 
-        yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideOnIndex()->setPermission('ROLE_EDITOR');
+        yield TextField::new('customTaxRate')->setColumns('col-md-10')
+            ->setDisabled()
+            ->hideOnIndex()->setPermission('ROLE_EDITOR');
         //yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10')->hideOnIndex();
         //yield BooleanField::new('sendAllMasters')->setColumns('col-md-10')->hideOnIndex();
         yield BooleanField::new('clearOrder')->setColumns('col-md-10')->hideOnIndex();
@@ -152,7 +160,7 @@ class OrderActiveCrudController extends AbstractCrudController
             $order = $event->getData();
 
             if ($order->isClearOrder() == true) {
-                $this->orderController->clearOrderPerfomer($order);
+                $this->unsetOrderController->clearOrderPerfomer($order);
             }
         });
     }

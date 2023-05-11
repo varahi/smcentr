@@ -4,6 +4,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="{{ asset('assets/js/jquery.simpleLoadMore.js') }}"></script>
         <script src="{{ asset('assets/js/dependableList.js') }}"></script>
+        <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     {% endblock %}
 
 {% block body %}
@@ -37,4 +38,10 @@
         </div>
     </section>
     {% include 'partials/footer/_footer.html.twig' %}
+
+
+    <script type="text/javascript">
+        $('.job_item select').select2({});
+    </script>
+
 {% endblock %}

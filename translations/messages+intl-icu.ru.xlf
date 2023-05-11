@@ -933,6 +933,14 @@
         <source>Are you sure you want to delete order</source>
         <target>Вы уверены, что хотите удалить заявку</target>
       </trans-unit>
+      <trans-unit id="giurjUG" resname="Quantity">
+        <source>Quantity</source>
+        <target>Количество</target>
+      </trans-unit>
+      <trans-unit id="kt_YcTM" resname="Reset search">
+        <source>Reset search</source>
+        <target>Сбросить поиск</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

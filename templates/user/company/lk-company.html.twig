@@ -108,6 +108,18 @@
     {#    <!-- Созданные заявки -->#}
     <section id="list_items">
         <div class="container">
+            <form class="form-std" autocomplete="off" name="assign" method="POST" action="{{ path('app_company_profile') }}">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" name="orderId" placeholder="Поиск по id заявки" />
+                    </div>
+                    <div class="col-md-4">
+                        <button>{{ 'Submit'|trans }}</button>
+                    </div>
+                </div>
+            </form>
+            <a href="{{ path('app_company_profile') }}">{{ 'Reset search'|trans }}</a>
+
             <div class="row">
                 <div class="col-md-12">
                     <h3>{{ 'New orders'|trans }}</h3>

@@ -127,7 +127,7 @@ class OrderRepository extends ServiceEntityRepository
      * @param $user
      * @return float|int|mixed|string
      */
-    public function findByStatus($status, $user)
+    public function findByStatus($status, $user, $id = '')
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('o')
@@ -137,6 +137,10 @@ class OrderRepository extends ServiceEntityRepository
             ->setParameter('status', $status)
             ->orderBy('o.created', 'DESC')
         ;
+
+        if ($id !=='') {
+            $qb->andWhere($qb->expr()->eq('o.id', $id));
+        }
 
         return $qb->getQuery()->getResult();
     }

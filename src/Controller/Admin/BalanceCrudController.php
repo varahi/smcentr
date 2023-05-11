@@ -38,7 +38,7 @@ class BalanceCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions->disable('new', 'edit', 'delete');
+        return $actions->disable('new', 'delete');
     }
 
     public function configureFields(string $pageName): iterable
