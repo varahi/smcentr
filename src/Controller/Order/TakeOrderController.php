@@ -9,6 +9,7 @@ use App\Service\Mailer;
 use App\Service\Order\GetTaxService;
 use App\Service\Order\SetBalanceService;
 use App\Service\PushNotification;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TakeOrderController extends AbstractController
@@ -41,7 +43,9 @@ class TakeOrderController extends AbstractController
         UserRepository $userRepository,
         Mailer $mailer,
         GetTaxService $getTaxService,
-        SetBalanceService $setBalanceService
+        SetBalanceService $setBalanceService,
+        Security $security,
+        ManagerRegistry $doctrine
     ) {
         $this->translator = $translator;
         $this->pushNotification = $pushNotification;
@@ -49,6 +53,8 @@ class TakeOrderController extends AbstractController
         $this->mailer = $mailer;
         $this->getTaxService = $getTaxService;
         $this->setBalanceService = $setBalanceService;
+        $this->security = $security;
+        $this->doctrine = $doctrine;
     }
 
     /**
@@ -73,6 +79,7 @@ class TakeOrderController extends AbstractController
         }
 
         //Get Tax
+        $order->setPerformer($user);
         $tax = $this->getTaxService->getTax($order);
         if (!isset($tax)) {
             // Remove perfomer and status
