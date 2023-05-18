@@ -30,18 +30,18 @@ class SetBalanceService
 
     public function setBalance($order)
     {
-        $user = $order->getPerformer();
+        $performer = $order->getPerformer();
         $tax = $this->getTaxService->getTax($order);
 
         // If order created by client
         if ($order->getTypeCreated() == self::CREATED_BY_CLIENT) {
-            $newMasterBalance = $user->getBalance() - $tax;
+            $newMasterBalance = $performer->getBalance() - $tax;
         }
 
         // If order created by company
         if ($order->getTypeCreated() == self::CREATED_BY_COMPANY) {
             $orderTaxRate = $order->getCustomTaxRate();
-            $newMasterBalance = $user->getBalance() - $tax - $orderTaxRate;
+            $newMasterBalance = $performer->getBalance() - $tax - $orderTaxRate;
 
             $company = $this->userRepository->findOneBy(['id' => $order->getUsers()->getId()]);
             $currentCompanyBalance = (float)$company->getBalance();
@@ -53,7 +53,7 @@ class SetBalanceService
         $currentProjectBalance = (float)$project->getBalance();
         $newProjectBalance = $currentProjectBalance + $tax;
 
-        $user->setBalance($newMasterBalance);
+        $performer->setBalance($newMasterBalance);
         $project->setBalance($newProjectBalance);
 
         $entityManager = $this->doctrine->getManager();

@@ -37,7 +37,7 @@ class GetTaxService
     {
         // User should be performer
         //$user = $this->security->getUser();
-        $user = $order->getPerformer();
+        $performer = $order->getPerformer();
 
         // Tax from order created by client
         if ($order->getTypeCreated() == self::CREATED_BY_CLIENT) {
@@ -51,7 +51,7 @@ class GetTaxService
             $tax = $order->getPrice() * $taxRate->getPercent(); // For example 2880 * 0.0
 
             // Redirect for top up balance
-            if ($user->getBalance() <= $tax) {
+            if ($performer->getBalance() <= $tax) {
                 $message = $this->translator->trans('Please top up balance', array(), 'flash');
                 $this->notifier->send(new Notification($message, ['browser']));
                 return new RedirectResponse($this->router->generate('app_top_up_balance'));
@@ -67,7 +67,7 @@ class GetTaxService
             $tax = $order->getPrice() * $company->getServiceTaxRate(); // percents
 
             // Redirect for top up balance
-            if ($user->getBalance() <= $tax + $orderTaxRate) {
+            if ($performer->getBalance() <= $tax + $orderTaxRate) {
                 $message = $this->translator->trans('Please top up balance', array(), 'flash');
                 $this->notifier->send(new Notification($message, ['browser']));
                 return new RedirectResponse($this->router->generate('app_top_up_balance'));
