@@ -2,11 +2,22 @@
     <form class="form-search" autocomplete="off" name="assign" method="POST">
         <div class="job_item">
             <a id="job{{ order.id }}"></a>
+            <div class="id_item">ID {{ order.id }}</div>
             {% include 'partials/order/_order_main_info.html.twig' %}
             <br />
-            <select id="" name="assign_master" required class="required">
+            <label for="masters">Все мастера с подходящим опытом</label><br />
+
+            <select id="masters" name="assign_master1">
                 <option value="" selected="selected">Выберите мастера</option>
-                {% for master in masters %}
+                {% for master in allMasters %}
+                    <option value="{{ master.id }}">{{ master.email }} - {{ master.fullName }}</option>
+                {% endfor %}
+            </select><br /><br />
+
+            <label for="company-masters">Мастера компании</label><br />
+            <select id="company-masters" name="assign_master2">
+                <option value="" selected="selected">Выберите мастера</option>
+                {% for master in companyMasters %}
                     <option value="{{ master.id }}">{{ master.email }} - {{ master.fullName }}</option>
                 {% endfor %}
             </select><br /><br />

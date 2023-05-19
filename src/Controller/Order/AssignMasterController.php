@@ -8,6 +8,8 @@ use App\Repository\UserRepository;
 use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
@@ -55,6 +57,7 @@ class AssignMasterController extends AbstractController
      * @Route("/assign-master/order-{id}", name="app_assign_master")
      */
     public function assignMaster(
+        Request $request,
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         Order $order,
@@ -75,12 +78,18 @@ class AssignMasterController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        //$masters = $userRepository->findByCompanyProfessionAndJobType(self::ROLE_MASTER, $user, $order->getProfession(), $order->getJobType());
-        $masters = $userRepository->findByCompany(self::ROLE_MASTER, $user);
-
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if ($_POST['assign_master']) {
-                $master = $userRepository->findOneBy(['id' => $_POST['assign_master']]);
+            if ($_POST['assign_master1'] == "" && $_POST['assign_master2'] == "") {
+                $message = $translator->trans('Choose master', array(), 'flash');
+                $notifier->send(new Notification($message, ['browser']));
+                $referer = $request->headers->get('referer');
+                return new RedirectResponse($referer);
+            }
+            if ($_POST['assign_master1']) {
+                $master = $userRepository->findOneBy(['id' => $_POST['assign_master1']]);
+            }
+            if ($_POST['assign_master2']) {
+                $master = $userRepository->findOneBy(['id' => $_POST['assign_master2']]);
             }
 
             if (isset($master)) {
@@ -115,7 +124,8 @@ class AssignMasterController extends AbstractController
         $response = new Response($this->twig->render('user/company/assign_master.html.twig', [
             'user' => $user,
             'order' => $order,
-            'masters' => $masters
+            'companyMasters' => $userRepository->findByCompany(self::ROLE_MASTER, $user),
+            'allMasters' => $userRepository->findByProfessionAndJobType(self::ROLE_MASTER, $order->getProfession(), $order->getJobType())
         ]));
 
         return $response;

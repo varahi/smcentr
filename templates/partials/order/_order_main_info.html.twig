@@ -1,6 +1,6 @@
 <div class="top_item">
     <div class="item_left">
-        <h2>{{ order.jobType.name }}</h2>
+        <h2>{{ order.jobType.name }} {% if order.quantity %} - {{ order.quantity }} шт.{% endif %}</h2>
         <div class="city">
             {{ order.city.name }}
         </div>
