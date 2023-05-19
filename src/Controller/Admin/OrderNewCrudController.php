@@ -136,7 +136,6 @@ class OrderNewCrudController extends AbstractCrudController
         yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideWhenUpdating()
             ->hideOnIndex()->setPermission('ROLE_EDITOR');
         yield TextField::new('customTaxRate')->setColumns('col-md-10')->hideWhenCreating()
-            ->setDisabled()
             ->hideOnIndex()->setPermission('ROLE_EDITOR');
 
         //yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10')->hideOnIndex();

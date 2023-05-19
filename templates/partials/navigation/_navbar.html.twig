@@ -18,7 +18,7 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 {% if is_granted('ROLE_MASTER') %}
-                    <a class="nav-link" href="{{ path('app_orders_list') }}">Список заказов</a>
+                    <a class="nav-link" href="{{ path('app_orders_list') }}">Список заявок</a>
                 {% endif %}
                 {% if is_granted('ROLE_CLIENT') or is_granted('ROLE_COMPANY') %}
                     <a class="nav-link" href="{{ path('app_order_new') }}">Создать заявку</a>
@@ -61,9 +61,9 @@
                     {% if is_granted('ROLE_CLIENT') %}
                         <a class="dropdown-item" href="{{ path('app_client_profile') }}">Профиль</a>
                     {% endif %}
-                    {% if is_granted('ROLE_MASTER') %}
-                        <a class="dropdown-item" href="{{ path('app_master_balance') }}">Баланс</a>
-                    {% endif %}
+{#                    {% if is_granted('ROLE_MASTER') %}#}
+{#                        <a class="dropdown-item" href="{{ path('app_master_balance') }}">Баланс</a>#}
+{#                    {% endif %}#}
                     {% if is_granted('ROLE_COMPANY') %}
                         <a class="dropdown-item" href="{{ path('app_company_profile') }}">Профиль</a>
                     {% endif %}
