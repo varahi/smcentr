@@ -5,6 +5,8 @@ namespace App\Controller\Order;
 use App\Controller\Traits\NotificationTrait;
 use App\Entity\Order;
 use App\Repository\UserRepository;
+use App\Service\Order\GetTaxService;
+use App\Service\Order\SetBalanceService;
 use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,21 +38,20 @@ class AssignMasterController extends AbstractController
 
     private $doctrine;
 
-    /**
-     * @param Security $security
-     * @param Environment $twig
-     * @param ManagerRegistry $doctrine
-     */
     public function __construct(
         Security $security,
         Environment $twig,
         ManagerRegistry $doctrine,
+        GetTaxService $getTaxService,
+        SetBalanceService $setBalanceService,
         int $projectId
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
         $this->projectId = $projectId;
+        $this->getTaxService = $getTaxService;
+        $this->setBalanceService = $setBalanceService;
     }
 
     /**
@@ -98,6 +99,17 @@ class AssignMasterController extends AbstractController
                 $order->setStatus(self::STATUS_ACTIVE);
                 $entityManager = $this->doctrine->getManager();
                 $entityManager->persist($order);
+
+
+                $tax = $this->getTaxService->getTax($order);
+                if (!isset($tax)) {;
+                    $message = $translator->trans('No task defined', array(), 'flash');
+                    $notifier->send(new Notification($message, ['browser']));
+                    $referer = $request->headers->get('referer');
+                    return new RedirectResponse($referer);
+                }
+                $this->setBalanceService->setBalance($order);
+
                 $entityManager->flush();
 
                 // Send notification to master
