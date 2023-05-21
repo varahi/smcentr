@@ -276,6 +276,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $payment;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $selector;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -296,8 +301,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        return $this->fullName .' ('. $this->email . ') '. $this->phone;
+        return $this->fullName .' - '. $this->email;
     }
+
+    public function getSelector(): ?string
+    {
+        return $this->fullName .' ('. $this->email .') ' .$this->phone;
+    }
+
 
     public function getId(): ?int
     {

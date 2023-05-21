@@ -102,7 +102,8 @@ class AssignMasterController extends AbstractController
 
 
                 $tax = $this->getTaxService->getTax($order);
-                if (!isset($tax)) {;
+                if (!isset($tax)) {
+                    ;
                     $message = $translator->trans('No task defined', array(), 'flash');
                     $notifier->send(new Notification($message, ['browser']));
                     $referer = $request->headers->get('referer');
