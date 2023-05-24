@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Form\User\MasterProfileFormType;
 use App\ImageOptimizer;
+use App\Message\CommentMessage;
 use App\Repository\CityRepository;
 use App\Repository\DistrictRepository;
 use App\Repository\FirebaseRepository;
@@ -28,6 +29,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 use Twig\Environment;
 use App\Service\PhoneNumberService;
+
+use App\Message\SendEmailNotification;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MasterProfileController extends AbstractController
 {
@@ -172,7 +180,9 @@ class MasterProfileController extends AbstractController
         CityRepository $cityRepository,
         DistrictRepository $districtRepository,
         FirebaseRepository $firebaseRepository,
-        PushNotification $firebase
+        PushNotification $firebase,
+        MessageBusInterface $messageBus,
+        ValidatorInterface $validator
     ): Response {
         if ($this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
@@ -298,6 +308,27 @@ class MasterProfileController extends AbstractController
                     }
                 }*/
                 // Send push notification end
+
+                // Test send message
+                $emailConstraint = new Assert\Email();
+                $emailConstraint->message = 'Invalid email address';
+
+                $errors = $validator->validate(
+                    $user->getEmail(),
+                    $emailConstraint
+                );
+
+                if (0 !== count($errors)) {
+                    $errorMessage = $errors[0]->getMessage();
+                }
+
+                $message = new SendEmailNotification($user->getEmail());
+                $envelope = new Envelope($message, [
+                    new AmqpStamp('normal')
+                ]);
+                $messageBus->dispatch($envelope);
+
+//                $messageBus->dispatch(new SendEmailNotification($user->getEmail()));
 
                 $message = $translator->trans('Profile updated', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));

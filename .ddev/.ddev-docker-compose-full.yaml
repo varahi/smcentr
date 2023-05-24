@@ -65,7 +65,6 @@ services:
     - host_ip: 127.0.0.1
       mode: ingress
       protocol: tcp
-      published: "0"
       target: 3306
     restart: "no"
     stop_grace_period: 1m0s
@@ -119,6 +118,41 @@ services:
       default: null
     restart: "no"
     working_dir: /root
+  rabbitmq:
+    container_name: ddev-smcentr.su-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+    hostname: smcentr.su-rabbitmq
+    image: rabbitmq:3-management
+    labels:
+      com.ddev.approot: /home/dmitry/Work/Cygenic/smcentr_symfony/src
+      com.ddev.site-name: smcentr.su
+    networks:
+      ddev_default: null
+      default: null
+    ports:
+    - mode: ingress
+      protocol: tcp
+      published: "15672"
+      target: 15672
+    - mode: ingress
+      protocol: tcp
+      published: "5672"
+      target: 5672
+    volumes:
+    - bind:
+        create_host_path: true
+      source: /home/dmitry/Work/Cygenic/smcentr_symfony/src/.ddev/rabbitmq-build/enabled_plugins
+      target: /etc/rabbitmq/enabled_plugins
+      type: bind
+    - bind:
+        create_host_path: true
+      source: /home/dmitry/Work/Cygenic/smcentr_symfony/src/.ddev
+      target: /mnt/ddev_config
+      type: bind
   web:
     build:
       args:
@@ -190,6 +224,8 @@ services:
       com.ddev.approot: /home/dmitry/Work/Cygenic/smcentr_symfony/src
       com.ddev.platform: ddev
       com.ddev.site-name: smcentr.su
+    links:
+    - rabbitmq:rabbitmq
     networks:
       ddev_default: null
       default: null
@@ -205,10 +241,14 @@ services:
     restart: "no"
     user: 1000:1000
     volumes:
-    - consistency: cached
-      source: ../
-      target: /var/www/html
-      type: bind
+    - source: ddev-ssh-agent_socket_dir
+      target: /home/.ssh-agent
+      type: volume
+      volume: {}
+    - source: ddev-global-cache
+      target: /mnt/ddev-global-cache
+      type: volume
+      volume: {}
     - bind:
         create_host_path: true
       read_only: true
@@ -221,14 +261,10 @@ services:
       source: /home/dmitry/Work/Cygenic/smcentr_symfony/src/.ddev/xhprof
       target: /usr/local/bin/xhprof
       type: bind
-    - source: ddev-global-cache
-      target: /mnt/ddev-global-cache
-      type: volume
-      volume: {}
-    - source: ddev-ssh-agent_socket_dir
-      target: /home/.ssh-agent
-      type: volume
-      volume: {}
+    - consistency: cached
+      source: ../
+      target: /var/www/html
+      type: bind
     working_dir: /var/www/html/
 volumes:
   database:
