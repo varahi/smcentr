@@ -77,7 +77,7 @@ class TicketController extends AbstractController
 
         return $this->render('ticket/index.html.twig', [
             'user' => $user,
-            'newTickets' => $newTickets,
+            'newTickets' => array_merge($newTickets, $activeTickets),
             'activeTickets' => $activeTickets,
             'completedTickets' => $completedTickets
         ]);

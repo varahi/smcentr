@@ -83,19 +83,22 @@
                 {% endif %}
             </div>
 
-            {{ form_start(answerForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
-            <div class="col-md-12">
-                <div class="reg_contact">
-                    <h3>{{ 'Answer the question'|trans }}</h3>
-                    {{ form_widget(answerForm.answer) }}
-                </div>
-                <div style="text-align: center">
-                    <div style="margin: 20px 0;">
-                        <button id="myBtn">{{ 'Submit'|trans }}</button>
+            {% if ticket.status == 0 or ticket.status == 1 %}
+                {{ form_start(answerForm, {'attr' : {'class': 'form-std', 'autocomplete': 'off'}} ) }}
+                <div class="col-md-12">
+                    <div class="reg_contact">
+                        <h3>{{ 'Answer the question'|trans }}</h3>
+                        {{ form_widget(answerForm.answer) }}
+                    </div>
+                    <div style="text-align: center">
+                        <div style="margin: 20px 0;">
+                            <button id="myBtn">{{ 'Submit'|trans }}</button>
+                        </div>
                     </div>
                 </div>
                 {{ form_end(answerForm) }}
-            </div>
+            {% endif %}
+
         </div>
     </section>
 

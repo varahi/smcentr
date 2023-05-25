@@ -322,11 +322,11 @@ class MasterProfileController extends AbstractController
                     $errorMessage = $errors[0]->getMessage();
                 }
 
-                $message = new SendEmailNotification($user->getEmail());
-                $envelope = new Envelope($message, [
-                    new AmqpStamp('normal')
-                ]);
-                $messageBus->dispatch($envelope);
+//                $message = new SendEmailNotification($user->getEmail());
+//                $envelope = new Envelope($message, [
+//                    new AmqpStamp('normal')
+//                ]);
+//                $messageBus->dispatch($envelope);
 
 //                $messageBus->dispatch(new SendEmailNotification($user->getEmail()));
 
