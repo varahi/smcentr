@@ -23,11 +23,9 @@ final class SendEmailNotificationHandler implements MessageHandlerInterface
     public function __invoke(SendEmailNotification $message)
     {
         $email = (new TemplatedEmail())
-            //->from($this->params->get('system_mail'))
-            ->from('noreply@t3dev.ru')
-            //->to($message->getEmail())
-            ->to('info@t3dev.ru')
-            ->subject('Thank you for your order!')
+            ->from($this->params->get('noreply_email'))
+            ->to($message->getEmail())
+            ->subject($this->params->get('default_subject'))
             ->htmlTemplate('emails/profile_updated.html.twig')
         ;
 

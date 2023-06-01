@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Firebase;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Notifier\Message\PushMessage;
 
 class PushNotification
 {

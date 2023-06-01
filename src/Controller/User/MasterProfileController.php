@@ -2,19 +2,19 @@
 
 namespace App\Controller\User;
 
+use App\Entity\Firebase;
 use App\Form\User\MasterProfileFormType;
 use App\ImageOptimizer;
-use App\Message\CommentMessage;
+use App\Message\SendEmailNotification;
+use App\Message\SendPushNotification;
 use App\Repository\CityRepository;
 use App\Repository\DistrictRepository;
-use App\Repository\FirebaseRepository;
 use App\Repository\JobTypeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\FileUploader;
-use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,8 +29,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 use Twig\Environment;
 use App\Service\PhoneNumberService;
-
-use App\Message\SendEmailNotification;
 use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -66,7 +64,8 @@ class MasterProfileController extends AbstractController
         VerifyEmailHelperInterface $helper,
         EmailVerifier $emailVerifier,
         string $defaultDomain,
-        PhoneNumberService $phoneNumberService
+        PhoneNumberService $phoneNumberService,
+        FileUploader $fileUploader
     ) {
         $this->security = $security;
         $this->twig = $twig;
@@ -77,6 +76,7 @@ class MasterProfileController extends AbstractController
         $this->emailVerifier = $emailVerifier;
         $this->defaultDomain = $defaultDomain;
         $this->phoneNumberService = $phoneNumberService;
+        $this->fileUploader = $fileUploader;
     }
 
     /**
@@ -174,13 +174,10 @@ class MasterProfileController extends AbstractController
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         UserPasswordHasherInterface $passwordHasher,
-        FileUploader $fileUploader,
         ProfessionRepository $professionRepository,
         JobTypeRepository $jobTypeRepository,
         CityRepository $cityRepository,
         DistrictRepository $districtRepository,
-        FirebaseRepository $firebaseRepository,
-        PushNotification $firebase,
         MessageBusInterface $messageBus,
         ValidatorInterface $validator
     ): Response {
@@ -267,47 +264,10 @@ class MasterProfileController extends AbstractController
                         }
                     }
                 }
-
                 // Files upload
-                $avatarFile = $form->get('avatar')->getData();
-                $doc1File = $form->get('doc1')->getData();
-                $doc2File = $form->get('doc2')->getData();
-                $doc3File = $form->get('doc3')->getData();
-                if ($avatarFile) {
-                    $avatarFileName = $fileUploader->upload($avatarFile);
-                    $user->setAvatar($avatarFileName);
-                }
-                if ($doc1File) {
-                    $doc1FileName = $fileUploader->upload($doc1File);
-                    $user->setDoc1($doc1FileName);
-                }
-                if ($doc2File) {
-                    $doc2FileName = $fileUploader->upload($doc2File);
-                    $user->setDoc2($doc2FileName);
-                }
-                if ($doc3File) {
-                    $doc3FileName = $fileUploader->upload($doc3File);
-                    $user->setDoc3($doc3FileName);
-                }
-
+                $this->filesUpload($form);
                 $entityManager->persist($user);
                 $entityManager->flush();
-
-                // Send push notification start
-                /*$notification = [
-                    'title' => 'Some title',
-                    'body' => sprintf('Some action updated at %s.', date('H:i')),
-                    'icon' => $this->defaultDomain . '/assets/images/logo.svg',
-                    'click_action' => 'https://smcentr.localhost/',
-                ];
-
-                $tokens = $firebaseRepository->findAll();
-                if (count($tokens) > 0) {
-                    foreach ($tokens as $key => $token) {
-                        $firebase->sendSimplePushNotification($token->getToken(), $notification);
-                    }
-                }*/
-                // Send push notification end
 
                 // Test send message
                 $emailConstraint = new Assert\Email();
@@ -322,13 +282,33 @@ class MasterProfileController extends AbstractController
                     $errorMessage = $errors[0]->getMessage();
                 }
 
-//                $message = new SendEmailNotification($user->getEmail());
-//                $envelope = new Envelope($message, [
-//                    new AmqpStamp('normal')
-//                ]);
-//                $messageBus->dispatch($envelope);
+                // Send email via RabbitMQ
+                $message = new SendEmailNotification($user->getEmail());
+                $envelope = new Envelope($message, [
+                    new AmqpStamp('normal')
+                ]);
+                $messageBus->dispatch($envelope);
+                $messageBus->dispatch(new SendEmailNotification($user->getEmail()));
 
-//                $messageBus->dispatch(new SendEmailNotification($user->getEmail()));
+                // Send push via RabbitMQ
+                $context = [
+                    'title' => 'My push message',
+                    'body' => 'Test message body',
+                    'sound' => 'default',
+                    'color' => '#cccccc',
+                    'clickAction' => 'OPEN_ACTIVITY_1',
+                    'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+                ];
+                $tokens = $entityManager->getRepository(Firebase::class)->findNonHidden()??null;
+                if (count($tokens) > 0) {
+                    foreach ($tokens as $token) {
+                        $token = new SendPushNotification($token->getToken(), 'My test subject', $context);
+                        $envelope = new Envelope($token, [
+                            new AmqpStamp('normal')
+                        ]);
+                        $messageBus->dispatch($envelope);
+                    }
+                }
 
                 $message = $translator->trans('Profile updated', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
@@ -352,6 +332,32 @@ class MasterProfileController extends AbstractController
             $message = $translator->trans('Please login', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute("app_login");
+        }
+    }
+
+    private function filesUpload($form)
+    {
+        $user = $this->security->getUser();
+        // Files upload
+        $avatarFile = $form->get('avatar')->getData();
+        $doc1File = $form->get('doc1')->getData();
+        $doc2File = $form->get('doc2')->getData();
+        $doc3File = $form->get('doc3')->getData();
+        if ($avatarFile) {
+            $avatarFileName = $this->fileUploader->upload($avatarFile);
+            $user->setAvatar($avatarFileName);
+        }
+        if ($doc1File) {
+            $doc1FileName = $this->fileUploader->upload($doc1File);
+            $user->setDoc1($doc1FileName);
+        }
+        if ($doc2File) {
+            $doc2FileName = $this->fileUploader->upload($doc2File);
+            $user->setDoc2($doc2FileName);
+        }
+        if ($doc3File) {
+            $doc3FileName = $this->fileUploader->upload($doc3File);
+            $user->setDoc3($doc3FileName);
         }
     }
 }

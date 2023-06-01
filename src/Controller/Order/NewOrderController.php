@@ -3,9 +3,12 @@
 namespace App\Controller\Order;
 
 use App\Controller\Traits\NotificationTrait;
+use App\Entity\Firebase;
 use App\Entity\Order;
 use App\Entity\Notification as UserNotification;
 use App\Form\Order\OrderFormCompanyType;
+use App\Message\SendEmailNotification;
+use App\Message\SendPushNotification;
 use App\Repository\CityRepository;
 use App\Repository\DistrictRepository;
 use App\Repository\JobTypeRepository;
@@ -19,6 +22,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Notifier\Message\PushMessage;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -84,7 +91,8 @@ class NewOrderController extends AbstractController
         CityRepository $cityRepository,
         DistrictRepository $districtRepository,
         ProfessionRepository $professionRepository,
-        JobTypeRepository $jobTypeRepository
+        JobTypeRepository $jobTypeRepository,
+        MessageBusInterface $messageBus
     ): Response {
         if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
@@ -179,6 +187,18 @@ class NewOrderController extends AbstractController
 
                 // Send push notification
                 $this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+
+                // Send push notification via RabbitMQ
+//                $tokens = $entityManager->getRepository(Firebase::class)->findAll()??null;
+//                if (count($tokens) > 0) {
+//                    foreach ($tokens as $key => $token) {
+//                        $token = new SendPushNotification($token->getToken());
+//                        $envelope = new Envelope($token, [
+//                            new AmqpStamp('normal')
+//                        ]);
+//                        $messageBus->dispatch($envelope);
+//                    }
+//                }
 
                 $entityManager->flush();
 
