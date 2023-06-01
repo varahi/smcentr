@@ -43,12 +43,14 @@ class CloseOrderController extends AbstractController
         Security $security,
         Environment $twig,
         ManagerRegistry $doctrine,
-        int $projectId
+        int $projectId,
+        PushNotification $pushNotification
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
         $this->projectId = $projectId;
+        $this->pushNotification = $pushNotification;
     }
 
     /**
@@ -89,7 +91,13 @@ class CloseOrderController extends AbstractController
                     $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $message);
 
                     // Send push notification
-                    $pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message, 'https://smcentr.su/');
+                    //$pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message, 'https://smcentr.su/');
+                    $context = [
+                        'title' => $translator->trans('Notification order closed', array(), 'messages'),
+                        'clickAction' => 'https://smcentr.su/',
+                        'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+                    ];
+                    $this->pushNotification->sendMQPushNotification($translator->trans('Order closed', array(), 'flash'), $context);
                 }
             }
 
@@ -103,7 +111,8 @@ class CloseOrderController extends AbstractController
                     $this->setNotification($order, $order->getUsers(), self::NOTIFICATION_CHANGE_STATUS, $message2);
 
                     // Send push notification
-                    $pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message2, 'https://smcentr.su/');
+                    //$pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message2, 'https://smcentr.su/');
+                    $this->pushNotification->sendMQPushNotification($translator->trans('Order closed', array(), 'flash'), $context);
                 }
             }
 

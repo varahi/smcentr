@@ -651,7 +651,7 @@
       </trans-unit>
       <trans-unit id="JEVIOSs" resname="Notification new order for user">
         <source>Notification new order for user</source>
-        <target>Вами создана новая заявка</target>
+        <target>Новая заявка на сайте</target>
       </trans-unit>
       <trans-unit id="Ysy.Zs8" resname="Withdrawal from the balance">
         <source>Withdrawal from the balance</source>

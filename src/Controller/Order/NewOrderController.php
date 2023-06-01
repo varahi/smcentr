@@ -3,12 +3,9 @@
 namespace App\Controller\Order;
 
 use App\Controller\Traits\NotificationTrait;
-use App\Entity\Firebase;
 use App\Entity\Order;
 use App\Entity\Notification as UserNotification;
 use App\Form\Order\OrderFormCompanyType;
-use App\Message\SendEmailNotification;
-use App\Message\SendPushNotification;
 use App\Repository\CityRepository;
 use App\Repository\DistrictRepository;
 use App\Repository\JobTypeRepository;
@@ -22,10 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
-use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Notifier\Message\PushMessage;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -186,19 +180,14 @@ class NewOrderController extends AbstractController
                 $this->setNotification($order, $user, self::NOTIFICATION_NEW_ORDER, $message);
 
                 // Send push notification
-                $this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
-
-                // Send push notification via RabbitMQ
-//                $tokens = $entityManager->getRepository(Firebase::class)->findAll()??null;
-//                if (count($tokens) > 0) {
-//                    foreach ($tokens as $key => $token) {
-//                        $token = new SendPushNotification($token->getToken());
-//                        $envelope = new Envelope($token, [
-//                            new AmqpStamp('normal')
-//                        ]);
-//                        $messageBus->dispatch($envelope);
-//                    }
-//                }
+                //$this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+                // Send push via RabbitMQ
+                $context = [
+                    'title' => $this->translator->trans('Notification new order for user', array(), 'messages'),
+                    'clickAction' => 'https://smcentr.su/',
+                    'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+                ];
+                $this->pushNotification->sendMQPushNotification($this->translator->trans('New order on site', array(), 'flash'), $context);
 
                 $entityManager->flush();
 
@@ -272,7 +261,13 @@ class NewOrderController extends AbstractController
                     $this->setNotification($order, $master, self::NOTIFICATION_NEW_ORDER, $message);
 
                     // Send push notification
-                    $this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+                    //$this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+                    $context = [
+                        'title' => $this->translator->trans('Notification new order for master', array(), 'messages'),
+                        'clickAction' => 'https://smcentr.su/',
+                        'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+                    ];
+                    $this->pushNotification->sendMQPushNotification($this->translator->trans('New order on site', array(), 'flash'), $context);
 
                     $entityManager = $this->doctrine->getManager();
                     $entityManager->flush();

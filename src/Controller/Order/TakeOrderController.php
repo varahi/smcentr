@@ -104,7 +104,8 @@ class TakeOrderController extends AbstractController
 
         // Send push
         $fullTax = $tax + $orderTaxRate;
-        $this->sendPushNotifications($order, $fullTax);
+        // ToDo: Do we send push when take order?
+        //$this->sendPushNotifications($order, $fullTax);
 
         // Save new order
         $entityManager->persist($order);

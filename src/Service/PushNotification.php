@@ -4,8 +4,12 @@ namespace App\Service;
 
 use App\Entity\Firebase;
 use App\Entity\User;
+use App\Message\SendPushNotification;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Notifier\Message\PushMessage;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class PushNotification
 {
@@ -27,11 +31,28 @@ class PushNotification
     public function __construct(
         string $firebaseApiKey,
         string $defaultDomain,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        MessageBusInterface $messageBus
     ) {
         $this->firebaseApiKey = $firebaseApiKey;
         $this->defaultDomain = $defaultDomain;
         $this->doctrine = $doctrine;
+        $this->messageBus = $messageBus;
+    }
+
+    public function sendMQPushNotification($subject, $context)
+    {
+        $entityManager = $this->doctrine->getManager();
+        $tokens = $entityManager->getRepository(Firebase::class)->findNonHidden()??null;
+        if (count($tokens) > 0) {
+            foreach ($tokens as $token) {
+                $token = new SendPushNotification($token->getToken(), $subject, $context);
+                $envelope = new Envelope($token, [
+                    new AmqpStamp('normal')
+                ]);
+                $this->messageBus->dispatch($envelope);
+            }
+        }
     }
 
     /**

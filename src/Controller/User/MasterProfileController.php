@@ -2,7 +2,6 @@
 
 namespace App\Controller\User;
 
-use App\Entity\Firebase;
 use App\Form\User\MasterProfileFormType;
 use App\ImageOptimizer;
 use App\Message\SendEmailNotification;
@@ -15,6 +14,7 @@ use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\FileUploader;
+use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -65,7 +65,8 @@ class MasterProfileController extends AbstractController
         EmailVerifier $emailVerifier,
         string $defaultDomain,
         PhoneNumberService $phoneNumberService,
-        FileUploader $fileUploader
+        FileUploader $fileUploader,
+        PushNotification $pushNotification
     ) {
         $this->security = $security;
         $this->twig = $twig;
@@ -77,6 +78,7 @@ class MasterProfileController extends AbstractController
         $this->defaultDomain = $defaultDomain;
         $this->phoneNumberService = $phoneNumberService;
         $this->fileUploader = $fileUploader;
+        $this->pushNotification = $pushNotification;
     }
 
     /**
@@ -269,46 +271,15 @@ class MasterProfileController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                // Test send message
-                $emailConstraint = new Assert\Email();
-                $emailConstraint->message = 'Invalid email address';
-
-                $errors = $validator->validate(
-                    $user->getEmail(),
-                    $emailConstraint
-                );
-
-                if (0 !== count($errors)) {
-                    $errorMessage = $errors[0]->getMessage();
-                }
-
                 // Send email via RabbitMQ
+                /*
                 $message = new SendEmailNotification($user->getEmail());
                 $envelope = new Envelope($message, [
                     new AmqpStamp('normal')
                 ]);
                 $messageBus->dispatch($envelope);
                 $messageBus->dispatch(new SendEmailNotification($user->getEmail()));
-
-                // Send push via RabbitMQ
-                $context = [
-                    'title' => 'My push message',
-                    'body' => 'Test message body',
-                    'sound' => 'default',
-                    'color' => '#cccccc',
-                    'clickAction' => 'OPEN_ACTIVITY_1',
-                    'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
-                ];
-                $tokens = $entityManager->getRepository(Firebase::class)->findNonHidden()??null;
-                if (count($tokens) > 0) {
-                    foreach ($tokens as $token) {
-                        $token = new SendPushNotification($token->getToken(), 'My test subject', $context);
-                        $envelope = new Envelope($token, [
-                            new AmqpStamp('normal')
-                        ]);
-                        $messageBus->dispatch($envelope);
-                    }
-                }
+                */
 
                 $message = $translator->trans('Profile updated', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
