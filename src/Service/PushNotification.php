@@ -88,18 +88,22 @@ class PushNotification
      */
     public function sendCustomerPushNotification($title, $body, $click, User $user)
     {
-        $notification = [
+        $context = [
             'title' => $title,
-            'body' => $body,
-            'icon' => $this->defaultDomain . '/assets/images/logo_black.svg',
-            'click_action' => $click,
+            'clickAction' => $click,
+            'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
         ];
 
         $entityManager = $this->doctrine->getManager();
         $tokens = $entityManager->getRepository(Firebase::class)->findAllByUser($user);
         if (count($tokens) > 0) {
             foreach ($tokens as $key => $token) {
-                $this->sendSimplePushNotification($token->getToken(), $notification);
+                //$this->sendSimplePushNotification($token->getToken(), $notification);
+                $token = new SendPushNotification($token->getToken(), $body, $context);
+                $envelope = new Envelope($token, [
+                    new AmqpStamp('normal')
+                ]);
+                $this->messageBus->dispatch($envelope);
             }
         }
     }
