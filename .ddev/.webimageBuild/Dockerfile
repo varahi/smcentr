@@ -12,7 +12,7 @@ RUN (groupadd --gid $gid "$username" || groupadd "$username" || true) && (userad
 
 ### DDEV-injected from webimage_extra_packages or dbimage_extra_packages
 
-RUN apt-get -qq update && DEBIAN_FRONTEND=noninteractive apt-get -qq install -y -o Dpkg::Options::="--force-confold" --no-install-recommends --no-install-suggests php-amqp
+RUN apt-get -qq update && DEBIAN_FRONTEND=noninteractive apt-get -qq install -y -o Dpkg::Options::="--force-confold" --no-install-recommends --no-install-suggests php7.4-amqp
 
 ### DDEV-injected composer update
 RUN export XDEBUG_MODE=off; composer self-update --stable || composer self-update --stable || true; composer self-update --2 || composer self-update --2 || true
