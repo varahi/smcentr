@@ -76,6 +76,7 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('roles', '%"'.$role.'"%')
             ->join('u.professions', 'p')
             ->andWhere($qb->expr()->eq('p.id', $profession->getId()))
+            ->andWhere($qb->expr()->eq('u.isVerified', '1'))
             ->orderBy('u.id', 'ASC')
         ;
 

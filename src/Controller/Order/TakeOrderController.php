@@ -4,6 +4,7 @@ namespace App\Controller\Order;
 
 use App\Controller\Traits\NotificationTrait;
 use App\Entity\Order;
+use App\Repository\FirebaseRepository;
 use App\Repository\UserRepository;
 use App\Service\Mailer;
 use App\Service\Order\GetTaxService;
@@ -45,7 +46,8 @@ class TakeOrderController extends AbstractController
         GetTaxService $getTaxService,
         SetBalanceService $setBalanceService,
         Security $security,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        FirebaseRepository $firebaseRepository
     ) {
         $this->translator = $translator;
         $this->pushNotification = $pushNotification;
@@ -55,6 +57,7 @@ class TakeOrderController extends AbstractController
         $this->setBalanceService = $setBalanceService;
         $this->security = $security;
         $this->doctrine = $doctrine;
+        $this->firebaseRepository = $firebaseRepository;
     }
 
     /**
@@ -146,6 +149,37 @@ class TakeOrderController extends AbstractController
 
     private function sendPushNotifications($order, $fullTax)
     {
+        $message1 = $this->translator->trans('Withdrawal from the balance', array(), 'messages');
+        $messageStr1 = $message1 .' '.$fullTax.' руб.' .' за заявку';
+        $messageStr2 = $this->translator->trans('You got an order', array(), 'messages');
+        $message3 = $this->translator->trans('Your order has been processed', array(), 'messages');
+        $messageStr3 = $message3 .' '.$order->getPerformer()->getFullName().' - '.$order->getPerformer()->getEmail();
+
+        // Set standard notification
+        $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_BALANCE_MINUS, $messageStr1);
+        $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $messageStr2);
+
+        $ownerTokens = $this->firebaseRepository->findAllByUsers($order->getUsers()); // Tokens for owner
+        $masterTokens = $this->firebaseRepository->findAllByUsers($order->getPerformer()); // Tokens for master
+
+        $ownerContext = [
+            'title' => $this->translator->trans('Your order has been processed', array(), 'messages'),
+            'clickAction' => 'https://smcentr.su/',
+            'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+        ];
+
+        $masterContext = [
+            'title' => $this->translator->trans('You accepted application', array(), 'messages'),
+            'clickAction' => 'https://smcentr.su/',
+            'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+        ];
+
+        $this->pushNotification->sendMQPushNotification($this->translator->trans($messageStr3, array(), 'flash'), $ownerContext, $ownerTokens);
+        $this->pushNotification->sendMQPushNotification($this->translator->trans($messageStr2, array(), 'flash'), $masterContext, $masterTokens);
+    }
+
+    private function _sendPushNotifications_back($order, $fullTax)
+    {
         // Send notifications for masters
         $message1 = $this->translator->trans('Withdrawal from the balance', array(), 'messages');
         $messageStr1 = $message1 .' '.$fullTax.' руб.' .' за заявку';
@@ -154,7 +188,7 @@ class TakeOrderController extends AbstractController
         $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $messageStr2);
 
         // Send push notification
-        $this->pushNotification->sendCustomerPushNotification($message1, $messageStr1, 'https://smcentr.su/', $order->getPerformer());
+        //$this->pushNotification->sendCustomerPushNotification($message1, $messageStr1, 'https://smcentr.su/', $order->getPerformer());
         $this->pushNotification->sendCustomerPushNotification(
             $this->translator->trans('You accepted application', array(), 'flash'),
             $messageStr2,

@@ -40,10 +40,9 @@ class PushNotification
         $this->messageBus = $messageBus;
     }
 
-    public function sendMQPushNotification($subject, $context)
+    public function sendMQPushNotification($subject, $context, $tokens)
     {
         $entityManager = $this->doctrine->getManager();
-        $tokens = $entityManager->getRepository(Firebase::class)->findNonHidden()??null;
         if (count($tokens) > 0) {
             foreach ($tokens as $token) {
                 $token = new SendPushNotification($token->getToken(), $subject, $context);
@@ -98,7 +97,6 @@ class PushNotification
         $tokens = $entityManager->getRepository(Firebase::class)->findAllByUser($user);
         if (count($tokens) > 0) {
             foreach ($tokens as $key => $token) {
-                //$this->sendSimplePushNotification($token->getToken(), $notification);
                 $token = new SendPushNotification($token->getToken(), $body, $context);
                 $envelope = new Envelope($token, [
                     new AmqpStamp('normal')

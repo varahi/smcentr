@@ -57,6 +57,20 @@ class FirebaseRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+
+    public function findAllByUsers($users)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('f')
+            ->from(self::TABLE, 'f')
+            ->join('f.user', 'u')
+            ->where($qb->expr()->in('u.id', $users))
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+
     /**
      * @return float|int|mixed|string
      */
