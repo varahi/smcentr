@@ -112,6 +112,15 @@
             "config/packages/debug.yaml"
         ]
     },
+    "symfony/firebase-notifier": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.1",
+            "ref": "a6e63ab1ddcc32c93bc064a19084810bfa673c7b"
+        }
+    },
     "symfony/flex": {
         "version": "1.19",
         "recipe": {

@@ -76,6 +76,7 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('roles', '%"'.$role.'"%')
             ->join('u.professions', 'p')
             ->andWhere($qb->expr()->eq('p.id', $profession->getId()))
+            ->andWhere($qb->expr()->eq('u.isVerified', '1'))
             ->orderBy('u.id', 'ASC')
         ;
 
@@ -116,6 +117,35 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('roles', '%"'.$role.'"%')
             ->orderBy('u.id', 'ASC')
         ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param $role
+     * @param $company
+     * @return float|int|mixed|string
+     */
+    public function findByProfessionAndJobType($role, $profession, $jobType)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('u')
+            ->from(self::USER_TABLE, 'u')
+            ->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%"'.$role.'"%')
+            ->orderBy('u.id', 'ASC');
+
+        if (isset($profession) && !empty($profession)) {
+            $qb
+                ->join('u.professions', 'p')
+                ->andWhere($qb->expr()->eq('p.id', $profession->getId()));
+        }
+
+        if (isset($jobType) && !empty($jobType)) {
+            $qb
+                ->leftJoin('u.jobTypes', 'j')
+                ->andWhere($qb->expr()->eq('j.id', $jobType->getId()));
+        }
 
         return $qb->getQuery()->getResult();
     }

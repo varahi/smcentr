@@ -8,7 +8,6 @@ use App\Entity\Notification as UserNotification;
 use App\Form\Order\OrderFormCompanyType;
 use App\Repository\CityRepository;
 use App\Repository\DistrictRepository;
-use App\Repository\FirebaseRepository;
 use App\Repository\JobTypeRepository;
 use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
@@ -28,7 +27,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-class NewOrderController extends AbstractController
+class NewOrderController_back extends AbstractController
 {
     use NotificationTrait;
 
@@ -64,8 +63,7 @@ class NewOrderController extends AbstractController
         int $projectId,
         Mailer $mailer,
         TranslatorInterface $translator,
-        PushNotification $pushNotification,
-        FirebaseRepository $firebaseRepository
+        PushNotification $pushNotification
     ) {
         $this->security = $security;
         $this->twig = $twig;
@@ -74,7 +72,6 @@ class NewOrderController extends AbstractController
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->pushNotification = $pushNotification;
-        $this->firebaseRepository = $firebaseRepository;
     }
 
     /**
@@ -140,6 +137,22 @@ class NewOrderController extends AbstractController
                     }
                 }
 
+                if (isset($_POST['order_form_company']['sendOwnMasters']) && $_POST['order_form_company']['sendOwnMasters'] == 1) {
+                    $masterNotification = new UserNotification();
+                    if (count($user->getCompanyMasters()) > 0) {
+                        // send notification to own masters
+                        /*foreach ($user->getCompanyMasters() as $companyMaster) {
+                            $masterNotification->setUser($companyMaster);
+                            $message = $translator->trans('Notification new order for master', array(), 'messages');
+                            $masterNotification->setMessage($message);
+                            $masterNotification->setApplication($order);
+                            $masterNotification->setType(self::NOTIFICATION_NEW_ORDER);
+                            $masterNotification->setIsRead('0');
+                            $entityManager->persist($masterNotification);
+                        }*/
+                    }
+                }
+
                 if ($user != null && in_array(self::ROLE_CLIENT, $user->getRoles())) {
                     $order->setTypeCreated(self::CLIENT_CREATED);
                 }
@@ -156,21 +169,21 @@ class NewOrderController extends AbstractController
                 $entityManager->persist($order);
                 $entityManager->flush();
 
-                // Set non-push notifications for user
+                //$this->newOrderNotifications($masters, $order);
+
+                // Send notifications for user
                 $message = $this->translator->trans('Notification new order for user', array(), 'messages');
                 $this->setNotification($order, $user, self::NOTIFICATION_NEW_ORDER, $message);
 
-                // Send push via RabbitMQ to relevant masters
-                $relevantMasters = $userRepository->findByCityAndProfession(self::ROLE_MASTER, $order->getCity(), $order->getProfession());
-                $tokens = $this->firebaseRepository->findAllByUsers($relevantMasters);
-                if (count($tokens) > 0) {
-                    $context = [
-                        'title' => $this->translator->trans('Notification new order for master', array(), 'messages'),
-                        'clickAction' => 'https://smcentr.su/',
-                        'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
-                    ];
-                    $this->pushNotification->sendMQPushNotification($this->translator->trans('New order on site', array(), 'flash'), $context, $tokens);
-                }
+                // Send push notification
+                //$this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+                // Send push via RabbitMQ
+                $context = [
+                    'title' => $this->translator->trans('Notification new order for user', array(), 'messages'),
+                    'clickAction' => 'https://smcentr.su/',
+                    'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+                ];
+                $this->pushNotification->sendMQPushNotification($this->translator->trans('New order on site', array(), 'flash'), $context);
 
                 $entityManager->flush();
 
@@ -192,6 +205,70 @@ class NewOrderController extends AbstractController
             $message = $this->translator->trans('Please login', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute("app_login");
+        }
+    }
+
+    private function newOrderNotifications($masters, $order)
+    {
+        // Mails to master about a new order
+        if (count($masters) > 0) {
+            foreach ($masters as $master) {
+                if (count($master->getProfessions()) > 0 && count($master->getJobTypes()) > 0) {
+                    if ($master->getProfessions() && count($master->getProfessions()) > 0) {
+                        foreach ($master->getProfessions() as $profession) {
+                            $professionIds[] = $profession->getId();
+                        }
+                    } else {
+                        $professionIds = [];
+                    }
+
+                    if ($master->getJobTypes() && count($master->getJobTypes()) > 0) {
+                        foreach ($master->getJobTypes() as $jobType) {
+                            $jobTypeIds[] = $jobType->getId();
+                        }
+                    } else {
+                        $jobTypeIds = [];
+                    }
+                } else {
+                    $jobTypeIds = [];
+                    $professionIds = [];
+                }
+
+                /*if ($master->isGetNotifications() == 1 &&
+                    $order->getCity()->getId() == $master->getCity()->getId() &&
+                    in_array($order->getJobType()->getId(), $jobTypeIds) &&
+                    in_array($order->getProfession()->getId(), $professionIds)
+                ) {
+                    $subject = $translator->trans('New order available', array(), 'messages');
+                    $mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
+                }*/
+
+                // Send notifications for masters
+                if ($master->isGetNotifications() == 1 &&
+                    $order->getCity()->getId() == $master->getCity()->getId() &&
+                    in_array($order->getJobType()->getId(), $jobTypeIds) &&
+                    in_array($order->getProfession()->getId(), $professionIds)
+                ) {
+                    $subject = $this->translator->trans('New order available', array(), 'messages');
+                    $this->mailer->sendUserEmail($master, $subject, 'emails/new_order_to_master.html.twig', $order);
+
+                    // Send notifications for master
+                    $message = $this->translator->trans('Notification new order for master', array(), 'messages');
+                    $this->setNotification($order, $master, self::NOTIFICATION_NEW_ORDER, $message);
+
+                    // Send push notification
+                    //$this->pushNotification->sendPushNotification($this->translator->trans('New order on site', array(), 'flash'), $message, 'https://smcentr.su/');
+                    $context = [
+                        'title' => $this->translator->trans('Notification new order for master', array(), 'messages'),
+                        'clickAction' => 'https://smcentr.su/',
+                        'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+                    ];
+                    $this->pushNotification->sendMQPushNotification($this->translator->trans('New order on site', array(), 'flash'), $context);
+
+                    $entityManager = $this->doctrine->getManager();
+                    $entityManager->flush();
+                }
+            }
         }
     }
 }

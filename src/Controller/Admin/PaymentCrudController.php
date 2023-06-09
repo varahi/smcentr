@@ -22,7 +22,7 @@ class PaymentCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions->disable('new', 'delete');
+        return $actions->disable('new');
     }
 
 

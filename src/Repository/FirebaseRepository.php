@@ -57,6 +57,38 @@ class FirebaseRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+
+    public function findAllByUsers($users)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('f')
+            ->from(self::TABLE, 'f')
+            ->join('f.user', 'u')
+            ->where($qb->expr()->in('u.id', $users))
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+
+    /**
+     * @return float|int|mixed|string
+     */
+    public function findNonHidden()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $expr = $qb->expr();
+
+        $qb->select('f')
+            ->from(self::TABLE, 'f')
+            ->where($expr->neq('f.hidden', 1))
+            ->orderBy('f.created', 'ASC');
+
+        $reviews = $qb->getQuery()->getResult();
+
+        return $reviews;
+    }
+
 //    /**
 //     * @return Firebase[] Returns an array of Firebase objects
 //     */

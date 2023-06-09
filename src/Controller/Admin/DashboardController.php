@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Firebase;
 use App\Entity\Payment;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -135,10 +136,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Notifications');
         yield MenuItem::subMenu('Notifications', 'fa fa fa-sticky-note')->setSubItems([
             MenuItem::linkToCrud('Notifications', 'fa fa-bell', Notification::class)->setPermission('ROLE_EDITOR'),
-            MenuItem::linkToCrud('Push Notifications', 'fa fa-bell', Notification::class)
-                ->setPermission('ROLE_EDITOR')->setController(PushNotificationCrudController::class),
-            MenuItem::linkToRoute('Create notification', 'fa fa-bell-o', 'app_new_notification')
-                ->setPermission('ROLE_SUPER_ADMIN'),
+            MenuItem::linkToCrud('Push Notifications', 'fa fa-bell', Notification::class)->setPermission('ROLE_EDITOR')->setController(PushNotificationCrudController::class),
+            MenuItem::linkToRoute('Create notification', 'fa fa-bell-o', 'app_new_notification')->setPermission('ROLE_SUPER_ADMIN'),
+            MenuItem::linkToCrud('Tokens', 'fa fa-user-secret', Firebase::class),
             ]);
 
         yield MenuItem::section('<hr />');

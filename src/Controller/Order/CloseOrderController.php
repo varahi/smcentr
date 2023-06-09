@@ -4,6 +4,7 @@ namespace App\Controller\Order;
 
 use App\Controller\Traits\NotificationTrait;
 use App\Entity\Order;
+use App\Repository\FirebaseRepository;
 use App\Service\Mailer;
 use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
@@ -43,12 +44,16 @@ class CloseOrderController extends AbstractController
         Security $security,
         Environment $twig,
         ManagerRegistry $doctrine,
-        int $projectId
+        int $projectId,
+        PushNotification $pushNotification,
+        FirebaseRepository $firebaseRepository
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
         $this->projectId = $projectId;
+        $this->pushNotification = $pushNotification;
+        $this->firebaseRepository = $firebaseRepository;
     }
 
     /**
@@ -84,12 +89,9 @@ class CloseOrderController extends AbstractController
                     $subject = $translator->trans('Your order closed by perfomer', array(), 'messages');
                     $mailer->sendUserEmail($order->getUsers(), $subject, 'emails/order_closed_by_performer.html.twig', $order);
 
-                    // Send notification for master
+                    // Set notification for master
                     $message = $translator->trans('Notification order closed', array(), 'messages');
                     $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $message);
-
-                    // Send push notification
-                    $pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message, 'https://smcentr.su/');
                 }
             }
 
@@ -101,11 +103,18 @@ class CloseOrderController extends AbstractController
                     // Send notification for user
                     $message2 = $translator->trans('Notification order closed', array(), 'messages');
                     $this->setNotification($order, $order->getUsers(), self::NOTIFICATION_CHANGE_STATUS, $message2);
-
-                    // Send push notification
-                    $pushNotification->sendPushNotification($translator->trans('Order closed', array(), 'flash'), $message2, 'https://smcentr.su/');
                 }
             }
+
+            $ownerTokens = $this->firebaseRepository->findAllByUsers($order->getUsers()); // Tokens for owner
+            $masterTokens = $this->firebaseRepository->findAllByUsers($order->getPerformer()); // Tokens for master
+            $context = [
+                'title' => $translator->trans('Notification order closed', array(), 'messages'),
+                'clickAction' => 'https://smcentr.su/',
+                'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+            ];
+            $this->pushNotification->sendMQPushNotification($translator->trans('Order closed', array(), 'flash'), $context, $ownerTokens);
+            $this->pushNotification->sendMQPushNotification($translator->trans('Order closed', array(), 'flash'), $context, $masterTokens);
 
             $entityManager->flush();
 

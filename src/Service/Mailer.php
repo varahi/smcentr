@@ -8,10 +8,14 @@ use App\Entity\Ticket;
 use App\Entity\User;
 use App\Entity\Request as UserRequest;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Notifier\Notification\Notification;
+use Symfony\Component\Notifier\NotifierInterface;
 use Twig\Environment;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class Mailer
 {
@@ -21,16 +25,24 @@ class Mailer
 
     private $mailer;
 
+    private RequestStack $requestStack;
+
     public function __construct(
         MailerInterface $mailer,
         Environment $twig,
         string $adminEmail,
-        string $noreplyEmail
+        string $noreplyEmail,
+        ValidatorInterface $validator,
+        NotifierInterface $notifier,
+        RequestStack $requestStack
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->adminEmail = $adminEmail;
         $this->noreplyEmail = $noreplyEmail;
+        $this->validator = $validator;
+        $this->notifier = $notifier;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -38,18 +50,33 @@ class Mailer
      */
     public function updateCrudUserEmail(User $user, string $subject, string $template)
     {
-        $date = new \DateTime();
-        $email = (new TemplatedEmail())
-            ->subject($subject)
-            ->htmlTemplate($template)
-            ->from($this->adminEmail)
-            ->to($user->getEmail())
-            ->context([
-                'user' => $user,
-                'date' => $date
-            ]);
+        $emailConstraint = new Assert\Email();
+        $emailConstraint->message = 'Invalid email address';
+        $errors = $this->validator->validate(
+            $user->getEmail(),
+            $emailConstraint
+        );
+        $httpRequest = $this->requestStack->getCurrentRequest();
 
-        $this->mailer->send($email);
+        if (0 === count($errors)) {
+            $date = new \DateTime();
+            $email = (new TemplatedEmail())
+                ->subject($subject)
+                ->htmlTemplate($template)
+                ->from($this->adminEmail)
+                ->to($user->getEmail())
+                ->context([
+                    'user' => $user,
+                    'date' => $date
+                ]);
+
+            $this->mailer->send($email);
+        } else {
+            $errorMessage = $errors[0]->getMessage();
+            $this->notifier->send(new Notification($errorMessage, ['browser']));
+            $referer = $httpRequest->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
     }
 
     /**
@@ -57,19 +84,34 @@ class Mailer
      */
     public function sendUserEmail(User $user, string $subject, string $template, Order $order)
     {
-        $date = new \DateTime();
-        $email = (new TemplatedEmail())
-            ->subject($subject)
-            ->htmlTemplate($template)
-            ->from($this->adminEmail)
-            ->to($user->getEmail())
-            ->context([
-                'user' => $user,
-                'date' => $date,
-                'order' => $order
-            ]);
+        $emailConstraint = new Assert\Email();
+        $emailConstraint->message = 'Invalid email address';
+        $errors = $this->validator->validate(
+            $user->getEmail(),
+            $emailConstraint
+        );
+        $httpRequest = $this->requestStack->getCurrentRequest();
 
-        $this->mailer->send($email);
+        if (0 === count($errors)) {
+            $date = new \DateTime();
+            $email = (new TemplatedEmail())
+                ->subject($subject)
+                ->htmlTemplate($template)
+                ->from($this->adminEmail)
+                ->to($user->getEmail())
+                ->context([
+                    'user' => $user,
+                    'date' => $date,
+                    'order' => $order
+                ]);
+
+            $this->mailer->send($email);
+        } else {
+            $errorMessage = $errors[0]->getMessage();
+            $this->notifier->send(new Notification($errorMessage, ['browser']));
+            $referer = $httpRequest->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
     }
 
     /**
@@ -77,19 +119,34 @@ class Mailer
      */
     public function sendNewCompanyEmail(User $user, string $subject, string $template, $plainPassword)
     {
-        $date = new \DateTime();
-        $email = (new TemplatedEmail())
-            ->subject($subject)
-            ->htmlTemplate($template)
-            ->from($this->adminEmail)
-            ->to($user->getEmail())
-            ->context([
-                'user' => $user,
-                'date' => $date,
-                'plainPassword' => $plainPassword
-            ]);
+        $emailConstraint = new Assert\Email();
+        $emailConstraint->message = 'Invalid email address';
+        $errors = $this->validator->validate(
+            $user->getEmail(),
+            $emailConstraint
+        );
+        $httpRequest = $this->requestStack->getCurrentRequest();
 
-        $this->mailer->send($email);
+        if (0 === count($errors)) {
+            $date = new \DateTime();
+            $email = (new TemplatedEmail())
+                ->subject($subject)
+                ->htmlTemplate($template)
+                ->from($this->adminEmail)
+                ->to($user->getEmail())
+                ->context([
+                    'user' => $user,
+                    'date' => $date,
+                    'plainPassword' => $plainPassword
+                ]);
+
+            $this->mailer->send($email);
+        } else {
+            $errorMessage = $errors[0]->getMessage();
+            $this->notifier->send(new Notification($errorMessage, ['browser']));
+            $referer = $httpRequest->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
     }
 
     /**
@@ -97,18 +154,33 @@ class Mailer
      */
     public function sendMasterVerifedEmail(User $user, string $subject, string $template)
     {
-        $date = new \DateTime();
-        $email = (new TemplatedEmail())
-            ->subject($subject)
-            ->htmlTemplate($template)
-            ->from($this->adminEmail)
-            ->to($user->getEmail())
-            ->context([
-                'user' => $user,
-                'date' => $date,
-            ]);
+        $emailConstraint = new Assert\Email();
+        $emailConstraint->message = 'Invalid email address';
+        $errors = $this->validator->validate(
+            $user->getEmail(),
+            $emailConstraint
+        );
+        $httpRequest = $this->requestStack->getCurrentRequest();
 
-        $this->mailer->send($email);
+        if (0 === count($errors)) {
+            $date = new \DateTime();
+            $email = (new TemplatedEmail())
+                ->subject($subject)
+                ->htmlTemplate($template)
+                ->from($this->adminEmail)
+                ->to($user->getEmail())
+                ->context([
+                    'user' => $user,
+                    'date' => $date,
+                ]);
+
+            $this->mailer->send($email);
+        } else {
+            $errorMessage = $errors[0]->getMessage();
+            $this->notifier->send(new Notification($errorMessage, ['browser']));
+            $referer = $httpRequest->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
     }
 
     /**
@@ -116,20 +188,35 @@ class Mailer
      */
     public function sendAnswerEmail(User $user, string $subject, string $template, Answer $answer, Ticket $ticket)
     {
-        $date = new \DateTime();
-        $email = (new TemplatedEmail())
-            ->subject($subject)
-            ->htmlTemplate($template)
-            ->from($this->adminEmail)
-            ->to($user->getEmail())
-            ->context([
-                'user' => $user,
-                'date' => $date,
-                'answer' => $answer,
-                'ticket' => $ticket
-            ]);
+        $emailConstraint = new Assert\Email();
+        $emailConstraint->message = 'Invalid email address';
+        $errors = $this->validator->validate(
+            $user->getEmail(),
+            $emailConstraint
+        );
+        $httpRequest = $this->requestStack->getCurrentRequest();
 
-        $this->mailer->send($email);
+        if (0 === count($errors)) {
+            $date = new \DateTime();
+            $email = (new TemplatedEmail())
+                ->subject($subject)
+                ->htmlTemplate($template)
+                ->from($this->adminEmail)
+                ->to($user->getEmail())
+                ->context([
+                    'user' => $user,
+                    'date' => $date,
+                    'answer' => $answer,
+                    'ticket' => $ticket
+                ]);
+
+            $this->mailer->send($email);
+        } else {
+            $errorMessage = $errors[0]->getMessage();
+            $this->notifier->send(new Notification($errorMessage, ['browser']));
+            $referer = $httpRequest->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
     }
 
     /**
@@ -137,19 +224,34 @@ class Mailer
      */
     public function sendTicketRequestEmail(User $user, string $subject, string $template, Ticket $ticket)
     {
-        $date = new \DateTime();
-        $email = (new TemplatedEmail())
-            ->subject($subject)
-            ->htmlTemplate($template)
-            ->from($this->adminEmail)
-            ->to($user->getEmail())
-            ->context([
-                'user' => $user,
-                'date' => $date,
-                'ticket' => $ticket
-            ]);
+        $emailConstraint = new Assert\Email();
+        $emailConstraint->message = 'Invalid email address';
+        $errors = $this->validator->validate(
+            $user->getEmail(),
+            $emailConstraint
+        );
+        $httpRequest = $this->requestStack->getCurrentRequest();
 
-        $this->mailer->send($email);
+        if (0 === count($errors)) {
+            $date = new \DateTime();
+            $email = (new TemplatedEmail())
+                ->subject($subject)
+                ->htmlTemplate($template)
+                ->from($this->adminEmail)
+                ->to($user->getEmail())
+                ->context([
+                    'user' => $user,
+                    'date' => $date,
+                    'ticket' => $ticket
+                ]);
+
+            $this->mailer->send($email);
+        } else {
+            $errorMessage = $errors[0]->getMessage();
+            $this->notifier->send(new Notification($errorMessage, ['browser']));
+            $referer = $httpRequest->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
     }
 
     /**
@@ -157,18 +259,33 @@ class Mailer
      */
     public function sendWithdrawalRequestEmail(User $user, string $subject, string $template, UserRequest $request)
     {
-        $date = new \DateTime();
-        $email = (new TemplatedEmail())
-            ->subject($subject)
-            ->htmlTemplate($template)
-            ->from($this->noreplyEmail)
-            ->to($this->adminEmail)
-            ->context([
-                'user' => $user,
-                'date' => $date,
-                'request' => $request
-            ]);
+        $emailConstraint = new Assert\Email();
+        $emailConstraint->message = 'Invalid email address';
+        $errors = $this->validator->validate(
+            $user->getEmail(),
+            $emailConstraint
+        );
+        $httpRequest = $this->requestStack->getCurrentRequest();
 
-        $this->mailer->send($email);
+        if (0 === count($errors)) {
+            $date = new \DateTime();
+            $email = (new TemplatedEmail())
+                ->subject($subject)
+                ->htmlTemplate($template)
+                ->from($this->noreplyEmail)
+                ->to($this->adminEmail)
+                ->context([
+                    'user' => $user,
+                    'date' => $date,
+                    'request' => $request
+                ]);
+
+            $this->mailer->send($email);
+        } else {
+            $errorMessage = $errors[0]->getMessage();
+            $this->notifier->send(new Notification($errorMessage, ['browser']));
+            $referer = $httpRequest->headers->get('referer');
+            return new RedirectResponse($referer);
+        }
     }
 }

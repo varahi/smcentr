@@ -76,7 +76,6 @@ trait NotificationTrait
         // Send push notification
         if (count($users) > 0) {
             foreach ($users as $user) {
-                //$pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
                 $pushNotification->sendPushNotification('Уведомление с сайта smcentr.su', $post['message'], 'https://smcentr.su/');
             }
         }
@@ -87,8 +86,7 @@ trait NotificationTrait
         NotifierInterface $notifier,
         CityRepository $cityRepository,
         UserRepository $userRepository,
-        $role,
-        PushNotification $pushNotification
+        $role
     ) {
         $post = $request->request->get('notification_form');
         if ($post['city'] == '') {
@@ -103,9 +101,13 @@ trait NotificationTrait
 
         // Send push notification
         if (count($users) > 0) {
+            $context = [
+                'title' => $this->translator->trans('Уведомление с сайта smcentr.su', array(), 'messages'),
+                'clickAction' => 'https://smcentr.su/',
+                'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+            ];
             foreach ($users as $user) {
-                //$pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
-                $pushNotification->sendPushNotification('Уведомление с сайта smcentr.su', $post['message'], 'https://smcentr.su/');
+                $this->pushNotification->sendMQPushNotification($post['message'], $context);
             }
         }
     }
@@ -113,8 +115,7 @@ trait NotificationTrait
     public function notificationAllUsersByRole(
         Request $request,
         UserRepository $userRepository,
-        $role,
-        PushNotification $pushNotification
+        $role
     ) {
         $post = $request->request->get('notification_form');
         $users = $userRepository->findByRole($role);
@@ -122,17 +123,20 @@ trait NotificationTrait
 
         // Send push notification
         if (count($users) > 0) {
+            $context = [
+                'title' => $this->translator->trans('Уведомление с сайта smcentr.su', array(), 'messages'),
+                'clickAction' => 'https://smcentr.su/',
+                'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+            ];
             foreach ($users as $user) {
-                //$pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
-                $pushNotification->sendPushNotification('Уведомление с сайта smcentr.su', $post['message'], 'https://smcentr.su/');
+                $this->pushNotification->sendMQPushNotification($post['message'], $context);
             }
         }
     }
 
     public function notificationAllUsers(
         Request $request,
-        UserRepository $userRepository,
-        PushNotification $pushNotification
+        UserRepository $userRepository
     ) {
         $post = $request->request->get('notification_form');
         $clientUsers = $userRepository->findByRole(self::ROLE_CLIENT);
@@ -143,9 +147,13 @@ trait NotificationTrait
 
         // Send push notification
         if (count($users) > 0) {
+            $context = [
+                'title' => $this->translator->trans('Уведомление с сайта smcentr.su', array(), 'messages'),
+                'clickAction' => 'https://smcentr.su/',
+                'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+            ];
             foreach ($users as $user) {
-                //$pushNotification->sendPushNotification($translator->trans('Website push notification', array(), 'flash'), $post['message'], 'https://smcentr.su/');
-                $pushNotification->sendPushNotification('Уведомление с сайта smcentr.su', $post['message'], 'https://smcentr.su/');
+                $this->pushNotification->sendMQPushNotification($post['message'], $context);
             }
         }
     }

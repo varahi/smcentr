@@ -157,6 +157,10 @@
         <source>Order removed</source>
         <target>Заявка удалена</target>
       </trans-unit>
+      <trans-unit id="Choose master" resname="Choose master">
+        <source>Choose master</source>
+        <target>Выберите мастера</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

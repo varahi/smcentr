@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22c46b98af76a763754aaf5e878215c2",
+    "content-hash": "e59aa618285546fb50f44ce696d31b07",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -4852,6 +4852,73 @@
                 }
             ],
             "time": "2023-02-16T09:33:00+00:00"
+        },
+        {
+            "name": "symfony/firebase-notifier",
+            "version": "v5.4.23",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/firebase-notifier.git",
+                "reference": "f08086d3ab8c837909e20dc40fbfd2f96b6e3556"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/firebase-notifier/zipball/f08086d3ab8c837909e20dc40fbfd2f96b6e3556",
+                "reference": "f08086d3ab8c837909e20dc40fbfd2f96b6e3556",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/http-client": "^4.3|^5.0|^6.0",
+                "symfony/notifier": "^5.4.21|^6.2.7"
+            },
+            "type": "symfony-notifier-bridge",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Notifier\\Bridge\\Firebase\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeroen Spee",
+                    "homepage": "https://github.com/Jeroeny"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Firebase Notifier Bridge",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "firebase",
+                "notifier"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/firebase-notifier/tree/v5.4.23"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-04-08T15:17:03+00:00"
         },
         {
             "name": "symfony/flex",

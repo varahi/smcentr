@@ -97,7 +97,11 @@ class OrderActiveCrudController extends AbstractCrudController
         yield DateField::new('deadline')->setColumns('col-md-3')->hideOnIndex();
 
         yield TextField::new('address')->setColumns('col-md-10');
-        yield AssociationField::new('performer')->hideOnIndex()->setColumns('col-md-10');
+
+        yield AssociationField::new('performer')
+            ->setFormTypeOption('choice_label', 'selector')
+            ->hideOnIndex()->setColumns('col-md-10');
+
         yield FormField::addRow();
         yield IntegerField::new('quantity')->setColumns('col-md-2');
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle')->setCssClass('col-sm-4');
@@ -138,7 +142,6 @@ class OrderActiveCrudController extends AbstractCrudController
         )->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
 
         yield TextField::new('customTaxRate')->setColumns('col-md-10')
-            ->setDisabled()
             ->hideOnIndex()->setPermission('ROLE_EDITOR');
         //yield BooleanField::new('sendOwnMasters')->setColumns('col-md-10')->hideOnIndex();
         //yield BooleanField::new('sendAllMasters')->setColumns('col-md-10')->hideOnIndex();

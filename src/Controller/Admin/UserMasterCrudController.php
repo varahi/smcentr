@@ -141,6 +141,7 @@ class UserMasterCrudController extends AbstractCrudController
             //->setFormTypeOption('disabled', 'disabled')
             ->setLabel('Master Company')
             ->setColumns('col-md-4')
+            ->hideOnIndex()
             ->setFormTypeOption('query_builder', function (EntityRepository $entityRepository) use ($role) {
                 return $entityRepository->createQueryBuilder('entity')
                     ->where('entity.roles LIKE :roles')
@@ -231,7 +232,7 @@ class UserMasterCrudController extends AbstractCrudController
 
         yield MoneyField::new('balance')->setCurrency('RUB')
             ->setCustomOption('storedAsCents', false)->setColumns('col-md-4')
-            ->setPermission('ROLE_SUPER_ADMIN')->hideOnIndex();
+            ->setPermission('ROLE_SUPER_ADMIN');
 
         yield ChoiceField::new('level')->setChoices(
             [
@@ -269,7 +270,7 @@ class UserMasterCrudController extends AbstractCrudController
         yield AssociationField::new('assignments')->hideOnIndex()->setColumns('col-md-4');
 
         yield FormField::addRow();
-        yield AssociationField::new('notifications')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
+        //yield AssociationField::new('notifications')->hideOnIndex()->setColumns('col-md-4')->setPermission('ROLE_SUPER_ADMIN');
     }
 
     public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface

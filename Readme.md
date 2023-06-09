@@ -39,3 +39,12 @@ ddev export-db --target-db=db -f database.sql.gz
 ```shell
 ddev import-db --src=database.sql.gz
 ```
+
+### RabbitMQ access
+http://smcentr.su.ddev.site:15672/
+http://localhost:15672/
+login: rabbitmq
+pass: rabbitmq
+
+docker exec -it smcentr_project_web bash
+/usr/local/bin/php bin/console messenger:consume async -vv

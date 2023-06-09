@@ -4,9 +4,10 @@ namespace App\Controller\User;
 
 use App\Form\User\MasterProfileFormType;
 use App\ImageOptimizer;
+use App\Message\SendEmailNotification;
+use App\Message\SendPushNotification;
 use App\Repository\CityRepository;
 use App\Repository\DistrictRepository;
-use App\Repository\FirebaseRepository;
 use App\Repository\JobTypeRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProfessionRepository;
@@ -28,6 +29,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 use Twig\Environment;
 use App\Service\PhoneNumberService;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MasterProfileController extends AbstractController
 {
@@ -58,7 +64,9 @@ class MasterProfileController extends AbstractController
         VerifyEmailHelperInterface $helper,
         EmailVerifier $emailVerifier,
         string $defaultDomain,
-        PhoneNumberService $phoneNumberService
+        PhoneNumberService $phoneNumberService,
+        FileUploader $fileUploader,
+        PushNotification $pushNotification
     ) {
         $this->security = $security;
         $this->twig = $twig;
@@ -69,6 +77,8 @@ class MasterProfileController extends AbstractController
         $this->emailVerifier = $emailVerifier;
         $this->defaultDomain = $defaultDomain;
         $this->phoneNumberService = $phoneNumberService;
+        $this->fileUploader = $fileUploader;
+        $this->pushNotification = $pushNotification;
     }
 
     /**
@@ -166,13 +176,12 @@ class MasterProfileController extends AbstractController
         TranslatorInterface $translator,
         NotifierInterface $notifier,
         UserPasswordHasherInterface $passwordHasher,
-        FileUploader $fileUploader,
         ProfessionRepository $professionRepository,
         JobTypeRepository $jobTypeRepository,
         CityRepository $cityRepository,
         DistrictRepository $districtRepository,
-        FirebaseRepository $firebaseRepository,
-        PushNotification $firebase
+        MessageBusInterface $messageBus,
+        ValidatorInterface $validator
     ): Response {
         if ($this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
@@ -257,47 +266,20 @@ class MasterProfileController extends AbstractController
                         }
                     }
                 }
-
                 // Files upload
-                $avatarFile = $form->get('avatar')->getData();
-                $doc1File = $form->get('doc1')->getData();
-                $doc2File = $form->get('doc2')->getData();
-                $doc3File = $form->get('doc3')->getData();
-                if ($avatarFile) {
-                    $avatarFileName = $fileUploader->upload($avatarFile);
-                    $user->setAvatar($avatarFileName);
-                }
-                if ($doc1File) {
-                    $doc1FileName = $fileUploader->upload($doc1File);
-                    $user->setDoc1($doc1FileName);
-                }
-                if ($doc2File) {
-                    $doc2FileName = $fileUploader->upload($doc2File);
-                    $user->setDoc2($doc2FileName);
-                }
-                if ($doc3File) {
-                    $doc3FileName = $fileUploader->upload($doc3File);
-                    $user->setDoc3($doc3FileName);
-                }
-
+                $this->filesUpload($form);
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                // Send push notification start
-                /*$notification = [
-                    'title' => 'Some title',
-                    'body' => sprintf('Some action updated at %s.', date('H:i')),
-                    'icon' => $this->defaultDomain . '/assets/images/logo.svg',
-                    'click_action' => 'https://smcentr.localhost/',
-                ];
-
-                $tokens = $firebaseRepository->findAll();
-                if (count($tokens) > 0) {
-                    foreach ($tokens as $key => $token) {
-                        $firebase->sendSimplePushNotification($token->getToken(), $notification);
-                    }
-                }*/
-                // Send push notification end
+                // Send email via RabbitMQ
+                /*
+                $message = new SendEmailNotification($user->getEmail());
+                $envelope = new Envelope($message, [
+                    new AmqpStamp('normal')
+                ]);
+                $messageBus->dispatch($envelope);
+                $messageBus->dispatch(new SendEmailNotification($user->getEmail()));
+                */
 
                 $message = $translator->trans('Profile updated', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
@@ -321,6 +303,32 @@ class MasterProfileController extends AbstractController
             $message = $translator->trans('Please login', array(), 'flash');
             $notifier->send(new Notification($message, ['browser']));
             return $this->redirectToRoute("app_login");
+        }
+    }
+
+    private function filesUpload($form)
+    {
+        $user = $this->security->getUser();
+        // Files upload
+        $avatarFile = $form->get('avatar')->getData();
+        $doc1File = $form->get('doc1')->getData();
+        $doc2File = $form->get('doc2')->getData();
+        $doc3File = $form->get('doc3')->getData();
+        if ($avatarFile) {
+            $avatarFileName = $this->fileUploader->upload($avatarFile);
+            $user->setAvatar($avatarFileName);
+        }
+        if ($doc1File) {
+            $doc1FileName = $this->fileUploader->upload($doc1File);
+            $user->setDoc1($doc1FileName);
+        }
+        if ($doc2File) {
+            $doc2FileName = $this->fileUploader->upload($doc2File);
+            $user->setDoc2($doc2FileName);
+        }
+        if ($doc3File) {
+            $doc3FileName = $this->fileUploader->upload($doc3File);
+            $user->setDoc3($doc3FileName);
         }
     }
 }
