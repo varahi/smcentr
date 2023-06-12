@@ -27,7 +27,7 @@ class FirebaseController extends AbstractController
      */
     public function saveToken()
     {
-        //file_put_contents('post.txt', $_POST['token']);
+        //file_put_contents('token.txt', $_POST['token']);
         $token = $_POST['token'];
         $entityManager = $this->doctrine->getManager();
         if (isset($token) && !empty($token)) {
