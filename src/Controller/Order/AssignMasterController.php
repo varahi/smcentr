@@ -34,6 +34,10 @@ class AssignMasterController extends AbstractController
 
     public const NOTIFICATION_CHANGE_STATUS = '1';
 
+    private const CREATED_BY_COMPANY = '3';
+
+    private const CREATED_BY_CLIENT = '1';
+
     private $projectId;
 
     private $doctrine;
@@ -44,7 +48,9 @@ class AssignMasterController extends AbstractController
         ManagerRegistry $doctrine,
         GetTaxService $getTaxService,
         SetBalanceService $setBalanceService,
-        int $projectId
+        int $projectId,
+        NotifierInterface $notifier,
+        TranslatorInterface $translator
     ) {
         $this->security = $security;
         $this->twig = $twig;
@@ -52,6 +58,8 @@ class AssignMasterController extends AbstractController
         $this->projectId = $projectId;
         $this->getTaxService = $getTaxService;
         $this->setBalanceService = $setBalanceService;
+        $this->notifier = $notifier;
+        $this->translator = $translator;
     }
 
     /**
@@ -102,8 +110,27 @@ class AssignMasterController extends AbstractController
 
 
                 $tax = $this->getTaxService->getTax($order);
+
+                //$this->redirectBalanceService->redirectByBalance($order); // ToDO: try to set redirect via service
+                if ($order->getTypeCreated() == self::CREATED_BY_CLIENT) {
+                    $performer = $order->getPerformer();
+                    if ($performer->getBalance() <= $tax) {
+                        $message = $this->translator->trans('Please top up balance', array(), 'flash');
+                        $this->notifier->send(new Notification($message, ['browser']));
+                        return new RedirectResponse($this->urlGenerator->generate('app_top_up_balance'));
+                    }
+                }
+
+                if ($order->getTypeCreated() == self::CREATED_BY_COMPANY) {
+                    $orderTaxRate = $order->getCustomTaxRate(); // roubles
+                    if ($performer->getBalance() <= $tax + $orderTaxRate) {
+                        $message = $this->translator->trans('Please top up balance', array(), 'flash');
+                        $this->notifier->send(new Notification($message, ['browser']));
+                        return new RedirectResponse($this->urlGenerator->generate('app_top_up_balance'));
+                    }
+                }
+
                 if (!isset($tax)) {
-                    ;
                     $message = $translator->trans('No task defined', array(), 'flash');
                     $notifier->send(new Notification($message, ['browser']));
                     $referer = $request->headers->get('referer');

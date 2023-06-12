@@ -8,6 +8,7 @@ use App\Repository\FirebaseRepository;
 use App\Repository\UserRepository;
 use App\Service\Mailer;
 use App\Service\Order\GetTaxService;
+use App\Service\Order\RedirectBalanceService;
 use App\Service\Order\SetBalanceService;
 use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,6 +21,7 @@ use Symfony\Component\Notifier\NotifierInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TakeOrderController extends AbstractController
 {
@@ -37,6 +39,10 @@ class TakeOrderController extends AbstractController
 
     private const CREATED_BY_COMPANY = '3';
 
+    private const CREATED_BY_CLIENT = '1';
+
+    private $urlGenerator;
+
 
     public function __construct(
         TranslatorInterface $translator,
@@ -44,10 +50,13 @@ class TakeOrderController extends AbstractController
         UserRepository $userRepository,
         Mailer $mailer,
         GetTaxService $getTaxService,
+        RedirectBalanceService $redirectBalanceService,
         SetBalanceService $setBalanceService,
         Security $security,
         ManagerRegistry $doctrine,
-        FirebaseRepository $firebaseRepository
+        FirebaseRepository $firebaseRepository,
+        NotifierInterface $notifier,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->translator = $translator;
         $this->pushNotification = $pushNotification;
@@ -58,6 +67,9 @@ class TakeOrderController extends AbstractController
         $this->security = $security;
         $this->doctrine = $doctrine;
         $this->firebaseRepository = $firebaseRepository;
+        $this->notifier = $notifier;
+        $this->urlGenerator = $urlGenerator;
+        $this->redirectBalanceService = $redirectBalanceService;
     }
 
     /**
@@ -84,6 +96,27 @@ class TakeOrderController extends AbstractController
         //Get Tax
         $order->setPerformer($user);
         $tax = $this->getTaxService->getTax($order);
+        //$this->redirectBalanceService->redirectByBalance($order); // ToDO: try to set redirect via service
+
+        // Redirect user to top up balance
+        if ($order->getTypeCreated() == self::CREATED_BY_CLIENT) {
+            $performer = $order->getPerformer();
+            if ($performer->getBalance() <= $tax) {
+                $message = $this->translator->trans('Please top up balance', array(), 'flash');
+                $this->notifier->send(new Notification($message, ['browser']));
+                return new RedirectResponse($this->urlGenerator->generate('app_top_up_balance'));
+            }
+        }
+
+        if ($order->getTypeCreated() == self::CREATED_BY_COMPANY) {
+            $orderTaxRate = $order->getCustomTaxRate(); // roubles
+            if ($performer->getBalance() <= $tax + $orderTaxRate) {
+                $message = $this->translator->trans('Please top up balance', array(), 'flash');
+                $this->notifier->send(new Notification($message, ['browser']));
+                return new RedirectResponse($this->urlGenerator->generate('app_top_up_balance'));
+            }
+        }
+
         if (!isset($tax)) {
             // Remove perfomer and status
             //$this->unsetOrderController->clearOrderPerfomer($order);
