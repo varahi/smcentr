@@ -64,7 +64,7 @@ class FirebaseRepository extends ServiceEntityRepository
         $qb->select('f')
             ->from(self::TABLE, 'f')
             ->join('f.user', 'u')
-            ->where($qb->expr()->in('u.id', $users))
+            ->where($qb->expr()->in('u.id', $users->getId()))
         ;
 
         return $qb->getQuery()->getResult();
