@@ -46,5 +46,6 @@ http://localhost:15672/
 login: rabbitmq
 pass: rabbitmq
 
-docker exec -it smcentr_project_web bash
-/usr/local/bin/php bin/console messenger:consume async -vv
+Go to ddev ssh with command ```ddev ssh```
+and run command ```/usr/bin/php bin/console messenger:consume async -vv```
+

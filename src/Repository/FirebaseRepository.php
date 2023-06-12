@@ -45,7 +45,7 @@ class FirebaseRepository extends ServiceEntityRepository
      * @param int $id
      * @return int|mixed|string
      */
-    public function findAllByUser($user)
+    public function findAllByOneUser($user)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('f')
@@ -64,7 +64,7 @@ class FirebaseRepository extends ServiceEntityRepository
         $qb->select('f')
             ->from(self::TABLE, 'f')
             ->join('f.user', 'u')
-            ->where($qb->expr()->in('u.id', $users->getId()))
+            ->where($qb->expr()->in('u.id', $users))
         ;
 
         return $qb->getQuery()->getResult();

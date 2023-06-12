@@ -106,15 +106,20 @@ class CloseOrderController extends AbstractController
                 }
             }
 
-            $ownerTokens = $this->firebaseRepository->findAllByUsers($order->getUsers()); // Tokens for owner
-            $masterTokens = $this->firebaseRepository->findAllByUsers($order->getPerformer()); // Tokens for master
             $context = [
                 'title' => $translator->trans('Notification order closed', array(), 'messages'),
                 'clickAction' => 'https://smcentr.su/',
                 'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
             ];
-            $this->pushNotification->sendMQPushNotification($translator->trans('Order closed', array(), 'flash'), $context, $ownerTokens);
-            $this->pushNotification->sendMQPushNotification($translator->trans('Order closed', array(), 'flash'), $context, $masterTokens);
+
+            if ($order->getUsers()) {
+                $ownerTokens = $this->firebaseRepository->findAllByUsers($order->getUsers()); // Tokens for owner
+                $this->pushNotification->sendMQPushNotification($translator->trans('Order closed', array(), 'flash'), $context, $ownerTokens);
+            }
+            if ($order->getPerformer()) {
+                $masterTokens = $this->firebaseRepository->findAllByUsers($order->getPerformer()); // Tokens for master
+                $this->pushNotification->sendMQPushNotification($translator->trans('Order closed', array(), 'flash'), $context, $masterTokens);
+            }
 
             $entityManager->flush();
 

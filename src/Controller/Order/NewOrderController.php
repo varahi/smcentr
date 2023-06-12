@@ -162,8 +162,12 @@ class NewOrderController extends AbstractController
 
                 // Send push via RabbitMQ to relevant masters
                 $relevantMasters = $userRepository->findByCityAndProfession(self::ROLE_MASTER, $order->getCity(), $order->getProfession());
-                $tokens = $this->firebaseRepository->findAllByUsers($relevantMasters);
-                if (count($tokens) > 0) {
+                //dd($relevantMasters);
+                if (isset($relevantMasters) && !empty($relevantMasters)) {
+                    $tokens = $this->firebaseRepository->findAllByUsers($relevantMasters);
+                }
+
+                if (isset($tokens) && count($tokens) > 0) {
                     $context = [
                         'title' => $this->translator->trans('Notification new order for master', array(), 'messages'),
                         'clickAction' => 'https://smcentr.su/',

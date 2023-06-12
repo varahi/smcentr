@@ -192,9 +192,6 @@ class TakeOrderController extends AbstractController
         $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_BALANCE_MINUS, $messageStr1);
         $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $messageStr2);
 
-        $ownerTokens = $this->firebaseRepository->findAllByUsers($order->getUsers()); // Tokens for owner
-        $masterTokens = $this->firebaseRepository->findAllByUsers($order->getPerformer()); // Tokens for master
-
         $ownerContext = [
             'title' => $this->translator->trans('Your order has been processed', array(), 'messages'),
             'clickAction' => 'https://smcentr.su/',
@@ -207,34 +204,13 @@ class TakeOrderController extends AbstractController
             'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
         ];
 
-        $this->pushNotification->sendMQPushNotification($this->translator->trans($messageStr3, array(), 'flash'), $ownerContext, $ownerTokens);
-        $this->pushNotification->sendMQPushNotification($this->translator->trans($messageStr2, array(), 'flash'), $masterContext, $masterTokens);
-    }
-
-    private function _sendPushNotifications_back($order, $fullTax)
-    {
-        // Send notifications for masters
-        $message1 = $this->translator->trans('Withdrawal from the balance', array(), 'messages');
-        $messageStr1 = $message1 .' '.$fullTax.' руб.' .' за заявку';
-        $messageStr2 = $this->translator->trans('You got an order', array(), 'messages');
-        $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_BALANCE_MINUS, $messageStr1);
-        $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $messageStr2);
-
-        // Send push notification
-        //$this->pushNotification->sendCustomerPushNotification($message1, $messageStr1, 'https://smcentr.su/', $order->getPerformer());
-        $this->pushNotification->sendCustomerPushNotification(
-            $this->translator->trans('You accepted application', array(), 'flash'),
-            $messageStr2,
-            'https://smcentr.su/',
-            $order->getPerformer()
-        );
-
-        // Send notifications for user
-        $message3 = $this->translator->trans('Your order has been processed', array(), 'messages');
-        $messageStr3 = $message3 .' '.$order->getPerformer()->getFullName().' - '.$order->getPerformer()->getEmail();
-        $this->setNotification($order, $order->getUsers(), self::NOTIFICATION_CHANGE_STATUS, $messageStr3);
-
-        // Send push notification
-        $this->pushNotification->sendCustomerPushNotification($message3, $messageStr3, 'https://smcentr.su/', $order->getUsers());
+        if ($order->getUsers()) {
+            $ownerTokens = $this->firebaseRepository->findAllByOneUser($order->getUsers()); // Tokens for owner
+            $this->pushNotification->sendMQPushNotification($this->translator->trans($messageStr3, array(), 'flash'), $ownerContext, $ownerTokens);
+        }
+        if ($order->getPerformer()) {
+            $masterTokens = $this->firebaseRepository->findAllByOneUser($order->getPerformer()); // Tokens for master
+            $this->pushNotification->sendMQPushNotification($this->translator->trans($messageStr2, array(), 'flash'), $masterContext, $masterTokens);
+        }
     }
 }

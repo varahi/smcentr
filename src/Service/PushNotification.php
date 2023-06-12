@@ -94,7 +94,7 @@ class PushNotification
         ];
 
         $entityManager = $this->doctrine->getManager();
-        $tokens = $entityManager->getRepository(Firebase::class)->findAllByUser($user);
+        $tokens = $entityManager->getRepository(Firebase::class)->findAllByOneUser($user);
         if (count($tokens) > 0) {
             foreach ($tokens as $key => $token) {
                 $token = new SendPushNotification($token->getToken(), $body, $context);
