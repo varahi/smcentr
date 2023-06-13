@@ -83,6 +83,31 @@ class TicketController extends AbstractController
         ]);
     }
 
+
+    /**
+     *
+     * @Route("/ticket-count-new", name="app_ticket_count_new")
+     */
+    public function countNew(
+        TicketRepository $ticketRepository,
+        NotifierInterface $notifier,
+        TranslatorInterface $translator
+    ): Response {
+        if ($this->isGranted(self::ROLE_SUPER_ADMIN) || $this->isGranted(self::ROLE_EDITOR) || $this->isGranted(self::ROLE_SUPPORT)) {
+            $user = $this->security->getUser();
+
+            $newTickets = count($ticketRepository->findAllByStatus(self::STATUS_NEW));
+
+            return new Response(<<<EOF
+                $newTickets
+             EOF);
+        } else {
+            $message = $translator->trans('Please login', array(), 'flash');
+            $notifier->send(new Notification($message, ['browser']));
+            return $this->redirectToRoute("app_login");
+        }
+    }
+
     /**
      *
      * @Route("/ticket-list", name="app_ticket_list")

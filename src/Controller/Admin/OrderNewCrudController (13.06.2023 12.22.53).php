@@ -102,13 +102,8 @@ class OrderNewCrudController extends AbstractCrudController
         yield FormField::addPanel('Additional Info')->setIcon('fa fa-info-circle')->setCssClass('col-sm-4');
         yield FormField::addRow();
 
-
-
-        yield AssociationField::new('city')->hideOnIndex()->setColumns('col-md-10')->setRequired(true)->addCssClass('js-select-city');
-        yield AssociationField::new('district')->hideOnIndex()->setColumns('col-md-10')->addCssClass('js-hide-district');
-
-
-
+        yield AssociationField::new('city')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
+        yield AssociationField::new('district')->hideOnIndex()->setColumns('col-md-10')->setCrudController(CityCrudController::class);
         yield AssociationField::new('users')->setColumns('col-md-10')->setLabel('Customer')->setRequired(true);
         yield AssociationField::new('profession')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
         yield AssociationField::new('jobType')->hideOnIndex()->setColumns('col-md-10')->setRequired(true);

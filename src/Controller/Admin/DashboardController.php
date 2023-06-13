@@ -6,6 +6,7 @@ use App\Entity\Firebase;
 use App\Entity\Payment;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -95,7 +96,7 @@ class DashboardController extends AbstractDashboardController
         ]);
         yield MenuItem::section('<hr />');
 
-        yield MenuItem::linkToRoute('Tickets list', 'fa fa-support', 'app_ticket_list');
+        yield MenuItem::linkToRoute('Tickets list', 'fa fa-support', 'app_ticket_list')->setCssClass('js-load-count');
         yield MenuItem::linkToCrud('Request a withdrawal', 'fa fa-mail-forward', Request::class)
             ->setPermission('ROLE_EDITOR');
         yield MenuItem::linkToCrud('Payments', 'fa fa-money', Payment::class);
@@ -139,7 +140,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Push Notifications', 'fa fa-bell', Notification::class)->setPermission('ROLE_EDITOR')->setController(PushNotificationCrudController::class),
             MenuItem::linkToRoute('Create notification', 'fa fa-bell-o', 'app_new_notification')->setPermission('ROLE_SUPER_ADMIN'),
             MenuItem::linkToCrud('Tokens', 'fa fa-user-secret', Firebase::class),
-            ]);
+        ]);
 
         yield MenuItem::section('<hr />');
 
@@ -193,5 +194,9 @@ class DashboardController extends AbstractDashboardController
             ->setName(method_exists($user, '__toString') ? (string) $user : $user->getUsername())
             ->setAvatarUrl(null)
             ->setMenuItems($userMenuItems);
+    }
+    public function configureAssets(): Assets
+    {
+        return Assets::new()->addJsFile('assets/js/custom-easyadmin.js?v=2'.rand());
     }
 }
