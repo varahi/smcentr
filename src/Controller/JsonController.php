@@ -17,7 +17,7 @@ class JsonController extends AbstractController
     }
 
     /**
-     * @Route("/api/job-types/profession-{id}", name="api_job_types")
+     * @Route("/api/job-types/profession-{id}", name="api_job_types", requirements={"id":"\d+"})
      * @return Response
      */
     public function apiProfession(

@@ -3,6 +3,7 @@
 namespace App\Controller\Order;
 
 use App\Controller\Traits\NotificationTrait;
+use App\Entity\Firebase;
 use App\Entity\Order;
 use App\Entity\Notification as UserNotification;
 use App\Form\Order\OrderFormCompanyType;
@@ -162,9 +163,13 @@ class NewOrderController extends AbstractController
 
                 // Send push via RabbitMQ to relevant masters
                 $relevantMasters = $userRepository->findByCityAndProfession(self::ROLE_MASTER, $order->getCity(), $order->getProfession());
-                //dd($relevantMasters);
                 if (isset($relevantMasters) && !empty($relevantMasters)) {
-                    $tokens = $this->firebaseRepository->findAllByUsers($relevantMasters);
+                    foreach ($relevantMasters as $master) {
+                        $relevantMastersIds[] = $master->getId();
+                        // Send notifications to relevant masters
+                        $this->setNotification($order, $master, self::NOTIFICATION_NEW_ORDER, $message);
+                    }
+                    $tokens = $entityManager->getRepository(Firebase::class)->findBy(array('user' => $relevantMastersIds));
                 }
 
                 if (isset($tokens) && count($tokens) > 0) {
