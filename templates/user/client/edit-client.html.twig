@@ -53,9 +53,7 @@
                         <label for="client_profile_form_district" style="display: none"></label>
                         <select id="client_profile_form_district" name="client_profile_form[district]">
                             {% for district in districts %}
-                                <option data-list-id="{{ district.city.id }}" value="{{ district.id }}" {% if district.city.id == user.city.id %} selected {% endif %}>
-                                    {{ district.name }}
-                                </option>
+                                <option data-list-id="{{ district.city.id }}" value="{{ district.id }}" {% if district.id == user.district.id %} selected {% endif %} style="display: none;">{{ district.name }}</option>
                             {% endfor %}
                         </select>
 
@@ -124,6 +122,11 @@
                 $( ".upload" ).removeClass( 'hover');
             }
         );
+
+        $('option[data-list-id={{ user.city.id }}]').show();
+        $('#client_profile_form_city').on('change', function (){
+            $('option').show();
+        });
     </script>
     {% include 'partials/footer/_footer.html.twig' %}
 {% endblock %}
