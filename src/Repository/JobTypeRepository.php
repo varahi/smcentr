@@ -16,6 +16,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class JobTypeRepository extends ServiceEntityRepository
 {
+    /**
+     *
+     */
+    public const TABLE = 'App\Entity\JobType';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, JobType::class);
@@ -46,6 +51,22 @@ class JobTypeRepository extends ServiceEntityRepository
     public function findAllOrder(array $order)
     {
         return $this->findBy([], $order);
+    }
+
+    /**
+     * @param $profession
+     * @return float|int|mixed|string
+     */
+    public function findByProfession($profession)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('j')
+            ->from(self::TABLE, 'j')
+            ->where($qb->expr()->eq('j.profession', $profession->getId()))
+            ->orderBy('j.id', 'ASC')
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

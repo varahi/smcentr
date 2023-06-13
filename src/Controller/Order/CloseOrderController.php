@@ -71,10 +71,12 @@ class CloseOrderController extends AbstractController
             $user = $this->security->getUser();
 
             // Redirect if order not owner
-            if ($order->getPerformer()->getId() !== $user->getId()) {
-                $message = $translator->trans('Please login', array(), 'flash');
-                $notifier->send(new Notification($message, ['browser']));
-                return $this->redirectToRoute('app_login');
+            if ($order->getPerformer() !==null) {
+                if ($order->getPerformer()->getId() !== $user->getId()) {
+                    $message = $translator->trans('Please login', array(), 'flash');
+                    $notifier->send(new Notification($message, ['browser']));
+                    return $this->redirectToRoute('app_login');
+                }
             }
 
             // Persist data
@@ -113,11 +115,11 @@ class CloseOrderController extends AbstractController
             ];
 
             if ($order->getUsers()) {
-                $ownerTokens = $this->firebaseRepository->findAllByUsers($order->getUsers()); // Tokens for owner
+                $ownerTokens = $this->firebaseRepository->findAllByOneUser($order->getUsers()); // Tokens for owner
                 $this->pushNotification->sendMQPushNotification($translator->trans('Order closed', array(), 'flash'), $context, $ownerTokens);
             }
             if ($order->getPerformer()) {
-                $masterTokens = $this->firebaseRepository->findAllByUsers($order->getPerformer()); // Tokens for master
+                $masterTokens = $this->firebaseRepository->findAllByOneUser($order->getPerformer()); // Tokens for master
                 $this->pushNotification->sendMQPushNotification($translator->trans('Order closed', array(), 'flash'), $context, $masterTokens);
             }
 
