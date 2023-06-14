@@ -941,6 +941,10 @@
         <source>Reset search</source>
         <target>Сбросить поиск</target>
       </trans-unit>
+        <trans-unit id="You got answer on your ticket" resname="You got answer on your ticket">
+            <source>You got answer on your ticket</source>
+            <target>Вы получили ответ из службы поддержки</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

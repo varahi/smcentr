@@ -6,8 +6,10 @@ use App\Entity\Ticket;
 use App\Entity\Answer;
 use App\Form\Answer\AnswerFormType;
 use App\Form\Order\OrderFormType;
+use App\Repository\FirebaseRepository;
 use App\Repository\TicketRepository;
 use App\Repository\UserRepository;
+use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -57,11 +59,15 @@ class TicketController extends AbstractController
     public function __construct(
         Security $security,
         Environment $twig,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        FirebaseRepository $firebaseRepository,
+        PushNotification $pushNotification
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
+        $this->firebaseRepository = $firebaseRepository;
+        $this->pushNotification = $pushNotification;
     }
 
     /**
@@ -174,6 +180,18 @@ class TicketController extends AbstractController
 
                 $subject = $translator->trans('Your request has been answered', array(), 'messages');
                 $mailer->sendAnswerEmail($ticket->getUser(), $subject, 'emails/answer_ticket_to_user.html.twig', $answer, $ticket);
+
+                // Send push notification
+                $context = [
+                    'title' => $translator->trans('You got answer on your ticket', array(), 'messages'),
+                    'clickAction' => 'https://smcentr.su/support',
+                    'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+                ];
+
+                if ($ticket->getUser()) {
+                    $tokens = $this->firebaseRepository->findAllByOneUser($ticket->getUser());
+                    $this->pushNotification->sendMQPushNotification($answer->getAnswer(), $context, $tokens);
+                }
 
                 $message = $translator->trans('Answered', array(), 'flash');
                 $notifier->send(new Notification($message, ['browser']));
