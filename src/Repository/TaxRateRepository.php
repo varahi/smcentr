@@ -52,6 +52,7 @@ class TaxRateRepository extends ServiceEntityRepository
         $qb->select('t')
             ->from($this->_entityName, 't')
             ->where($qb->expr()->eq('t.city', $city->getId()))
+            ->setMaxResults(1)
             ->andWhere($qb->expr()->eq('t.profession', $profession->getId()))
         ;
         return $qb->getQuery()->getOneOrNullResult();
