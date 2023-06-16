@@ -10,7 +10,7 @@
             <select id="masters" name="assign_master1">
                 <option value="" selected="selected">Выберите мастера</option>
                 {% for master in allMasters %}
-                    <option value="{{ master.id }}">{{ master.email }} - {{ master.fullName }}</option>
+                    <option value="{{ master.id }}">{{ master.email }} / {{ master.phone }} / {{ master.fullName }}</option>
                 {% endfor %}
             </select><br /><br />
 
@@ -18,7 +18,7 @@
             <select id="company-masters" name="assign_master2">
                 <option value="" selected="selected">Выберите мастера</option>
                 {% for master in companyMasters %}
-                    <option value="{{ master.id }}">{{ master.email }} - {{ master.fullName }}</option>
+                    <option value="{{ master.id }}">{{ master.email }} / {{ master.phone }} / {{ master.fullName }}</option>
                 {% endfor %}
             </select><br /><br />
             <button>{{ 'Submit'|trans }}</button>
