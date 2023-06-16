@@ -59,6 +59,11 @@ class Ticket
      */
     private $answer;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isInClientProgress;
+
     public function __construct()
     {
         $this->created = new \DateTime();
@@ -185,6 +190,18 @@ class Ticket
                 $answer->setTicket(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isIsInClientProgress(): ?bool
+    {
+        return $this->isInClientProgress;
+    }
+
+    public function setIsInClientProgress(?bool $isInClientProgress): self
+    {
+        $this->isInClientProgress = $isInClientProgress;
 
         return $this;
     }
