@@ -172,13 +172,17 @@ class NewOrderController extends AbstractController
                     $tokens = $entityManager->getRepository(Firebase::class)->findBy(array('user' => $relevantMastersIds));
                 }
 
+                $subject = $this->translator->trans('Service name', array(), 'messages') . ': ' . $order->getProfession()->getName() .' '. $order->getJobType()->getName() . '<br />';
+                $subject .= $this->translator->trans('Cost of work', array(), 'messages') . ': ' . $order->getPrice() . ' руб.';
+
                 if (isset($tokens) && count($tokens) > 0) {
                     $context = [
                         'title' => $this->translator->trans('Notification new order for master', array(), 'messages'),
                         'clickAction' => 'https://smcentr.su/',
                         'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
                     ];
-                    $this->pushNotification->sendMQPushNotification($this->translator->trans('New order on site', array(), 'flash'), $context, $tokens);
+                    $this->pushNotification->sendMQPushNotification($subject, $context, $tokens);
+                    //$this->pushNotification->sendMQPushNotification($this->translator->trans('New order on site', array(), 'flash'), $context, $tokens);
                 }
 
                 $entityManager->flush();

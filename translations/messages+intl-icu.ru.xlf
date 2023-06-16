@@ -945,6 +945,14 @@
             <source>You got answer on your ticket</source>
             <target>Вы получили ответ из службы поддержки</target>
         </trans-unit>
+        <trans-unit id="Service name" resname="Service name">
+            <source>Service name</source>
+            <target>Название услуги</target>
+        </trans-unit>
+        <trans-unit id="Cost of work" resname="Cost of work">
+            <source>Cost of work</source>
+            <target>Стоимость работ</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>
