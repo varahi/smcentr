@@ -52,6 +52,11 @@ class Notification
      */
     private $application;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=NotificationGroup::class, inversedBy="notification", cascade={"persist", "remove"})
+     */
+    private $notificationGroup;
+
     public function __construct()
     {
         $this->created = new \DateTime();
@@ -135,6 +140,18 @@ class Notification
     public function setApplication(?Order $application): self
     {
         $this->application = $application;
+
+        return $this;
+    }
+
+    public function getNotificationGroup(): ?NotificationGroup
+    {
+        return $this->notificationGroup;
+    }
+
+    public function setNotificationGroup(?NotificationGroup $notificationGroup): self
+    {
+        $this->notificationGroup = $notificationGroup;
 
         return $this;
     }
