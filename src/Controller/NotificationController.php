@@ -54,11 +54,15 @@ class NotificationController extends AbstractController
     public function __construct(
         Security $security,
         Environment $twig,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
+        TranslatorInterface $translator,
+        PushNotification $pushNotification
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
+        $this->translator = $translator;
+        $this->pushNotification = $pushNotification;
     }
 
     /**
@@ -72,8 +76,7 @@ class NotificationController extends AbstractController
         NotifierInterface $notifier,
         CityRepository $cityRepository,
         ProfessionRepository $professionRepository,
-        UserRepository $userRepository,
-        PushNotification $pushNotification
+        UserRepository $userRepository
     ): Response {
         if ($this->isGranted(self::ROLE_SUPER_ADMIN)) {
             $user = $this->security->getUser();
@@ -89,42 +92,42 @@ class NotificationController extends AbstractController
 
                 // Notifications to masters of the chosen profession and the chosen city
                 if ($post['notificationType'] == 10) {
-                    $this->masterNotificationByProfessionAndCity($request, $notifier, $cityRepository, $professionRepository, $userRepository, $pushNotification);
+                    $this->masterNotificationByProfessionAndCity($request, $notifier, $cityRepository, $professionRepository, $userRepository);
                 }
 
                 // Notifications to clients of the chosen city
                 if ($post['notificationType'] == 20) {
-                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_CLIENT, $pushNotification);
+                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_CLIENT);
                 }
 
                 // Notifications to masters of the chosen city
                 if ($post['notificationType'] == 30) {
-                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_MASTER, $pushNotification);
+                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_MASTER);
                 }
 
                 // Notifications to all masters
                 if ($post['notificationType'] == 40) {
-                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_MASTER, $pushNotification);
+                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_MASTER);
                 }
 
                 // Notifications to all clients
                 if ($post['notificationType'] == 50) {
-                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_CLIENT, $pushNotification);
+                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_CLIENT);
                 }
 
                 // Notifications to companies of the chosen city
                 if ($post['notificationType'] == 60) {
-                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_COMPANY, $pushNotification);
+                    $this->notificationByCity($request, $notifier, $cityRepository, $userRepository, self::ROLE_COMPANY);
                 }
 
                 // Notifications to all companies
                 if ($post['notificationType'] == 70) {
-                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_COMPANY, $pushNotification);
+                    $this->notificationAllUsersByRole($request, $userRepository, self::ROLE_COMPANY);
                 }
 
                 // Notifications to all users
                 if ($post['notificationType'] == 80) {
-                    $this->notificationAllUsers($request, $userRepository, $pushNotification);
+                    $this->notificationAllUsers($request, $userRepository);
                 }
 
                 $message = $translator->trans('Notifications sent', array(), 'flash');

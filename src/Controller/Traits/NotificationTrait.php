@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Traits;
 
+use App\Entity\Firebase;
 use App\Entity\Notification as UserNotification;
 use App\Entity\Order;
 use App\Entity\User;
@@ -26,22 +27,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 trait NotificationTrait
 {
-    /**
-     * @param Security $security
-     * @param Environment $twig
-     * @param ManagerRegistry $doctrine
-     * @param UrlGeneratorInterface $urlGenerator
-     */
     public function __construct(
         Security $security,
         Environment $twig,
         ManagerRegistry $doctrine,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        TranslatorInterface $translator,
+        PushNotification $pushNotification
     ) {
         $this->security = $security;
         $this->twig = $twig;
         $this->doctrine = $doctrine;
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
+        $this->pushNotification = $pushNotification;
     }
 
     /**
@@ -57,8 +56,7 @@ trait NotificationTrait
         NotifierInterface $notifier,
         CityRepository $cityRepository,
         ProfessionRepository $professionRepository,
-        UserRepository $userRepository,
-        PushNotification $pushNotification
+        UserRepository $userRepository
     ) {
         $post = $request->request->get('notification_form');
 
@@ -73,11 +71,16 @@ trait NotificationTrait
         $users = $userRepository->findByCityAndProfession(self::ROLE_MASTER, $city, $profession);
         $this->sendNotification($post, $users);
 
-        // Send push notification
+        // Send push notification via Rabbit MQ
         if (count($users) > 0) {
-            foreach ($users as $user) {
-                $pushNotification->sendPushNotification('Уведомление с сайта smcentr.su', $post['message'], 'https://smcentr.su/');
-            }
+            $entityManager = $this->doctrine->getManager();
+            $tokens = $entityManager->getRepository(Firebase::class)->findBy(array('user' => $users));
+            $context = [
+                'title' => $this->translator->trans('Website push notification', array(), 'messages'),
+                'clickAction' => 'https://smcentr.su/',
+                'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
+            ];
+            $this->pushNotification->sendMQPushNotification($post['message'], $context, $tokens);
         }
     }
 
@@ -99,16 +102,16 @@ trait NotificationTrait
         $users = $userRepository->findByCity($role, $city);
         $this->sendNotification($post, $users);
 
-        // Send push notification
+        // Send push notification via Rabbit MQ
         if (count($users) > 0) {
+            $entityManager = $this->doctrine->getManager();
+            $tokens = $entityManager->getRepository(Firebase::class)->findBy(array('user' => $users));
             $context = [
-                'title' => $this->translator->trans('Уведомление с сайта smcentr.su', array(), 'messages'),
+                'title' => $this->translator->trans('Website push notification', array(), 'messages'),
                 'clickAction' => 'https://smcentr.su/',
                 'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
             ];
-            foreach ($users as $user) {
-                $this->pushNotification->sendMQPushNotification($post['message'], $context);
-            }
+            $this->pushNotification->sendMQPushNotification($post['message'], $context, $tokens);
         }
     }
 
@@ -121,16 +124,16 @@ trait NotificationTrait
         $users = $userRepository->findByRole($role);
         $this->sendNotification($post, $users);
 
-        // Send push notification
+        // Send push notification via Rabbit MQ
         if (count($users) > 0) {
+            $entityManager = $this->doctrine->getManager();
+            $tokens = $entityManager->getRepository(Firebase::class)->findBy(array('user' => $users));
             $context = [
-                'title' => $this->translator->trans('Уведомление с сайта smcentr.su', array(), 'messages'),
+                'title' => $this->translator->trans('Website push notification', array(), 'messages'),
                 'clickAction' => 'https://smcentr.su/',
                 'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
             ];
-            foreach ($users as $user) {
-                $this->pushNotification->sendMQPushNotification($post['message'], $context);
-            }
+            $this->pushNotification->sendMQPushNotification($post['message'], $context, $tokens);
         }
     }
 
@@ -145,16 +148,16 @@ trait NotificationTrait
         $users = array_merge($clientUsers, $masterUsers, $companyUsers);
         $this->sendNotification($post, $users);
 
-        // Send push notification
+        // Send push notification via Rabbit MQ
         if (count($users) > 0) {
+            $entityManager = $this->doctrine->getManager();
+            $tokens = $entityManager->getRepository(Firebase::class)->findBy(array('user' => $users));
             $context = [
-                'title' => $this->translator->trans('Уведомление с сайта smcentr.su', array(), 'messages'),
+                'title' => $this->translator->trans('Website push notification', array(), 'messages'),
                 'clickAction' => 'https://smcentr.su/',
                 'icon' => 'https://smcentr.su/assets/images/logo_black.svg'
             ];
-            foreach ($users as $user) {
-                $this->pushNotification->sendMQPushNotification($post['message'], $context);
-            }
+            $this->pushNotification->sendMQPushNotification($post['message'], $context, $tokens);
         }
     }
 
