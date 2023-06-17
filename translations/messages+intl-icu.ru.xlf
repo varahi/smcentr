@@ -953,6 +953,10 @@
             <source>Cost of work</source>
             <target>Стоимость работ</target>
         </trans-unit>
+        <trans-unit id="NotificationGroup" resname="NotificationGroup">
+            <source>NotificationGroup</source>
+            <target>Группа уведомлений</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

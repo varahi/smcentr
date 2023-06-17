@@ -18,7 +18,7 @@ use App\Entity\Order;
 use App\Entity\Profession;
 use App\Entity\User;
 use App\Entity\Pages;
-use App\Entity\Notification;
+use App\Entity\NotificationGroup;
 use App\Entity\TaxRate;
 use App\Entity\Request;
 use App\Entity\Project;
@@ -136,8 +136,8 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Notifications');
         yield MenuItem::subMenu('Notifications', 'fa fa fa-sticky-note')->setSubItems([
-            MenuItem::linkToCrud('Notifications', 'fa fa-bell', Notification::class)->setPermission('ROLE_EDITOR'),
-            MenuItem::linkToCrud('Push Notifications', 'fa fa-bell', Notification::class)->setPermission('ROLE_EDITOR')->setController(PushNotificationCrudController::class),
+            MenuItem::linkToCrud('Notifications', 'fa fa-bell', NotificationGroup::class)->setPermission('ROLE_EDITOR'),
+            //MenuItem::linkToCrud('Push Notifications', 'fa fa-bell', Notification::class)->setPermission('ROLE_EDITOR')->setController(PushNotificationCrudController::class),
             MenuItem::linkToRoute('Create notification', 'fa fa-bell-o', 'app_new_notification')->setPermission('ROLE_SUPER_ADMIN'),
             MenuItem::linkToCrud('Tokens', 'fa fa-user-secret', Firebase::class),
         ]);

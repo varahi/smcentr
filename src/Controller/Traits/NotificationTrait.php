@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Traits;
 
 use App\Entity\Firebase;
+use App\Entity\NotificationGroup;
 use App\Entity\Notification as UserNotification;
 use App\Entity\Order;
 use App\Entity\User;
@@ -170,15 +171,20 @@ trait NotificationTrait
     {
         $entityManager = $this->doctrine->getManager();
         if (count($users) > 0) {
+            $notificationGroup = new NotificationGroup();
+            $notificationGroup->setText($post['message']);
             foreach ($users as $user) {
                 $userNotification = new UserNotification();
                 $userNotification->setUser($user);
                 $userNotification->setMessage($post['message']);
                 $userNotification->setType(self::NOTIFICATION_MAILING);
                 $userNotification->setIsRead((int)0);
+                $notificationGroup->addNotification($userNotification);
                 $entityManager->persist($userNotification);
                 $entityManager->flush();
             }
+            $entityManager->persist($notificationGroup);
+            $entityManager->flush();
         }
     }
 
