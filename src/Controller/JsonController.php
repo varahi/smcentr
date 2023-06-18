@@ -42,11 +42,8 @@ class JsonController extends AbstractController
 
         foreach ($items as $item) {
             if ($item->getId()) {
-                $itemId = $item->getId();
+                $arrData[] = $item->getId();
             }
-            $arrData[] = [
-                'id' => $itemId,
-            ];
         }
         return $arrData;
     }
