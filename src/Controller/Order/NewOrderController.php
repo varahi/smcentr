@@ -172,8 +172,9 @@ class NewOrderController extends AbstractController
                     $tokens = $entityManager->getRepository(Firebase::class)->findBy(array('user' => $relevantMastersIds));
                 }
 
-                $subject = $this->translator->trans('Service name', array(), 'messages') . ': ' . $order->getProfession()->getName() .' '. $order->getJobType()->getName() . '<br />';
-                $subject .= $this->translator->trans('Cost of work', array(), 'messages') . ': ' . $order->getPrice() . ' руб.';
+                //$subject = $this->translator->trans('Service name', array(), 'messages') . ': ' . $order->getProfession()->getName() .' '. $order->getJobType()->getName() . '<br />';
+                //$subject .= $this->translator->trans('Cost of work', array(), 'messages') . ': ' . $order->getPrice() . ' руб.';
+                $subject = $order->getJobType()->getName() .' '. $order->getPrice() . ' руб.';
 
                 if (isset($tokens) && count($tokens) > 0) {
                     $context = [
