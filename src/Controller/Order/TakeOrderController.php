@@ -109,6 +109,7 @@ class TakeOrderController extends AbstractController
         }
 
         if ($order->getTypeCreated() == self::CREATED_BY_COMPANY) {
+            $performer = $order->getPerformer();
             $orderTaxRate = $order->getCustomTaxRate(); // roubles
             if ($performer->getBalance() <= $tax + $orderTaxRate) {
                 $message = $this->translator->trans('Please top up balance', array(), 'flash');
