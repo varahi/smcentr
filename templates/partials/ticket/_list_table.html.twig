@@ -16,7 +16,13 @@
             <th scope="row">{{ ticket.id }}</th>
             <td>{{ ticket.created|date("d.m.Y - H:i") }}</td>
             <td>{{ ticket.title }}</td>
-            <td>{{ ticket.description|raw }}</td>
+            <td>{{ ticket.description|raw }}
+                {% if ticket.isRead == '0' %}
+                    <span class="nav-link notif" style="margin-top: -30px" href="{{ path('app_notifications') }}">
+                        <span>{{ 'N'|trans }}</span>
+                    </span>
+                {% endif %}
+            </td>
             <td>{{ ticket.user.fullName }}</td>
             <td>
                 {% include 'partials/ticket/_ticket_stars.html.twig' %}
@@ -31,7 +37,6 @@
                     </a>
                 </td>
             {% endif %}
-
         </tr>
     {% endfor %}
     </tbody>

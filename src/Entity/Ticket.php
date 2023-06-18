@@ -62,7 +62,7 @@ class Ticket
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $isInClientProgress;
+    private $isRead;
 
     public function __construct()
     {
@@ -194,14 +194,14 @@ class Ticket
         return $this;
     }
 
-    public function isIsInClientProgress(): ?bool
+    public function isIsRead(): ?bool
     {
-        return $this->isInClientProgress;
+        return $this->isRead;
     }
 
-    public function setIsInClientProgress(?bool $isInClientProgress): self
+    public function setIsRead(?int $isRead): self
     {
-        $this->isInClientProgress = $isInClientProgress;
+        $this->isRead = $isRead;
 
         return $this;
     }

@@ -175,7 +175,7 @@ class TicketController extends AbstractController
                 // Set answered user
                 $answer->setUser($user);
                 $entityManager->persist($answer);
-                $entityManager->persist($ticket);
+                $ticket->setIsRead((int)1);
                 $entityManager->flush();
 
                 $subject = $translator->trans('Your request has been answered', array(), 'messages');
@@ -243,7 +243,7 @@ class TicketController extends AbstractController
                     $answer->setUser($user);
                     $answer->setTicket($ticket);
                     $entityManager->persist($answer);
-                    $entityManager->persist($ticket);
+                    $ticket->setIsRead((int)0);
                     $entityManager->flush();
 
                     // Send emails to admin

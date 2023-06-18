@@ -181,6 +181,7 @@ class OrderNewCrudController extends AbstractCrudController
         $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             /** @var Order order */
             $order = $event->getData();
+            $subject = $order->getJobType()->getName() .' '. $order->getPrice() . ' руб.';
 
             // Send push notification
             $context = [
@@ -203,7 +204,7 @@ class OrderNewCrudController extends AbstractCrudController
                 }
             }
             if (isset($tokens)) {
-                $this->pushNotification->sendMQPushNotification($this->translator->trans('New order on site', array(), 'flash'), $context, $tokens);
+                $this->pushNotification->sendMQPushNotification($subject, $context, $tokens);
             }
         });
     }
