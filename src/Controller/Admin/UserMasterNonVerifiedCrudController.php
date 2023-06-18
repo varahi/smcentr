@@ -8,6 +8,7 @@ use App\Service\PhoneNumberService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -105,6 +106,8 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
     {
         return $assets
             ->addCssFile('assets/css/easy_admin_custom.css')
+            ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+            ->addJsFile('assets/js/jquery.maskedinput.min.js')
             ;
     }
 
@@ -142,8 +145,16 @@ class UserMasterNonVerifiedCrudController extends AbstractCrudController
                     ->orderBy('entity.fullName', 'ASC');
             });
 
-        //yield TelephoneField::new('phone')->setColumns('col-md-4')->hideOnIndex();
-        yield WhatsAppField::new('phone')->setColumns('col-md-4')->setTemplatePath('bundles/EasyAdminBundle/field/whatsapp.html.twig');
+        yield TelephoneField::new('phone')
+            ->setColumns('col-md-4')
+            ->hideOnIndex()
+        ;
+
+        yield WhatsAppField::new('phone')
+            ->setColumns('col-md-4')
+            ->setTemplatePath('bundles/EasyAdminBundle/field/whatsapp.html.twig')
+            ->hideWhenUpdating()
+        ;
 
         /*yield AssociationField::new('master')
             ->setLabel('Master Company')

@@ -111,6 +111,8 @@ class UserMasterCrudController extends AbstractCrudController
     {
         return $assets
             ->addCssFile('assets/css/easy_admin_custom.css')
+            ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+            ->addJsFile('assets/js/jquery.maskedinput.min.js')
             ;
     }
 
@@ -149,8 +151,16 @@ class UserMasterCrudController extends AbstractCrudController
                     ->orderBy('entity.fullName', 'ASC');
             });
 
-        //yield TelephoneField::new('phone')->setColumns('col-md-4');
-        yield WhatsAppField::new('phone')->setColumns('col-md-4')->setTemplatePath('bundles/EasyAdminBundle/field/whatsapp.html.twig');
+        yield TelephoneField::new('phone')
+            ->setColumns('col-md-4')
+            ->hideOnIndex()
+        ;
+
+        yield WhatsAppField::new('phone')
+            ->setColumns('col-md-4')
+            ->setTemplatePath('bundles/EasyAdminBundle/field/whatsapp.html.twig')
+            ->hideWhenUpdating()
+        ;
 
         /*yield AssociationField::new('master')
             ->setLabel('Master Company')

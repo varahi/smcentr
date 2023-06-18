@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Order;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
@@ -74,6 +75,15 @@ class OrderActiveCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Active orders list')
             ->setSearchFields(['title', 'price', 'description', 'id'])
             ->setDefaultSort(['id' => 'DESC']);
+    }
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            ->addCssFile('assets/css/easy_admin_custom.css')
+            ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+            ->addJsFile('assets/js/jquery.maskedinput.min.js')
+            ;
     }
 
     public function configureActions(Actions $actions): Actions

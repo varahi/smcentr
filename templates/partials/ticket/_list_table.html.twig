@@ -19,7 +19,7 @@
             <td>{{ ticket.description|raw }}
                 {% if ticket.isRead == '0' %}
                     <span class="nav-link notif" style="margin-top: -30px" href="{{ path('app_notifications') }}">
-                        <span>{{ 'N'|trans }}</span>
+                        <span>{{ '!'|trans }}</span>
                     </span>
                 {% endif %}
             </td>

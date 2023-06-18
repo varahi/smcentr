@@ -11,6 +11,7 @@ use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
@@ -90,6 +91,15 @@ class OrderNewCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('New orders list')
             ->setSearchFields(['title', 'price', 'description', 'id'])
             ->setDefaultSort(['id' => 'DESC']);
+    }
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            ->addCssFile('assets/css/easy_admin_custom.css')
+            ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+            ->addJsFile('assets/js/jquery.maskedinput.min.js')
+            ;
     }
 
     public function configureFields(string $pageName): iterable

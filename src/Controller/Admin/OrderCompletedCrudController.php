@@ -6,6 +6,7 @@ use App\Entity\Order;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -67,6 +68,15 @@ class OrderCompletedCrudController extends AbstractCrudController
             ->setDefaultSort(['id' => 'DESC']);
     }
 
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            ->addCssFile('assets/css/easy_admin_custom.css')
+            ->addJsFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+            ->addJsFile('assets/js/jquery.maskedinput.min.js')
+            ;
+    }
+
     public function configureActions(Actions $actions): Actions
     {
         return $actions
@@ -90,7 +100,7 @@ class OrderCompletedCrudController extends AbstractCrudController
         yield TextField::new('address')->setColumns('col-md-10');
         yield AssociationField::new('performer')
             ->setFormTypeOption('choice_label', 'selector')
-            ->setFormTypeOption('by_reference', false)
+            //->setFormTypeOption('by_reference', false)
             ->hideOnIndex()->setColumns('col-md-10');
         yield FormField::addRow();
         yield IntegerField::new('quantity')->setColumns('col-md-2');
