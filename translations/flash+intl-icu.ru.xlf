@@ -63,7 +63,7 @@
       </trans-unit>
       <trans-unit id="Please top up balance" resname="Please top up balance">
         <source>Please top up balance</source>
-        <target><![CDATA[На вашем балансе недостаточно средств для совершения данной операции. <a href="/user/top-up-balancer">Пожалуйста пополните ваш баланс.</a>]]></target>
+        <target><![CDATA[На вашем балансе недостаточно средств для совершения данной операции. <a href="/user/top-up-balance">Пожалуйста пополните ваш баланс.</a>]]></target>
       </trans-unit>
       <trans-unit id="Answered" resname="Answered">
         <source>Answered</source>

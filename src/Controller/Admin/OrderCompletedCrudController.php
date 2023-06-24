@@ -89,7 +89,7 @@ class OrderCompletedCrudController extends AbstractCrudController
         yield FormField::addRow();
 
         yield IntegerField::new('id')->setFormTypeOption('disabled', 'disabled');
-        //yield TextField::new('title');
+        //yi eld TextField::new('title');
         //yield TextField::new('price');
         yield TelephoneField::new('phone')->setColumns('col-md-4')->hideOnIndex();
         yield TextareaField::new('description')->setColumns('col-md-10');

@@ -957,6 +957,10 @@
             <source>NotificationGroup</source>
             <target>Группа уведомлений</target>
         </trans-unit>
+        <trans-unit id="Website push notification" resname="Website push notification">
+            <source>Website push notification</source>
+            <target>Уведомление с сайта smcentr.su</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

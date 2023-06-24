@@ -10,12 +10,12 @@
     </div>
     <div class="date">{{ notification.created|date("H:i d.m.Y") }}</div>
 
-    {% if is_granted('ROLE_MASTER') or is_granted('ROLE_COMPANY') %}
+    {% if is_granted('ROLE_MASTER') %}
         {% if notification.type == 1 or notification.type == 4 %}
             <div class="title">{{ notification.message }}
                 <a href="{{ path('app_master_profile') }}#job{{ notification.application.id }}">ID {{ notification.application.id }}</a>
             </div>
-            <div class="desc"><a href="{{ path('app_orders_list') }}#job{{ notification.application.id }}">Вы можете ознакомиться с заявкой</a></div>
+            <div class="desc"><a href="{{ path('app_master_profile') }}#job{{ notification.application.id }}">Вы можете ознакомиться с заявкой</a></div>
         {% endif %}
 
         {% if notification.type == 2 or notification.type == 3 %}
@@ -27,7 +27,26 @@
             <div class="title">{{ notification.message }}</div>
             <div class="desc">Уведомление отправлено администратором сайта</div>
         {% endif %}
+    {% endif %}
 
+
+    {% if is_granted('ROLE_COMPANY') %}
+        {% if notification.type == 1 or notification.type == 4 %}
+            <div class="title">{{ notification.message }}
+                <a href="{{ path('app_company_profile') }}#job{{ notification.application.id }}">ID {{ notification.application.id }}</a>
+            </div>
+            <div class="desc"><a href="{{ path('app_company_profile') }}#job{{ notification.application.id }}">Вы можете ознакомиться с заявкой</a></div>
+        {% endif %}
+
+        {% if notification.type == 2 or notification.type == 3 %}
+            <div class="title">{{ notification.message }} <a href="{{ path('app_company_profile') }}#job{{ notification.application.id }}}">ID {{ notification.application.id }}</a></div>
+            <div class="desc"><a href="{{ path('app_company_profile') }}">Баланс вы можете посмотреть на странице профиля</a></div>
+        {% endif %}
+
+        {% if notification.type == 10 %}
+            <div class="title">{{ notification.message }}</div>
+            <div class="desc">Уведомление отправлено администратором сайта</div>
+        {% endif %}
     {% endif %}
 
     {% if is_granted('ROLE_CLIENT') %}

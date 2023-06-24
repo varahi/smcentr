@@ -123,6 +123,7 @@ class AssignMasterController extends AbstractController
 
                 if ($order->getTypeCreated() == self::CREATED_BY_COMPANY) {
                     $orderTaxRate = $order->getCustomTaxRate(); // roubles
+                    $performer = $order->getPerformer();
                     if ($performer->getBalance() <= $tax + $orderTaxRate) {
                         $message = $this->translator->trans('Please top up balance', array(), 'flash');
                         $this->notifier->send(new Notification($message, ['browser']));

@@ -22,10 +22,17 @@
         {% endif %}
     </div>
 {% elseif is_granted('ROLE_CLIENT') or is_granted('ROLE_COMPANY')%}
+
     <div class="phone">
         {% if order.performer %}
             <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
-            <div class="phone_num"><a href="tel:{{ order.performer.phone|trim|replace({'(': '', ')': '', '+8': '+7', ' ': '', '-': ''}) }}">{{ order.performer.phone }}</a></div>
+            <div class="phone_num">Телефон мастера: <a href="tel:{{ order.performer.phone|trim|replace({'(': '', ')': '', '+8': '+7', ' ': '', '-': ''}) }}">{{ order.performer.phone }}</a></div>
+        {% endif %}
+    </div>
+    <div class="phone">
+        {% if order.users %}
+            <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
+            <div class="phone_num">Телефон клиента: <a href="tel:{{ order.users.phone|trim|replace({'(': '', ')': '', '+8': '+7', ' ': '', '-': ''}) }}">{{ order.users.phone }}</a></div>
         {% endif %}
     </div>
     <div class="client_block">

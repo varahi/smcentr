@@ -171,6 +171,7 @@ class TakeOrderController extends AbstractController
                 $subject = 'Вы успешно приняли заявку, она добавилась в ваш профиль.';
             }
             $this->mailer->sendUserEmail($order->getPerformer(), $subject, 'emails/order_taked_to_work.html.twig', $order);
+            $this->mailer->sendUserEmail($order->getUsers(), 'Ваша заявка принята в работу', 'emails/order_taked_to_work.html.twig', $order);
         }
 
         if ($order->getTypeCreated() == self::CREATED_BY_COMPANY) {

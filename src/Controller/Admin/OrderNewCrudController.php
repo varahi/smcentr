@@ -119,7 +119,6 @@ class OrderNewCrudController extends AbstractCrudController
         yield TextField::new('address')->setColumns('col-md-10');
         yield AssociationField::new('performer')
             ->setFormTypeOption('choice_label', 'selector')
-            ->setFormTypeOption('by_reference', false)
             ->hideOnIndex()->setColumns('col-md-10');
         yield FormField::addRow();
         yield IntegerField::new('quantity')->setColumns('col-md-2');

@@ -94,6 +94,7 @@ class CloseOrderController extends AbstractController
                     // Set notification for master
                     $message = $translator->trans('Notification order closed', array(), 'messages');
                     $this->setNotification($order, $order->getPerformer(), self::NOTIFICATION_CHANGE_STATUS, $message);
+                    $this->setNotification($order, $order->getUsers(), self::NOTIFICATION_CHANGE_STATUS, $message);
                 }
             }
 
