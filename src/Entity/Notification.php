@@ -28,12 +28,12 @@ class Notification
     private $message;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notifications")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="notifications", cascade={"persist"})
      */
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="user", cascade={"persist"})
      */
     private $notifications;
 
@@ -48,7 +48,7 @@ class Notification
     private $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="notifications")
+     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="notifications", cascade={"persist"})
      */
     private $application;
 

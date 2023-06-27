@@ -15,6 +15,8 @@ use App\Repository\ProfessionRepository;
 use App\Repository\UserRepository;
 use App\Form\Order\OrderFormType;
 use App\Service\Mailer;
+use App\Service\Order\GetTaxService;
+use App\Service\Order\SetBalanceService;
 use App\Service\PushNotification;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,11 +41,15 @@ class NewOrderController extends AbstractController
 
     public const ROLE_COMPANY = 'ROLE_COMPANY';
 
+    private const CREATED_BY_CLIENT = '1';
+
     public const CLIENT_CREATED = '1';
 
     public const COMPANY_CREATED = '3';
 
     public const STATUS_NEW = '0';
+
+    public const STATUS_ACTIVE = '1';
 
     private const DEFAULT_LEVEL = '3';
 
@@ -66,7 +72,9 @@ class NewOrderController extends AbstractController
         Mailer $mailer,
         TranslatorInterface $translator,
         PushNotification $pushNotification,
-        FirebaseRepository $firebaseRepository
+        FirebaseRepository $firebaseRepository,
+        GetTaxService $getTaxService,
+        SetBalanceService $setBalanceService
     ) {
         $this->security = $security;
         $this->twig = $twig;
@@ -76,6 +84,8 @@ class NewOrderController extends AbstractController
         $this->translator = $translator;
         $this->pushNotification = $pushNotification;
         $this->firebaseRepository = $firebaseRepository;
+        $this->getTaxService = $getTaxService;
+        $this->setBalanceService = $setBalanceService;
     }
 
     /**
@@ -152,6 +162,21 @@ class NewOrderController extends AbstractController
                 $order->setStatus(self::STATUS_NEW);
                 $order->setUsers($user);
                 $order->setLevel('3');
+
+                // Set balance
+                if ($order->getTypeCreated() == self::COMPANY_CREATED) {
+                    if ($order->getPerformer()) {
+                        $order->setStatus(self::STATUS_ACTIVE);
+                        $tax = $this->getTaxService->getTax($order);
+                        if (!isset($tax)) {
+                            $message = $this->translator->trans('No task defined', array(), 'flash');
+                            $notifier->send(new Notification($message, ['browser']));
+                            return $this->redirectToRoute('app_orders_list');
+                        }
+                        // Set balance for master, company and project
+                        $this->setBalanceService->setBalance($order);
+                    }
+                }
 
                 $entityManager = $doctrine->getManager();
                 $entityManager->persist($order);

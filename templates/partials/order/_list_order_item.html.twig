@@ -3,7 +3,7 @@
     {% for taxRate in order.city.taxRates %}
         {% if order.profession %}
         {% if taxRate.id == order.profession.id %}
-            {% set tax = taxRate.percent * order.price %}
+            {% set tax = taxRate.percent * order.price + order.customTaxRate%}
         {% endif %}
         {% endif %}
     {% endfor %}
