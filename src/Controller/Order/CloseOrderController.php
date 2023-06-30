@@ -29,6 +29,8 @@ class CloseOrderController extends AbstractController
 
     public const ROLE_MASTER = 'ROLE_MASTER';
 
+    public const ROLE_COMPANY = 'ROLE_COMPANY';
+
     public const NOTIFICATION_CHANGE_STATUS = '1';
 
     private $projectId;
@@ -67,17 +69,18 @@ class CloseOrderController extends AbstractController
         Mailer $mailer,
         PushNotification $pushNotification
     ): Response {
-        if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER)) {
+        if ($this->isGranted(self::ROLE_CLIENT) || $this->isGranted(self::ROLE_MASTER) || $this->isGranted(self::ROLE_COMPANY)) {
             $user = $this->security->getUser();
 
             // Redirect if order not owner
+            /*
             if ($order->getPerformer() !==null) {
                 if ($order->getPerformer()->getId() !== $user->getId()) {
                     $message = $translator->trans('Please login', array(), 'flash');
                     $notifier->send(new Notification($message, ['browser']));
                     return $this->redirectToRoute('app_login');
                 }
-            }
+            }*/
 
             // Persist data
             $entityManager = $this->doctrine->getManager();

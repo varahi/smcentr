@@ -5,5 +5,12 @@
         <div class="client_contact_visible">
             {% include 'partials/order/_contact_info.html.twig' %}
         </div>
+
+        {% if is_granted('ROLE_COMPANY') %}
+            <a href="{{ path('app_delete_order', { id: order.id}) }}" onclick="return confirm('{{ 'Are you sure you want to delete order'|trans }}') ">
+                {{ 'Delete order'|trans }}
+            </a>
+        {% endif %}
+
     </div>
 </div>

@@ -63,7 +63,6 @@
 
 {% if order.status == 0 or order.status == 1 %}
 <div class="btn_price">
-
     {% if is_granted('ROLE_MASTER') %}
     <a href="{{ path('app_close_order', { id: order.id}) }}"
        onclick="return confirm('{{ 'Are you sure you want to close order'|trans }} {% if tax > 0 %} С вашего баланса спишется {{ tax }} руб. {% endif %}')">
@@ -71,21 +70,30 @@
     </a>
     {% endif %}
 
-{#    {% if is_granted('ROLE_COMPANY') %}#}
-{#        <a href="{{ path('app_close_order', { id: order.id}) }}"#}
-{#           onclick="return confirm('{{ 'Are you sure you want to close order'|trans }}')">#}
-{#            <button>{{ 'Close order'|trans }}</button>#}
-{#        </a>#}
-{#    {% endif %}#}
-
     {% if is_granted('ROLE_CLIENT') %}
         <a href="{{ path('app_close_order', { id: order.id}) }}"
            onclick="return confirm('{{ 'Are you sure you want to close order'|trans }}')">
             <button>{{ 'Close order'|trans }}</button>
         </a>
     {% endif %}
-
     {#<span>{{ order.price|format_currency('RUB', {fraction_digit: 0}) }} <i>руб.</i></span>#}
     <span>{{ order.price|number_format(0, '.', ' ') }} <i>&#8381;</i></span>
 </div>
+{% endif %}
+
+
+{% if is_granted('ROLE_COMPANY') and order.status == 1 %}
+        <div class="status_created_by" style="max-width: 150px; min-width: 150px">
+            <a href="{{ path('app_close_order', { id: order.id}) }}"
+               onclick="return confirm('{{ 'Are you sure you want to close order'|trans }}')">
+                {{ 'Close order'|trans }}
+            </a>
+        </div>
+
+    <div class="status_created_by" style="max-width: 150px; min-width: 150px">
+            <a href="{{ path('app_unset_order', { id: order.id}) }}"
+               onclick="return confirm('{{ 'Are you sure you want to empty order'|trans }}')">
+                {{ 'Empty order'|trans }}
+            </a>
+        </div>
 {% endif %}

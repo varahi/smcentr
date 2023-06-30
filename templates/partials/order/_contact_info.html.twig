@@ -30,9 +30,9 @@
         {% endif %}
     </div>
     <div class="phone">
-        {% if order.users %}
+        {% if order.phone %}
             <img src="{{ asset('assets/images/phone.svg') }}" alt="" />
-            <div class="phone_num">Телефон клиента: <a href="tel:{{ order.users.phone|trim|replace({'(': '', ')': '', '+8': '+7', ' ': '', '-': ''}) }}">{{ order.users.phone }}</a></div>
+            <div class="phone_num">Телефон клиента: <a href="tel:{{ order.phone|trim|replace({'(': '', ')': '', '+8': '+7', ' ': '', '-': ''}) }}">{{ order.phone }}</a></div>
         {% endif %}
     </div>
     <div class="client_block">
