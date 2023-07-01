@@ -161,6 +161,10 @@
         <source>Choose master</source>
         <target>Выберите мастера</target>
       </trans-unit>
+      <trans-unit id="Not enought balance" resname="Not enought balance">
+        <source>Not enought balance</source>
+        <target>На балансе мастера недостаточно средств для совершения данной операции.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
