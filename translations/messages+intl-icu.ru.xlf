@@ -961,6 +961,10 @@
             <source>Website push notification</source>
             <target>Уведомление с сайта smcentr.su</target>
         </trans-unit>
+        <trans-unit id="Created By Admin" resname="Created By Admin">
+            <source>Created By Admin</source>
+            <target>Создано администратором</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

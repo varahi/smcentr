@@ -18,6 +18,8 @@ class UnsetTaxService
 
     private const CREATED_BY_COMPANY = '3';
 
+    private const CREATED_BY_ADMIN = '10';
+
     private $projectId;
 
     public function __construct(
@@ -49,17 +51,27 @@ class UnsetTaxService
                 return new RedirectResponse($this->router->generate('app_orders_list'));
             }
             $tax = $order->getPrice() * $taxRate->getPercent(); // For example 2880 * 0.0
-            $user = $order->getPerformer();
-            if ($user) {
-                $newMasterBalance = $user->getBalance() + $tax;
-                $user->setBalance($newMasterBalance);
-            }
-            $entityManager = $this->doctrine->getManager();
-            $entityManager->flush($order);
-            $entityManager->flush($user);
+            $this->setUserBalance($order, $tax);
+        }
+
+        if ($order->getTypeCreated() == self::CREATED_BY_ADMIN) {
+            $tax = $order->getCustomTaxRate();
+            $this->setUserBalance($order, $tax);
         }
 
         return 0;
+    }
+
+    private function setUserBalance($order, $tax)
+    {
+        $user = $order->getPerformer();
+        if ($user) {
+            $newMasterBalance = $user->getBalance() + $tax;
+            $user->setBalance($newMasterBalance);
+        }
+        $entityManager = $this->doctrine->getManager();
+        $entityManager->flush($order);
+        $entityManager->flush($user);
     }
 
     public function unsetCompanyTax($order)
@@ -93,6 +105,10 @@ class UnsetTaxService
         if ($order->getTypeCreated() == self::CREATED_BY_COMPANY) {
             $company = $this->userRepository->findOneBy(['id' => $order->getUsers()->getId()]);
             $tax = $order->getPrice() * $company->getServiceTaxRate(); // percents
+        }
+
+        if ($order->getTypeCreated() == self::CREATED_BY_ADMIN) {
+            $tax = $order->getCustomTaxRate();
         }
 
         if (isset($tax)) {

@@ -41,6 +41,8 @@ class TakeOrderController extends AbstractController
 
     private const CREATED_BY_CLIENT = '1';
 
+    private const CREATED_BY_ADMIN = '10';
+
     private $urlGenerator;
 
 
@@ -132,6 +134,9 @@ class TakeOrderController extends AbstractController
         if ($order->getTypeCreated() == self::CREATED_BY_COMPANY) {
             $orderTaxRate = $order->getCustomTaxRate();
         }
+        if ($order->getTypeCreated() == self::CREATED_BY_ADMIN) {
+            $fullTax = $order->getCustomTaxRate();
+        }
 
         // Set performer and order status
         $order->setPerformer($user);
@@ -142,7 +147,6 @@ class TakeOrderController extends AbstractController
         // Send push
         $fullTax = $tax + $orderTaxRate;
         $this->sendPushNotifications($order, $fullTax);
-
         // Save new order
         $entityManager->persist($order);
         $entityManager->flush();

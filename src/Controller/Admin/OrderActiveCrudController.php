@@ -148,6 +148,7 @@ class OrderActiveCrudController extends AbstractCrudController
                 'Клиент' => '1',
                 'Мастер' => '2',
                 'Компания' => '3',
+                'Администратор' => '10',
             ]
         )->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
 

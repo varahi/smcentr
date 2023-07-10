@@ -17,6 +17,8 @@ class GetTaxService
 
     private const CREATED_BY_COMPANY = '3';
 
+    private const CREATED_BY_ADMIN = '10';
+
     public function __construct(
         TaxRateRepository $taxRateRepository,
         NotifierInterface $notifier,
@@ -44,6 +46,10 @@ class GetTaxService
                 return new RedirectResponse($this->router->generate('app_orders_list'));
             }
             $tax = $order->getPrice() * $taxRate->getPercent(); // For example 2880 * 0.0
+        }
+
+        if ($order->getTypeCreated() == self::CREATED_BY_ADMIN) {
+            $tax = $order->getCustomTaxRate();
         }
 
         // Tax from order created by company

@@ -20,6 +20,8 @@ class UnsetOrderController extends AbstractController
 
     private const CREATED_BY_COMPANY = '3';
 
+    private const CREATED_BY_ADMIN = '10';
+
     public function __construct(
         ManagerRegistry $doctrine,
         UnsetTaxService $unsetTaxService,
@@ -38,11 +40,11 @@ class UnsetOrderController extends AbstractController
         NotifierInterface $notifier,
         Order $order
     ): Response {
-        if ($order->getTypeCreated() !== self::CREATED_BY_COMPANY) {
-            $message = $this->translator->trans('Please login', array(), 'flash');
-            $notifier->send(new Notification($message, ['browser']));
-            return $this->redirectToRoute('app_login');
-        }
+//        if ($order->getTypeCreated() !== self::CREATED_BY_COMPANY || $order->getTypeCreated() !== self::CREATED_BY_ADMIN) {
+//            $message = $this->translator->trans('Please login', array(), 'flash');
+//            $notifier->send(new Notification($message, ['browser']));
+//            return $this->redirectToRoute('app_login');
+//        }
 
         $this->clearOrderPerfomer($order);
 

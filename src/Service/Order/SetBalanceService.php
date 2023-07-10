@@ -17,6 +17,8 @@ class SetBalanceService
 
     private const CREATED_BY_COMPANY = '3';
 
+    private const CREATED_BY_ADMIN = 10;
+
     private $projectId;
 
     public function __construct(
@@ -52,8 +54,8 @@ class SetBalanceService
             return new RedirectResponse($this->router->generate('app_top_up_balance'));
         }
 
-        // If order created by client
-        if ($order->getTypeCreated() == self::CREATED_BY_CLIENT) {
+        // If order created by client or created by admin from backend
+        if ($order->getTypeCreated() == self::CREATED_BY_CLIENT || $order->getTypeCreated() == self::CREATED_BY_ADMIN) {
             $newMasterBalance = $performer->getBalance() - $tax;
         }
 

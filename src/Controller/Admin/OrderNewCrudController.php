@@ -20,6 +20,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
@@ -157,6 +158,7 @@ class OrderNewCrudController extends AbstractCrudController
                 'Клиент' => '1',
                 'Мастер' => '2',
                 'Компания' => '3',
+                'Администратор' => '10',
             ]
         )->hideOnIndex()->setColumns('col-md-10')->setRequired(true);
 
